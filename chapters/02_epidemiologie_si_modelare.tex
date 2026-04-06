@@ -1,0 +1,932 @@
+% ============================================================
+% CAPITOLUL 2 — EPIDEMIOLOGIE COMPUTAȚIONALĂ ȘI MODELAREA
+%               MATEMATICĂ A BOLILOR INFECȚIOASE
+% ============================================================
+
+\chapter{Epidemiologie Computațională și Modelarea Matematică a Bolilor Infecțioase}
+\label{ch:epidemiologie}
+
+\section{Fundamente de epidemiologie}
+\label{sec:fundamente_epi}
+
+\subsection{Definiții și concepte fundamentale}
+\label{subsec:definitii_epi}
+
+Epidemiologia este știința care studiază distribuția, determinanții și controlul
+stărilor sau evenimentelor legate de sănătate în populații definite
+\cite{andersonmay1991}. În sens mai specific, \emph{epidemiologia infecțioasă}
+se ocupă cu dinamica transmiterii bolilor cauzate de agenți patogeni biologici
+(virusuri, bacterii, paraziți) în populații umane sau animale.
+
+\begin{definitie}[Epidemic, pandemic, endemic]
+O boală infecțioasă se numește \textbf{endemică} dacă persistă la nivel constant
+într-o regiune geografică definită. Se numește \textbf{epidemie} dacă numărul de
+cazuri depășește în mod semnificativ nivelul endemic așteptat, și \textbf{pandemie}
+dacă afectează mai multe continente sau o mare parte a globului.
+\end{definitie}
+
+\begin{definitie}[Incidență și prevalență]
+\textbf{Incidența} reprezintă numărul de cazuri noi ale unei boli apărute într-o
+populație de risc, într-un interval de timp specificat. Se exprimă ca rată:
+\begin{equation}
+    \text{Incidență} = \frac{\text{cazuri noi în intervalul } [t_1, t_2]}
+                            {\text{populație la risc} \times (t_2 - t_1)}.
+\end{equation}
+\textbf{Prevalența} reprezintă proporția indivizilor afectați la un moment dat:
+\begin{equation}
+    \text{Prevalență} = \frac{\text{cazuri existente la momentul } t}
+                             {\text{populație totală la momentul } t}.
+\end{equation}
+\end{definitie}
+
+\subsection{Parametrii fundamentali ai transmiterii}
+\label{subsec:parametri}
+
+\begin{definitie}[Intervalul serial și intervalul de generație]
+\textbf{Intervalul serial} este durata medie dintre apariția simptomelor la cazul
+primar și la cazul secundar generat de acesta. \textbf{Intervalul de generație}
+este durata medie dintre infecția cazului primar și infecția unui caz secundar.
+\end{definitie}
+
+\begin{definitie}[Perioada de incubație]
+\textbf{Perioada de incubație} este intervalul de timp dintre momentul infectării
+și apariția primelor simptome. Este distinctă de \emph{perioada de latență},
+care reprezintă intervalul dintre infecție și debutul infecțiozității.
+\end{definitie}
+
+\begin{definitie}[Numărul de reproducere de bază $\Rzero$]
+\label{def:R0}
+Numărul de reproducere de bază $\Rzero$ este definit ca numărul mediu de infecții
+secundare produse de un singur individ infectat introdus într-o populație
+complet susceptibilă, pe durata perioadei sale infecțioase \cite{diekmann1990}.
+Este cel mai important parametru al epidemiologiei matematice, deoarece determină
+potențialul epidemic al unui agent patogen.
+\end{definitie}
+
+O consecință imediată a \cref{def:R0} este că:
+\begin{itemize}
+    \item dacă $\Rzero < 1$, fiecare caz infectat generează în medie mai puțin
+    de un caz nou, astfel că epidemia se stinge spontan;
+    \item dacă $\Rzero > 1$, fiecare caz generează în medie mai mult de un caz
+    nou, epidemia se propagă exponențial în stadiul inițial;
+    \item dacă $\Rzero = 1$, epidemia se menține la nivel endemic instabil.
+\end{itemize}
+
+Numărul de reproducere \emph{efectiv} (sau în timp real) $\mathcal{R}(t)$ generalizează
+$\Rzero$ pentru o populație parțial imunizată:
+\begin{equation}
+    \mathcal{R}(t) = \Rzero \cdot \frac{S(t)}{N},
+\end{equation}
+unde $S(t)$ este numărul de indivizi susceptibili la momentul $t$ și $N$ este
+mărimea populației totale.
+
+% ============================================================
+\section{Modele compartimentale în epidemiologie}
+\label{sec:modele_compartimentale}
+% ============================================================
+
+\subsection{Cadrul general}
+\label{subsec:cadru_general}
+
+Modelele compartimentale reprezintă clasa fundamentală de modele matematice în
+epidemiologie \cite{hethcote2000}. Principiul lor constă în împărțirea populației
+în \emph{compartimente} care descriu stări epidemiologice distincte, iar tranziția
+dintre compartimente este guvernată de un sistem de ecuații diferențiale ordinare
+(EDO).
+
+Fie $N$ mărimea totală a populației (presupusă constantă). Fiecare compartiment
+$X_i(t)$ reprezintă numărul de indivizi în starea $i$ la momentul $t$, cu
+$\sum_i X_i(t) = N$. Dinamic\-a tranzițiilor este descrisă de sistemul:
+\begin{equation}
+    \diff{\mathbf{x}}{t} = \mathbf{f}(\mathbf{x}, t, \boldsymbol{\theta}),
+    \quad \mathbf{x}(0) = \mathbf{x}_0,
+\end{equation}
+unde $\mathbf{x} = (X_1, \ldots, X_n)^\intercal$, $\boldsymbol{\theta}$ este
+vectorul parametrilor și $\mathbf{f}$ descrie fluxurile nete dintre compartimente.
+
+\subsection{Modelul SI}
+\label{subsec:model_si}
+
+Cel mai simplu model compartimențal este modelul \textbf{SI} (Susceptibili-Infectați),
+care presupune că infecția este permanentă (nu există recuperare):
+\begin{equation}
+\label{eq:si}
+\begin{cases}
+    \diff{S}{t} = -\dfrac{\beta S I}{N}, \\[8pt]
+    \diff{I}{t} = \phantom{-}\dfrac{\beta S I}{N}.
+\end{cases}
+\end{equation}
+Cu condiția $S + I = N$, sistemul \eqref{eq:si} se reduce la o ecuație logistică
+în $I$, cu soluția analitică:
+\begin{equation}
+    I(t) = \frac{N}{1 + \left(\dfrac{N - I_0}{I_0}\right) e^{-\beta t}},
+\end{equation}
+unde $I_0 = I(0)$. Toți indivizii sunt infectați pe termen lung ($I(\infty) = N$).
+
+\subsection{Modelul SIS}
+\label{subsec:model_sis}
+
+Modelul \textbf{SIS} (Susceptibili-Infectați-Susceptibili) extinde modelul SI prin
+includerea recuperării fără imunitate, permițând re-infectarea:
+\begin{equation}
+\label{eq:sis}
+\begin{cases}
+    \diff{S}{t} = -\dfrac{\beta S I}{N} + \gamma I, \\[8pt]
+    \diff{I}{t} = \phantom{-}\dfrac{\beta S I}{N} - \gamma I.
+\end{cases}
+\end{equation}
+Parametrul $\gamma > 0$ reprezintă rata de recuperare ($1/\gamma$ este durata
+medie a perioadei infecțioase). Pentru modelul SIS, $\Rzero = \beta/\gamma$, iar:
+\begin{itemize}
+    \item dacă $\Rzero \leq 1$: echilibrul fără boală $I^* = 0$ este stabil global;
+    \item dacă $\Rzero > 1$: există un echilibru endemic stabil
+    $I^* = N(1 - 1/\Rzero) > 0$.
+\end{itemize}
+
+\subsection{Modelul SEIR}
+\label{subsec:model_seir}
+
+Modelul \textbf{SEIR} introduce compartimentul $E$ (Expuși / în perioadă de latență),
+care ține cont de faptul că indivizii infectați nu sunt imediat infecțioși:
+\begin{equation}
+\label{eq:seir}
+\begin{cases}
+    \diff{S}{t} = -\dfrac{\beta S I}{N}, \\[8pt]
+    \diff{E}{t} = \phantom{-}\dfrac{\beta S I}{N} - \sigma E, \\[8pt]
+    \diff{I}{t} = \phantom{-}\sigma E - \gamma I, \\[8pt]
+    \diff{R}{t} = \phantom{-}\gamma I,
+\end{cases}
+\end{equation}
+unde $\sigma = 1/T_E$ este rata de tranziție din starea expusă în starea infecțioasă
+($T_E$ = durata medie de incubație). Numărul de reproducere de bază pentru modelul
+SEIR este $\Rzero = \beta/\gamma$, identic cu cel al modelului SIR.
+
+\subsection{Modelul SIRS}
+\label{subsec:model_sirs}
+
+Modelul \textbf{SIRS} generalizează modelul SIR prin imunitate temporară (indivizii
+recuperați pot deveni din nou susceptibili după un interval de timp):
+\begin{equation}
+\label{eq:sirs}
+\begin{cases}
+    \diff{S}{t} = -\dfrac{\beta S I}{N} + \xi R, \\[8pt]
+    \diff{I}{t} = \phantom{-}\dfrac{\beta S I}{N} - \gamma I, \\[8pt]
+    \diff{R}{t} = \phantom{-}\gamma I - \xi R,
+\end{cases}
+\end{equation}
+unde $\xi = 1/T_R$ este rata de pierdere a imunității ($T_R$ = durata medie a
+imunității). Dacă $\Rzero > 1$, modelul SIRS admite un echilibru endemic stabil.
+
+% ============================================================
+\section{Modelul SIR — Analiză Matematică Detaliată}
+\label{sec:model_sir}
+% ============================================================
+
+\subsection{Ipoteze și derivarea ecuațiilor din principii prime}
+\label{subsec:sir_derivare}
+
+Modelul SIR, formulat de Kermack și McKendrick \cite{kermack1927}, se bazează
+pe o serie de ipoteze simplificatoare care trebuie înțelese explicit:
+
+\begin{enumerate}
+    \item \textbf{Populație închisă și omogenă:} Nu există nașteri, decese
+    naturale sau migrații; $N = \text{const}$. Fiecare individ are aceeași
+    probabilitate de a intra în contact cu orice alt individ (amestecare omogenă).
+    \item \textbf{Transmitere prin acțiune de masă:} Rata de contact eficient
+    (producătoare de infecție) este proporțională cu produsul $S \cdot I$.
+    \item \textbf{Imunitate permanentă:} Un individ recuperat nu poate fi
+    re-infectat; compartimentul $R$ este absorbant.
+    \item \textbf{Durata infecțioasă exponențial distribuită:} Rata de recuperare
+    $\gamma$ este constantă, iar durata medie a perioadei infecțioase este $1/\gamma$.
+    \item \textbf{Fără mortalitate indusă de boală:} Sau, echivalent, mortalitatea
+    specifică bolii este neglijabilă față de dinamica transmiterii.
+\end{enumerate}
+
+\textbf{Derivarea termenului de infecție.} Considerăm că în unitatea de timp,
+un individ susceptibil are în medie $c$ contacte cu alți indivizi aleși uniform
+din populație. Probabilitatea ca un contact arbitrar să fie cu un individ infectat
+este $I/N$, iar probabilitatea de transmitere la contact eficient este $p$. Astfel,
+rata de infecție a unui susceptibil este $c \cdot p \cdot I/N = \beta I / N$, unde
+$\beta = cp$ este parametrul de transmitere. Fluxul total de noi infecții pe unitate
+de timp este $(\beta I / N) \cdot S$.
+
+Sistemul de ecuații diferențiale ordinare al modelului SIR este:
+\begin{equation}
+\label{eq:sir}
+\boxed{
+\begin{aligned}
+    \diff{S}{t} &= -\frac{\beta S I}{N}, \\[6pt]
+    \diff{I}{t} &= \frac{\beta S I}{N} - \gamma I, \\[6pt]
+    \diff{R}{t} &= \gamma I,
+\end{aligned}
+}
+\end{equation}
+cu condiții inițiale $S(0) = S_0 > 0$, $I(0) = I_0 > 0$, $R(0) = R_0 \geq 0$
+și $S_0 + I_0 + R_0 = N$.
+
+Diagrama de flux a compartimentelor este prezentată în
+\cref{fig:sir_diagram}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    box/.style = {rectangle, draw, thick, minimum width=2cm, minimum height=1.2cm,
+                  fill=blue!10, font=\large\bfseries},
+    arr/.style = {-{Stealth[length=3mm]}, thick},
+    lbl/.style = {font=\normalsize, midway, above}
+]
+    \node[box] (S) {$S$};
+    \node[box, right=3cm of S] (I) {$I$};
+    \node[box, right=3cm of I] (R) {$R$};
+
+    \draw[arr] (S) -- (I) node[lbl] {$\beta SI/N$};
+    \draw[arr] (I) -- (R) node[lbl] {$\gamma I$};
+\end{tikzpicture}
+\caption{Diagrama de flux a compartimentelor modelului SIR.
+Fluxul $\beta SI/N$ reprezintă rata de noi infecții,
+iar $\gamma I$ reprezintă rata de recuperare.}
+\label{fig:sir_diagram}
+\end{figure}
+
+\subsection{Proprietăți matematice fundamentale}
+\label{subsec:sir_proprietati}
+
+Înainte de a analiza comportamentul calitativ al soluțiilor, stabilim proprietățile
+matematice esențiale: existența și unicitatea soluției, conservarea populației totale
+și invarianța domeniului pozitiv.
+
+\begin{teorema}[Existență și unicitate globală]
+\label{thm:existenta_unicitate}
+Fie $\beta, \gamma > 0$, $N > 0$ și $(S_0, I_0, R_0) \in \R^3$ cu
+$S_0, I_0 > 0$, $R_0 \geq 0$. Atunci sistemul \eqref{eq:sir} admite o
+unică soluție globală $(S, I, R) \in C^1([0, \infty); \R^3)$.
+\end{teorema}
+
+\begin{proof}
+Definim $\mathbf{x} = (S, I, R)^\intercal$ și
+$\mathbf{f}(\mathbf{x}) = (-\beta SI/N,\; \beta SI/N - \gamma I,\; \gamma I)^\intercal$.
+Funcția $\mathbf{f} : \R^3 \to \R^3$ este de clasă $C^\infty$ (polinomul de
+gradul doi în $S$ și $I$ este neted), în particular continuu diferențiabilă.
+Prin \emph{teorema Picard-Lindelöf} (Cauchy-Lipschitz), există o soluție locală
+unică pe un interval $[0, T_{\max})$. \\
+\indent Existența \emph{globală} ($T_{\max} = \infty$) se stabilește prin mărginirea
+soluției. Deoarece $S(t), I(t), R(t) \geq 0$ (Teorema~\ref{thm:pozitivitate}) și
+$S + I + R = N$ (Teorema~\ref{thm:conservare}), rezultă că $\|\mathbf{x}(t)\| \leq N\sqrt{3}$
+pentru orice $t \in [0, T_{\max})$. Soluția mărginită nu poate prezenta blow-up în
+timp finit, deci $T_{\max} = \infty$.
+\end{proof}
+
+\begin{teorema}[Conservarea populației totale]
+\label{thm:conservare}
+Pentru orice soluție a sistemului \eqref{eq:sir},
+\begin{equation}
+    S(t) + I(t) + R(t) = N \quad \forall\, t \geq 0.
+\end{equation}
+\end{teorema}
+
+\begin{proof}
+Calculăm derivata sumei:
+\begin{align*}
+    \diff{}{t}(S + I + R) &= \diff{S}{t} + \diff{I}{t} + \diff{R}{t} \\
+    &= -\frac{\beta S I}{N} + \left(\frac{\beta S I}{N} - \gamma I\right) + \gamma I \\
+    &= 0.
+\end{align*}
+Prin integrare, $S(t) + I(t) + R(t) = S_0 + I_0 + R_0 = N$.
+\end{proof}
+
+\begin{teorema}[Pozitivitate și mărginire]
+\label{thm:pozitivitate}
+Dacă $S_0 > 0$, $I_0 > 0$, $R_0 \geq 0$, atunci:
+\begin{equation}
+    S(t) > 0, \quad I(t) > 0, \quad R(t) \geq 0, \quad \forall\, t > 0.
+\end{equation}
+În particular, $S(t), I(t), R(t) \in [0, N]$ pentru orice $t \geq 0$.
+\end{teorema}
+
+\begin{proof}
+\textbf{(a) Pozitivitatea lui $S$:} Din ecuația $dS/dt = -(\beta I/N) S$,
+aceasta este o ecuație diferențială liniară omogenă în $S$ cu
+coeficient $-\beta I(t)/N$. Soluția este:
+\begin{equation}
+\label{eq:S_formula}
+    S(t) = S_0 \cdot \exp\!\left(-\frac{\beta}{N}\int_0^t I(s)\,ds\right).
+\end{equation}
+Deoarece integrala este finită și $S_0 > 0$, rezultă $S(t) > 0$ pentru orice $t \geq 0$
+(presupunând $I(s) \geq 0$, demonstrat mai jos).
+
+\textbf{(b) Pozitivitatea lui $I$:} Rescrierea ecuației a doua ca
+$dI/dt = (\beta S(t)/N - \gamma)\, I$ arată că aceasta este liniară în $I$:
+\begin{equation}
+    I(t) = I_0 \cdot \exp\!\left(\int_0^t \left[\frac{\beta S(\tau)}{N} - \gamma\right]d\tau\right) > 0,
+\end{equation}
+deoarece $I_0 > 0$ și exponențiala este strict pozitivă.
+
+\textbf{(c) Non-negativitatea lui $R$:} Din $dR/dt = \gamma I(t) > 0$ și $R_0 \geq 0$,
+funcția $R$ este strict crescătoare, deci $R(t) > R_0 \geq 0$.
+
+Mărginirea urmează din Teorema~\ref{thm:conservare}: $S(t) \leq N$, $I(t) \leq N$,
+$R(t) \leq N$.
+\end{proof}
+
+\begin{observatie}
+Teorema~\ref{thm:pozitivitate} implică că domeniul pozitiv
+\begin{equation}
+    \Omega = \{(S, I, R) \in \R^3_{\geq 0} : S + I + R = N\}
+\end{equation}
+este \emph{invariant pozitiv} față de fluxul sistemului \eqref{eq:sir}. Prin urmare,
+este suficient să studiem comportamentul soluțiilor pe $\Omega$, care este un simplex
+în $\R^3$.
+\end{observatie}
+
+\begin{teorema}[Monotonia compartimentelor]
+\label{thm:monotonie}
+De-a lungul oricărei soluții a sistemului \eqref{eq:sir}:
+\begin{enumerate}[(i)]
+    \item $S(t)$ este strict descrescătoare;
+    \item $R(t)$ este strict crescătoare;
+    \item $I(t)$ atinge un singur maxim în $t^* = \inf\{t > 0 : S(t) = \gamma N/\beta\}$
+    (dacă $S_0 > \gamma N/\beta$); altfel este descrescătoare.
+\end{enumerate}
+\end{teorema}
+
+\begin{proof}
+\textit{(i)} $dS/dt = -\beta SI/N < 0$ deoarece $S > 0$, $I > 0$.
+\textit{(ii)} $dR/dt = \gamma I > 0$.
+\textit{(iii)} $dI/dt = (\beta S/N - \gamma)I > 0 \Leftrightarrow S > \gamma N/\beta$.
+Deoarece $S$ este strict descrescătoare, există cel mult un moment $t^*$ când
+$S(t^*) = \gamma N/\beta$, care este maximul lui $I$.
+\end{proof}
+
+\subsection{Analiza echilibrelor și stabilitate}
+\label{subsec:sir_stabilitate}
+
+Punctele de echilibru ale sistemului \eqref{eq:sir} sunt obținute din condiția
+$\mathbf{f}(\mathbf{x}^*) = \mathbf{0}$. Ecuațiile conduc la:
+\begin{equation}
+    -\frac{\beta S^* I^*}{N} = 0, \quad
+    \frac{\beta S^* I^*}{N} - \gamma I^* = 0, \quad
+    \gamma I^* = 0.
+\end{equation}
+Din a treia ecuație, $I^* = 0$. Substituind, obținem că orice punct de forma
+$(S^*, 0, N - S^*)$ cu $S^* \in [0, N]$ este echilibru. Mulțimea echilibrelor este:
+\begin{equation}
+    \mathcal{E} = \{(S^*, 0, N - S^*) : S^* \in [0, N]\} \subset \Omega.
+\end{equation}
+
+\begin{observatie}
+Spre deosebire de modelele SIS și SIRS, modelul SIR nu admite echilibru endemic
+cu $I^* > 0$. Aceasta reflectă faptul că, pe termen lung, epidemia se stinge
+întotdeauna (deși poate infecta o fracție mare din populație înainte de stingere).
+\end{observatie}
+
+\textbf{Analiza stabilității locale.} Deoarece $R = N - S - I$, sistemul se reduce
+la două ecuații (eliminând $R$):
+\begin{equation}
+\label{eq:sir2d}
+\begin{cases}
+    \diff{S}{t} = -\dfrac{\beta SI}{N}, \\[8pt]
+    \diff{I}{t} = \dfrac{\beta SI}{N} - \gamma I.
+\end{cases}
+\end{equation}
+Jacobianul sistemului \eqref{eq:sir2d} evaluat la un echilibru $(S^*, 0)$ este:
+\begin{equation}
+\label{eq:jacobian}
+    J(S^*, 0) = \begin{pmatrix}
+        0 & -\beta S^*/N \\
+        0 & \beta S^*/N - \gamma
+    \end{pmatrix}.
+\end{equation}
+Valorile proprii sunt $\lambda_1 = 0$ și $\lambda_2 = \beta S^*/N - \gamma$.
+
+\begin{teorema}[Stabilitatea echilibrului fără boală]
+\label{thm:stabilitate_dfe}
+Echilibrul fără boală $(S^*, 0)$ este:
+\begin{itemize}
+    \item stabil (nelinear) dacă $\beta S^*/N < \gamma$, adică dacă
+    $S^*/N < 1/\Rzero$;
+    \item instabil dacă $\beta S^*/N > \gamma$.
+\end{itemize}
+\end{teorema}
+
+\begin{proof}
+Valorea proprie $\lambda_2 = \beta S^*/N - \gamma$ determină stabilitatea pe
+direcția $I$. Deoarece $\lambda_1 = 0$, analiza liniară este degenerată și
+trebuie completată cu argumente neliniare. Totuși, din Teorema~\ref{thm:monotonie},
+$I(t)$ este descrescătoare dacă $S(t) < \gamma N/\beta$ pentru tot $t > 0$, ceea
+ce se întâmplă când $S_0 < \gamma N/\beta$, implicând stingerea epidemiei.
+\end{proof}
+
+\subsection{Numărul de reproducere de bază $\Rzero$}
+\label{subsec:R0}
+
+\subsubsection{Definiție prin matricea generației următoare}
+
+Metoda \emph{matricei generației următoare} (next-generation matrix), formalizată
+de Diekmann, Heesterbeek și Metz \cite{diekmann1990} și extinsă de
+van den Driessche și Watmough \cite{vandendriesschwatmough2002},
+furnizează o procedură sistematică pentru calculul $\Rzero$ în modele
+compartimentale de complexitate arbitrară.
+
+Fie $\mathbf{x}_I$ vectorul compartimentelor infectate. Scriem:
+\begin{equation}
+    \diff{\mathbf{x}_I}{t} = \mathcal{F}(\mathbf{x}) - \mathcal{V}(\mathbf{x}),
+\end{equation}
+unde $\mathcal{F}_i$ reprezintă rata de apariție a noilor infecții în
+compartimentul $i$, iar $\mathcal{V}_i$ reprezintă rata netă de ieșire
+din compartimentul $i$ prin toate celelalte procese.
+
+Matricele Jacobiene evaluate la echilibrul fără boală $\mathbf{x}_0$ sunt:
+\begin{equation}
+    F = \left[\pdiff{\mathcal{F}_i}{x_j}\right]_{\mathbf{x}_0}, \quad
+    V = \left[\pdiff{\mathcal{V}_i}{x_j}\right]_{\mathbf{x}_0}.
+\end{equation}
+Matricea generației următoare este $K = FV^{-1}$, iar:
+\begin{equation}
+\label{eq:R0_def}
+    \Rzero = \rho(K),
+\end{equation}
+unde $\rho(\cdot)$ este raza spectrală (cea mai mare valoare proprie în modul).
+
+\subsubsection{Calculul $\Rzero$ pentru modelul SIR}
+
+Pentru modelul SIR, singurul compartiment infectat este $\{I\}$.
+La echilibrul fără boală $(S, I, R) = (N, 0, 0)$:
+\begin{equation}
+    \mathcal{F}(I) = \frac{\beta S I}{N} \implies
+    F = \left[\pdiff{\mathcal{F}}{I}\right]_{S=N} = \frac{\beta N}{N} = \beta.
+\end{equation}
+\begin{equation}
+    \mathcal{V}(I) = \gamma I \implies V = \gamma.
+\end{equation}
+Matricea $K$ este scalarul:
+\begin{equation}
+    K = F V^{-1} = \frac{\beta}{\gamma}.
+\end{equation}
+Prin urmare:
+\begin{equation}
+\label{eq:R0_sir}
+    \boxed{\Rzero = \frac{\beta}{\gamma}.}
+\end{equation}
+
+Interpretarea biologică este directă: $1/\gamma$ este durata medie a perioadei
+infecțioase, iar $\beta$ este numărul mediu de contacte eficiente pe unitate de
+timp; produsul lor dă numărul de infecții secundare produse pe durata infecțiozității.
+
+\begin{teorema}[Pragul epidemic]
+\label{thm:prag_epidemic}
+Considerăm o populație inițial complet susceptibilă ($S_0 \approx N$). Atunci:
+\begin{enumerate}[(i)]
+    \item Dacă $\Rzero > 1$, numărul de infectați crește inițial exponențial
+    și are loc o epidemie ($I(t)$ atinge un maxim $I_{\max} > I_0$).
+    \item Dacă $\Rzero \leq 1$, $I(t)$ este imediat descrescătoare și nu are
+    loc nicio epidemie.
+\end{enumerate}
+\end{teorema}
+
+\begin{proof}
+Din $dI/dt|_{t=0} = I_0(\beta S_0/N - \gamma) \approx I_0(\beta - \gamma)$
+(pentru $S_0 \approx N$), concluzia urmează din semnul expresiei $\beta - \gamma$:
+\begin{equation}
+    \diff{I}{t}\bigg|_{t=0} > 0 \iff \beta > \gamma \iff \frac{\beta}{\gamma} > 1 \iff \Rzero > 1.
+    \qedhere
+\end{equation}
+\end{proof}
+
+\subsection{Pragul de imunizare în turmă (herd immunity)}
+\label{subsec:herd_immunity}
+
+\begin{definitie}[Imunitate de grup]
+Imunitatea de grup (\emph{herd immunity}) se referă la protecția indirectă a
+persoanelor susceptibile, generată atunci când o fracție suficient de mare
+din populație este imunizată (fie natural, fie prin vaccinare), astfel încât
+transmiterea susținută a agentului patogen devine imposibilă.
+\end{definitie}
+
+Epidemia se stinge când numărul de reproducere efectiv devine subunitar:
+\begin{equation}
+    \mathcal{R}(t) = \Rzero \cdot \frac{S(t)}{N} < 1 \iff \frac{S(t)}{N} < \frac{1}{\Rzero}.
+\end{equation}
+Dacă o fracție $p$ din populație este imunizată (cu $S/N = 1 - p$), condiția
+de blocare a epidemiei devine:
+\begin{equation}
+    (1 - p) \cdot \Rzero < 1 \iff p > 1 - \frac{1}{\Rzero}.
+\end{equation}
+
+\begin{definitie}[Pragul de imunizare în turmă]
+Fracția minimă a populației care trebuie imunizată pentru a preveni propagarea
+epidemiei este:
+\begin{equation}
+\label{eq:herd_immunity}
+    p_c = 1 - \frac{1}{\Rzero}.
+\end{equation}
+\end{definitie}
+
+\begin{exemplu}
+Pentru rujeolă, $\Rzero \approx 12$--$18$, deci $p_c \approx 92$--$94\%$.
+Pentru COVID-19 (tulpina originală), $\Rzero \approx 2$--$3$, deci
+$p_c \approx 50$--$67\%$. Variantele ulterioare (Delta, Omicron) au $\Rzero$
+semnificativ mai mare, crescând corespunzător pragul de imunizare.
+\end{exemplu}
+
+\subsection{Ecuația dimensiunii finale a epidemiei}
+\label{subsec:final_size}
+
+O caracteristică remarcabilă a modelului SIR este că permite calculul analitic al
+\emph{dimensiunii finale} a epidemiei --- fracția totală din populație care este
+infectată în cursul epidemiei --- fără a rezolva explicit sistemul diferențial.
+
+\begin{teorema}[Ecuația dimensiunii finale]
+\label{thm:final_size}
+Fie $z = 1 - S(\infty)/N$ fracția din populație infectată cumulativ pe durata
+epidemiei, presupunând $S_0 = N$ și $R_0 = 0$. Atunci $z$ este unica rădăcină
+pozitivă a ecuației transcendentale:
+\begin{equation}
+\label{eq:final_size}
+    z = 1 - e^{-\Rzero z}.
+\end{equation}
+\end{teorema}
+
+\begin{proof}
+Împărțind ecuația pentru $S$ la ecuația pentru $R$:
+\begin{equation}
+    \frac{dS}{dR} = \frac{-\beta SI/N}{\gamma I} = -\frac{\beta}{\gamma N} S = -\frac{\Rzero}{N} S.
+\end{equation}
+Această ecuație separabilă în $S$ și $R$ se integrează direct:
+\begin{equation}
+    \int_{S_0}^{S(t)} \frac{dS'}{S'} = -\frac{\Rzero}{N}\int_0^{R(t)} dR' \implies
+    \ln\frac{S(t)}{S_0} = -\frac{\Rzero}{N} R(t).
+\end{equation}
+Deci $S(t) = S_0 \exp\!\left(-\Rzero R(t)/N\right)$.
+
+La $t \to \infty$, $I(\infty) = 0$ (demonstrat mai jos), deci $R(\infty) = N - S(\infty)$
+(pentru $R_0 = 0$). Substituind cu $S_0 = N$:
+\begin{equation}
+    S(\infty) = N e^{-\Rzero(N - S(\infty))/N}.
+\end{equation}
+Notând $z = 1 - S(\infty)/N$ și împărțind prin $N$:
+\begin{equation}
+    1 - z = e^{-\Rzero z} \implies z = 1 - e^{-\Rzero z}.
+\end{equation}
+
+\textbf{Că $I(\infty) = 0$:} Funcția $R(t)$ este monoton crescătoare și mărginită
+de $N$, deci $\lim_{t\to\infty}R(t)$ există. Dacă $I(\infty) = \ell > 0$, atunci
+$R'(t) = \gamma I(t) \geq \gamma\ell > 0$ pentru $t$ suficient de mare, ceea ce
+implică $R(t) \to \infty$, contradicție. Deci $I(\infty) = 0$.
+
+\textbf{Unicitatea rădăcinii pozitive:} Fie $g(z) = 1 - e^{-\Rzero z} - z$.
+Avem $g(0) = 0$, $g'(0) = \Rzero - 1 > 0$ (dacă $\Rzero > 1$), și
+$g(1) = 1 - e^{-\Rzero} - 1 = -e^{-\Rzero} < 0$. Deoarece $g''(z) = -\Rzero^2
+e^{-\Rzero z} < 0$, funcția $g$ este concavă, deci are exact o singură rădăcină
+în $(0,1)$.
+\end{proof}
+
+\begin{observatie}
+Ecuația \eqref{eq:final_size} este \emph{transcendentală} și nu admite soluție
+în formă închisă pentru $\Rzero \neq 1$. Se rezolvă numeric, de exemplu prin
+metoda Newton-Raphson sau prin iterație de punct fix.
+\end{observatie}
+
+\begin{corolar}[Rata de atac finală]
+Dacă $\Rzero > 1$, rata de atac finală $z^*$ satisface $z^* \in (0, 1)$ și
+crește monoton cu $\Rzero$. Limita $\lim_{\Rzero \to \infty} z^* = 1$.
+\end{corolar}
+
+\subsection{Extensii ale modelului SIR}
+\label{subsec:sir_extensii}
+
+Modelul SIR de bază poate fi extins în multiple direcții pentru a acomoda
+realități biologice mai complexe:
+\begin{itemize}
+    \item \textbf{Demografie:} includerea nașterilor și mortalității naturale
+    permite studiul echilibrelor endemice pe termen lung.
+    \item \textbf{Structura pe vârste:} matricele de contact structurate
+    pe grupe de vârstă (modele de tip POLYMOD) capturează heterogenitatea
+    contactelor sociale.
+    \item \textbf{Spațialitate:} modelele cu patch-uri sau ecuații
+    diferențiale parțiale descriu propagarea geografică.
+    \item \textbf{Stochasticitate:} modelele stochastice (proces de ramificare,
+    lanțuri Markov în timp continuu) sunt esențiale pentru populații mici.
+    \item \textbf{Control:} vaccinarea, izolarea și tratamentul pot fi modelate
+    ca fluxuri suplimentare între compartimente.
+\end{itemize}
+
+% ============================================================
+\section{Metode Numerice pentru Ecuații Diferențiale Ordinare}
+\label{sec:metode_numerice}
+% ============================================================
+
+\subsection{Clasificarea metodelor numerice}
+\label{subsec:clasificare_numerice}
+
+Soluția analitică a sistemului SIR nu există în formă închisă (cu excepția
+cazurilor degenerate), ceea ce face indispensabilă rezolvarea numerică.
+O metodă numerică pentru problema cu valori inițiale (PVI):
+\begin{equation}
+\label{eq:pvi}
+    \diff{\mathbf{y}}{t} = \mathbf{f}(t, \mathbf{y}), \quad \mathbf{y}(t_0) = \mathbf{y}_0,
+\end{equation}
+generează o secvență de aproximații $\mathbf{y}_n \approx \mathbf{y}(t_n)$ la
+punctele $t_n = t_0 + nh$.
+
+Metodele numerice se clasifică după mai multe criterii:
+\begin{itemize}
+    \item \textbf{Explicite vs.\ implicite:} la metodele explicite,
+    $\mathbf{y}_{n+1}$ se calculează direct din valorile anterioare; la cele
+    implicite, apare $\mathbf{y}_{n+1}$ și în membrul drept (sistem nonlinear
+    de rezolvat la fiecare pas).
+    \item \textbf{Un-pas vs.\ multi-pas:} metodele un-pas folosesc doar
+    $\mathbf{y}_n$ pentru a calcula $\mathbf{y}_{n+1}$; metodele multi-pas
+    folosesc mai mulți pași anteriori.
+    \item \textbf{Ordin de convergență:} ordinul $p$ al metodei determină
+    că eroarea globală $\|\mathbf{y}(t_n) - \mathbf{y}_n\| = \mathcal{O}(h^p)$.
+    \item \textbf{Pas fix vs.\ adaptiv:} metodele adaptive ajustează
+    $h$ dinamic pe baza unei estimări a erorii locale.
+\end{itemize}
+
+\subsection{Metoda Euler explicită}
+\label{subsec:euler}
+
+Metoda Euler (1768) este cea mai simplă metodă numerică un-pas, obținută
+prin truncherea seriei Taylor la ordinul întâi:
+\begin{equation}
+\label{eq:euler}
+    \mathbf{y}_{n+1} = \mathbf{y}_n + h \cdot \mathbf{f}(t_n, \mathbf{y}_n).
+\end{equation}
+
+\begin{teorema}[Eroarea globală a metodei Euler]
+\label{thm:euler_eroare}
+Dacă $\mathbf{f}$ este Lipschitz în $\mathbf{y}$ cu constanta $L$ și
+$\mathbf{y} \in C^2([t_0, T])$, eroarea globală a metodei Euler satisface:
+\begin{equation}
+    \max_{n: t_n \leq T} \|\mathbf{y}(t_n) - \mathbf{y}_n\| \leq
+    \frac{h}{2L} \max_{t \in [t_0, T]} \|\mathbf{y}''(t)\|
+    \left(e^{L(T - t_0)} - 1\right) = \mathcal{O}(h).
+\end{equation}
+\end{teorema}
+
+Eroarea locală de trunchiere (pe un singur pas) este $\mathcal{O}(h^2)$, deci
+metoda are ordinul local 2 și ordinul global 1.
+
+Aplicată sistemului SIR cu $\mathbf{y}_n = (S_n, I_n, R_n)^\intercal$,
+schema Euler este:
+
+\begin{algorithm}
+\caption{Metoda Euler pentru sistemul SIR}
+\label{alg:euler_sir}
+\begin{lstlisting}[style=pseudocode]
+Input:  beta, gamma, N, S0, I0, R0, t0, tf, h
+Output: Secventa (tn, Sn, In, Rn) pentru tn in [t0, tf]
+
+(S, I, R) <- (S0, I0, R0);  t <- t0
+while t < tf do
+    dS <- -beta * S * I / N
+    dI <-  beta * S * I / N - gamma * I
+    dR <-  gamma * I
+    S  <- S + h * dS
+    I  <- I + h * dI
+    R  <- R + h * dR
+    t  <- t + h
+    Inregistreaza (t, S, I, R)
+end while
+\end{lstlisting}
+\end{algorithm}
+
+\textbf{Stabilitate.} Analiza stabilității metodei Euler pe ecuația test
+$y' = \lambda y$ ($\lambda \in \mathbb{C}$) conduce la factorul de amplificare
+$z = 1 + h\lambda$. Metoda este stabilă dacă $|1 + h\lambda| \leq 1$, ceea ce
+definește domeniul de stabilitate (disc de rază 1 centrat în $-1$ în planul
+$h\lambda$). Această restricție limiteaza pasul de integrare $h$, în special
+pentru probleme \emph{stiff}.
+
+\subsection{Metoda Runge-Kutta de ordinul 4 (RK4)}
+\label{subsec:rk4}
+
+Metodele Runge-Kutta sunt metode un-pas explicite care realizează mai multe
+evaluări ale funcției $\mathbf{f}$ la fiecare pas, atingând ordine superioare
+fără a recurge la derivate de ordin înalt ale soluției.
+
+\subsubsection{Derivare și formulă}
+
+Metoda RK4 clasică (cu 4 stadii) este dată de:
+\begin{equation}
+\label{eq:rk4}
+\begin{aligned}
+    \mathbf{k}_1 &= h \cdot \mathbf{f}(t_n, \mathbf{y}_n), \\
+    \mathbf{k}_2 &= h \cdot \mathbf{f}\!\left(t_n + \tfrac{h}{2},\; \mathbf{y}_n + \tfrac{\mathbf{k}_1}{2}\right), \\
+    \mathbf{k}_3 &= h \cdot \mathbf{f}\!\left(t_n + \tfrac{h}{2},\; \mathbf{y}_n + \tfrac{\mathbf{k}_2}{2}\right), \\
+    \mathbf{k}_4 &= h \cdot \mathbf{f}(t_n + h,\; \mathbf{y}_n + \mathbf{k}_3), \\
+    \mathbf{y}_{n+1} &= \mathbf{y}_n + \frac{1}{6}\left(\mathbf{k}_1 + 2\mathbf{k}_2 + 2\mathbf{k}_3 + \mathbf{k}_4\right).
+\end{aligned}
+\end{equation}
+
+Coeficienții metodei sunt reprezentați compact prin \emph{tabloul Butcher}:
+\begin{equation}
+\label{eq:butcher_rk4}
+\renewcommand{\arraystretch}{1.4}
+\begin{array}{c|cccc}
+    0   &     &     &     &   \\
+    1/2 & 1/2 &     &     &   \\
+    1/2 & 0   & 1/2 &     &   \\
+    1   & 0   & 0   & 1   &   \\
+    \hline
+        & 1/6 & 1/3 & 1/3 & 1/6
+\end{array}
+\end{equation}
+
+\begin{teorema}[Ordinul metodei RK4]
+\label{thm:rk4_ordin}
+Metoda \eqref{eq:rk4} are ordinul de convergență $p = 4$: dacă
+$\mathbf{f} \in C^4$ și $\mathbf{y} \in C^5([t_0, T])$, atunci eroarea globală
+satisface:
+\begin{equation}
+    \max_{n} \|\mathbf{y}(t_n) - \mathbf{y}_n\| = \mathcal{O}(h^4).
+\end{equation}
+\end{teorema}
+
+\begin{proof}[Schiță de demonstrație]
+Eroarea locală de trunchiere $\tau_n$ se obține substituind soluția exactă
+$\mathbf{y}(t_n)$ în schema \eqref{eq:rk4} și expandând în serie Taylor.
+Se poate arăta că primele 4 condiții de ordin (condițiile de arbore Butcher
+pentru $p = 4$) sunt satisfăcute de coeficienții \eqref{eq:butcher_rk4},
+implicând $\tau_n = \mathcal{O}(h^5)$. Eroarea globală este
+$\mathcal{O}(h^4)$ prin acumularea $\sim 1/h$ de pași. Detalii complete
+în \cite{hairer1993}.
+\end{proof}
+
+\begin{algorithm}
+\caption{Metoda Runge-Kutta de ordinul 4 pentru sistemul SIR}
+\label{alg:rk4_sir}
+\begin{lstlisting}[style=pseudocode]
+Input:  f, y0, t0, tf, h
+Output: Secventa (tn, yn)
+
+y <- y0;  t <- t0
+while t < tf do
+    k1 <- h * f(t,       y           )
+    k2 <- h * f(t + h/2, y + k1/2    )
+    k3 <- h * f(t + h/2, y + k2/2    )
+    k4 <- h * f(t + h,   y + k3      )
+    y  <- y + (k1 + 2*k2 + 2*k3 + k4) / 6
+    t  <- t + h
+end while
+\end{lstlisting}
+\end{algorithm}
+
+\subsection{Metode Runge-Kutta adaptive (RK45 / Dormand-Prince)}
+\label{subsec:rk_adaptive}
+
+Metodele cu pas fix impun utilizatorului alegerea unui $h$ adecvat, care este
+o sarcină dificilă în practică. Metodele \emph{adaptive} ajustează automat
+pasul $h$ pe baza unei estimări a erorii locale, asigurând că eroarea rămâne
+sub o toleranță prestabilită $\varepsilon$.
+
+\subsubsection{Metode Runge-Kutta încorporate}
+
+O \emph{pereche RK încorporată} de ordine $p$ și $p+1$ calculează doi
+estimatori pentru $\mathbf{y}_{n+1}$ folosind \emph{același} set de evaluări:
+\begin{equation}
+    \hat{\mathbf{y}}_{n+1} = \mathbf{y}_n + h\sum_{i=1}^s b_i \mathbf{k}_i \quad \text{(ordinul } p\text{)},
+\end{equation}
+\begin{equation}
+    \tilde{\mathbf{y}}_{n+1} = \mathbf{y}_n + h\sum_{i=1}^s \tilde{b}_i \mathbf{k}_i \quad \text{(ordinul } p+1\text{)},
+\end{equation}
+cu $\mathbf{k}_i = \mathbf{f}(t_n + c_i h, \mathbf{y}_n + h\sum_{j<i} a_{ij} \mathbf{k}_j)$.
+Estimatorul de eroare locală este:
+\begin{equation}
+    \mathbf{e}_{n+1} = \tilde{\mathbf{y}}_{n+1} - \hat{\mathbf{y}}_{n+1} = h\sum_{i=1}^s (b_i - \tilde{b}_i)\mathbf{k}_i.
+\end{equation}
+
+\subsubsection{Metoda Dormand-Prince (DOPRI5 / RK45)}
+
+Perechea \textbf{Dormand-Prince} \cite{dormandprince1980}, implementată ca
+\texttt{ode45} în MATLAB, \texttt{RK45} în SciPy (Python), \texttt{Tsit5}
+în Julia și \texttt{lsoda}/\texttt{ode45} în R (pachetul \texttt{deSolve}),
+utilizează 6 evaluări de funcție și are ordinul principal 5 cu estimator
+de eroare de ordinul 4.
+
+Tabloul Butcher complet al metodei Dormand-Prince este:
+
+\begin{equation}
+\label{eq:butcher_dopri5}
+\renewcommand{\arraystretch}{1.4}
+\small
+\begin{array}{c|ccccccc}
+    0       &              &             &            &           &             &          & \\
+    1/5     & 1/5          &             &            &           &             &          & \\
+    3/10    & 3/40         & 9/40        &            &           &             &          & \\
+    4/5     & 44/45        & -56/15      & 32/9       &           &             &          & \\
+    8/9     & 19372/6561   & -25360/2187 & 64448/6561 & -212/729  &             &          & \\
+    1       & 9017/3168    & -355/33     & 46732/5247 & 49/176    & -5103/18656 &          & \\
+    1       & 35/384       & 0           & 500/1113   & 125/192   & -2187/6784  & 11/84    & \\
+    \hline
+    \hat{b} & 35/384       & 0           & 500/1113   & 125/192   & -2187/6784  & 11/84    & 0 \\
+    \tilde{b}& 5179/57600  & 0           & 7571/16695 & 393/640   & -92097/339200 & 187/2100 & 1/40
+\end{array}
+\end{equation}
+
+\subsubsection{Control adaptiv al pasului}
+
+Pasul $h$ este actualizat după fiecare pas pe baza normei erorii:
+\begin{equation}
+    \text{err} = \left\|\frac{\mathbf{e}_{n+1}}{\text{atol} + \text{rtol} \cdot |\mathbf{y}_{n+1}|}\right\|_\infty,
+\end{equation}
+unde $\text{atol}$ și $\text{rtol}$ sunt toleranțe absolute și relative.
+Pasul următor este calculat prin formula:
+\begin{equation}
+    h_{\text{nou}} = h \cdot \min\!\left(f_{\max},\; \max\!\left(f_{\min},\; S \cdot \text{err}^{-1/(p+1)}\right)\right),
+\end{equation}
+cu factorul de siguranță $S = 0.9$ și limitele $f_{\min} = 0.1$, $f_{\max} = 10$.
+
+\subsection{Stabilitate numerică și probleme stiff}
+\label{subsec:stiff}
+
+\begin{definitie}[Problemă stiff]
+\label{def:stiff}
+O problemă cu valori inițiale \eqref{eq:pvi} este numită \emph{stiff} dacă
+valorile proprii ale Jacobianului $\partial \mathbf{f}/\partial \mathbf{y}$ au
+componente cu parte reală negativă de magnitudine mare, impunând pași de
+integrare $h$ extrem de mici pentru metodele explicite din motive de stabilitate,
+chiar dacă soluția variază lent.
+\end{definitie}
+
+\textbf{Aplicație la modelul SIR.} Jacobianul sistemului SIR \eqref{eq:sir2d} este:
+\begin{equation}
+    J(S, I) = \begin{pmatrix}
+        -\beta I/N & -\beta S/N \\
+        \beta I/N & \beta S/N - \gamma
+    \end{pmatrix}.
+\end{equation}
+Valorile proprii depind de $(S, I)$. La debutul epidemiei ($S \approx N$, $I$ mic),
+valorile proprii sunt aproximativ $0$ și $\beta - \gamma$, deci problema nu este
+stiff. Modelul SIR de bază nu este stiff pentru parametri tipici epidemiologici.
+Totuși, extensiile cu mai multe compartimente și rate foarte diferite pot
+produce probleme stiff, necesitând metode implicite (Runge-Kutta implicit, BDF).
+
+\begin{observatie}
+Metodele implicite (de exemplu, metoda Euler implicită, Crank-Nicolson, Radau)
+au domenii de stabilitate nelimitate și sunt preferate pentru probleme stiff,
+în ciuda costului computațional superior (rezolvarea unui sistem nonlinear
+la fiecare pas).
+\end{observatie}
+
+% ============================================================
+\section{Date Epidemiologice — Surse și Preprocesare}
+\label{sec:date_epidemiologice}
+% ============================================================
+
+\subsection{Surse de date epidemiologice}
+\label{subsec:surse_date}
+
+Implementarea și validarea modelelor epidemiologice computaționale necesită date
+empirice de calitate. Principalele surse de date epidemiologice utilizate în
+lucrare sunt:
+
+\begin{itemize}
+    \item \textbf{WHO (Organizația Mondială a Sănătății):} rapoarte de situație,
+    baze de date privind mortalitatea și morbiditatea, date de supraveghere a
+    bolilor infecțioase.
+    \item \textbf{ECDC (Centrul European pentru Prevenirea și Controlul Bolilor):}
+    date de supraveghere pentru statele membre UE, inclusiv serii temporale
+    zilnice pentru COVID-19 și alte boli infecțioase.
+    \item \textbf{Johns Hopkins University CSSE:} setul de date COVID-19
+    (cazuri confirmate, decese, recuperați) la nivel de țară și regiune,
+    disponibil public pe GitHub.
+    \item \textbf{Our World in Data:} date armonizate din surse multiple,
+    incluzând rate de vaccinare, indicatori de mobilitate și date socioeconomice.
+\end{itemize}
+
+\subsection{Structura datelor și preprocesare}
+\label{subsec:preprocesare}
+
+Datele epidemiologice brute prezintă probleme tipice care necesită preprocesare:
+\begin{itemize}
+    \item \textbf{Valori lipsă:} interpolate liniar sau propagate din ultimul
+    valor disponibil (forward fill);
+    \item \textbf{Raportări retrospective:} corecții retroactive care produc
+    valori negative în seriile de incidență zilnică;
+    \item \textbf{Efecte de weekend:} ciclicitate săptămânală în raportare,
+    uniformizată prin media mobilă de 7 zile;
+    \item \textbf{Inconsistențe geografice:} modificări de granițe sau
+    reorganizări administrative.
+\end{itemize}
+
+\subsection{Estimarea parametrilor din date reale}
+\label{subsec:estimare_parametri}
+
+Parametrii $\beta$ și $\gamma$ ai modelului SIR pot fi estimați din date
+observate prin metode statistice:
+\begin{itemize}
+    \item \textbf{Cel mai mic pătrat neliniar (NLS):} minimizarea erorii
+    pătratice dintre datele observate și soluția numerică a modelului;
+    \item \textbf{Estimarea maximă a verosimilității (MLE):} presupunând un
+    model de zgomot (Poisson sau binomial negativ pentru date de incidență),
+    se maximizează funcția de log-verosimilitate;
+    \item \textbf{Inferență bayesiană (MCMC):} permite cuantificarea
+    incertitudinii parametrilor prin distribuții posterioare.
+\end{itemize}
+
+Estimatorul $\hat{\gamma}$ poate fi obținut direct dacă durata medie a
+perioadei infecțioase este disponibilă din studii clinice:
+$\hat{\gamma} = 1 / T_{\text{infecțios}}$. Parametrul $\beta$ este mai
+dificil de estimat și depinde de comportamentul social, intervenții și
+variante ale agentului patogen.

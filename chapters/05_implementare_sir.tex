@@ -1,0 +1,108 @@
+% ============================================================
+% CAPITOLUL 5 — IMPLEMENTAREA MODELULUI SIR
+% ============================================================
+
+\chapter{Implementarea Modelului SIR}
+\label{ch:implementare}
+
+\section{Seturile de date utilizate}
+\label{sec:seturi_date}
+
+\todosec{Descrierea seturilor de date: surse (WHO/ECDC/JHU), perioade,
+boli modelate (COVID-19, gripă sezonieră, rujeolă). Procesul de preprocesare
+și ingestie în YugabyteDB. Parametrii estimați ($\beta$, $\gamma$, $N$)
+pentru fiecare set de date.}
+
+\section{Implementarea în R}
+\label{sec:implementare_r}
+
+\subsection{Structura proiectului și dependențe}
+\label{subsec:r_structura}
+
+\todosec{Structura directorului R, fișierul \texttt{renv.lock}/\texttt{DESCRIPTION},
+dependențe: deSolve, ggplot2, jsonlite, optparse.}
+
+\subsection{Rezolvarea numerică cu pachetul deSolve}
+\label{subsec:r_desolve}
+
+\todosec{Codul complet pentru definirea sistemului SIR, apelul \texttt{ode()}
+cu metodele lsoda, rk4 și ode45. Tratarea ieșirilor și exportul în format JSON
+pentru API-ul Go.}
+
+\subsection{Estimarea parametrilor din date reale}
+\label{subsec:r_estimare}
+
+\todosec{Funcția de minimizare least-squares, apelul \texttt{optim()},
+validarea pe date reale COVID-19.}
+
+\subsection{Vizualizare și export rezultate}
+\label{subsec:r_vizualizare}
+
+\todosec{Grafice ggplot2 ale traiectoriilor S(t), I(t), R(t). Exportul
+datelor în format JSON și CSV.}
+
+\section{Implementarea în Julia}
+\label{sec:implementare_julia}
+
+\subsection{Structura proiectului și pachete}
+\label{subsec:julia_structura}
+
+\todosec{Project.toml, Manifest.toml, dependențe:
+DifferentialEquations.jl, JSON3.jl, ArgParse.jl, Plots.jl.}
+
+\subsection{DifferentialEquations.jl — definiție și solver-e}
+\label{subsec:julia_diffeq}
+
+\todosec{Codul Julia: definire ODEProblem, apelul \texttt{solve()} cu
+Tsit5(), Vern7(), RK4(). Compararea solver-elor din perspectiva acurateței
+și a vitezei. Utilizarea \texttt{@time} și \texttt{BenchmarkTools.jl}.}
+
+\subsection{Optimizări specifice limbajului Julia}
+\label{subsec:julia_optimizari}
+
+\todosec{Evitarea alocărilor prin SVector/MVector (StaticArrays.jl),
+precompilare (\texttt{PackageCompiler.jl}), paralelism cu Threads.@threads
+pentru rulări multiple.}
+
+\section{Implementarea în Python}
+\label{sec:implementare_python}
+
+\subsection{Structura proiectului și dependențe}
+\label{subsec:python_structura}
+
+\todosec{requirements.txt, structura pachetului Python:
+scipy, numpy, matplotlib, pandas, click.}
+
+\subsection{scipy.integrate.solve\_ivp}
+\label{subsec:python_scipy}
+
+\todosec{Codul complet, compararea metodelor: RK45, DOP853, Radau, BDF.
+Benchmarking cu \texttt{timeit} și \texttt{memory\_profiler}.}
+
+\subsection{Vectorizare și optimizare NumPy}
+\label{subsec:python_numpy}
+
+\todosec{Implementarea manuală a RK4 vectorizat cu NumPy față de solve\_ivp.
+Analiza trade-off performanță/flexibilitate.}
+
+\section{Implementarea în SAS}
+\label{sec:implementare_sas}
+
+\subsection{PROC IML — implementare completă}
+\label{subsec:sas_iml}
+
+\todosec{Codul SAS/IML complet pentru RK4 manual și RK45 manual.
+Exportul rezultatelor cu PROC EXPORT. Rutine de benchmarking cu \texttt{DATETIME()}.}
+
+\subsection{Particularități față de celelalte implementări}
+\label{subsec:sas_particularitati}
+
+\todosec{Limitări SAS/IML: lipsa solver-elor adaptive native, overhead al
+mediului SAS, integrarea cu macro-urile SAS pentru parametrizare.}
+
+\section{Interfața comună de integrare cu API-ul Go}
+\label{sec:interfata_integrare}
+
+\todosec{Protocolul de comunicare: API-ul Go lansează un subprocess (R/Julia/Python/SAS),
+transmite parametrii ca JSON pe stdin, primește rezultatele ca JSON pe stdout.
+Schema JSON comună pentru input și output. Tratarea erorilor și timeout-urilor.}

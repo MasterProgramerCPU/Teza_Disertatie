@@ -1,0 +1,160 @@
+\babel@toc {romanian}{}\relax 
+\contentsline {chapter}{Rezumat}{i}{chapter*.1}%
+\contentsline {chapter}{\bbl@ensure@romanian {List\u a de figuri}}{vii}{chapter*.3}%
+\contentsline {chapter}{\bbl@ensure@romanian {List\u a de tabele}}{viii}{chapter*.4}%
+\contentsline {chapter}{Lista algoritmilor}{ix}{chapter*.5}%
+\contentsline {chapter}{\numberline {1}Introducere}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Context și motivație}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Obiectivele lucrării}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Contribuții originale}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Structura lucrării}{3}{section.1.4}%
+\contentsline {chapter}{\numberline {2}Epidemiologie Computațională și Modelarea Matematică a Bolilor Infecțioase}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Fundamente de epidemiologie}{4}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Definiții și concepte fundamentale}{4}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Parametrii fundamentali ai transmiterii}{5}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Modele compartimentale în epidemiologie}{5}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Cadrul general}{5}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Modelul SI}{6}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Modelul SIS}{6}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Modelul SEIR}{7}{subsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.2.5}Modelul SIRS}{7}{subsection.2.2.5}%
+\contentsline {section}{\numberline {2.3}Modelul SIR — Analiză Matematică Detaliată}{7}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Ipoteze și derivarea ecuațiilor din principii prime}{7}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Proprietăți matematice fundamentale}{8}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Analiza echilibrelor și stabilitate}{10}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Numărul de reproducere de bază $\mathcal {R}_0$}{11}{subsection.2.3.4}%
+\contentsline {subsubsection}{Definiție prin matricea generației următoare}{11}{section*.7}%
+\contentsline {subsubsection}{Calculul $\mathcal {R}_0$ pentru modelul SIR}{12}{section*.8}%
+\contentsline {subsection}{\numberline {2.3.5}Pragul de imunizare în turmă (herd immunity)}{12}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}Ecuația dimensiunii finale a epidemiei}{13}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}Extensii ale modelului SIR}{14}{subsection.2.3.7}%
+\contentsline {section}{\numberline {2.4}Metode Numerice pentru Ecuații Diferențiale Ordinare}{15}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Clasificarea metodelor numerice}{15}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Metoda Euler explicită}{15}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}Metoda Runge-Kutta de ordinul 4 (RK4)}{16}{subsection.2.4.3}%
+\contentsline {subsubsection}{Derivare și formulă}{16}{section*.9}%
+\contentsline {subsection}{\numberline {2.4.4}Metode Runge-Kutta adaptive (RK45 / Dormand-Prince)}{17}{subsection.2.4.4}%
+\contentsline {subsubsection}{Metode Runge-Kutta încorporate}{18}{section*.10}%
+\contentsline {subsubsection}{Metoda Dormand-Prince (DOPRI5 / RK45)}{18}{section*.11}%
+\contentsline {subsubsection}{Control adaptiv al pasului}{18}{section*.12}%
+\contentsline {subsection}{\numberline {2.4.5}Stabilitate numerică și probleme stiff}{19}{subsection.2.4.5}%
+\contentsline {section}{\numberline {2.5}Date Epidemiologice — Surse și Preprocesare}{19}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Surse de date epidemiologice}{19}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Structura datelor și preprocesare}{20}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Estimarea parametrilor din date reale}{20}{subsection.2.5.3}%
+\contentsline {chapter}{\numberline {3}Tehnologii și Instrumente Utilizate}{21}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Limbaje de programare pentru calcul științific}{21}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}R}{21}{subsection.3.1.1}%
+\contentsline {subsubsection}{Istoric și filosofie}{21}{section*.13}%
+\contentsline {subsubsection}{Caracteristici tehnice relevante}{21}{section*.14}%
+\contentsline {subsubsection}{Pachete relevante pentru modelul SIR}{22}{section*.15}%
+\contentsline {subsection}{\numberline {3.1.2}Julia}{22}{subsection.3.1.2}%
+\contentsline {subsubsection}{Istoric și filosofie}{22}{section*.16}%
+\contentsline {subsubsection}{Compilare Just-In-Time și sistemul de tipuri}{22}{section*.17}%
+\contentsline {subsubsection}{DifferentialEquations.jl}{23}{section*.18}%
+\contentsline {subsection}{\numberline {3.1.3}Python}{23}{subsection.3.1.3}%
+\contentsline {subsubsection}{Istoric și filosofie}{23}{section*.19}%
+\contentsline {subsubsection}{Caracteristici tehnice și ecosistem științific}{23}{section*.20}%
+\contentsline {subsubsection}{Funcțiile de rezolvare a EDO în SciPy}{24}{section*.21}%
+\contentsline {subsection}{\numberline {3.1.4}SAS}{25}{subsection.3.1.4}%
+\contentsline {subsubsection}{Istoric și model de licențiere}{25}{section*.22}%
+\contentsline {subsubsection}{PROC IML pentru calcul numeric}{25}{section*.23}%
+\contentsline {subsubsection}{Comparație cu alternativele open-source}{26}{section*.24}%
+\contentsline {subsection}{\numberline {3.1.5}Analiză comparativă a limbajelor}{26}{subsection.3.1.5}%
+\contentsline {section}{\numberline {3.2}Baze de date distribuite — YugabyteDB}{26}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Concepte de baze de date distribuite}{26}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Arhitectura YugabyteDB}{27}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Sharding și replicare}{27}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Orchestrarea containerelor — Kubernetes}{28}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Containere și nevoia de orchestrare}{28}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Arhitectura Kubernetes}{28}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Resurse Kubernetes relevante}{29}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}Backend API — Go}{29}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Caracteristici și filosofia limbajului Go}{29}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Ecosistem pentru API-uri REST}{30}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Frontend — Vue.js}{30}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Arhitectura Vue 3 și Composition API}{30}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Ecosistem și biblioteci utilizate}{30}{subsection.3.5.2}%
+\contentsline {chapter}{\numberline {4}Arhitectura Sistemului E-Medicine}{32}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Vedere de ansamblu}{32}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Cerințe funcționale și non-funcționale}{32}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Cerințe funcționale}{32}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Cerințe non-funcționale}{32}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Arhitectura bazei de date distribuite}{33}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Schema relațională}{33}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Modelul datelor epidemiologice}{33}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Strategia de partitionare și replicare în YugabyteDB}{33}{subsection.4.3.3}%
+\contentsline {section}{\numberline {4.4}Arhitectura API-ului backend Go}{33}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Structura modulară a proiectului}{33}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Diagrama endpointurilor REST}{33}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Integrarea cu runner-ele de algoritmi}{33}{subsection.4.4.3}%
+\contentsline {section}{\numberline {4.5}Arhitectura frontend Vue.js}{34}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Structura componentelor}{34}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Fluxul de date și state management}{34}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4.6}Infrastructura Kubernetes}{34}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Topologia cluster-ului}{34}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Deployment YugabyteDB pe Kubernetes}{34}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Deployment API Go și frontend Vue.js}{34}{subsection.4.6.3}%
+\contentsline {chapter}{\numberline {5}Implementarea Modelului SIR}{35}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Seturile de date utilizate}{35}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Implementarea în R}{35}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Structura proiectului și dependențe}{35}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Rezolvarea numerică cu pachetul deSolve}{35}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Estimarea parametrilor din date reale}{35}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Vizualizare și export rezultate}{35}{subsection.5.2.4}%
+\contentsline {section}{\numberline {5.3}Implementarea în Julia}{36}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Structura proiectului și pachete}{36}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}DifferentialEquations.jl — definiție și solver-e}{36}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Optimizări specifice limbajului Julia}{36}{subsection.5.3.3}%
+\contentsline {section}{\numberline {5.4}Implementarea în Python}{36}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Structura proiectului și dependențe}{36}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}scipy.integrate.solve\_ivp}{36}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Vectorizare și optimizare NumPy}{36}{subsection.5.4.3}%
+\contentsline {section}{\numberline {5.5}Implementarea în SAS}{37}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}PROC IML — implementare completă}{37}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Particularități față de celelalte implementări}{37}{subsection.5.5.2}%
+\contentsline {section}{\numberline {5.6}Interfața comună de integrare cu API-ul Go}{37}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{38}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Metodologia de benchmarking}{38}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Configurații hardware utilizate}{38}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Metrici urmărite}{38}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Protocoale de testare și reproductibilitate}{38}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Scalabilitate în funcție de dimensiunea setului de date}{38}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Comparație timp de execuție — R vs Julia vs Python vs SAS}{39}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Consum de memorie și resurse}{39}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Acuratețea numerică a rezultatelor}{39}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Performanța bazei de date distribuite}{39}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Latență la scriere și citire}{39}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}Comportament sub load — teste de stress}{39}{subsection.6.6.2}%
+\contentsline {section}{\numberline {6.7}Performanța API-ului Go}{39}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Analiză comparativă sintetică}{40}{section.6.8}%
+\contentsline {chapter}{\numberline {7}Aplicația Web E-Medicine}{41}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Descrierea funcționalităților aplicației}{41}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Backend Go — Implementare detaliată}{41}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Structura proiectului Go}{41}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Implementarea endpointurilor REST}{41}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Gestionarea execuției algoritmilor}{41}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}Conexiunea la YugabyteDB}{41}{subsection.7.2.4}%
+\contentsline {subsection}{\numberline {7.2.5}Autentificare și securitate}{42}{subsection.7.2.5}%
+\contentsline {section}{\numberline {7.3}Frontend Vue.js — Implementare detaliată}{42}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Structura componentelor și pagini}{42}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Dashboard epidemiologic}{42}{subsection.7.3.2}%
+\contentsline {subsection}{\numberline {7.3.3}Vizualizarea graficelor SIR}{42}{subsection.7.3.3}%
+\contentsline {subsection}{\numberline {7.3.4}Comparatorul de rezultate între limbaje}{42}{subsection.7.3.4}%
+\contentsline {subsection}{\numberline {7.3.5}Interfața pentru seturile de date}{42}{subsection.7.3.5}%
+\contentsline {section}{\numberline {7.4}Fluxuri de utilizare (use cases)}{42}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Testare și validare funcțională}{43}{section.7.5}%
+\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{44}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Sinteza contribuțiilor}{44}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Concluzii privind implementările modelului SIR}{44}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Concluzii privind infrastructura distribuită}{44}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Limitări ale lucrării}{44}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Direcții de dezvoltare viitoare}{45}{section.8.5}%
+\contentsline {chapter}{Bibliografie}{46}{section*.82}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{48}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{49}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{50}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Cod Sursă — Implementarea SAS}{51}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{52}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{53}{appendix.F}%
+\contentsline {chapter}{\numberline {G}Documentația API REST}{54}{appendix.G}%
