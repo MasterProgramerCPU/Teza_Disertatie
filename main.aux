@@ -387,6 +387,7 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Implementarea Modelului SIR}{44}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+<<<<<<< HEAD
 \newlabel{ch:implementare}{{5}{44}{Implementarea Modelului SIR}{chapter.5}{}}
 \newlabel{ch:implementare@cref}{{[chapter][5][]5}{[1][44][]44}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}Seturile de date utilizate}{44}{section.5.1}\protected@file@percent }
@@ -495,6 +496,93 @@
 \newlabel{subsec:consumer_loop@cref}{{[subsection][3][5,6]5.6.3}{[1][54][]55}{}{}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {5.12}{\ignorespaces Bucla generică de consum Redis (ilustrată în Python).}}{55}{lstlisting.5.12}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{56}{chapter.6}\protected@file@percent }
+=======
+\newlabel{ch:implementare}{{5}{35}{Implementarea Modelului SIR}{chapter.5}{}}
+\newlabel{ch:implementare@cref}{{[chapter][5][]5}{[1][35][]35}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Seturile de date utilizate}{35}{section.5.1}\protected@file@percent }
+\newlabel{sec:seturi_date}{{5.1}{35}{Seturile de date utilizate}{section.5.1}{}}
+\newlabel{sec:seturi_date@cref}{{[section][1][5]5.1}{[1][35][]35}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Descrierea seturilor de date: surse (WHO/ECDC/JHU), perioade, boli modelate (COVID-19, gripă sezonieră, rujeolă). Procesul de preprocesare și ingestie în YugabyteDB. Parametrii estimați ($\beta $, $\gamma $, $N$) pentru fiecare set de date.}{35}{section*.40}\protected@file@percent }
+\pgfsyspdfmark {pgfid16}{20028924}{33351100}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Implementarea în R}{35}{section.5.2}\protected@file@percent }
+\newlabel{sec:implementare_r}{{5.2}{35}{Implementarea în R}{section.5.2}{}}
+\newlabel{sec:implementare_r@cref}{{[section][2][5]5.2}{[1][35][]35}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Structura proiectului și dependențe}{35}{subsection.5.2.1}\protected@file@percent }
+\newlabel{subsec:r_structura}{{5.2.1}{35}{Structura proiectului și dependențe}{subsection.5.2.1}{}}
+\newlabel{subsec:r_structura@cref}{{[subsection][1][5,2]5.2.1}{[1][35][]35}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Structura directorului R, fișierul \texttt  {renv.lock}/\texttt  {DESCRIPTION}, dependențe: deSolve, ggplot2, jsonlite, optparse.}{35}{section*.41}\protected@file@percent }
+\pgfsyspdfmark {pgfid17}{20028924}{24234268}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Rezolvarea numerică cu pachetul deSolve}{35}{subsection.5.2.2}\protected@file@percent }
+\newlabel{subsec:r_desolve}{{5.2.2}{35}{Rezolvarea numerică cu pachetul deSolve}{subsection.5.2.2}{}}
+\newlabel{subsec:r_desolve@cref}{{[subsection][2][5,2]5.2.2}{[1][35][]35}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Codul complet pentru definirea sistemului SIR, apelul \texttt  {ode()} cu metodele lsoda, rk4 și ode45. Tratarea ieșirilor și exportul în format JSON pentru API-ul Go.}{35}{section*.42}\protected@file@percent }
+\pgfsyspdfmark {pgfid18}{20028924}{18424711}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Estimarea parametrilor din date reale}{35}{subsection.5.2.3}\protected@file@percent }
+\newlabel{subsec:r_estimare}{{5.2.3}{35}{Estimarea parametrilor din date reale}{subsection.5.2.3}{}}
+\newlabel{subsec:r_estimare@cref}{{[subsection][3][5,2]5.2.3}{[1][35][]35}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Funcția de minimizare least-squares, apelul \texttt  {optim()}, validarea pe date reale COVID-19.}{35}{section*.43}\protected@file@percent }
+\pgfsyspdfmark {pgfid19}{20028924}{12713434}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Vizualizare și export rezultate}{35}{subsection.5.2.4}\protected@file@percent }
+\newlabel{subsec:r_vizualizare}{{5.2.4}{35}{Vizualizare și export rezultate}{subsection.5.2.4}{}}
+\newlabel{subsec:r_vizualizare@cref}{{[subsection][4][5,2]5.2.4}{[1][35][]35}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Grafice ggplot2 ale traiectoriilor S(t), I(t), R(t). Exportul datelor în format JSON și CSV.}{35}{section*.44}\protected@file@percent }
+\pgfsyspdfmark {pgfid20}{20028924}{6944602}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Implementarea în Julia}{36}{section.5.3}\protected@file@percent }
+\newlabel{sec:implementare_julia}{{5.3}{36}{Implementarea în Julia}{section.5.3}{}}
+\newlabel{sec:implementare_julia@cref}{{[section][3][5]5.3}{[1][35][]36}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Structura proiectului și pachete}{36}{subsection.5.3.1}\protected@file@percent }
+\newlabel{subsec:julia_structura}{{5.3.1}{36}{Structura proiectului și pachete}{subsection.5.3.1}{}}
+\newlabel{subsec:julia_structura@cref}{{[subsection][1][5,3]5.3.1}{[1][35][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Project.toml, Manifest.toml, dependențe: DifferentialEquations.jl, JSON3.jl, ArgParse.jl, Plots.jl.}{36}{section*.45}\protected@file@percent }
+\pgfsyspdfmark {pgfid21}{20028924}{45673737}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}DifferentialEquations.jl — definiție și solver-e}{36}{subsection.5.3.2}\protected@file@percent }
+\newlabel{subsec:julia_diffeq}{{5.3.2}{36}{DifferentialEquations.jl — definiție și solver-e}{subsection.5.3.2}{}}
+\newlabel{subsec:julia_diffeq@cref}{{[subsection][2][5,3]5.3.2}{[1][36][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Codul Julia: definire ODEProblem, apelul \texttt  {solve()} cu Tsit5(), Vern7(), RK4(). Compararea solver-elor din perspectiva acurateței și a vitezei. Utilizarea \texttt  {@time} și \texttt  {BenchmarkTools.jl}.}{36}{section*.46}\protected@file@percent }
+\pgfsyspdfmark {pgfid22}{20028924}{39244336}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Optimizări specifice limbajului Julia}{36}{subsection.5.3.3}\protected@file@percent }
+\newlabel{subsec:julia_optimizari}{{5.3.3}{36}{Optimizări specifice limbajului Julia}{subsection.5.3.3}{}}
+\newlabel{subsec:julia_optimizari@cref}{{[subsection][3][5,3]5.3.3}{[1][36][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Evitarea alocărilor prin SVector/MVector (StaticArrays.jl), precompilare (\texttt  {PackageCompiler.jl}), paralelism cu Threads.@threads pentru rulări multiple.}{36}{section*.47}\protected@file@percent }
+\pgfsyspdfmark {pgfid23}{20028924}{32804786}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Implementarea în Python}{36}{section.5.4}\protected@file@percent }
+\newlabel{sec:implementare_python}{{5.4}{36}{Implementarea în Python}{section.5.4}{}}
+\newlabel{sec:implementare_python@cref}{{[section][4][5]5.4}{[1][36][]36}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Structura proiectului și dependențe}{36}{subsection.5.4.1}\protected@file@percent }
+\newlabel{subsec:python_structura}{{5.4.1}{36}{Structura proiectului și dependențe}{subsection.5.4.1}{}}
+\newlabel{subsec:python_structura@cref}{{[subsection][1][5,4]5.4.1}{[1][36][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ requirements.txt, structura pachetului Python: scipy, numpy, matplotlib, pandas, click.}{36}{section*.48}\protected@file@percent }
+\pgfsyspdfmark {pgfid24}{20028924}{24378061}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}scipy.integrate.solve\_ivp}{36}{subsection.5.4.2}\protected@file@percent }
+\newlabel{subsec:python_scipy}{{5.4.2}{36}{scipy.integrate.solve\_ivp}{subsection.5.4.2}{}}
+\newlabel{subsec:python_scipy@cref}{{[subsection][2][5,4]5.4.2}{[1][36][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Codul complet, compararea metodelor: RK45, DOP853, Radau, BDF. Benchmarking cu \texttt  {timeit} și \texttt  {memory\_profiler}.}{36}{section*.49}\protected@file@percent }
+\pgfsyspdfmark {pgfid25}{20028924}{18576089}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}Vectorizare și optimizare NumPy}{36}{subsection.5.4.3}\protected@file@percent }
+\newlabel{subsec:python_numpy}{{5.4.3}{36}{Vectorizare și optimizare NumPy}{subsection.5.4.3}{}}
+\newlabel{subsec:python_numpy@cref}{{[subsection][3][5,4]5.4.3}{[1][36][]36}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Implementarea manuală a RK4 vectorizat cu NumPy față de solve\_ivp. Analiza trade-off performanță/flexibilitate.}{36}{section*.50}\protected@file@percent }
+\pgfsyspdfmark {pgfid26}{20028924}{12735185}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Implementarea în SAS}{37}{section.5.5}\protected@file@percent }
+\newlabel{sec:implementare_sas}{{5.5}{37}{Implementarea în SAS}{section.5.5}{}}
+\newlabel{sec:implementare_sas@cref}{{[section][5][5]5.5}{[1][36][]37}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.1}PROC IML — implementare completă}{37}{subsection.5.5.1}\protected@file@percent }
+\newlabel{subsec:sas_iml}{{5.5.1}{37}{PROC IML — implementare completă}{subsection.5.5.1}{}}
+\newlabel{subsec:sas_iml@cref}{{[subsection][1][5,5]5.5.1}{[1][36][]37}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Codul SAS/IML complet pentru RK4 manual și RK45 manual. Exportul rezultatelor cu PROC EXPORT. Rutine de benchmarking cu \texttt  {DATETIME()}.}{37}{section*.51}\protected@file@percent }
+\pgfsyspdfmark {pgfid27}{20028924}{45685428}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5.2}Particularități față de celelalte implementări}{37}{subsection.5.5.2}\protected@file@percent }
+\newlabel{subsec:sas_particularitati}{{5.5.2}{37}{Particularități față de celelalte implementări}{subsection.5.5.2}{}}
+\newlabel{subsec:sas_particularitati@cref}{{[subsection][2][5,5]5.5.2}{[1][37][]37}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Limitări SAS/IML: lipsa solver-elor adaptive native, overhead al mediului SAS, integrarea cu macro-urile SAS pentru parametrizare.}{37}{section*.52}\protected@file@percent }
+\pgfsyspdfmark {pgfid28}{20028924}{39832566}
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Interfața comună de integrare cu API-ul Go}{37}{section.5.6}\protected@file@percent }
+\newlabel{sec:interfata_integrare}{{5.6}{37}{Interfața comună de integrare cu API-ul Go}{section.5.6}{}}
+\newlabel{sec:interfata_integrare@cref}{{[section][6][5]5.6}{[1][37][]37}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Protocolul de comunicare: API-ul Go lansează un subprocess (R/Julia/Python/SAS), transmite parametrii ca JSON pe stdin, primește rezultatele ca JSON pe stdout. Schema JSON comună pentru input și output. Tratarea erorilor și timeout-urilor.}{37}{section*.53}\protected@file@percent }
+\pgfsyspdfmark {pgfid29}{20028924}{32131874}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{38}{chapter.6}\protected@file@percent }
+>>>>>>> d672c8d1b1d36fe6b11452f44f043e539d44c968
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \newlabel{ch:evaluare}{{6}{56}{Evaluarea Performanței și Scalabilității}{chapter.6}{}}
@@ -639,6 +727,7 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{62}{chapter.8}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+<<<<<<< HEAD
 \newlabel{ch:concluzii}{{8}{62}{Concluzii și Direcții de Dezvoltare Viitoare}{chapter.8}{}}
 \newlabel{ch:concluzii@cref}{{[chapter][8][]8}{[1][62][]62}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8.1}Sinteza contribuțiilor}{62}{section.8.1}\protected@file@percent }
@@ -666,6 +755,35 @@
 \newlabel{sec:directii_viitoare@cref}{{[section][5][8]8.5}{[1][62][]63}{}{}{}}
 \@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Direcții: (1) Extinderea la modele SEIR, SIRS, modele stochastice; (2) Integrarea de modele de machine learning pentru estimarea parametrilor; (3) Adăugarea de vizualizări spațiale (hărți de propagare); (4) Suport pentru date în timp real (streaming cu Apache Kafka); (5) Implementarea unui modul de alertare epidemiologică automată; (6) Extinderea benchmarkurilor la GPU (CUDA, ROCm) pentru Julia și Python.}{63}{section*.61}\protected@file@percent }
 \pgfsyspdfmark {pgfid34}{20028924}{45184395}
+=======
+\newlabel{ch:concluzii}{{8}{44}{Concluzii și Direcții de Dezvoltare Viitoare}{chapter.8}{}}
+\newlabel{ch:concluzii@cref}{{[chapter][8][]8}{[1][44][]44}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Sinteza contribuțiilor}{44}{section.8.1}\protected@file@percent }
+\newlabel{sec:sinteza_contributii}{{8.1}{44}{Sinteza contribuțiilor}{section.8.1}{}}
+\newlabel{sec:sinteza_contributii@cref}{{[section][1][8]8.1}{[1][44][]44}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Rezumarea contribuțiilor principale ale lucrării: implementările comparative, infrastructura distribuită, aplicația web. Ce a fost atins față de obiectivele din Capitolul 1.}{44}{section*.78}\protected@file@percent }
+\pgfsyspdfmark {pgfid54}{20028924}{30750116}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Concluzii privind implementările modelului SIR}{44}{section.8.2}\protected@file@percent }
+\newlabel{sec:concluzii_sir}{{8.2}{44}{Concluzii privind implementările modelului SIR}{section.8.2}{}}
+\newlabel{sec:concluzii_sir@cref}{{[section][2][8]8.2}{[1][44][]44}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Care limbaj s-a dovedit cel mai performant și în ce condiții? Care oferă cel mai bun compromis performanță/ușurință de utilizare? Recomandări pentru practicieni.}{44}{section*.79}\protected@file@percent }
+\pgfsyspdfmark {pgfid55}{20028924}{23237151}
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}Concluzii privind infrastructura distribuită}{44}{section.8.3}\protected@file@percent }
+\newlabel{sec:concluzii_infrastructura}{{8.3}{44}{Concluzii privind infrastructura distribuită}{section.8.3}{}}
+\newlabel{sec:concluzii_infrastructura@cref}{{[section][3][8]8.3}{[1][44][]44}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Evaluarea YugabyteDB + K8s pentru date epidemiologice: avantaje (scalabilitate, fault tolerance), dezavantaje (complexitate operațională). Potrivirea arhitecturii pentru sistemele e-medicine.}{44}{section*.80}\protected@file@percent }
+\pgfsyspdfmark {pgfid56}{20028924}{15623722}
+\@writefile{toc}{\contentsline {section}{\numberline {8.4}Limitări ale lucrării}{44}{section.8.4}\protected@file@percent }
+\newlabel{sec:limitari}{{8.4}{44}{Limitări ale lucrării}{section.8.4}{}}
+\newlabel{sec:limitari@cref}{{[section][4][8]8.4}{[1][44][]44}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Limitări recunoscute: modelul SIR de bază ignoră structura de vârstă, spațialitatea și stochasticitatea; benchmarkurile sunt limitate la o serie de configurații hardware; interfața web nu implementează autentificare completă în versiunea prezentată.}{44}{section*.81}\protected@file@percent }
+\pgfsyspdfmark {pgfid57}{20028924}{8139751}
+\@writefile{toc}{\contentsline {section}{\numberline {8.5}Direcții de dezvoltare viitoare}{45}{section.8.5}\protected@file@percent }
+\newlabel{sec:directii_viitoare}{{8.5}{45}{Direcții de dezvoltare viitoare}{section.8.5}{}}
+\newlabel{sec:directii_viitoare@cref}{{[section][5][8]8.5}{[1][44][]45}{}{}{}}
+\@writefile{tdo}{\contentsline {todo}{\fcolorbox {black}{yellow!30}{\textcolor {yellow!30}{o}}\ Direcții: (1) Extinderea la modele SEIR, SIRS, modele stochastice; (2) Integrarea de modele de machine learning pentru estimarea parametrilor; (3) Adăugarea de vizualizări spațiale (hărți de propagare); (4) Suport pentru date în timp real (streaming cu Apache Kafka); (5) Implementarea unui modul de alertare epidemiologică automată; (6) Extinderea benchmarkurilor la GPU (CUDA, ROCm) pentru Julia și Python.}{45}{section*.82}\protected@file@percent }
+\pgfsyspdfmark {pgfid58}{20028924}{45198645}
+>>>>>>> d672c8d1b1d36fe6b11452f44f043e539d44c968
 \bibstyle{unsrt}
 \bibdata{bibliography}
 \bibcite{andersonmay1991}{{1}{}{{}}{{}}}
