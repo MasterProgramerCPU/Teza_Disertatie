@@ -87,6 +87,18 @@
 }
 \lstset{style=codestyle}
 
+\lstdefinelanguage{Julia}{
+  morekeywords={function,end,if,else,elseif,for,while,return,
+                using,import,export,module,struct,mutable,
+                const,let,do,try,catch,finally,begin,quote,
+                nothing,true,false,Int,Float64,String,Bool,
+                AbstractFloat,Vector,Matrix,Tuple,Dict,Set},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[b]'
+}
+
 % ============================================================
 % ALGORITHMS
 % ============================================================

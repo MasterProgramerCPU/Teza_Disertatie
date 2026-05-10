@@ -77,84 +77,90 @@
 \contentsline {subsection}{\numberline {3.5.2}Ecosistem și biblioteci utilizate}{30}{subsection.3.5.2}%
 \contentsline {chapter}{\numberline {4}Arhitectura Sistemului E-Medicine}{32}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Vedere de ansamblu}{32}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Cerințe funcționale și non-funcționale}{32}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Cerințe funcționale}{32}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Cerințe non-funcționale}{32}{subsection.4.2.2}%
-\contentsline {section}{\numberline {4.3}Arhitectura bazei de date distribuite}{33}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Schema relațională}{33}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Modelul datelor epidemiologice}{33}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Strategia de partitionare și replicare în YugabyteDB}{33}{subsection.4.3.3}%
-\contentsline {section}{\numberline {4.4}Arhitectura API-ului backend Go}{33}{section.4.4}%
-\contentsline {subsection}{\numberline {4.4.1}Structura modulară a proiectului}{33}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.4.2}Diagrama endpointurilor REST}{33}{subsection.4.4.2}%
-\contentsline {subsection}{\numberline {4.4.3}Integrarea cu runner-ele de algoritmi}{33}{subsection.4.4.3}%
-\contentsline {section}{\numberline {4.5}Arhitectura frontend Vue.js}{34}{section.4.5}%
-\contentsline {subsection}{\numberline {4.5.1}Structura componentelor}{34}{subsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.5.2}Fluxul de date și state management}{34}{subsection.4.5.2}%
-\contentsline {section}{\numberline {4.6}Infrastructura Kubernetes}{34}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Topologia cluster-ului}{34}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Deployment YugabyteDB pe Kubernetes}{34}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}Deployment API Go și frontend Vue.js}{34}{subsection.4.6.3}%
-\contentsline {chapter}{\numberline {5}Implementarea Modelului SIR}{35}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Seturile de date utilizate}{35}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Implementarea în R}{35}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Structura proiectului și dependențe}{35}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Rezolvarea numerică cu pachetul deSolve}{35}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Estimarea parametrilor din date reale}{35}{subsection.5.2.3}%
-\contentsline {subsection}{\numberline {5.2.4}Vizualizare și export rezultate}{35}{subsection.5.2.4}%
-\contentsline {section}{\numberline {5.3}Implementarea în Julia}{36}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Structura proiectului și pachete}{36}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}DifferentialEquations.jl — definiție și solver-e}{36}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}Optimizări specifice limbajului Julia}{36}{subsection.5.3.3}%
-\contentsline {section}{\numberline {5.4}Implementarea în Python}{36}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Structura proiectului și dependențe}{36}{subsection.5.4.1}%
-\contentsline {subsection}{\numberline {5.4.2}scipy.integrate.solve\_ivp}{36}{subsection.5.4.2}%
-\contentsline {subsection}{\numberline {5.4.3}Vectorizare și optimizare NumPy}{36}{subsection.5.4.3}%
-\contentsline {section}{\numberline {5.5}Implementarea în SAS}{37}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}PROC IML — implementare completă}{37}{subsection.5.5.1}%
-\contentsline {subsection}{\numberline {5.5.2}Particularități față de celelalte implementări}{37}{subsection.5.5.2}%
-\contentsline {section}{\numberline {5.6}Interfața comună de integrare cu API-ul Go}{37}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{38}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Metodologia de benchmarking}{38}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Configurații hardware utilizate}{38}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Metrici urmărite}{38}{subsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.1.3}Protocoale de testare și reproductibilitate}{38}{subsection.6.1.3}%
-\contentsline {section}{\numberline {6.2}Scalabilitate în funcție de dimensiunea setului de date}{38}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Comparație timp de execuție — R vs Julia vs Python vs SAS}{39}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Consum de memorie și resurse}{39}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Acuratețea numerică a rezultatelor}{39}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Performanța bazei de date distribuite}{39}{section.6.6}%
-\contentsline {subsection}{\numberline {6.6.1}Latență la scriere și citire}{39}{subsection.6.6.1}%
-\contentsline {subsection}{\numberline {6.6.2}Comportament sub load — teste de stress}{39}{subsection.6.6.2}%
-\contentsline {section}{\numberline {6.7}Performanța API-ului Go}{39}{section.6.7}%
-\contentsline {section}{\numberline {6.8}Analiză comparativă sintetică}{40}{section.6.8}%
-\contentsline {chapter}{\numberline {7}Aplicația Web E-Medicine}{41}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Descrierea funcționalităților aplicației}{41}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Backend Go — Implementare detaliată}{41}{section.7.2}%
-\contentsline {subsection}{\numberline {7.2.1}Structura proiectului Go}{41}{subsection.7.2.1}%
-\contentsline {subsection}{\numberline {7.2.2}Implementarea endpointurilor REST}{41}{subsection.7.2.2}%
-\contentsline {subsection}{\numberline {7.2.3}Gestionarea execuției algoritmilor}{41}{subsection.7.2.3}%
-\contentsline {subsection}{\numberline {7.2.4}Conexiunea la YugabyteDB}{41}{subsection.7.2.4}%
-\contentsline {subsection}{\numberline {7.2.5}Autentificare și securitate}{42}{subsection.7.2.5}%
-\contentsline {section}{\numberline {7.3}Frontend Vue.js — Implementare detaliată}{42}{section.7.3}%
-\contentsline {subsection}{\numberline {7.3.1}Structura componentelor și pagini}{42}{subsection.7.3.1}%
-\contentsline {subsection}{\numberline {7.3.2}Dashboard epidemiologic}{42}{subsection.7.3.2}%
-\contentsline {subsection}{\numberline {7.3.3}Vizualizarea graficelor SIR}{42}{subsection.7.3.3}%
-\contentsline {subsection}{\numberline {7.3.4}Comparatorul de rezultate între limbaje}{42}{subsection.7.3.4}%
-\contentsline {subsection}{\numberline {7.3.5}Interfața pentru seturile de date}{42}{subsection.7.3.5}%
-\contentsline {section}{\numberline {7.4}Fluxuri de utilizare (use cases)}{42}{section.7.4}%
-\contentsline {section}{\numberline {7.5}Testare și validare funcțională}{43}{section.7.5}%
-\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{44}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Sinteza contribuțiilor}{44}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Concluzii privind implementările modelului SIR}{44}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Concluzii privind infrastructura distribuită}{44}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Limitări ale lucrării}{44}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Direcții de dezvoltare viitoare}{45}{section.8.5}%
-\contentsline {chapter}{Bibliografie}{46}{section*.82}%
-\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{48}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{49}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{50}{appendix.C}%
-\contentsline {chapter}{\numberline {D}Cod Sursă — Implementarea SAS}{51}{appendix.D}%
-\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{52}{appendix.E}%
-\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{53}{appendix.F}%
-\contentsline {chapter}{\numberline {G}Documentația API REST}{54}{appendix.G}%
+\contentsline {section}{\numberline {4.2}Cerințe funcționale și non-funcționale}{33}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Cerințe funcționale}{33}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Cerințe non-funcționale}{34}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Arhitectura bazei de date distribuite}{35}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Schema relațională}{35}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Modelul datelor epidemiologice}{36}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Strategia de partiționare și replicare în YugabyteDB}{36}{subsection.4.3.3}%
+\contentsline {section}{\numberline {4.4}Arhitectura API-ului backend Go}{37}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Structura modulară a proiectului}{37}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Mecanismul de autentificare JWT}{38}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Diagrama endpointurilor REST}{39}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Integrarea cu runner-ele de algoritmi}{40}{subsection.4.4.4}%
+\contentsline {section}{\numberline {4.5}Arhitectura frontend Vue.js}{40}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Structura componentelor}{40}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Fluxul de date și state management}{41}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4.6}Infrastructura Kubernetes}{42}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Topologia cluster-ului}{42}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Deployment YugabyteDB pe Kubernetes}{43}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Deployment API Go și frontend Vue.js}{43}{subsection.4.6.3}%
+\contentsline {chapter}{\numberline {5}Implementarea Modelului SIR}{44}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Seturile de date utilizate}{44}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Sursa datelor și formatul brut}{44}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Preprocesarea și conversia în formatul sistemului}{45}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Parametrii estimați și scenariile de simulare}{45}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Implementarea în R}{46}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Structura proiectului și dependențe}{46}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Definiția sistemului ODE și metoda RK4}{46}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Colectarea metricilor și stocarea în baza de date}{47}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Implementarea în Julia}{48}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Structura proiectului și pachete}{48}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}ODEProblem și solver-ul Tsit5}{48}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Colectarea metricilor și inserarea bulk}{49}{subsection.5.3.3}%
+\contentsline {section}{\numberline {5.4}Implementarea în Python}{50}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Structura proiectului și dependențe}{50}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}scipy.integrate.solve\_ivp cu metoda RK45}{50}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Colectarea metricilor și inserarea bulk}{51}{subsection.5.4.3}%
+\contentsline {section}{\numberline {5.5}Implementarea de referință în SAS/IML}{52}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}RK4 manual în PROC IML}{52}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Considerații privind precizia și limitările SAS/IML}{53}{subsection.5.5.2}%
+\contentsline {section}{\numberline {5.6}Interfața comună de integrare cu API-ul Go}{54}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}Protocolul de comunicare prin cozi Redis}{54}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Schema mesajului de job}{54}{subsection.5.6.2}%
+\contentsline {subsection}{\numberline {5.6.3}Bucla de consum și tratarea erorilor}{55}{subsection.5.6.3}%
+\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{56}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Metodologia de benchmarking}{56}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Configurații hardware utilizate}{56}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Metrici urmărite}{56}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Protocoale de testare și reproductibilitate}{56}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Scalabilitate în funcție de dimensiunea setului de date}{56}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Comparație timp de execuție — R vs Julia vs Python vs SAS}{57}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Consum de memorie și resurse}{57}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Acuratețea numerică a rezultatelor}{57}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Performanța bazei de date distribuite}{57}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Latență la scriere și citire}{57}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}Comportament sub load — teste de stress}{57}{subsection.6.6.2}%
+\contentsline {section}{\numberline {6.7}Performanța API-ului Go}{57}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Analiză comparativă sintetică}{58}{section.6.8}%
+\contentsline {chapter}{\numberline {7}Aplicația Web E-Medicine}{59}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Descrierea funcționalităților aplicației}{59}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Backend Go — Implementare detaliată}{59}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Structura proiectului Go}{59}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Implementarea endpointurilor REST}{59}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Gestionarea execuției algoritmilor}{59}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}Conexiunea la YugabyteDB}{59}{subsection.7.2.4}%
+\contentsline {subsection}{\numberline {7.2.5}Autentificare și securitate}{60}{subsection.7.2.5}%
+\contentsline {section}{\numberline {7.3}Frontend Vue.js — Implementare detaliată}{60}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Structura componentelor și pagini}{60}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Dashboard epidemiologic}{60}{subsection.7.3.2}%
+\contentsline {subsection}{\numberline {7.3.3}Vizualizarea graficelor SIR}{60}{subsection.7.3.3}%
+\contentsline {subsection}{\numberline {7.3.4}Comparatorul de rezultate între limbaje}{60}{subsection.7.3.4}%
+\contentsline {subsection}{\numberline {7.3.5}Interfața pentru seturile de date}{60}{subsection.7.3.5}%
+\contentsline {section}{\numberline {7.4}Fluxuri de utilizare (use cases)}{60}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Testare și validare funcțională}{61}{section.7.5}%
+\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{62}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Sinteza contribuțiilor}{62}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Concluzii privind implementările modelului SIR}{62}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Concluzii privind infrastructura distribuită}{62}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Limitări ale lucrării}{62}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Direcții de dezvoltare viitoare}{63}{section.8.5}%
+\contentsline {chapter}{Bibliografie}{64}{section*.61}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{67}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{68}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{69}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Cod Sursă — Implementarea SAS}{70}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{71}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{72}{appendix.F}%
+\contentsline {chapter}{\numberline {G}Documentația API REST}{73}{appendix.G}%
