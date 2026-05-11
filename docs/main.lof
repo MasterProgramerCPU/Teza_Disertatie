@@ -1,0 +1,20 @@
+\babel@toc {romanian}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagrama de flux a compartimentelor modelului SIR. Fluxul $\beta SI/N$ reprezintă rata de noi infecții, iar $\gamma I$ reprezintă rata de recuperare.}}{8}{figure.caption.6}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către SPA sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}}{31}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama entitate-relație a bazei de date. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit {FK}; raportul de cardinalitate 1\,:\,N este indicat pe fiecare relație.}}{33}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Topologia cluster-ului Kubernetes. Ingressul este expus ca LoadBalancer Service în fața clusterului. Worker Node~1 găzduiește frontend-ul, primul runner și prima instanță YugabyteDB tserver; Worker Node~2 găzduiește celelalte două runner-e și doi tserveri.}}{40}{figure.caption.26}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Ciclul de viață al unui job de simulare: tranziția de stare în \texttt {simulation\_runs} în funcție de evenimentele din runner.}}{50}{figure.caption.29}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

@@ -1,0 +1,99 @@
+% ============================================================
+% CAPITOLUL 7 — APLICAȚIA WEB E-MEDICINE
+% ============================================================
+
+\chapter{Aplicația Web E-Medicine}
+\label{ch:aplicatie}
+
+\section{Descrierea funcționalităților aplicației}
+\label{sec:functionalitati}
+
+\todosec{Prezentare generală a aplicației: ecranele principale, fluxurile
+de utilizare cheie. Screenshot-uri ale interfeței finale.}
+
+\section{Backend Go — Implementare detaliată}
+\label{sec:backend_go}
+
+\subsection{Structura proiectului Go}
+\label{subsec:go_structura_proiect}
+
+\todosec{Arborele de directoare al proiectului Go, convenții de denumire,
+separarea responsabilităților pe pachete: api, db, runner, models, config.}
+
+\subsection{Implementarea endpointurilor REST}
+\label{subsec:go_endpoints}
+
+\todosec{Codul Go pentru endpointurile principale, utilizând framework-ul ales
+(Gin/Echo). Demonstrarea pattern-ului: handler -> service -> repository -> DB.}
+
+\subsection{Gestionarea execuției algoritmilor}
+\label{subsec:go_runnere}
+
+\todosec{Implementarea orchestrării asincrone a runner-elor prin Redis:
+publicarea mesajelor JSON în listele \texttt{sir:jobs:<language>}
+(\texttt{r}, \texttt{julia}, \texttt{python}) prin \texttt{LPUSH},
+gestionarea statusurilor (pending/running/completed/failed) prin tranziții
+de stare în tabelul \texttt{simulation\_runs}, timeout-uri și mecanisme
+de retry. Cod Go cu clientul \texttt{go-redis/redis/v9} și context
+cancellation.}
+
+\subsection{Conexiunea la YugabyteDB}
+\label{subsec:go_db}
+
+\todosec{Driverul \texttt{pgx} pentru PostgreSQL/YSQL, connection pooling,
+query-uri parametrizate pentru prevenirea SQL injection.}
+
+\subsection{Autentificare și securitate}
+\label{subsec:go_securitate}
+
+\todosec{JWT middleware, CORS configuration, rate limiting, validarea
+input-ului, HTTPS cu certificate TLS.}
+
+\section{Frontend Vue.js — Implementare detaliată}
+\label{sec:frontend_vue}
+
+\subsection{Structura componentelor și pagini}
+\label{subsec:vue_componente}
+
+\todosec{Arborele de componente, structura directorului \texttt{src/},
+tipare de compunere (composables reutilizabile).}
+
+\subsection{Dashboard epidemiologic}
+\label{subsec:vue_dashboard}
+
+\todosec{Componenta Dashboard: metrici cheie (R0 curent, vârf de infectați,
+dimensiunea finală estimată), grafice de sumar, ultimele rulări.}
+
+\subsection{Vizualizarea graficelor SIR}
+\label{subsec:vue_grafice_sir}
+
+\todosec{Componenta SIRChart cu ECharts/Chart.js: afișarea traiectoriilor
+S(t), I(t), R(t), zoom interactiv, export PNG/SVG. Codul Vue 3 (Composition API).}
+
+\subsection{Comparatorul de rezultate între limbaje}
+\label{subsec:vue_comparator}
+
+\todosec{Pagina de comparare: suprapunerea graficelor din rulări multiple
+(R, Julia, Python pe același set de date), tabelul de diferențe numerice,
+graficul timpilor de execuție.}
+
+\subsection{Interfața pentru seturile de date}
+\label{subsec:vue_datasets}
+
+\todosec{CRUD pentru seturile de date: upload CSV, previzualizare, editarea
+metadatelor, ștergere. Validarea client-side a formularelor.}
+
+\section{Fluxuri de utilizare (use cases)}
+\label{sec:use_cases}
+
+\todosec{Descrierea pas-cu-pas și screenshot-uri pentru:
+(1) Încărcarea unui set de date nou,
+(2) Declanșarea și monitorizarea unei simulări,
+(3) Compararea rezultatelor între limbaje,
+(4) Exportul rezultatelor.}
+
+\section{Testare și validare funcțională}
+\label{sec:testare_functionala}
+
+\todosec{Unit teste Go (testing package), integration tests (testcontainers),
+end-to-end tests (Playwright/Cypress pentru Vue.js). Acoperire de cod.}

@@ -1,0 +1,111 @@
+package repository
+
+import (
+	"context"
+	"errors"
+
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/tudorgeana/emedicine-api/internal/models"
+)
+
+type SimulationRepository struct {
+	pool *pgxpool.Pool
+}
+
+func NewSimulationRepository(pool *pgxpool.Pool) *SimulationRepository {
+	return &SimulationRepository{pool: pool}
+}
+
+func (r *SimulationRepository) Create(ctx context.Context, run *models.SimulationRun) (*models.SimulationRun, error) {
+	const q = `
+		INSERT INTO simulation_runs (user_id, dataset_id, language, beta, gamma, population_n, t_max, status)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')
+		RETURNING id, user_id, dataset_id, language, beta, gamma, population_n, t_max, status, created_at`
+
+	var out models.SimulationRun
+	err := r.pool.QueryRow(ctx, q,
+		run.UserID, run.DatasetID, run.Language, run.Beta, run.Gamma, run.PopulationN, run.TMax,
+	).Scan(
+		&out.ID, &out.UserID, &out.DatasetID, &out.Language, &out.Beta, &out.Gamma,
+		&out.PopulationN, &out.TMax, &out.Status, &out.CreatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([]models.SimulationRun, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT id, user_id, dataset_id, language, beta, gamma, population_n, t_max,
+		       status, error_message, created_at, completed_at
+		FROM simulation_runs WHERE user_id = $1 ORDER BY created_at DESC`, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var out []models.SimulationRun
+	for rows.Next() {
+		var s models.SimulationRun
+		if err := rows.Scan(
+			&s.ID, &s.UserID, &s.DatasetID, &s.Language, &s.Beta, &s.Gamma,
+			&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
+		); err != nil {
+			return nil, err
+		}
+		out = append(out, s)
+	}
+	return out, rows.Err()
+}
+
+func (r *SimulationRepository) Get(ctx context.Context, userID, id uuid.UUID) (*models.SimulationRun, error) {
+	var s models.SimulationRun
+	err := r.pool.QueryRow(ctx, `
+		SELECT id, user_id, dataset_id, language, beta, gamma, population_n, t_max,
+		       status, error_message, created_at, completed_at
+		FROM simulation_runs WHERE id = $1 AND user_id = $2`,
+		id, userID,
+	).Scan(
+		&s.ID, &s.UserID, &s.DatasetID, &s.Language, &s.Beta, &s.Gamma,
+		&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
+	)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, ErrNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &s, nil
+}
+
+type ResultsRepository struct {
+	pool *pgxpool.Pool
+}
+
+func NewResultsRepository(pool *pgxpool.Pool) *ResultsRepository {
+	return &ResultsRepository{pool: pool}
+}
+
+func (r *ResultsRepository) ListBySimulation(ctx context.Context, simID uuid.UUID) ([]models.SimulationResult, error) {
+	rows, err := r.pool.Query(ctx, `
+		SELECT simulation_id, t, s, i, r FROM simulation_results
+		WHERE simulation_id = $1 ORDER BY t ASC`, simID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var out []models.SimulationResult
+	for rows.Next() {
+		var res models.SimulationResult
+		if err := rows.Scan(&res.SimulationID, &res.T, &res.S, &res.I, &res.R); err != nil {
+			return nil, err
+		}
+		out = append(out, res)
+	}
+	return out, rows.Err()
+}

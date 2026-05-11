@@ -1,0 +1,426 @@
+% ============================================================
+% CAPITOLUL 3 — TEHNOLOGII ȘI INSTRUMENTE UTILIZATE
+% ============================================================
+
+\chapter{Tehnologii și Instrumente Utilizate}
+\label{ch:tehnologii}
+
+\section{Limbaje de programare pentru calcul științific}
+\label{sec:limbaje}
+
+Alegerea limbajului de programare pentru implementarea modelelor matematice
+nu este neutră: performanța, expresivitatea și ecosistemul de biblioteci
+au un impact direct asupra eficienței dezvoltării și calității rezultatelor.
+Această secțiune prezintă fundamentele și caracteristicile tehnice ale
+celor trei limbaje utilizate.
+
+% ---- R ---------------------------------------------------
+\subsection{R}
+\label{subsec:r}
+
+\subsubsection{Istoric și filosofie}
+
+R este un limbaj de programare și mediu software pentru calcul statistic și
+grafică, descendent direct al limbajului S (Bell Laboratories, 1976). A fost
+creat de Ross Ihaka și Robert Gentleman la Universitatea din Auckland în 1993,
+iar în 1997 a fost adoptat ca proiect open-source de \emph{R Development Core
+Team} \cite{rcoreteam2024}. Filosofia R este centrată pe date: vectorii,
+matricile și cadrele de date (data frames) sunt cetățeni de primă clasă,
+iar gramatica limbajului este proiectată pentru manipularea și analiza datelor.
+
+\subsubsection{Caracteristici tehnice relevante}
+
+R este un limbaj \emph{interpretat}, dinamic tipizat, cu suport pentru
+programare funcțională, orientată pe obiecte (sistemele S3, S4 și R5/R6)
+și procedurală. Caracteristici relevante pentru calculul științific:
+
+\begin{itemize}
+    \item \textbf{Vectorizare nativă:} operațiile aritmetice și logice aplicate
+    pe vectori și matrice sunt automat vectorizate și executate prin cod C/Fortran
+    compilat, evitând buclele interpretate costisitoare.
+    \item \textbf{Lazy evaluation:} argumentele funcțiilor sunt evaluate doar
+    când sunt necesare, permițând construcții expresive.
+    \item \textbf{Gestionarea memoriei:} R utilizează un garbage collector cu
+    copiere la scriere (copy-on-write), care poate genera overhead semnificativ
+    pentru structuri de date mari.
+    \item \textbf{Interfețe C/Fortran:} prin funcțiile \texttt{.C()},
+    \texttt{.Call()} și \texttt{.Fortran()}, R poate apela cod compilat nativ,
+    stând la baza multor pachete de înaltă performanță.
+\end{itemize}
+
+\subsubsection{Pachete relevante pentru modelul SIR}
+
+\begin{itemize}
+    \item \textbf{deSolve} \cite{soetaert2010desolve}: pachetul principal pentru
+    rezolvarea sistemelor de EDO, ecuații diferențiale cu derivate parțiale
+    (EDP) și ecuații algebrico-diferențiale (EAD). Integrează solver-e
+    consacrate: \texttt{lsoda} (Adams/BDF adaptiv), \texttt{ode45}
+    (Dormand-Prince), \texttt{rk4} (Runge-Kutta fix). Interfața principală
+    este funcția \texttt{ode()}.
+    \item \textbf{ggplot2}: sistem de grafică bazat pe \emph{grammar of graphics},
+    utilizat pentru vizualizarea traiectoriilor SIR.
+    \item \textbf{data.table}: manipulare eficientă (în memorie) a seturilor
+    de date mari, cu sintaxă concisă.
+    \item \textbf{microbenchmark} și \textbf{bench}: măsurarea precisă a
+    timpilor de execuție pentru benchmarking.
+\end{itemize}
+
+% ---- JULIA -----------------------------------------------
+\subsection{Julia}
+\label{subsec:julia}
+
+\subsubsection{Istoric și filosofie}
+
+Julia a fost creat la MIT de Jeff Bezanson, Alan Edelman, Stefan Karpinski
+și Viral B. Shah, cu versiunea 1.0 lansată în august 2018 \cite{bezanson2017julia}.
+Motivația proiectului a fost depășirea \emph{problemei celor două limbaje}
+(two-language problem): cercetătorii scriu prototipuri în R/Python (productivitate
+ridicată, viteză scăzută) și re-implementează codul critic în C/Fortran (viteză
+ridicată, productivitate scăzută). Julia vizează ambele obiective simultan.
+
+\subsubsection{Compilare Just-In-Time și sistemul de tipuri}
+
+Julia utilizează compilare \textbf{JIT} (Just-In-Time) bazată pe LLVM, cu
+o particularitate fundamentală: specializarea pe tipuri concrete. Când o funcție
+este apelată pentru prima dată cu argumente de tipuri specifice, compilatorul
+generează cod mașină optimizat pentru acele tipuri exacte. Apelurile ulterioare
+cu aceleași tipuri rulează direct codul compilat, apropiind performanța de C.
+
+\begin{itemize}
+    \item \textbf{Multiple dispatch:} funcțiile pot fi definite cu comportamente
+    diferite pentru combinații diferite de tipuri ale argumentelor (metode).
+    Compilatorul selectează și compilează metoda corectă la momentul apelului.
+    \item \textbf{Sistem de tipuri parametric:} tipurile pot fi parametrizate
+    (ex.\ \texttt{Array\{Float64, 1\}}), permițând generarea eficientă de cod
+    specializat.
+    \item \textbf{Metaprogramming:} macrocomenzile Julia ($\texttt{@macro}$)
+    permit generarea și transformarea codului la momentul parsării.
+\end{itemize}
+
+\subsubsection{DifferentialEquations.jl}
+
+Ecosistemul \textbf{SciML} (Scientific Machine Learning) al Julia conține
+pachetul \texttt{DifferentialEquations.jl} \cite{rackauckas2017diffeq}, cel
+mai cuprinzător framework open-source pentru rezolvarea ecuațiilor diferențiale.
+Acesta include:
+\begin{itemize}
+    \item Peste 300 de algoritmi de rezolvare pentru EDO, EDP, EAD,
+    ecuații diferențiale stochastice (EDS) și ecuații cu întârziere (DDEs);
+    \item Solver-e de înaltă performanță: \texttt{Tsit5} (Tsitouras RK 4/5),
+    \texttt{Vern7/9} (Verner 7/9), \texttt{Rodas4/5} (pentru probleme stiff);
+    \item Integrare nativă cu GPU-uri și calcul distribuit;
+    \item Diferențiere automată (AD) pentru estimarea parametrilor și
+    identificarea sistemelor.
+\end{itemize}
+
+% ---- PYTHON ----------------------------------------------
+\subsection{Python}
+\label{subsec:python}
+
+\subsubsection{Istoric și filosofie}
+
+Python a fost creat de Guido van Rossum și lansat în 1991 \cite{vanrossum2009python}.
+Filosofia sa, rezumată în \emph{Zen of Python} (\texttt{PEP 20}), accentuează
+lizibilitatea și simplitatea codului. Python a devenit limbajul dominant în
+știința datelor și machine learning datorită ecosistemului său extins și
+comunității masive.
+
+\subsubsection{Caracteristici tehnice și ecosistem științific}
+
+Python este un limbaj interpretat, dinamic tipizat, multi-paradigmă. Principala
+limitare pentru calcul intensiv este \textbf{GIL} (Global Interpreter Lock),
+care previne execuția paralelă a thread-urilor Python pure. Performanța este
+recuperată prin biblioteci care rulează cod nativ C/Fortran în afara GIL:
+
+\begin{itemize}
+    \item \textbf{NumPy}: calculul numeric vectorizat pe array-uri dense;
+    operațiile sunt implementate în C/Fortran și nu sunt supuse GIL.
+    \item \textbf{SciPy} \cite{virtanen2020scipy}: algoritmică științifică,
+    incluzând modulul \texttt{scipy.integrate} cu funcțiile \texttt{odeint}
+    (wrapper LSODA) și \texttt{solve\_ivp} (interfață modernă cu multiple
+    metode: RK45, DOP853, Radau, BDF, LSODA).
+    \item \textbf{Matplotlib}: vizualizare 2D/3D flexibilă.
+    \item \textbf{Pandas}: manipularea datelor tabulare.
+\end{itemize}
+
+\subsubsection{Funcțiile de rezolvare a EDO în SciPy}
+
+Interfața \texttt{solve\_ivp} din \texttt{scipy.integrate} este apelată astfel:
+\begin{lstlisting}[language=Python, caption={Interfața solve\_ivp din SciPy pentru rezolvarea sistemului SIR}]
+from scipy.integrate import solve_ivp
+import numpy as np
+
+def sir_model(t, y, beta, gamma, N):
+    S, I, R = y
+    dSdt = -beta * S * I / N
+    dIdt =  beta * S * I / N - gamma * I
+    dRdt =  gamma * I
+    return [dSdt, dIdt, dRdt]
+
+# Parametri
+N = 1_000_000; beta = 0.3; gamma = 0.1
+S0, I0, R0 = N - 1, 1, 0
+t_span = (0, 160); t_eval = np.linspace(0, 160, 1601)
+
+sol = solve_ivp(
+    fun=lambda t, y: sir_model(t, y, beta, gamma, N),
+    t_span=t_span,
+    y0=[S0, I0, R0],
+    method='RK45',
+    t_eval=t_eval,
+    rtol=1e-8,
+    atol=1e-10
+)
+\end{lstlisting}
+
+% ---- COMPARAȚIE -----------------------------------------
+\subsection{Analiză comparativă a limbajelor}
+\label{subsec:comparatie_limbaje}
+
+\Cref{tab:comparatie_limbaje} sintetizează principalele caracteristici ale
+celor trei limbaje din perspectiva utilizării pentru implementarea modelului SIR.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparație a limbajelor de programare utilizate}
+\label{tab:comparatie_limbaje}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Criteriu} & \textbf{R} & \textbf{Julia} & \textbf{Python} \\
+\midrule
+Licență          & Open-source & Open-source & Open-source \\
+Paradigmă        & Funcț./OOP  & Multi       & Multi       \\
+Compilare        & Interpretat & JIT (LLVM)  & Interpretat \\
+Solver EDO       & deSolve     & DiffEq.jl   & SciPy       \\
+Performanță rel. & Medie       & Înaltă      & Medie       \\
+Maturitate ecos. & Înaltă      & Medie       & Înaltă      \\
+Utilizare acad.  & Ridicată    & Medie       & Ridicată    \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Baze de date distribuite — YugabyteDB}
+\label{sec:yugabytedb}
+% ============================================================
+
+\subsection{Concepte de baze de date distribuite}
+\label{subsec:baze_distribuite}
+
+O \emph{bază de date distribuită} este o colecție de date distribuite fizic
+pe mai multe noduri (mașini sau locații geografice), gestionată de un sistem
+software care oferă transparența localizării: aplicațiile interacționează cu
+baza de date ca și cum ar fi centralizată.
+
+\begin{definitie}[Teorema CAP]
+\label{def:cap}
+Teorema CAP (Brewer, 2000) afirmă că un sistem distribuit nu poate garanta
+simultan mai mult de două dintre următoarele trei proprietăți:
+\begin{itemize}
+    \item \textbf{Consistency (C):} toate nodurile văd aceleași date în același
+    moment (citirile reflectă întotdeauna ultima scriere confirmată);
+    \item \textbf{Availability (A):} orice cerere validă primește un răspuns
+    (eventual fără ultima versiune a datelor);
+    \item \textbf{Partition tolerance (P):} sistemul continuă să funcționeze
+    chiar dacă comunicarea între noduri este parțial întreruptă.
+\end{itemize}
+\end{definitie}
+
+Bazele de date distribuite moderne (YugabyteDB, CockroachDB, Spanner) optează
+pentru \textbf{CP} (consistency + partition tolerance), sacrificând disponibilitatea
+perfectă în favoarea coerenței datelor.
+
+\subsection{Arhitectura YugabyteDB}
+\label{subsec:yugabyte_arhitectura}
+
+YugabyteDB \cite{yugabyte2024} este o bază de date distribuită open-source,
+construită pentru a combina caracteristicile PostgreSQL cu scalabilitatea
+orizontală și toleranța la erori a sistemelor NoSQL. Arhitectura sa se bazează
+pe doi piloni principali:
+
+\textbf{1. Stratul de stocare DocDB.} DocDB este motorul de stocare
+distribuit al YugabyteDB, bazat pe arhitectura \textbf{LSM-tree} (Log-Structured
+Merge-tree) derivată din \textbf{RocksDB}. Datele sunt stocate în \emph{tablete}
+--- unități de sharding distribuite pe noduri. Fiecare tabletă este replicată
+pe cel puțin trei noduri prin \textbf{protocolul Raft} (consens distribuit):
+\begin{itemize}
+    \item Un nod este ales \emph{lider}; scrierile trec prin lider;
+    \item Leaderul repl\-ică modificarea pe nodurile urmașe (\emph{followers});
+    \item O scriere este confirmată după ce o \emph{majoritate} (quorum) de
+    noduri o confirmă.
+\end{itemize}
+
+\textbf{2. Nivelurile de interfață API.}
+\begin{itemize}
+    \item \textbf{YSQL} (YugabyteDB SQL): compatibil cu PostgreSQL 11+,
+    suportând SQL complet, tranzacții ACID distribuite, join-uri, indecși,
+    triggere și proceduri stocate;
+    \item \textbf{YCQL} (YugabyteDB CQL): compatibil cu Apache Cassandra,
+    optimizat pentru workload-uri de tip wide-column cu disponibilitate extinsă.
+\end{itemize}
+
+\subsection{Sharding și replicare}
+\label{subsec:sharding}
+
+YugabyteDB suportă două strategii de sharding:
+\begin{itemize}
+    \item \textbf{Hash sharding:} cheia primară este hașurată și distribuită
+    uniform pe tablete; asigură echilibru de sarcină dar nu suportă eficient
+    \emph{range scans};
+    \item \textbf{Range sharding:} tabletele acoperă intervale contigue de
+    valori ale cheii; eficient pentru interogări de tip range, dar poate
+    produce \emph{hot spots}.
+\end{itemize}
+
+\begin{observatie}
+Pentru datele epidemiologice cu interogări frecvente pe intervale de date
+(serii temporale), range sharding pe coloana \texttt{timestamp} sau
+\texttt{date} este strategia recomandată, împreună cu un index secundar
+pe codul bolii și/sau regiune geografică.
+\end{observatie}
+
+% ============================================================
+\section{Orchestrarea containerelor — Kubernetes}
+\label{sec:kubernetes}
+% ============================================================
+
+\subsection{Containere și nevoia de orchestrare}
+\label{subsec:containere}
+
+Containerizarea (Docker) permite împachetarea unei aplicații împreună cu
+toate dependențele sale într-o unitate portabilă și reproductibilă.
+Pe măsură ce sistemele cresc în complexitate și numărul de containere
+depășește câteva zeci, gestionarea manuală devine infezabilă: unde rulează
+fiecare container? Cum se reporneşte dacă cade? Cum se scalează?
+
+\textbf{Kubernetes} (K8s) \cite{burns2016kubernetes, kubernetes2024} este
+platforma open-source de orchestrare a containerelor, inițial dezvoltată
+la Google pe baza experienței cu sistemul intern Borg, și donată CNCF
+(Cloud Native Computing Foundation) în 2014.
+
+\subsection{Arhitectura Kubernetes}
+\label{subsec:k8s_arhitectura}
+
+Un cluster Kubernetes este compus din:
+
+\textbf{Control Plane:}
+\begin{itemize}
+    \item \textbf{kube-apiserver:} componenta centrală, expune API-ul K8s
+    (REST/gRPC); toate celelalte componente comunică exclusiv prin API server;
+    \item \textbf{etcd:} baza de date distribuită key-value (Raft-based) care
+    stochează starea întregului cluster;
+    \item \textbf{kube-scheduler:} atribuie pod-uri nodurilor disponibile
+    pe baza resurselor disponibile și a constrângerilor de afinitate;
+    \item \textbf{kube-controller-manager:} rulează controllere care reconciliază
+    starea dorită cu starea actuală (Deployment, ReplicaSet, StatefulSet etc.).
+\end{itemize}
+
+\textbf{Worker Nodes:}
+\begin{itemize}
+    \item \textbf{kubelet:} agent pe fiecare nod, gestionează ciclul de
+    viață al pod-urilor (Pull image, start/stop/restart containere);
+    \item \textbf{kube-proxy:} gestionează regulile de rețea (iptables/IPVS)
+    pentru accesul la servicii;
+    \item \textbf{Container runtime:} interfața CRI (containerd, CRI-O).
+\end{itemize}
+
+\subsection{Resurse Kubernetes relevante}
+\label{subsec:k8s_resurse}
+
+\begin{itemize}
+    \item \textbf{Pod:} unitatea atomică de deployment; unul sau mai multe
+    containere cu spațiu de rețea și stocare partajate;
+    \item \textbf{Deployment:} gestionează un set de pod-uri identice;
+    asigură restart automat și rolling updates;
+    \item \textbf{StatefulSet:} similar Deployment, dar menține identitate
+    stabilă pentru pod-uri (hostname, persistent volume); \emph{esențial}
+    pentru YugabyteDB;
+    \item \textbf{Service:} abstractizare pentru accesul la un set de pod-uri;
+    asigură load balancing și descoperire de servicii;
+    \item \textbf{PersistentVolume / PersistentVolumeClaim:} stocare persistentă
+    independentă de ciclul de viață al pod-ului;
+    \item \textbf{ConfigMap / Secret:} configurare și date sensibile externalizate.
+\end{itemize}
+
+% ============================================================
+\section{Backend API — Go}
+\label{sec:golang}
+% ============================================================
+
+\subsection{Caracteristici și filosofia limbajului Go}
+\label{subsec:go_caracteristici}
+
+Go (cunoscut și ca Golang) este un limbaj de programare open-source creat
+la Google de Robert Griesemer, Rob Pike și Ken Thompson, cu prima versiune
+stabilă în 2012 \cite{golangspec2024}. Go a fost proiectat pentru productivitate
+la scară mare, cu accent pe simplitate, compilare rapidă și concurență structurată.
+
+Caracteristici relevante pentru construcția unui API backend:
+\begin{itemize}
+    \item \textbf{Compilare nativă rapidă:} Go compilează direct la cod mașin,
+    producând binare statice fără dependențe externe;
+    \item \textbf{Goroutine și canale (CSP):} concurența este modelată prin
+    goroutine (fire de execuție ușoare, ~2KB stack inițial) și canale (typed,
+    pentru comunicare sincronă/asincronă); modelul Communicating Sequential
+    Processes (CSP, Hoare 1978) este preferat față de memoria partajată cu mutex;
+    \item \textbf{Interfețe structurale (duck typing):} un tip implementează
+    implicit o interfață dacă definește metodele necesare, fără declarație
+    explicită;
+    \item \textbf{Garbage collection:} GC concurrent cu latență redusă
+    ($<1$ms stop-the-world în versiunile recente);
+    \item \textbf{Standard library bogată:} pachetul \texttt{net/http} suportă
+    HTTP/1.1, HTTP/2 și TLS out-of-the-box, fără framework extern.
+\end{itemize}
+
+\subsection{Ecosistem pentru API-uri REST}
+\label{subsec:go_api}
+
+Deși \texttt{net/http} din biblioteca standard este suficient pentru API-uri
+simple, framework-uri ca \textbf{Gin} sau \textbf{Echo} adaugă:
+\begin{itemize}
+    \item Router performant (radix tree pentru $\mathcal{O}(\log k)$ matching);
+    \item Middleware pipeline (logging, CORS, rate limiting, autentificare JWT);
+    \item Binding și validare automată a parametrilor HTTP (JSON, query params,
+    path params);
+    \item Generare automată a documentației OpenAPI/Swagger.
+\end{itemize}
+
+% ============================================================
+\section{Frontend — Vue.js}
+\label{sec:vuejs}
+% ============================================================
+
+\subsection{Arhitectura Vue 3 și Composition API}
+\label{subsec:vue_arhitectura}
+
+Vue.js \cite{vuejs2024} este un framework JavaScript progresiv pentru construirea
+interfețelor utilizator, creat de Evan You în 2014. Vue 3 (2020) introduce
+\textbf{Composition API}, o alternativă la Options API care permite organizarea
+logicii prin funcționalitate (nu prin tip --- data, methods, computed) și
+reutilizarea logicii prin \emph{composables}.
+
+Arhitectura Vue 3 se bazează pe:
+\begin{itemize}
+    \item \textbf{Reactivity system:} bazat pe \texttt{Proxy} ES6, permite
+    urmărirea dependențelor reactive cu granularitate fină;
+    \item \textbf{Virtual DOM:} reconciliere eficientă a arborelui DOM cu
+    algoritmul de diferențiere O(n);
+    \item \textbf{Single File Components (SFC):} fișiere \texttt{.vue}
+    care încapsulează template (HTML), script (JS/TS) și style (CSS)
+    într-o unitate coezivă.
+\end{itemize}
+
+\subsection{Ecosistem și biblioteci utilizate}
+\label{subsec:vue_ecosistem}
+
+\begin{itemize}
+    \item \textbf{Vue Router:} rutare client-side cu suport pentru rute
+    dinamice, navigare programatică și guards de autentificare;
+    \item \textbf{Pinia:} state management bazat pe Composition API, mai
+    simplu decât Vuex și mai bine integrat cu TypeScript;
+    \item \textbf{Axios:} client HTTP cu interceptori, pentru apelurile
+    REST la API-ul Go;
+    \item \textbf{ECharts / Chart.js:} vizualizare date epidemiologice
+    (grafice SIR, comparații de performanță, hărți de densitate).
+\end{itemize}

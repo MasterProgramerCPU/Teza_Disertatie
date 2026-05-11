@@ -1,0 +1,21 @@
+.env
+api/server
+api/bin/
+*.log
+
+# Go
+*.exe
+*.test
+*.out
+vendor/
+
+# Data (raw download is large, processed is reproducible)
+data/raw/*.csv
+data/raw/*.csv.part
+data/processed/*.csv
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+scripts/.venv/

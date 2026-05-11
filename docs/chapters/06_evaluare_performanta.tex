@@ -1,0 +1,87 @@
+% ============================================================
+% CAPITOLUL 6 — EVALUAREA PERFORMANȚEI ȘI SCALABILITĂȚII
+% ============================================================
+
+\chapter{Evaluarea Performanței și Scalabilității}
+\label{ch:evaluare}
+
+\section{Metodologia de benchmarking}
+\label{sec:metodologie_benchmark}
+
+\subsection{Configurații hardware utilizate}
+\label{subsec:hardware}
+
+\todosec{Tabel cu configurațiile hardware: laptop (Intel i5, 8GB RAM),
+workstation (AMD Ryzen 9, 32GB RAM), server cloud (AWS EC2 c5.4xlarge).
+Sistemul de operare, versiunile limbajelor, versiunile solver-elor.}
+
+\subsection{Metrici urmărite}
+\label{subsec:metrici}
+
+\todosec{Metrici: (1) Timp de execuție wall-clock (mediana și IQR peste 30 rulări),
+(2) CPU time (user + system), (3) Peak memory usage (RSS), (4) Acuratețe numerică
+(eroarea față de soluția de referință DOPRI8 cu toleranță $10^{-12}$).}
+
+\subsection{Protocoale de testare și reproductibilitate}
+\label{subsec:protocoale}
+
+\todosec{Protocol: warm-up runs, izolare procese, seed fix, versioning
+al codului de benchmark. Toate configurațiile rulate de 30 de ori, cu
+colectarea automatizată a rezultatelor.}
+
+\section{Scalabilitate în funcție de dimensiunea setului de date}
+\label{sec:scalabilitate_date}
+
+\todosec{Experimente cu $N \in \{10^3, 10^4, 10^5, 10^6, 10^7\}$.
+Grafice log-log ale timpului de execuție față de $N$ pentru fiecare limbaj.
+Identificarea complexității empirice.}
+
+\section{Comparație timp de execuție — R vs Julia vs Python}
+\label{sec:comparatie_timp}
+
+\todosec{Tabel comparativ și grafice boxplot. Analiza statistică:
+test Kruskal-Wallis, comparații post-hoc Dunn pentru detectarea diferențelor
+semnificative. Discutarea overhead-ului de start-up al fiecărui limbaj
+față de timpul de calcul pur.}
+
+\section{Consum de memorie și resurse}
+\label{sec:consum_memorie}
+
+\todosec{Profile de memorie pentru fiecare implementare. Grafice de utilizare
+a memoriei în timp. Identificarea cauzelor alocărilor excesive.}
+
+\section{Acuratețea numerică a rezultatelor}
+\label{sec:acuratete}
+
+\todosec{Compararea soluțiilor numerice cu soluția de referință.
+Eroarea $L^\infty$ și $L^2$ pentru $S(t)$, $I(t)$, $R(t)$.
+Verificarea conservării $S + I + R = N$ (eroarea de conservare).}
+
+\section{Performanța bazei de date distribuite}
+\label{sec:performanta_bd}
+
+\subsection{Latență la scriere și citire}
+\label{subsec:latenta_bd}
+
+\todosec{Măsurarea latenței P50/P95/P99 pentru operații INSERT și SELECT
+pe tabelele epidemiologice. Comparație cu PostgreSQL standalone.}
+
+\subsection{Comportament sub load — teste de stress}
+\label{subsec:stress_bd}
+
+\todosec{Teste de load cu \texttt{pgbench} și/sau \texttt{cassandra-stress}.
+Throughput (tranzacții/secundă) față de numărul de clienți concurenți.
+Comportamentul clusterului la oprirea unuia din cele 3 noduri YugabyteDB.}
+
+\section{Performanța API-ului Go}
+\label{sec:performanta_api}
+
+\todosec{Benchmarking API cu \texttt{wrk} sau \texttt{hey}: RPS (requests/second),
+latență P95/P99, comportament sub concurență (10, 50, 100, 500 clienți simultani).}
+
+\section{Analiză comparativă sintetică}
+\label{sec:analiza_sintetica}
+
+\todosec{Tabel de scoruri normalizate per metrică și per limbaj.
+Radar chart (spider chart) cu performanța relativă.
+Recomandări pentru scenarii de utilizare: volum mic vs. mare, precizie vs. viteză.}
