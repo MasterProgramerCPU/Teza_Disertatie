@@ -2,24 +2,28 @@
 % REZUMAT
 % ============================================================
 
-Lucrarea de față prezintă proiectarea și realizarea unui sistem e-medicine dedicat
-analizării și monitorizării datelor epidemiologice, având ca fundament matematic
-modelul SIR (Susceptibili--Infectați--Recuperați). Modelul este implementat și testat
-comparativ în trei limbaje de programare cu utilizare intensă în calculul științific:
-R, Julia și Python.
+Această lucrare tratează proiectarea unui sistem e-medicine pentru analiza datelor
+epidemiologice prin modele compartimentale, cu modelul SIDARTH folosit ca direcție
+principală de explorare. Spre deosebire de SIR, care reduce dinamica la trei
+stări agregate, SIDARTH separă infecțiile nedepistate, cazurile diagnosticate,
+formele simptomatice, formele severe și vindecările. Această granularitate face
+modelul mai potrivit pentru discutarea efectelor testării, diagnosticării și
+severității clinice asupra evoluției unei epidemii.
 
-Implementările sunt evaluate pe mai multe configurații hardware, urmărindu-se
-comportamentul algoritmilor din perspectiva performanței și a scalabilității în funcție
-de dimensiunea seturilor de date procesate. Datele epidemiologice utilizate sunt stocate
-într-o bază de date distribuită YugabyteDB, rulată într-un cluster Kubernetes, asigurând
-disponibilitate ridicată, toleranță la erori și distribuție eficientă a datelor.
+SIR rămâne prezent în lucrare ca model secundar, folosit pentru comparații și
+pentru verificarea comportamentului numeric al implementărilor. Sistemul construit
+separă explicit stocarea datelor, expunerea API-ului și execuția simulărilor.
+Datele epidemiologice sunt persistate într-o schemă relațională compatibilă
+PostgreSQL, rulată peste YugabyteDB, iar simulările sunt executate asincron de
+runner-e specializate, coordonate prin Redis.
 
-Pentru centralizarea, compararea și vizualizarea rezultatelor este dezvoltată o aplicație
-web dedicată, compusă dintr-un API backend implementat în limbajul Go și o interfață
-frontend realizată în Vue.js. Aceasta oferă o perspectivă unificată asupra performanței
-și comportamentului modelelor epidemiologice analizate, permițând consultarea
-rezultatelor rulărilor, a seturilor de date utilizate și a graficelor asociate.
+Componenta web, alcătuită dintr-un API Go și o interfață Vue.js, oferă fluxurile
+necesare încărcării seturilor de date, lansării simulărilor, urmăririi statusului și
+vizualizării traiectoriilor compartimentale. Accentul lucrării cade pe legătura
+dintre modelul matematic, implementarea numerică și arhitectura software care face
+posibilă evaluarea reproductibilă a rezultatelor pentru modele cu grade diferite
+de complexitate.
 
 \bigskip
-\noindent\textbf{Cuvinte cheie:} model SIR, epidemiologie computațională, e-medicine,
+\noindent\textbf{Cuvinte cheie:} model SIDARTH, model SIR, epidemiologie computațională, e-medicine,
 calcul comparativ, YugabyteDB, Kubernetes, Go, Vue.js, benchmark de performanță.

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner-r
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/name: runner-r
+    app.kubernetes.io/component: runner
+    app.kubernetes.io/part-of: epimodel
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: runner-r
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: runner-r
+        app.kubernetes.io/component: runner
+        app.kubernetes.io/part-of: epimodel
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: runner-r
+          image: emedicine/runner-r:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: epimodel-config
+                  key: REDIS_URL
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: epimodel-secrets
+                  key: DATABASE_URL
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

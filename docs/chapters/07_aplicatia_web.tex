@@ -5,95 +5,105 @@
 \chapter{Aplicația Web E-Medicine}
 \label{ch:aplicatie}
 
-\section{Descrierea funcționalităților aplicației}
+\section{Rolul aplicației}
 \label{sec:functionalitati}
 
-\todosec{Prezentare generală a aplicației: ecranele principale, fluxurile
-de utilizare cheie. Screenshot-uri ale interfeței finale.}
+Aplicația web este interfața prin care modelul matematic și infrastructura de
+execuție devin utilizabile. Ea nu este un sistem clinic complet, ci un mediu de
+lucru pentru încărcarea datelor, configurarea simulărilor SIDARTH sau SIR și
+compararea rezultatelor obținute în R, Julia și Python. Din această perspectivă,
+aplicația are rol de instrument experimental.
 
-\section{Backend Go — Implementare detaliată}
+Fluxul principal începe cu autentificarea utilizatorului. După autentificare,
+acesta poate încărca un fișier CSV cu date epidemiologice, poate alege modelul,
+poate introduce parametrii și poate urmări statusul execuției. Când runner-ul
+finalizează job-ul, interfața afișează traiectoriile compartimentale și permite
+exportul rezultatelor în format CSV. O pagină separată permite compararea mai
+multor rulări finalizate, iar pagina de benchmark prezintă agregările calculate la
+nivel de limbaj.
+
+\section{Backend Go}
 \label{sec:backend_go}
 
-\subsection{Structura proiectului Go}
-\label{subsec:go_structura_proiect}
+Backend-ul este implementat în Go și expune un API REST sub prefixul
+\texttt{/api}. Serverul folosește routerul \texttt{chi}, middleware pentru
+logging, recuperare după panică, timeout de request și CORS, iar accesul la rutele
+protejate este controlat prin JWT. Alegerea Go este potrivită pentru această
+componentă deoarece API-ul este stateless, are nevoie de latențe predictibile și
+poate fi distribuit ușor sub formă de binar static în container.
 
-\todosec{Arborele de directoare al proiectului Go, convenții de denumire,
-separarea responsabilităților pe pachete: api, db, runner, models, config.}
+Structura codului separă intrarea HTTP de accesul la date. Pachetul
+\texttt{handlers} parsează cererile, validează input-ul și construiește
+răspunsurile JSON. Pachetul \texttt{repository} conține interogările SQL și
+operațiile tranzacționale peste \texttt{pgx}. Pachetul \texttt{runner} definește
+schema mesajului trimis în Redis și publicarea job-urilor. Contractul de simulare
+include tipul modelului, parametrii, condițiile inițiale și conexiunea la baza de
+date.
 
-\subsection{Implementarea endpointurilor REST}
-\label{subsec:go_endpoints}
+\section{Gestionarea dataseturilor}
+\label{sec:dataseturi_web}
 
-\todosec{Codul Go pentru endpointurile principale, utilizând framework-ul ales
-(Gin/Echo). Demonstrarea pattern-ului: handler -> service -> repository -> DB.}
+Dataseturile sunt încărcate printr-un formular multipart. API-ul acceptă câmpurile
+\texttt{name}, \texttt{disease\_code} și \texttt{file}; fișierul trebuie să conțină
+cel puțin coloanele \texttt{date}, \texttt{region}, \texttt{infected} și
+\texttt{population}. Coloanele \texttt{recovered} și \texttt{susceptible} sunt
+opționale, dar atunci când sunt prezente sunt folosite pentru condițiile inițiale.
+Pentru SIDARTH, cazurile active sunt plasate inițial în compartimentul $I$, iar
+persoanele ieșite din infecție în $H$.
 
-\subsection{Gestionarea execuției algoritmilor}
-\label{subsec:go_runnere}
+Persistarea datasetului se face într-o tranzacție. Mai întâi este creat rândul din
+\texttt{datasets}, apoi înregistrările epidemiologice sunt inserate prin
+\texttt{CopyFrom}. Această alegere reduce costul încărcării CSV-urilor față de
+inserarea rând-cu-rând și păstrează atomicitatea: dacă una dintre înregistrări nu
+poate fi scrisă, datasetul nu rămâne într-o stare parțială.
 
-\todosec{Implementarea orchestrării asincrone a runner-elor prin Redis:
-publicarea mesajelor JSON în listele \texttt{sir:jobs:<language>}
-(\texttt{r}, \texttt{julia}, \texttt{python}) prin \texttt{LPUSH},
-gestionarea statusurilor (pending/running/completed/failed) prin tranziții
-de stare în tabelul \texttt{simulation\_runs}, timeout-uri și mecanisme
-de retry. Cod Go cu clientul \texttt{go-redis/redis/v9} și context
-cancellation.}
+\section{Execuția simulărilor}
+\label{sec:executie_simulari_web}
 
-\subsection{Conexiunea la YugabyteDB}
-\label{subsec:go_db}
+Crearea unei simulări este un proces scurt în API și un proces asincron în
+ansamblul sistemului. Endpointul \texttt{POST /api/simulations} verifică existența
+datasetului, modelul, limbajul selectat, parametrii și $t_{\max}$, apoi extrage
+prima înregistrare epidemiologică pentru a determina valorile inițiale. După ce
+rândul din \texttt{simulation\_runs} este creat cu status \texttt{pending}, API-ul
+publică mesajul JSON în coada Redis corespunzătoare limbajului.
 
-\todosec{Driverul \texttt{pgx} pentru PostgreSQL/YSQL, connection pooling,
-query-uri parametrizate pentru prevenirea SQL injection.}
+Runner-ele sunt responsabile pentru tranzițiile ulterioare. Ele marchează rularea
+ca \texttt{running}, execută solver-ul pentru \texttt{model\_type}, inserează
+rezultatele și benchmarkul, apoi marchează rularea ca \texttt{completed}. Dacă
+apare o eroare, statusul devine \texttt{failed}, iar mesajul este salvat în baza de
+date. Interfața web nu trebuie să țină o conexiune deschisă pe durata calculului;
+pagina de rezultat interoghează periodic endpointul de status până la finalizare.
 
-\subsection{Autentificare și securitate}
-\label{subsec:go_securitate}
-
-\todosec{JWT middleware, CORS configuration, rate limiting, validarea
-input-ului, HTTPS cu certificate TLS.}
-
-\section{Frontend Vue.js — Implementare detaliată}
+\section{Frontend Vue.js}
 \label{sec:frontend_vue}
 
-\subsection{Structura componentelor și pagini}
-\label{subsec:vue_componente}
+Frontend-ul este o aplicație Vue 3 construită cu Vite și TypeScript. Rutarea este
+gestionată cu Vue Router, iar starea aplicației cu Pinia. Clientul HTTP este o
+instanță Axios configurată cu prefixul \texttt{/api}; un interceptor adaugă automat
+headerul \texttt{Authorization} atunci când există token în \texttt{localStorage}.
 
-\todosec{Arborele de componente, structura directorului \texttt{src/},
-tipare de compunere (composables reutilizabile).}
+Paginile sunt organizate după fluxurile principale ale aplicației:
+\texttt{DashboardPage} sumarizează dataseturile și simulările recente,
+\texttt{DatasetsPage} gestionează încărcarea CSV-urilor,
+\texttt{NewSimulationPage} colectează modelul și parametrii,
+\texttt{SimulationResultPage} afișează statusul și rezultatele,
+\texttt{ComparePage} suprapune seriile mai multor rulări, iar
+\texttt{BenchmarksPage} afișează agregările pe model și limbaj. Componenta
+\texttt{CompartmentChart} folosește Chart.js prin \texttt{vue-chartjs} și
+construiește dinamic seriile în funcție de cheile disponibile în
+\texttt{compartments}. Astfel, același grafic poate afișa atât SIDARTH, cât și SIR.
 
-\subsection{Dashboard epidemiologic}
-\label{subsec:vue_dashboard}
+Decizia de a folosi polling la două secunde este simplă, dar adecvată pentru
+durata așteptată a simulărilor. O soluție bazată pe WebSocket sau Server-Sent
+Events ar reduce numărul de cereri, însă ar introduce stare suplimentară în
+backend. Pentru un API stateless și pentru job-uri care durează de la câteva
+secunde la câteva minute, polling-ul păstrează implementarea previzibilă.
 
-\todosec{Componenta Dashboard: metrici cheie (R0 curent, vârf de infectați,
-dimensiunea finală estimată), grafice de sumar, ultimele rulări.}
-
-\subsection{Vizualizarea graficelor SIR}
-\label{subsec:vue_grafice_sir}
-
-\todosec{Componenta SIRChart cu ECharts/Chart.js: afișarea traiectoriilor
-S(t), I(t), R(t), zoom interactiv, export PNG/SVG. Codul Vue 3 (Composition API).}
-
-\subsection{Comparatorul de rezultate între limbaje}
-\label{subsec:vue_comparator}
-
-\todosec{Pagina de comparare: suprapunerea graficelor din rulări multiple
-(R, Julia, Python pe același set de date), tabelul de diferențe numerice,
-graficul timpilor de execuție.}
-
-\subsection{Interfața pentru seturile de date}
-\label{subsec:vue_datasets}
-
-\todosec{CRUD pentru seturile de date: upload CSV, previzualizare, editarea
-metadatelor, ștergere. Validarea client-side a formularelor.}
-
-\section{Fluxuri de utilizare (use cases)}
-\label{sec:use_cases}
-
-\todosec{Descrierea pas-cu-pas și screenshot-uri pentru:
-(1) Încărcarea unui set de date nou,
-(2) Declanșarea și monitorizarea unei simulări,
-(3) Compararea rezultatelor între limbaje,
-(4) Exportul rezultatelor.}
-
-\section{Testare și validare funcțională}
+\section{Validare funcțională}
 \label{sec:testare_functionala}
 
-\todosec{Unit teste Go (testing package), integration tests (testcontainers),
-end-to-end tests (Playwright/Cypress pentru Vue.js). Acoperire de cod.}
+Validarea funcțională a aplicației poate fi făcută prin fluxuri end-to-end care
+urmează operațiile reale ale utilizatorului: înregistrare, autentificare, încărcare
+dataset, pornire simulare SIDARTH, așteptare finalizare, afișare grafic și export
+CSV. Aceeași suită ar trebui să verifice și rularea SIR, deoarece aceasta asigură
+compatibilitatea cu modelul secundar și cu comparațiile simple.

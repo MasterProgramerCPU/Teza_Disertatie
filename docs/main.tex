@@ -83,7 +83,16 @@
     frame=single,
     rulecolor=\color{gray!30},
     xleftmargin=15pt,
-    xrightmargin=5pt
+    xrightmargin=5pt,
+    literate=
+      {ă}{{\u{a}}}1 {Ă}{{\u{A}}}1
+      {â}{{\^{a}}}1 {Â}{{\^{A}}}1
+      {î}{{\^{i}}}1 {Î}{{\^{I}}}1
+      {ș}{{\c{s}}}1 {Ș}{{\c{S}}}1
+      {ț}{{\c{t}}}1 {Ț}{{\c{T}}}1
+      {β}{{$\beta$}}1 {γ}{{$\gamma$}}1
+      {≤}{{$\leq$}}1 {≥}{{$\geq$}}1
+      {—}{{---}}1 {–}{{--}}1
 }
 \lstset{style=codestyle}
 
@@ -97,6 +106,17 @@
   morecomment=[l]{\#},
   morestring=[b]",
   morestring=[b]'
+}
+
+\lstdefinelanguage{Go}{
+  morekeywords={package,import,func,return,if,else,for,range,type,struct,
+                interface,var,const,go,defer,select,case,default,map,chan,
+                nil,true,false,string,int,int64,float64,error},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{`}{`}
 }
 
 % ============================================================
@@ -136,10 +156,10 @@
 % HYPERLINKS
 % ============================================================
 \usepackage[hidelinks,
-            pdftitle={Sistem E-Medicine bazat pe Modelul SIR},
+            pdftitle={Sistem E-Medicine bazat pe Modelul SIDARTH},
             pdfauthor={},
             pdfsubject={Lucrare de disertație},
-            pdfkeywords={SIR, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
+            pdfkeywords={SIDARTH, SIR, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
             ]{hyperref}
 \usepackage[capitalise]{cleveref}
 
@@ -148,17 +168,12 @@
 % ============================================================
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+\setlength{\headheight}{14pt}
 \fancyhf{}
 \fancyhead[L]{\small\nouppercase{\leftmark}}
 \fancyhead[R]{\small\thepage}
 \fancyfoot{}
 \renewcommand{\headrulewidth}{0.4pt}
-
-% ============================================================
-% TODO NOTES (pentru capitolele schelet)
-% ============================================================
-\usepackage[colorinlistoftodos, prependcaption]{todonotes}
-\newcommand{\todosec}[1]{\todo[inline, color=yellow!30]{#1}}
 
 % ============================================================
 % UNITS
@@ -199,6 +214,7 @@
 % DOCUMENT
 % ============================================================
 \begin{document}
+\hypersetup{pageanchor=false}
 
 %------------------------------------------------------------
 % PAGINA DE TITLU
@@ -217,7 +233,7 @@
     {\LARGE\bfseries
         Sistem E-Medicine pentru Analizarea\\[0.3cm]
         și Monitorizarea Datelor Epidemiologice\\[0.3cm]
-        bazat pe Modelul Matematic SIR
+        bazat pe Modelul Matematic SIDARTH
     }\\[0.4cm]
     \rule{\textwidth}{1.5pt}
 
@@ -243,6 +259,7 @@
     \vfill
     {\large \the\year}
 \end{titlepage}
+\hypersetup{pageanchor=true}
 
 %------------------------------------------------------------
 % PAGINI PRELIMINARE
@@ -280,7 +297,7 @@
 \input{chapters/02_epidemiologie_si_modelare}
 \input{chapters/03_tehnologii}
 \input{chapters/04_arhitectura_sistemului}
-\input{chapters/05_implementare_sir}
+\input{chapters/05_implementare_modele}
 \input{chapters/06_evaluare_performanta}
 \input{chapters/07_aplicatia_web}
 \input{chapters/08_concluzii}

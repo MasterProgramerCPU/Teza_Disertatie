@@ -10,8 +10,8 @@
 \label{sec:arhitectura_overview}
 
 Sistemul e-medicine propus în această lucrare este o aplicație distribuită,
-orientată pe microservicii, care permite utilizatorilor să încarce seturi de
-date epidemiologice reale, să declanșeze simulări ale modelului SIR în trei
+organizată în componente independente, care permite utilizatorilor să încarce seturi de
+date epidemiologice reale, să declanșeze simulări SIDARTH sau SIR în trei
 limbaje de programare distincte --- R, Julia și Python --- și să compare
 rezultatele atât din punct de vedere numeric, cât și al performanței
 computaționale. Arhitectura globală este organizată în patru straturi
@@ -23,13 +23,12 @@ funcționale, ilustrate în \cref{fig:arhitectura_globala}.
 autentificarea prin JWT, orchestrarea job-urilor de simulare și medierea
 accesului la baza de date.
 \textbf{Stratul de calcul} cuprinde trei microservicii dedicate --- numite
-\emph{runnere} --- fiecare implementând algoritmul SIR într-un limbaj
+\emph{runnere} --- fiecare implementând același contract de model compartimental într-un limbaj
 distinct; acestea comunică asincron cu API-ul printr-o coadă de mesaje Redis.
-\textbf{Stratul de stocare} este asigurat de un cluster YugabyteDB distribuit,
-care persistă atât datele epidemiologice de intrare, cât și rezultatele
-simulărilor. Întreaga infrastructură este orchestrată de Kubernetes, rulând
-pe un cluster cu trei noduri fizice, asigurând toleranță la erori,
-scalabilitate orizontală și management declarativ al resurselor.
+\textbf{Stratul de stocare} este asigurat de YugabyteDB, care persistă atât
+datele epidemiologice de intrare, cât și rezultatele simulărilor. În mediul local,
+componentele sunt pornite prin Docker Compose; pentru un deployment de producție,
+aceeași separare a responsabilităților permite descrierea resurselor în Kubernetes.
 
 \begin{figure}[htbp]
 \centering
@@ -110,16 +109,16 @@ atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}
 \label{fig:arhitectura_globala}
 \end{figure}
 
-Fluxul principal de date al sistemului se desfășoară după cum urmează.
-Utilizatorul se autentifică și obține un token JWT, după care poate încărca
+Fluxul principal de date începe cu autentificarea utilizatorului și obținerea unui
+token JWT, după care acesta poate încărca
 un fișier CSV cu date epidemiologice; API-ul validează structura fișierului,
 stochează metadatele în tabelul \texttt{datasets} și înregistrările brute în
 \texttt{epidemiological\_records}. La inițierea unei simulări, utilizatorul
-specifică limbajul dorit și parametrii modelului ($\beta$, $\gamma$, $N$,
-$t_{\max}$); API-ul creează o înregistrare în \texttt{simulation\_runs} cu
+specifică modelul, limbajul dorit, parametrii, populația $N$ și orizontul
+$t_{\max}$; API-ul creează o înregistrare în \texttt{simulation\_runs} cu
 statusul \texttt{pending} și publică un mesaj JSON în coada Redis corespunzătoare
-limbajului ales. Runner-ul consumă job-ul, execută simularea SIR, scrie seria
-temporală $(S(t), I(t), R(t))$ în \texttt{simulation\_results} și actualizează
+limbajului ales. Runner-ul consumă job-ul, execută simularea cerută, scrie
+traiectoriile compartimentale în \texttt{simulation\_results} și actualizează
 statusul la \texttt{completed}. Frontend-ul interoghează periodic API-ul și
 afișează graficele imediat ce simularea este finalizată.
 
@@ -138,18 +137,18 @@ durată de valabilitate configurabilă.
 \textbf{Gestionarea seturilor de date epidemiologice} presupune că utilizatorul
 poate încărca fișiere CSV ce conțin serii temporale epidemiologice --- date
 calendaristice, numere de cazuri, populație, regiune geografică. Sistemul
-validează structura, calculează statistici sumare și stochează datele persistent
+validează structura, calculează numărul de înregistrări și stochează datele persistent
 în baza de date.
 
-\textbf{Configurarea și declanșarea simulărilor SIR} permite utilizatorului să
+\textbf{Configurarea și declanșarea simulărilor} permite utilizatorului să
 selecteze un set de date, să aleagă limbajul de execuție (R, Julia sau Python)
-și să introducă parametrii modelului ($\beta$, $\gamma$) și dimensiunea
-populației $N$. Sistemul execută simularea asincron, printr-un runner dedicat,
+și să introducă tipul modelului, parametrii și dimensiunea populației $N$.
+Sistemul execută simularea asincron, printr-un runner dedicat,
 și notifică finalizarea fără a bloca interfața.
 
-\textbf{Vizualizarea rezultatelor} presupune afișarea curbelor $S(t)$, $I(t)$
-și $R(t)$ ca grafice interactive, cu posibilitatea de a suprapune valorile
-observate din datele de intrare peste curba simulată.
+\textbf{Vizualizarea rezultatelor} presupune afișarea curbelor compartimentale
+ca grafice interactive, indiferent dacă simularea are trei compartimente, ca SIR,
+sau șapte compartimente, ca SIDARTH.
 
 \textbf{Compararea inter-limbaj} permite utilizatorului să selecteze mai multe
 simulări efectuate pe același set de date, cu aceiași parametri, în limbaje
@@ -157,8 +156,7 @@ diferite, și să compare vizual atât forma curbelor, cât și metricile de
 performanță (timp de execuție, memorie utilizată).
 
 \textbf{Exportul rezultatelor} oferă posibilitatea de a descărca seria
-temporală a unei simulări în format CSV și de a exporta graficele ca imagini
-PNG.
+temporală a unei simulări în format CSV.
 
 \textbf{Monitorizarea benchmark-urilor} înseamnă că sistemul colectează
 automat timpii de execuție (wall-clock și CPU) și consumul de memorie pentru
@@ -168,35 +166,34 @@ interfața de comparare.
 \subsection{Cerințe non-funcționale}
 \label{subsec:cerinte_nonfunctionale}
 
-Din punct de vedere al \textbf{performanței}, latența endpointurilor API
-pentru operații de citire trebuie să fie sub 200\,ms la percentila 95, în
-condiții normale de încărcare; runner-ele trebuie să finalizeze o simulare
-SIR standard ($N = 10^6$, $t_{\max} = 365$ zile) în mai puțin de 30 de
-secunde.
+Din punct de vedere al performanței, sistemul trebuie să păstreze scurte
+operațiile sincrone ale API-ului. Crearea unei simulări nu execută modelul în
+procesul HTTP, ci doar validează cererea, persistă metadatele și publică job-ul
+în Redis. Durata simulării este tratată separat, la nivel de runner.
 
-\textbf{Disponibilitatea} este asigurată de clusterul YugabyteDB cu factor de
-replicare 3, care tolerează căderea unui nod fără pierdere de date sau
-întrerupere a serviciului (disponibilitate $>99{,}5\%$); API-ul Go este
-deploiat cu minimum două replici pentru eliminarea punctelor unice de eșec.
+Disponibilitatea depinde de modul de deployment. În varianta Docker Compose,
+sistemul este potrivit pentru dezvoltare și testare locală. Într-un deployment
+Kubernetes, API-ul poate fi replicat, iar YugabyteDB poate rula cu factor de
+replicare 3, tolerând pierderea unui nod fără pierdere de date confirmate.
 
-\textbf{Scalabilitatea} este obținută prin design-ul stateless al API-ului și
+Scalabilitatea este obținută prin design-ul stateless al API-ului și
 prin arhitectura bazată pe coadă: numărul de replici ale oricărui runner poate
 fi crescut orizontal prin simpla modificare a câmpului \texttt{replicas} în
 Deployment-ul Kubernetes, fără modificări de cod; YugabyteDB suportă adăugarea
 de noduri fără downtime.
 
-\textbf{Securitatea} implică protejarea tuturor endpointurilor sensibile prin
+Securitatea implică protejarea tuturor endpointurilor sensibile prin
 JWT, gestionarea secretelor (chei JWT, parole DB) prin obiecte Kubernetes
 \texttt{Secret} --- montate ca variabile de mediu, nu incluse în imaginile
 Docker --- și aplicarea principiului privilegiilor minime la nivelul
 ServiceAccount-urilor Kubernetes.
 
-\textbf{Extensibilitatea} garantează că adăugarea unui nou limbaj de
-implementare SIR necesită doar crearea unui nou container runner care respectă
+Extensibilitatea garantează că adăugarea unui nou limbaj sau a unui nou model
+compatibil necesită doar crearea unui nou container runner care respectă
 interfața de comunicare cu coada Redis, fără modificarea API-ului sau a schemei
 bazei de date.
 
-\textbf{Portabilitatea} este asigurată prin containerizarea (Docker) a tuturor
+Portabilitatea este asigurată prin containerizarea (Docker) a tuturor
 componentelor și descrierea lor declarativă prin manifeste Kubernetes, permițând
 deployment pe orice furnizor de cloud sau infrastructură on-premises care
 suportă Kubernetes 1.28+.
@@ -256,9 +253,9 @@ căror relații sunt ilustrate în \cref{fig:erd}.
     \bfseries\underline{id}\normalfont\ \ uuid\\%
     user\_id\ \ uuid\ \textit{FK}\\%
     dataset\_id\ \ uuid\ \textit{FK}\\%
+    model\_type\ \ varchar\\%
     language\ \ varchar\\%
-    beta\ \ double precision\\%
-    gamma\ \ double precision\\%
+    parameters\ \ jsonb\\%
     population\_n\ \ bigint\\%
     t\_max\ \ integer\\%
     status\ \ varchar\\%
@@ -287,9 +284,7 @@ căror relații sunt ilustrate în \cref{fig:erd}.
     \rule{3.2cm}{0.4pt}\\[1pt]%
     \bfseries\underline{simulation\_id}\normalfont\ \ uuid\ \textit{FK}\\%
     \bfseries\underline{t}\normalfont\ \ integer\\%
-    s\ \ double precision\\%
-    i\ \ double precision\\%
-    r\ \ double precision%
+    compartments\ \ jsonb%
 };
 
 %% ---- benchmarks ------------------------------------------
@@ -352,15 +347,17 @@ Tabelul \texttt{datasets} conține metadatele seturilor de date epidemiologice
 câmpurile \texttt{susceptible}, \texttt{infected} și \texttt{recovered} conțin
 valorile observate sau valorile inițiale folosite la calibrarea parametrilor,
 iar \texttt{region\_code} urmează standardul ISO~3166-2. Tabelul
-\texttt{simulation\_runs} reprezintă job-ul de simulare și include parametrii
-de intrare ai modelului SIR ($\beta$, $\gamma$, $N$, $t_{\max}$), limbajul
-ales, statusul execuției (\texttt{pending}, \texttt{running}, \texttt{completed},
-\texttt{failed}), câmpul \texttt{error\_message} pentru capturarea erorilor de
-execuție și timestampurile de creare și finalizare. Tabelul
-\texttt{simulation\_results} stochează seria temporală de ieșire: valorile
-$s(t)$, $i(t)$ și $r(t)$ pentru fiecare pas de timp $t \in \{0,1,\ldots,
-t_{\max}\}$; cheia primară compusă \texttt{(simulation\_id, t)} identifică
-unic fiecare punct și asigură interogări eficiente ale seriei complete. Tabelul \texttt{benchmarks} reține metricile
+\texttt{simulation\_runs} reprezintă job-ul de simulare și include tipul modelului
+(\texttt{sidarth} sau \texttt{sir}), parametrii în format JSONB, populația,
+orizontul temporal, limbajul ales, statusul execuției
+(\texttt{pending}, \texttt{running}, \texttt{completed}, \texttt{failed}),
+câmpul \texttt{error\_message} pentru capturarea erorilor de execuție și
+timestampurile de creare și finalizare. Tabelul \texttt{simulation\_results}
+stochează seria temporală de ieșire: pentru fiecare pas de timp
+$t \in \{0,1,\ldots,t_{\max}\}$, câmpul \texttt{compartments} conține un obiect
+JSONB cu valorile compartimentelor modelului. Cheia primară compusă
+\texttt{(simulation\_id, t)} identifică unic fiecare punct și asigură interogări
+eficiente ale seriei complete. Tabelul \texttt{benchmarks} reține metricile
 de performanță colectate automat la finalul fiecărei rulări: timpul wall-clock,
 timpul CPU și consumul maxim de memorie.
 
@@ -396,7 +393,8 @@ de date, API-ul verifică că toate câmpurile obligatorii sunt prezente și au
 tipul corect, că relația $I(t) + R(t) \leq N$ este respectată pentru fiecare
 înregistrare, că seria temporală este ordonată cronologic și nu conține goluri
 mai mari de 14 zile consecutive (condiție tratată ca avertisment, nu eroare
-critică), și că fiecare cod de regiune este valid conform ISO~3166-2.
+critică), și că fiecare cod de regiune este nevid. Validarea formală față de
+un registru ISO nu este inclusă în implementarea curentă.
 
 \subsection{Strategia de partiționare și replicare în YugabyteDB}
 \label{subsec:strategie_partitionare}
@@ -474,8 +472,6 @@ emedicine-api/
 |   |   +-- dispatcher.go # Publicare job-uri in Redis
 |   |   `-- queue.go      # Definitia mesajului JSON al job-ului
 |   `-- models/           # Struct-uri de domeniu (User, Dataset, Run etc.)
-`-- pkg/
-    `-- sirmath/          # Implementare referinta SIR in Go (validare)
 \end{lstlisting}
 
 Arhitectura internă respectă pattern-ul în trei straturi. \textbf{Handler
@@ -535,10 +531,10 @@ DELETE & \texttt{/api/datasets/\{id\}}          & Ștergere set de date         
 POST   & \texttt{/api/simulations}              & Inițiere simulare nouă                   & DA  \\
 GET    & \texttt{/api/simulations}              & Lista simulărilor utilizatorului         & DA  \\
 GET    & \texttt{/api/simulations/\{id\}}       & Status și metadate simulare              & DA  \\
-GET    & \texttt{/api/simulations/\{id\}/results} & Seria temporală $S(t)$, $I(t)$, $R(t)$ & DA  \\
+GET    & \texttt{/api/simulations/\{id\}/results} & Seria temporală compartimentală & DA  \\
 GET    & \texttt{/api/simulations/\{id\}/export} & Export CSV rezultate                   & DA  \\
 \midrule
-GET    & \texttt{/api/benchmarks}               & Benchmark-uri agregate per limbaj        & DA  \\
+GET    & \texttt{/api/benchmarks}               & Benchmark-uri agregate per model și limbaj & DA  \\
 \midrule
 GET    & \texttt{/api/health}                   & Health check (liveness probe K8s)        & Nu  \\
 \bottomrule
@@ -555,31 +551,32 @@ Răspunsurile API urmează o convenție simplificată inspirată din
 Comunicarea dintre API-ul Go și runner-e este asincronă, mediată de Redis
 printr-un model \emph{producer--consumer}. Când utilizatorul inițiază o
 simulare, API-ul publică un obiect JSON în lista Redis
-\texttt{sir:jobs:<language>} (ex.\ \texttt{sir:jobs:r}):
+\texttt{epimodel:jobs:<language>} (ex.\ \texttt{epimodel:jobs:r}):
 
 \begin{lstlisting}[language=bash, caption={Exemplu mesaj JSON publicat în coada Redis la inițierea unei simulări.}]
 {
   "simulation_id": "a3f9c2d1-...",
   "dataset_id":    "7b4e1a02-...",
-  "beta":          0.3,
-  "gamma":         0.05,
+  "model_type":    "sidarth",
+  "parameters":    {"alpha": 0.57, "beta": 0.011, "gamma": 0.456},
   "population_n":  1000000,
   "t_max":         365,
+  "initial":       {"s": 998999.0, "i": 1001.0, "d": 0.0,
+                    "a": 0.0, "r": 0.0, "t": 0.0, "h": 0.0},
   "db_dsn":        "postgres://emedicine:***@yb-tserver-service.yugabyte.svc.cluster.local:5433/emedicine"
 }
 \end{lstlisting}
 
 Fiecare runner execută o buclă \texttt{BRPOP} blocantă pe coada sa dedicată.
 La primirea unui job, runner-ul actualizează statusul simulării la
-\texttt{running}, execută algoritmul SIR (detaliat în
-\cref{ch:implementare}), inserează rezultatele în
-\texttt{simulation\_results} printr-un bulk insert de $t_{\max}+1$ rânduri
-(Python folosește \texttt{execute\_values}, R folosește \texttt{dbWriteTable},
-Julia folosește \texttt{LibPQ.load!}), înregistrează metricile de performanță în
+\texttt{running}, execută modelul cerut prin \texttt{model\_type}
+(detaliat în \cref{ch:implementare}), inserează rezultatele în
+\texttt{simulation\_results} prin inserări batch de $t_{\max}+1$ rânduri,
+înregistrează metricile de performanță în
 \texttt{benchmarks}, iar în final actualizează statusul la \texttt{completed}
 --- sau la \texttt{failed}, cu mesajul de eroare stocat, dacă a apărut o
-excepție. Existența cozilor separate per limbaj (\texttt{sir:jobs:r},
-\texttt{sir:jobs:julia}, \texttt{sir:jobs:python}) permite scalarea
+excepție. Existența cozilor separate per limbaj (\texttt{epimodel:jobs:r},
+\texttt{epimodel:jobs:julia}, \texttt{epimodel:jobs:python}) permite scalarea
 independentă a fiecărui runner în funcție de cerere, fără a modifica logica
 de rutare a API-ului.
 
@@ -607,9 +604,9 @@ emedicine-ui/
     |   +-- ComparePage.vue        # Comparare simulari inter-limbaj
     |   `-- BenchmarksPage.vue
     +-- components/
-    |   +-- SIRChart.vue           # Grafic Chart.js (S/I/R vs timp)
+    |   +-- CompartmentChart.vue   # Grafic Chart.js pentru compartimente
     |   +-- BenchmarkTable.vue
-    |   +-- ParameterForm.vue      # Formular beta, gamma, N, t_max
+    |   +-- ParameterForm.vue      # Formular model, parametri, t_max
     |   +-- DatasetUpload.vue      # Drag-and-drop CSV
     |   +-- SimulationStatus.vue   # Badge status cu polling
     |   `-- NavBar.vue
@@ -645,14 +642,13 @@ primește înapoi \texttt{simulation\_id} și componenta
 \texttt{GET /api/simulations/\{id\}}, oprindu-se când statusul devine
 \texttt{completed} sau \texttt{failed}. La finalizare,
 \texttt{SimulationResultPage} încarcă seria temporală și o pasează componentei
-\texttt{SIRChart}, care randează graficul interactiv cu trei curbe colorate
-distinct ($S$ în albastru, $I$ în roșu, $R$ în verde).
+\texttt{CompartmentChart}, care randează graficul interactiv pe baza cheilor
+prezente în obiectul \texttt{compartments}.
 
-Pagina \texttt{ComparePage} permite selectarea a 2--3 simulări efectuate pe
-același set de date. \texttt{simulationsStore.loadMultiple(ids)} execută
-cererile în paralel prin \texttt{Promise.all} și returnează seriile temporale
-comasate, pe care \texttt{SIRChart} le suprapune în același grafic,
-diferențiindu-le prin stil de linie (continuu, întrerupt, punctat).
+Pagina \texttt{ComparePage} permite selectarea a 2--3 simulări finalizate.
+Pentru fiecare rulare selectată, store-ul încarcă metadatele și seria temporală
+prin cereri paralele, iar \texttt{CompartmentChart} le suprapune în același
+grafic, diferențiindu-le prin stil de linie (continuu, întrerupt, punctat).
 
 % ------------------------------------------------------------
 \section{Infrastructura Kubernetes}

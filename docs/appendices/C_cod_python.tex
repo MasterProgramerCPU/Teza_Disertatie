@@ -1,5 +1,7 @@
 \chapter{Cod Sursă — Implementarea Python}
 \label{app:cod_python}
 
-\todosec{Codul Python complet: scipy.integrate.solve\_ivp, implementare
-manuală RK4 NumPy, benchmarking cu timeit, export JSON.}
+Această anexă include runner-ul Python, care folosește \texttt{scipy.integrate.solve\_ivp}
+pentru integrarea numerică și \texttt{psycopg} pentru scrierea rezultatelor.
+
+\lstinputlisting[language=Python, caption={Runner-ul Python pentru modelele SIDARTH și SIR.}]{../code/runners/python/runner.py}

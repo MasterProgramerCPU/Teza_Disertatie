@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  11 MAY 2026 09:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  11 MAY 2026 15:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1165,32 +1165,7 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthR=\skip86
 \@temptokenb=\toks62
 )
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/todonotes/t
-odonotes.sty
-Package: todonotes 2024/01/05 v1.1.7 Todonotes source and documentation.
-Package: todonotes 2024/01/05
-
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/ifthen
-.sty
-Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
-)
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/xkeyval/xke
-yval.sty
-Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
-
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/generic/xkeyval/x
-keyval.tex
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/generic/xkeyval/x
-kvutils.tex
-\XKV@toks=\toks63
-\XKV@tempa@toks=\toks64
-)
-\XKV@depth=\count366
-File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
-))
-\c@@todonotes@numberoftodonotes=\count367
-)
-\c@teorema=\count368
+\c@teorema=\count366
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -1199,36 +1174,29 @@ Package csquotes Info: Redefining alias 'default' -> 'romanian'.
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/l3backend/l
 3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count369
+\l__color_backend_stack_int=\count367
 \l__pdf_internal_box=\box79
-) (./main.aux
-
-LaTeX Warning: Label `subsec:preprocesare' multiply defined.
-
-
-LaTeX Warning: Label `subsec:preprocesare@cref' multiply defined.
-
-)
+) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 216.
+LaTeX Font Info:    ... okay on input line 216.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1247,7 +1215,7 @@ LaTeX Font Info:    ... okay on input line 201.
 * \oddsidemargin=13.08827pt
 * \evensidemargin=13.08827pt
 * \topmargin=-38.1381pt
-* \headheight=12.0pt
+* \headheight=14.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
 * \footskip=30.0pt
@@ -1264,20 +1232,20 @@ LaTeX Font Info:    ... okay on input line 201.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 201.
-Package microtype Info: Applying patch `item' on input line 201.
-Package microtype Info: Applying patch `toc' on input line 201.
-Package microtype Info: Applying patch `eqnum' on input line 201.
-Package microtype Info: Applying patch `footnote' on input line 201.
-Package microtype Info: Applying patch `verbatim' on input line 201.
-LaTeX Info: Redefining \microtypesetup on input line 201.
+LaTeX Info: Redefining \microtypecontext on input line 216.
+Package microtype Info: Applying patch `item' on input line 216.
+Package microtype Info: Applying patch `toc' on input line 216.
+Package microtype Info: Applying patch `eqnum' on input line 216.
+Package microtype Info: Applying patch `footnote' on input line 216.
+Package microtype Info: Applying patch `verbatim' on input line 216.
+LaTeX Info: Redefining \microtypesetup on input line 216.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 201.
+LaTeX Info: Redefining \showhyphens on input line 216.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -1290,17 +1258,17 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/context/base/mkii
 /supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count370
+\scratchcounter=\count368
 \scratchdimen=\dimen335
 \scratchbox=\box80
-\nofMPsegments=\count371
-\nofMParguments=\count372
-\everyMPshowfont=\toks65
-\MPscratchCnt=\count373
+\nofMPsegments=\count369
+\nofMParguments=\count370
+\everyMPshowfont=\toks63
+\MPscratchCnt=\count371
 \MPscratchDim=\dimen336
-\MPnumerator=\count374
-\makeMPintoPDFobject=\count375
-\everyMPtoPDFconversion=\toks66
+\MPnumerator=\count372
+\makeMPintoPDFobject=\count373
+\everyMPtoPDFconversion=\toks64
 )
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/epstopdf-pk
 g/epstopdf-base.sty
@@ -1327,20 +1295,14 @@ Package caption Info: End \AtBeginDocument code.
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
-\c@lstlisting=\count376
-Package hyperref Info: Link coloring OFF on input line 201.
+\c@lstlisting=\count374
+Package hyperref Info: Link coloring OFF on input line 216.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-
-
-Package todonotes Warning: The length marginparwidth is less than 2cm and will 
-most likely cause issues with the appearance of inserted todonotes. The issue c
-an be solved by adding a line like \setlength {\marginparwidth }{2cm} prior to 
-loading the todonotes package. on input line 201.
-
-LaTeX Font Info:    Trying to load font information for U+msa on input line 210
+Package hyperref Info: Option `pageanchor' set `false' on input line 217.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 226
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1351,7 +1313,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 t-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 210
+LaTeX Font Info:    Trying to load font information for U+msb on input line 226
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1362,8 +1324,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 t-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 21
-0.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 22
+6.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/jknapltx/ur
 sfs.fd
@@ -1374,7 +1336,9 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 
 {/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updm
 ap/pdftex.map}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
-nc/dvips/cm-super/cm-super-t1.enc}] (./chapters/00_rezumat.tex)
+nc/dvips/cm-super/cm-super-t1.enc}]
+Package hyperref Info: Option `pageanchor' set `true' on input line 262.
+ (./chapters/00_rezumat.tex)
 
 [1
 
@@ -1385,62 +1349,21 @@ nc/dvips/cm-super/cm-super-t1.enc}] (./chapters/00_rezumat.tex)
 
 ]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [3]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[4]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[5])
+[4])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[6] (./main.lof
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-Overfull \hbox (17.5052pt too wide) in paragraph at lines 11--11
- [][] [][]\T1/cmr/m/n/12 (-20) Ciclul de via[]  al unui job de si-mu-lare: tran
-zi[]ia de stare în \T1/cmtt/m/n/12 simulation_runs 
- []
-
-)
+[5] (./main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
 
 
-[7
+[6
 
 
 ] (./main.lot)
@@ -1449,7 +1372,7 @@ zi[]ia de stare în \T1/cmtt/m/n/12 simulation_runs
 
 
 
-[8
+[7
 
 
 ] (./main.loa)
@@ -1458,58 +1381,19 @@ zi[]ia de stare în \T1/cmtt/m/n/12 simulation_runs
 
 
 
-[9
+[8
 
 
 ] (./chapters/01_introducere.tex
 \bbl@ensure@romanian {Capitolul} 1.
 
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.44 
-      [1
+[1
 
 
 ]
-Overfull \hbox (6.57956pt too wide) in paragraph at lines 52--56
-[]\T1/cmr/bx/n/12 (-20) Fundamentarea ma-te-ma-tic  ri-gu-roas  \T1/cmr/m/n/12 
-(-20) a mo-de-lu-lui SIR prin de-ri-va-rea ecua[]iilor
- []
 
-
-Overfull \hbox (8.80888pt too wide) in paragraph at lines 52--56
-\T1/cmr/m/n/12 (-20) din prin-ci-pii prime, de-mon-stra-rea propriet []ilor ma-
-te-ma-tice fun-damen-tale (existen[] ,
- []
-
-
-Overfull \hbox (6.18217pt too wide) in paragraph at lines 62--65
-[]\T1/cmr/bx/n/12 (-20) Evaluarea com-pa-ra-tiv  a performan[]ei \T1/cmr/m/n/12
- (-20) im-ple-men-t -ri-lor pe mul-ti-ple configura[]ii
- []
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[2{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm-
-super/cm-super-ts1.enc}]) (./chapters/02_epidemiologie_si_modelare.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[2]) (./chapters/02_epidemiologie_si_modelare.tex
 
 [3]
 \bbl@ensure@romanian {Capitolul} 2.
@@ -1519,277 +1403,67 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 ]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [5]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [6]
+Overfull \hbox (14.11281pt too wide) in paragraph at lines 189--196
+\T1/cmr/m/n/12 (-20) (diagnostica[]i asimp-to-ma-tici), $\OML/cmm/m/it/12 A$ \T
+1/cmr/m/n/12 (-20) (simp-to-ma-tici nedepista[]i), $\OML/cmm/m/it/12 R$ \T1/cmr
+/m/n/12 (-20) (simp-to-ma-tici diagnostica[]i),
+ []
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [7]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [8]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [9]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [10]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 419.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 419.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 419.
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [11]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [12]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [13]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [14]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 674.
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 677.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [15]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 708.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 711.
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [16]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [17]
 
-LaTeX Font Warning: Command \small invalid in math mode on input line 812.
-
-
-Overfull \hbox (20.80786pt too wide) detected at line 825
+[18]
+Overfull \hbox (20.80786pt too wide) detected at line 859
 [][][][][]
  []
 
-LaTeX Font Info:    Calculating math sizes for size <> on input line 825.
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <> not available
-(Font)              size <5> substituted on input line 825.
 
 
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
+[19]
 
+[20]) (./chapters/03_tehnologii.tex
 
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <0.7> not available
-(Font)              size <5> substituted on input line 825.
-
-
-LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <0.5> not available
-(Font)              size <5> substituted on input line 825.
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[18]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[19]) (./chapters/03_tehnologii.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[20]
+[21]
 \bbl@ensure@romanian {Capitolul} 3.
 
 
-[21
+[22
 
 ]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[22]
-Overfull \hbox (80.48424pt too wide) in paragraph at lines 102--106
+Overfull \hbox (80.48424pt too wide) in paragraph at lines 85--94
 \T1/cmr/m/n/12 (-20) Ecosistemul \T1/cmr/bx/n/12 (-20) SciML \T1/cmr/m/n/12 (-2
 0) (Scien-ti-fic Ma-chine Lear-ning) al Julia con[]ine pa-che-tul \T1/cmtt/m/n/
 12 DifferentialEquations.jl
@@ -1797,142 +1471,65 @@ Overfull \hbox (80.48424pt too wide) in paragraph at lines 102--106
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [23]
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 149.
+nput line 125.
 
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [24]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [25]
-Overfull \hbox (22.51225pt too wide) in paragraph at lines 291--296
+Overfull \hbox (22.51225pt too wide) in paragraph at lines 254--259
 \T1/cmr/m/n/12 (-20) Containerizarea (Do-c-ker) per-mite îm-pa-che-ta-rea unei 
 aplica[]ii îm-pre-un  cu toate dependen[]ele
  []
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [26]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[27]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[28]
-Overfull \hbox (0.15836pt too wide) in paragraph at lines 407--409
-[]\T1/cmr/bx/n/12 (-20) Virtual DOM: \T1/cmr/m/n/12 (-20) re-con-ci-li-ere efi-
-cient  a ar-bo-re-lui DOM cu al-go-rit-mul de diferen[]iere
+Overfull \hbox (73.55736pt too wide) in paragraph at lines 279--285
+\T1/cmr/m/n/12 (-20) Resursele fo-lo-site cel mai des sunt \T1/cmtt/m/n/12 Pod\
+T1/cmr/m/n/12 (-20) , \T1/cmtt/m/n/12 Deployment\T1/cmr/m/n/12 (-20) , \T1/cmtt
+/m/n/12 StatefulSet\T1/cmr/m/n/12 (-20) , \T1/cmtt/m/n/12 Service\T1/cmr/m/n/12
+ (-20) , \T1/cmtt/m/n/12 PersistentVolumeClaim\T1/cmr/m/n/12 (-20) ,
  []
 
-) (./chapters/04_arhitectura_sistemului.tex
 
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[27]) (./chapters/04_arhitectura_sistemului.tex
 
-[29]
+[28]
 \bbl@ensure@romanian {Capitolul} 4.
 
 
-[30
+[29
 
 ]
 
+[30]
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 231.
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [31]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 234.
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [32]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[33]
-Underfull \hbox (badness 10000) in paragraph at lines 386--387
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
 []|\T1/cmr/m/n/12 (+20) Popula[]ia sus-cep-ti-bil  es-ti-mat 
  []
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[34]
+[33]
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
-Overfull \hbox (4.42365pt too wide) in paragraph at lines 438--442
+Overfull \hbox (4.42365pt too wide) in paragraph at lines 436--440
 []\T1/cmr/m/n/12 (-20) Tabelul \T1/cmtt/m/n/12 simulation_results \T1/cmr/m/n/1
 2 (-20) uti-li-zeaz , în schimb, hash shar-ding pe \T1/cmtt/m/n/12 simulation_i
 d\T1/cmr/m/n/12 (-20) ,
@@ -1948,88 +1545,62 @@ tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[34]
 
 [35]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[36]
-Overfull \hbox (21.71356pt too wide) in alignment at lines 513--519
+Overfull \hbox (21.71356pt too wide) in alignment at lines 509--515
  [] [] [] [] 
  []
 
 
-Overfull \hbox (21.71356pt too wide) in alignment at lines 519--524
+Overfull \hbox (21.71356pt too wide) in alignment at lines 515--520
  [] [] [] [] 
  []
 
 
-Overfull \hbox (21.71356pt too wide) in alignment at lines 524--526
+Overfull \hbox (21.71356pt too wide) in alignment at lines 520--522
  [] [] [] [] 
  []
 
 
-Underfull \hbox (badness 1796) in paragraph at lines 541--541
+Underfull \hbox (badness 1796) in paragraph at lines 537--537
 []|\T1/cmr/m/n/12 (+20) Benchmark-uri agre-gate per
  []
 
 
-Overfull \hbox (21.71356pt too wide) in alignment at lines 526--545
+Overfull \hbox (21.71356pt too wide) in alignment at lines 522--541
  [] [] [] [] 
  []
 
 
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[36]
 
 [37]
 
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
 [38]
-Overfull \hbox (11.76253pt too wide) in paragraph at lines 635--640
+Overfull \hbox (11.76253pt too wide) in paragraph at lines 632--637
 []\T1/cmr/m/n/12 (-20) La au-ten-ti-fi-care, \T1/cmtt/m/n/12 authStore \T1/cmr/
 m/n/12 (-20) prime[]te JWT-ul de la API []i îl sto-cheaz  în \T1/cmtt/m/n/12 lo
 calStorage
  []
 
 
-Overfull \hbox (91.76451pt too wide) in paragraph at lines 641--650
+Overfull \hbox (91.76451pt too wide) in paragraph at lines 638--647
 []\T1/cmr/m/n/12 (-20) Fluxul de si-mu-lare în-cepe din pa-gina \T1/cmtt/m/n/12
  NewSimulationPage\T1/cmr/m/n/12 (-20) , care ape-leaz  \T1/cmtt/m/n/12 simulat
 ionsStore.create()
  []
 
 
-Overfull \hbox (44.32712pt too wide) in paragraph at lines 641--650
+Overfull \hbox (44.32712pt too wide) in paragraph at lines 638--647
 \T1/cmtt/m/n/12 SimulationStatus \T1/cmr/m/n/12 (-20) porne[]te un po-l-ling la
  in-ter-val de 2 se-cunde pe \T1/cmtt/m/n/12 GET /api/simulations/{id}\T1/cmr/m
 /n/12 (-20) ,
  []
 
 
-Overfull \hbox (30.68326pt too wide) in paragraph at lines 641--650
+Overfull \hbox (30.68326pt too wide) in paragraph at lines 638--647
 \T1/cmr/m/n/12 (-20) oprindu-se când sta-tu-sul de-vine \T1/cmtt/m/n/12 complet
 ed \T1/cmr/m/n/12 (-20) sau \T1/cmtt/m/n/12 failed\T1/cmr/m/n/12 (-20) . La fi-
 na-li-zare, \T1/cmtt/m/n/12 SimulationResultPage
@@ -2037,30 +1608,9 @@ na-li-zare, \T1/cmtt/m/n/12 SimulationResultPage
 
 
 
+[39]) (./chapters/05_implementare_modele.tex
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[39]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[40]) (./chapters/05_implementare_sir.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[40]
 
 [41]
 \bbl@ensure@romanian {Capitolul} 5.
@@ -2069,27 +1619,86 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [42
 
 ]
-Overfull \hbox (61.74112pt too wide) in paragraph at lines 74--77
-\T1/cmr/m/n/12 (-20) rezolvat  cu me-toda Nelder-Mead [[]] im-ple-men-tat  în \
-T1/cmtt/m/n/12 optim() \T1/cmr/m/n/12 (-20) (R) []i \T1/cmtt/m/n/12 scipy.optim
-ize.minimize()
- []
-
-
-Overfull \hbox (47.35211pt too wide) in paragraph at lines 85--98
- [][] 
- []
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
 
 [43]
+Overfull \hbox (29.7968pt too wide) in paragraph at lines 94--103
+[]\T1/cmr/m/n/12 (-20) Coada Re-dis a fost re-de-nu-mit  din \T1/cmtt/m/n/12 si
+r:jobs:<language> \T1/cmr/m/n/12 (-20) în \T1/cmtt/m/n/12 epimodel:jobs:<langua
+ge>\T1/cmr/m/n/12 (-20) .
+ []
+
+
+Overfull \hbox (47.13483pt too wide) in paragraph at lines 115--118
+[]\T1/cmr/m/n/12 (-20) În Py-thon, nu-cleul mo-de-lu-lui este o func[]ie RHS co
+m-pa-ti-bil  cu \T1/cmtt/m/n/12 scipy.integrate.solve_ivp\T1/cmr/m/n/12 (-20) .
+
+ []
+
+
+
+[44]
+
+[45]) (./chapters/06_evaluare_performanta.tex
+Overfull \hbox (3.93188pt too wide) in paragraph at lines 200--4
+[]\T1/cmr/m/n/12 (-20) i \T1/cmtt/m/n/12 resource.getrusage\T1/cmr/m/n/12 (-20)
+ ; R folose[]te \T1/cmtt/m/n/12 proc.time() []\T1/cmr/m/n/12 (-20) i \T1/cmtt/m
+/n/12 /proc/self/status\T1/cmr/m/n/12 (-20) ; Julia folose[]te
+ []
+
+
+
+[46]
+\bbl@ensure@romanian {Capitolul} 6.
+
+
+[47
+
+]
+
+[48]) (./chapters/07_aplicatia_web.tex
+
+[49]
+\bbl@ensure@romanian {Capitolul} 7.
+
+Overfull \hbox (0.617pt too wide) in paragraph at lines 35--42
+\T1/cmr/m/n/12 (-20) seaz  ce-re-rile, va-li-deaz  input-ul []i construie[]te r
+ s-pun-su-rile JSON. Pa-che-tul \T1/cmtt/m/n/12 repository
+ []
+
+
+
+[50
+
+]
+Overfull \hbox (3.57886pt too wide) in paragraph at lines 85--95
+\T1/cmtt/m/n/12 BenchmarksPage \T1/cmr/m/n/12 (-20) afi[]eaz  agre-g -rile pe m
+o-del []i lim-baj. Com-po-nenta \T1/cmtt/m/n/12 CompartmentChart
+ []
+
+
+
+[51]) (./chapters/08_concluzii.tex
+
+[52]
+\bbl@ensure@romanian {Capitolul} 8.
+
+
+[53
+
+]
+
+[54])
+
+[55] (./main.bbl
+
+[56
+
+
+]) (./appendices/A_cod_r.tex
+
+[57]
+\bbl@ensure@romanian {Anexa} A.
+
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
@@ -2101,255 +1710,199 @@ File: lstlang2.sty 2024/09/23 1.10c listings language file
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang3.sty
 File: lstlang3.sty 2024/09/23 1.10c listings language file
-)
-Overfull \hbox (14.77193pt too wide) in paragraph at lines 145--147
-\T1/cmr/m/n/12 (-20) Sistemul diferen[]ial SIR este de-fi-nit ca o func[]ie R c
-om-pa-ti-bil  cu interfa[]a \T1/cmtt/m/n/12 deSolve::ode()\T1/cmr/m/n/12 (-20) 
-: 
- []
+) (../code/runners/r/runner.R
 
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[44]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[45]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[46]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[47]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[48]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[49]
-Underfull \hbox (badness 1142) in paragraph at lines 443--443
-[]\T1/cmr/m/n/12 (+20) Figura 5.1: |Ci-clul de via[]  al unui job de si-mu-lare
-: tranzi[]ia de stare în
- []
-
-
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[50]) (./chapters/06_evaluare_performanta.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[51]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[52]
-\bbl@ensure@romanian {Capitolul} 6.
-Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
-ine 16.
-
-
-[53
-
-]
-Underfull \hbox (badness 5533) in paragraph at lines 74--74
-[][][]\T1/cmr/m/n/12 (+20) Teste de load cu \T1/cmtt/m/n/12 pgbench []\T1/cmr/m
-/n/12 (+20) i/sau \T1/cmtt/m/n/12 cassandra-stress\T1/cmr/m/n/12 (+20) . Thro-u
--gh-put 
- []
-
-) (./chapters/07_aplicatia_web.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[54]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[55]
-\bbl@ensure@romanian {Capitolul} 7.
-
-
-[56
+[58
 
 ]
 
+[59]
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[60]
 
-[57]) (./chapters/08_concluzii.tex
+[61]
 
+[62]
 
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
+[63])) (./appendices/B_cod_julia.tex
 
-[58]
-\bbl@ensure@romanian {Capitolul} 8.
-)
-
-[59
-
-]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[60] (./main.bbl
-
-[61
-
-
-]
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[62]) (./appendices/A_cod_r.tex
-
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 13.59999pt, for example:
-(fancyhdr)                \setlength{\headheight}{13.59999pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-1.59999pt}.
-
-[63]
-\bbl@ensure@romanian {Anexa} A.
-) (./appendices/B_cod_julia.tex
-
-[64
-
-]
+[64]
 \bbl@ensure@romanian {Anexa} B.
-) (./appendices/C_cod_python.tex
+(../code/runners/julia/runner.jl
 
 [65
 
 ]
+
+[66]
+
+[67]
+
+[68]
+
+[69])) (./appendices/C_cod_python.tex
+
+[70]
 \bbl@ensure@romanian {Anexa} C.
-) (./appendices/E_schema_bd.tex
+(../code/runners/python/runner.py
 
-[66
+[71
 
 ]
+
+[72]
+
+[73]
+
+[74]
+
+[75]
+
+[76])) (./appendices/E_schema_bd.tex
+
+[77]
 \bbl@ensure@romanian {Anexa} D.
-) (./appendices/F_kubernetes.tex
+(../code/db/migrations/000001_create_users.up.sql)
+(../code/db/migrations/000002_create_datasets.up.sql)
+(../code/db/migrations/000003_create_epidemiological_records.up.sql
 
-[67
+[78
 
-]
+]) (../code/db/migrations/000004_create_simulation_runs.up.sql
+
+[79]) (../code/db/migrations/000005_create_simulation_results.up.sql)
+(../code/db/migrations/000006_create_benchmarks.up.sql))
+(./appendices/F_kubernetes.tex
+
+[80]
 \bbl@ensure@romanian {Anexa} E.
-) (./appendices/G_api_rest.tex
 
-[68
+Overfull \hbox (22.00581pt too wide) in paragraph at lines 27--27
+[]|\T1/cmtt/m/n/12 02-secret.example.yaml| 
+ []
+
+
+Overfull \hbox (28.1793pt too wide) in paragraph at lines 28--28
+[]|\T1/cmtt/m/n/12 10-yugabyte-master.yaml| 
+ []
+
+
+Overfull \hbox (34.3528pt too wide) in paragraph at lines 29--29
+[]|\T1/cmtt/m/n/12 11-yugabyte-tserver.yaml| 
+ []
+
+
+Overfull \hbox (3.48534pt too wide) in paragraph at lines 31--31
+[]|\T1/cmtt/m/n/12 30-migrate-job.yaml| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
+[]|\T1/cmtt/m/n/12 Deployment \T1/cmr/m/n/12 (+20) +
+ []
+
+
+Overfull \hbox (15.83232pt too wide) in paragraph at lines 33--33
+[]|\T1/cmtt/m/n/12 50-runner-python.yaml| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
+[]|\T1/cmr/m/n/12 (+20) Runner Py-thon
+ []
+
+
+Overfull \hbox (9.65883pt too wide) in paragraph at lines 35--35
+[]|\T1/cmtt/m/n/12 52-runner-julia.yaml| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--36
+[]|\T1/cmr/m/n/12 (+20) Runner Julia
+ []
+
+
+Overfull \hbox (13.47954pt too wide) in paragraph at lines 35--36
+\T1/cmr/m/n/12 (-20) (\T1/cmtt/m/n/12 DifferentialEquations.jl\T1/cmr/m/n/12 (-
+20) )| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 36--36
+[]|\T1/cmtt/m/n/12 Deployment \T1/cmr/m/n/12 (+20) +
+ []
+
+(../code/k8s/00-namespace.yaml)
+
+[81
 
 ]
+
+[82] (../code/k8s/11-yugabyte-tserver.yaml
+
+[83]
+
+[84]
+
+[85]) (../code/k8s/20-redis.yaml
+
+[86]
+
+[87])
+
+[88] (../code/k8s/40-api.yaml
+
+[89]
+
+[90])
+Overfull \hbox (1.37933pt too wide) in paragraph at lines 83--87
+\T1/cmr/m/n/12 (-20) requ-est, $\OT1/cmr/m/n/12 (-20) 2$ \T1/cmr/m/n/12 (-20) G
+iB li-mit) din ca-uza cos-tu-lui de com-pi-lare JIT al \T1/cmtt/m/n/12 Differen
+tialEquations.jl\T1/cmr/m/n/12 (-20) .
+ []
+
+(../code/k8s/52-runner-julia.yaml
+
+[91]) (../code/k8s/70-ingress.yaml
+
+[92]) (../code/docker-compose.yml
+
+[93]
+
+[94]
+
+[95]
+
+[96])) (./appendices/G_api_rest.tex
+
+[97]
 \bbl@ensure@romanian {Anexa} F.
-)
+(../code/api/internal/api/router/router.go
 
-[69
+[98
 
-] (./main.aux)
+]
+
+[99]) (../code/api/internal/api/handlers/response.go
+
+[100]))
+
+[101] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
-
-
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 4.5pt have occurred.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 75DCEA6B3E07580BFAF60276A9FB5D0C;31595.
+(rerunfilecheck)             Checksum: 5AC79CFAD1C197EF01C7B3A642C68B38;23376.
  ) 
 Here is how much of TeX's memory you used:
- 46722 strings out of 473190
- 1017964 string characters out of 5704334
- 1977770 words of memory out of 5000000
- 68104 multiletter control sequences out of 15000+600000
- 623221 words of font info for 391 fonts, out of 8000000 for 9000
+ 47661 strings out of 473190
+ 1030621 string characters out of 5704334
+ 2165865 words of memory out of 5000000
+ 67803 multiletter control sequences out of 15000+600000
+ 618021 words of font info for 358 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,19n,96p,1001b,2228s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,19n,91p,1001b,3269s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmbx12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmbx8.pfb></opt/homebrew/Cellar/texlive/202503
@@ -2403,10 +1956,10 @@ rew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti
 public/cm-super/sftt0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
 mf-dist/fonts/type1/public/cm-super/sftt1095.pfb></opt/homebrew/Cellar/texlive/
 20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (79 pages, 956886 bytes).
+Output written on main.pdf (110 pages, 1124295 bytes).
 PDF statistics:
- 2002 PDF objects out of 2073 (max. 8388607)
- 1817 compressed objects within 19 object streams
- 698 named destinations out of 1000 (max. 500000)
- 112765 words of extra memory for PDF output out of 128383 (max. 10000000)
+ 3463 PDF objects out of 3580 (max. 8388607)
+ 3234 compressed objects within 33 object streams
+ 1922 named destinations out of 2073 (max. 500000)
+ 97693 words of extra memory for PDF output out of 106986 (max. 10000000)
 

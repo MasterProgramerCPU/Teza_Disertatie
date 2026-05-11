@@ -4,7 +4,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useDatasetsStore } from "@/stores/datasets.store";
 import { useSimulationsStore } from "@/stores/simulations.store";
 import ParameterForm from "@/components/ParameterForm.vue";
-import type { Language } from "@/types";
+import { defaultParameters } from "@/model-presets";
+import type { Language, ModelType } from "@/types";
 
 const route = useRoute();
 const router = useRouter();
@@ -12,9 +13,14 @@ const datasets = useDatasetsStore();
 const simulations = useSimulationsStore();
 
 const datasetId = ref<string>((route.query.dataset_id as string) ?? "");
-const params = ref<{ beta: number; gamma: number; t_max: number; language: Language }>({
-  beta: 0.3,
-  gamma: 0.0714,
+const params = ref<{
+  model_type: ModelType;
+  parameters: Record<string, number>;
+  t_max: number;
+  language: Language;
+}>({
+  model_type: "sidarth",
+  parameters: defaultParameters("sidarth"),
   t_max: 365,
   language: "python",
 });
@@ -38,9 +44,9 @@ async function submit() {
   try {
     const run = await simulations.create({
       dataset_id: datasetId.value,
+      model_type: params.value.model_type,
       language: params.value.language,
-      beta: params.value.beta,
-      gamma: params.value.gamma,
+      parameters: params.value.parameters,
       t_max: params.value.t_max,
     });
     router.push({ name: "simulation-detail", params: { id: run.id } });

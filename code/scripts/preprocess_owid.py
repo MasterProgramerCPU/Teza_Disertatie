@@ -1,22 +1,31 @@
-"""Preprocess OWID COVID-19 data into per-country SIR datasets.
+"""Preprocess OWID COVID-19 data into per-country compartmental datasets.
 
 For each of 10 countries, this script:
   1. downloads (or reuses cached) the OWID full dataset,
   2. filters to the target country and date window
      (2020-01-22 -> 2023-12-31),
-  3. derives compartments S(t), I(t), R(t) from raw OWID fields,
+  3. derives observable compartments (infected, removed, susceptible)
+     from raw OWID fields,
   4. validates the resulting series,
   5. writes a CSV ready to upload via POST /api/datasets.
 
 Derivation:
-  * I(t) = sum of new_cases over the last INFECTIOUS_WINDOW_DAYS (14 days),
-          approximating the count of active infections at time t.
-  * R(t) = total_cases(t) - I(t)  -- people no longer infectious
-          (recovered + deceased; SIR "removed" compartment).
-  * S(t) = N - I(t) - R(t)        -- by conservation.
+  * infected(t) = sum of new_cases over the last INFECTIOUS_WINDOW_DAYS
+                  (14 days), approximating the count of active infections
+                  at time t.
+  * recovered(t) = total_cases(t) - infected(t)
+                  -- people no longer infectious (recovered + deceased,
+                  the "removed" compartment in SIR; mapped to H in SIDARTH).
+  * susceptible(t) = N - infected(t) - recovered(t)   -- by conservation.
 
 The 14-day infectious window matches the clinical estimate for COVID-19
 documented in the thesis (gamma = 1/14 ~ 0.0714 day^-1).
+
+The same CSV schema feeds both supported models: SIR uses
+(susceptible, infected, recovered) directly as (S0, I0, R0), while
+SIDARTH places active infections in compartment I and previously
+infected individuals in compartment H, with D, A, R, T starting at zero
+(see thesis chapter 5).
 """
 
 from __future__ import annotations

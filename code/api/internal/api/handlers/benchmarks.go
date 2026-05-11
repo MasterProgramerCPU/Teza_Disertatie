@@ -16,7 +16,7 @@ func NewBenchmarksHandler(benches *repository.BenchmarkRepository) *BenchmarksHa
 }
 
 func (h *BenchmarksHandler) Aggregate(w http.ResponseWriter, r *http.Request) {
-	out, err := h.benches.AggregateByLanguage(r.Context())
+	out, err := h.benches.AggregateByModelAndLanguage(r.Context())
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "aggregate query failure: "+err.Error())
 		return

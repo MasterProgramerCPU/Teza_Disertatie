@@ -58,42 +58,56 @@ func ValidLanguage(s string) bool {
 	return false
 }
 
+type ModelType string
+
+const (
+	ModelSIDARTH ModelType = "sidarth"
+	ModelSIR     ModelType = "sir"
+)
+
+func ValidModelType(s string) bool {
+	switch ModelType(s) {
+	case ModelSIDARTH, ModelSIR:
+		return true
+	}
+	return false
+}
+
 type SimulationRun struct {
-	ID           uuid.UUID        `json:"id"`
-	UserID       uuid.UUID        `json:"user_id"`
-	DatasetID    uuid.UUID        `json:"dataset_id"`
-	Language     Language         `json:"language"`
-	Beta         float64          `json:"beta"`
-	Gamma        float64          `json:"gamma"`
-	PopulationN  int64            `json:"population_n"`
-	TMax         int              `json:"t_max"`
-	Status       SimulationStatus `json:"status"`
-	ErrorMessage *string          `json:"error_message,omitempty"`
-	CreatedAt    time.Time        `json:"created_at"`
-	CompletedAt  *time.Time       `json:"completed_at,omitempty"`
+	ID           uuid.UUID          `json:"id"`
+	UserID       uuid.UUID          `json:"user_id"`
+	DatasetID    uuid.UUID          `json:"dataset_id"`
+	ModelType    ModelType          `json:"model_type"`
+	Language     Language           `json:"language"`
+	Parameters   map[string]float64 `json:"parameters"`
+	PopulationN  int64              `json:"population_n"`
+	TMax         int                `json:"t_max"`
+	Status       SimulationStatus   `json:"status"`
+	ErrorMessage *string            `json:"error_message,omitempty"`
+	CreatedAt    time.Time          `json:"created_at"`
+	CompletedAt  *time.Time         `json:"completed_at,omitempty"`
 }
 
 type SimulationResult struct {
-	SimulationID uuid.UUID `json:"simulation_id"`
-	T            int       `json:"t"`
-	S            float64   `json:"s"`
-	I            float64   `json:"i"`
-	R            float64   `json:"r"`
+	SimulationID uuid.UUID          `json:"simulation_id"`
+	T            int                `json:"t"`
+	Compartments map[string]float64 `json:"compartments"`
 }
 
 type Benchmark struct {
-	ID            uuid.UUID `json:"id"`
-	SimulationID  uuid.UUID `json:"simulation_id"`
-	WallTimeMs    int64     `json:"wall_time_ms"`
-	CPUTimeMs     int64     `json:"cpu_time_ms"`
-	PeakMemoryMB  float32   `json:"peak_memory_mb"`
+	ID           uuid.UUID `json:"id"`
+	SimulationID uuid.UUID `json:"simulation_id"`
+	WallTimeMs   int64     `json:"wall_time_ms"`
+	CPUTimeMs    int64     `json:"cpu_time_ms"`
+	PeakMemoryMB float32   `json:"peak_memory_mb"`
 }
 
 type BenchmarkAggregate struct {
-	Language        Language `json:"language"`
-	RunCount        int      `json:"run_count"`
-	MedianWallMs    float64  `json:"median_wall_ms"`
-	P95WallMs       float64  `json:"p95_wall_ms"`
-	MedianCPUMs     float64  `json:"median_cpu_ms"`
-	MedianMemoryMB  float64  `json:"median_memory_mb"`
+	ModelType      ModelType `json:"model_type"`
+	Language       Language  `json:"language"`
+	RunCount       int       `json:"run_count"`
+	MedianWallMs   float64   `json:"median_wall_ms"`
+	P95WallMs      float64   `json:"p95_wall_ms"`
+	MedianCPUMs    float64   `json:"median_cpu_ms"`
+	MedianMemoryMB float64   `json:"median_memory_mb"`
 }

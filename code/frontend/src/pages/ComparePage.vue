@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 import { useSimulationsStore } from "@/stores/simulations.store";
-import SIRChart from "@/components/SIRChart.vue";
+import CompartmentChart from "@/components/CompartmentChart.vue";
+import { MODEL_LABELS } from "@/model-presets";
 import type { SimulationResultPoint, SimulationRun } from "@/types";
 
 const simulations = useSimulationsStore();
@@ -42,7 +43,7 @@ async function compare() {
       selected.value.map((id) => simulations.get(id)),
     );
     series.value = results.map((points, idx) => ({
-      label: runs[idx].language,
+      label: `${MODEL_LABELS[runs[idx].model_type]} / ${runs[idx].language}`,
       points,
       style: STYLES[idx % STYLES.length],
     }));
@@ -56,12 +57,12 @@ async function compare() {
 
 <template>
   <h1>Comparare simulări</h1>
-  <p class="muted">Selectează 2-3 simulări finalizate (de preferat pe același set de date și aceiași β/γ).</p>
+  <p class="muted">Selectează 2-3 simulări finalizate, ideal pe același set de date și cu parametri comparabili.</p>
 
   <div class="card">
     <table v-if="completedRuns.length > 0">
       <thead>
-        <tr><th></th><th>Limbaj</th><th>β</th><th>γ</th><th>t_max</th><th>Dataset</th><th>Finalizat</th></tr>
+        <tr><th></th><th>Model</th><th>Limbaj</th><th>t_max</th><th>Dataset</th><th>Finalizat</th></tr>
       </thead>
       <tbody>
         <tr v-for="s in completedRuns" :key="s.id">
@@ -74,9 +75,8 @@ async function compare() {
               style="width: auto;"
             />
           </td>
+          <td>{{ MODEL_LABELS[s.model_type] }}</td>
           <td>{{ s.language }}</td>
-          <td>{{ s.beta.toFixed(4) }}</td>
-          <td>{{ s.gamma.toFixed(4) }}</td>
           <td>{{ s.t_max }}</td>
           <td><code>{{ s.dataset_id.slice(0, 8) }}…</code></td>
           <td>{{ s.completed_at ? new Date(s.completed_at).toLocaleString() : "—" }}</td>
@@ -93,6 +93,6 @@ async function compare() {
 
   <div v-if="series.length > 0" class="card">
     <h2>Comparație</h2>
-    <SIRChart :series="series" :height="500" />
+    <CompartmentChart :series="series" :height="500" />
   </div>
 </template>

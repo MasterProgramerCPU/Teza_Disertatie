@@ -10,7 +10,7 @@ onMounted(() => benchmarks.fetchAll());
 
 <template>
   <h1>Benchmarks</h1>
-  <p class="muted">Agregarea metricilor pe simulările finalizate, grupate per limbaj.</p>
+  <p class="muted">Agregarea metricilor pe simulările finalizate, grupate per model și limbaj.</p>
 
   <p v-if="benchmarks.error" class="alert error">{{ benchmarks.error }}</p>
 

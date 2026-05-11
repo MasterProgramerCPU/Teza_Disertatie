@@ -1,6 +1,7 @@
 \chapter{Cod Sursă — Implementarea R}
 \label{app:cod_r}
 
-\todosec{Codul R complet pentru modelul SIR: definire sistem EDO,
-apel deSolve, estimare parametri, export JSON. Inclus prin
-\texttt{\textbackslash lstinputlisting\{...\}} din fișierele sursă.}
+Această anexă include runner-ul R folosit de sistem pentru consumul job-urilor
+Redis, rezolvarea modelelor SIDARTH și SIR și persistarea rezultatelor în YugabyteDB.
+
+\lstinputlisting[language=R, caption={Runner-ul R pentru modelele SIDARTH și SIR.}]{../code/runners/r/runner.R}

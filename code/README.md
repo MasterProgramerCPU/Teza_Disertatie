@@ -1,4 +1,4 @@
-# Sistem E-Medicine SIR — Cod sursă
+# Sistem E-Medicine SIDARTH — Cod sursă
 
 Acest director conține implementarea sistemului descris în lucrare.
 
@@ -17,16 +17,14 @@ code/
 │   │   ├── db/repository/  # Repository pattern peste pgx
 │   │   ├── runner/         # Redis dispatcher pentru job-uri
 │   │   └── models/         # Struct-uri de domeniu
-│   ├── pkg/sirmath/        # (rezervat) implementare SIR de referință în Go
 │   ├── go.mod
 │   └── Dockerfile
-├── runners/                # Cele 3 runner-e SIR (BRPOP consumer)
+├── runners/                # Cele 3 runner-e pentru modele compartimentale
 │   ├── python/             # scipy.integrate.solve_ivp (RK45)
 │   ├── r/                  # deSolve::ode (rk4, h=1)
 │   └── julia/              # DifferentialEquations.jl (Tsit5)
 ├── db/migrations/          # Migrații SQL (golang-migrate)
-├── k8s/                    # (rezervat) manifeste Kubernetes
-├── scripts/                # (rezervat) script preprocesare OWID
+├── scripts/                # Script preprocesare OWID
 ├── docker-compose.yml      # YugabyteDB + Redis + API + 3 runner-e
 └── Makefile
 ```
@@ -46,7 +44,7 @@ make health
 2. **Redis** (port 6379)
 3. **migrate** rulează migrațiile pe YugabyteDB
 4. **API** Go pornește pe port 8080
-5. **runner-python, runner-r, runner-julia** — consumă fiecare coada sa Redis (`sir:jobs:{python,r,julia}`)
+5. **runner-python, runner-r, runner-julia** — consumă fiecare coada sa Redis (`epimodel:jobs:{python,r,julia}`)
 
 > **Notă:** Primul `make up` durează 10–15 minute pentru build-ul runner-elor (R compilează `deSolve`/`RPostgres` din sursă, Julia precompilează `DifferentialEquations.jl`). Build-urile sunt cache-uite ulterior.
 
@@ -94,9 +92,25 @@ curl -X POST localhost:8080/api/simulations \
   -H 'Content-Type: application/json' \
   -d '{
     "dataset_id":"<id>",
+    "model_type":"sidarth",
     "language":"python",
-    "beta":0.3,
-    "gamma":0.0714,
+    "parameters":{
+      "alpha":0.57,
+      "beta":0.011,
+      "gamma":0.456,
+      "delta":0.011,
+      "epsilon":0.171,
+      "zeta":0.125,
+      "lambda":0.034,
+      "eta":0.125,
+      "rho":0.034,
+      "theta":0.37,
+      "mu":0.017,
+      "kappa":0.017,
+      "nu":0.027,
+      "xi":0.017,
+      "sigma":0.017
+    },
     "t_max":160
   }'
 ```
@@ -104,13 +118,14 @@ curl -X POST localhost:8080/api/simulations \
 ## Note tehnice
 
 - **Schema BD:** 6 tabele (`users`, `datasets`, `epidemiological_records`, `simulation_runs`, `simulation_results`, `benchmarks`) — vezi `db/migrations/`
-- **Comunicarea cu runner-ele:** API publică job-uri în lista Redis `sir:jobs:<language>` prin `LPUSH`; runner-ele consumă cu `BRPOP` (modelul descris în capitolul 4 al lucrării)
+- **Modele suportate:** `sidarth` este modelul principal; `sir` rămâne disponibil ca model secundar pentru comparații.
+- **Comunicarea cu runner-ele:** API publică job-uri în lista Redis `epimodel:jobs:<language>` prin `LPUSH`; runner-ele consumă cu `BRPOP` (modelul descris în capitolul 4 al lucrării)
 - **JWT:** HS256, expirare 24h, parole hash-uite cu bcrypt cost 12
 - **Validare CSV:** coloane obligatorii `date`, `region`, `infected`, `population`; opționale `recovered`, `susceptible`; verifică $I+R \leq N$ și ordinea cronologică
 
 ## Runner-ele
 
-Fiecare runner expune același comportament: BRPOP din coada sa, marchează rularea ca `running`, rezolvă SIR, face bulk insert al rezultatelor, scrie metricile în `benchmarks`, marchează `completed`.
+Fiecare runner expune același comportament: BRPOP din coada sa, marchează rularea ca `running`, rezolvă sistemul SIDARTH sau SIR cerut în job, inserează traiectoriile compartimentale în `simulation_results`, scrie metricile în `benchmarks`, marchează `completed`.
 
 | Runner | Solver | Pași timp | Client Redis | Driver DB |
 |--------|--------|-----------|--------------|-----------|
@@ -125,6 +140,6 @@ Metricile colectate (toate scrise în tabela `benchmarks`):
 
 ## Componente care urmează
 
-- [ ] Script preprocesare OWID → CSV-uri SIR (România/Italia/Coreea de Sud)
-- [ ] Frontend Vue.js
-- [ ] Manifeste Kubernetes (pentru deploy pe clusterul fizic)
+- [ ] Calibrare dedicată pentru parametrii SIDARTH pe date reale.
+- [ ] Extinderea selectorului de model cu SEIR/SIRS.
+- [ ] Manifeste Kubernetes pentru deploy pe clusterul fizic.

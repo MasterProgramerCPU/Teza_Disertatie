@@ -16,9 +16,10 @@ func NewBenchmarkRepository(pool *pgxpool.Pool) *BenchmarkRepository {
 	return &BenchmarkRepository{pool: pool}
 }
 
-func (r *BenchmarkRepository) AggregateByLanguage(ctx context.Context) ([]models.BenchmarkAggregate, error) {
+func (r *BenchmarkRepository) AggregateByModelAndLanguage(ctx context.Context) ([]models.BenchmarkAggregate, error) {
 	const q = `
 		SELECT
+			s.model_type,
 			s.language,
 			COUNT(*)::int AS run_count,
 			percentile_cont(0.5) WITHIN GROUP (ORDER BY b.wall_time_ms)   AS median_wall_ms,
@@ -28,8 +29,8 @@ func (r *BenchmarkRepository) AggregateByLanguage(ctx context.Context) ([]models
 		FROM benchmarks b
 		JOIN simulation_runs s ON s.id = b.simulation_id
 		WHERE s.status = 'completed'
-		GROUP BY s.language
-		ORDER BY s.language`
+		GROUP BY s.model_type, s.language
+		ORDER BY s.model_type, s.language`
 
 	rows, err := r.pool.Query(ctx, q)
 	if err != nil {
@@ -41,7 +42,7 @@ func (r *BenchmarkRepository) AggregateByLanguage(ctx context.Context) ([]models
 	for rows.Next() {
 		var a models.BenchmarkAggregate
 		if err := rows.Scan(
-			&a.Language, &a.RunCount, &a.MedianWallMs, &a.P95WallMs,
+			&a.ModelType, &a.Language, &a.RunCount, &a.MedianWallMs, &a.P95WallMs,
 			&a.MedianCPUMs, &a.MedianMemoryMB,
 		); err != nil {
 			return nil, err

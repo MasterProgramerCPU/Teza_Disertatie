@@ -5,83 +5,115 @@
 \chapter{Evaluarea Performanței și Scalabilității}
 \label{ch:evaluare}
 
-\section{Metodologia de benchmarking}
+\section{Principiul evaluării}
 \label{sec:metodologie_benchmark}
 
-\subsection{Configurații hardware utilizate}
-\label{subsec:hardware}
+Evaluarea performanței urmărește separarea costului numeric de costurile
+introduse de arhitectura aplicației. În sistemul implementat, modelul nu este
+apelat direct din interfață, ci este executat de un runner care primește job-ul
+din Redis și scrie rezultatele în YugabyteDB. Prin urmare, măsurarea trebuie să
+țină cont de solver, de serializarea rezultatelor, de inserarea în baza de date
+și de tranzițiile de status ale simulării.
 
-\todosec{Tabel cu configurațiile hardware: laptop (Intel i5, 8GB RAM),
-workstation (AMD Ryzen 9, 32GB RAM), server cloud (AWS EC2 c5.4xlarge).
-Sistemul de operare, versiunile limbajelor, versiunile solver-elor.}
+Unitatea experimentală este o rulare completă a unui model ales prin
+\texttt{model\_type}. Pentru SIDARTH, vectorul de stare are șapte componente, iar
+pentru SIR are trei. Ambele folosesc aceeași infrastructură: API-ul creează
+rândul în \texttt{simulation\_runs}, publică job-ul în Redis, runner-ul execută
+integrarea numerică, scrie seria temporală în \texttt{simulation\_results} și
+salvează metricile în \texttt{benchmarks}. Această definiție include costul
+operațional real al runner-ului, nu doar apelul către solver.
 
-\subsection{Metrici urmărite}
+\section{Metrici colectate}
 \label{subsec:metrici}
 
-\todosec{Metrici: (1) Timp de execuție wall-clock (mediana și IQR peste 30 rulări),
-(2) CPU time (user + system), (3) Peak memory usage (RSS), (4) Acuratețe numerică
-(eroarea față de soluția de referință DOPRI8 cu toleranță $10^{-12}$).}
+\begin{table}[htbp]
+\centering
+\caption{Metricile colectate pentru fiecare rulare.}
+\label{tab:metrici_benchmark}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Metrică} & \textbf{Interpretare} \\
+\midrule
+\texttt{wall\_time\_ms} & Durata observată de procesul runner între începutul rezolvării și finalizarea persistării rezultatelor. \\
+\texttt{cpu\_time\_ms} & Timpul de procesor consumat de runner; în Julia este aproximat prin timpul elapsed, din cauza diferențelor de expunere a timpului CPU. \\
+\texttt{peak\_memory\_mb} & Vârful de memorie rezidentă raportat de proces pe durata rulării. \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\subsection{Protocoale de testare și reproductibilitate}
+Python măsoară timpul cu \texttt{time.perf\_counter()} și
+\texttt{time.process\_time()}, R folosește \texttt{proc.time()}, iar Julia
+folosește \texttt{time\_ns()}. Aceste mecanisme nu sunt identice, dar sunt
+disponibile nativ în fiecare runtime și permit colectarea automată fără un profiler
+extern.
+
+\section{Protocol experimental}
 \label{subsec:protocoale}
 
-\todosec{Protocol: warm-up runs, izolare procese, seed fix, versioning
-al codului de benchmark. Toate configurațiile rulate de 30 de ori, cu
-colectarea automatizată a rezultatelor.}
+Un protocol reproductibil trebuie să controleze încălzirea runtime-ului, starea
+bazei de date și concurența dintre job-uri. În Julia, prima rulare poate include
+costuri de compilare JIT, motiv pentru care rezultatele relevante trebuie separate
+între rulări de încălzire și rulări măsurate. În R și Python, costul de import al
+bibliotecilor este plătit la pornirea containerului, nu la fiecare job.
 
-\section{Scalabilitate în funcție de dimensiunea setului de date}
+Pentru o campanie finală se recomandă rulări repetate pentru fiecare combinație
+model--limbaj, cu aceeași imagine Docker, aceleași toleranțe numerice și un singur
+job activ pe runner. Valorile agregate ar trebui raportate prin mediană și
+interval intercuartilic, deoarece timpii în containere pot avea cozi lungi produse
+de scheduling, I/O sau garbage collection.
+
+\section{Scalabilitate și complexitatea modelului}
 \label{sec:scalabilitate_date}
 
-\todosec{Experimente cu $N \in \{10^3, 10^4, 10^5, 10^6, 10^7\}$.
-Grafice log-log ale timpului de execuție față de $N$ pentru fiecare limbaj.
-Identificarea complexității empirice.}
+În modelele compartimentale agregate, mărimea populației $N$ nu crește direct
+dimensiunea sistemului diferențial. O simulare SIDARTH pentru $N=10^3$ și una
+pentru $N=10^7$ au același număr de ecuații; se schimbă doar scara valorilor.
+Costul crește în schimb cu numărul de compartimente, cu orizontul temporal
+$t_{\max}$ și cu numărul de puncte salvate.
 
-\section{Comparație timp de execuție — R vs Julia vs Python}
+SIDARTH este mai costisitor decât SIR nu pentru că populația este mai mare, ci
+pentru că fiecare evaluare RHS calculează mai multe fluxuri și fiecare punct salvat
+conține mai multe valori. În plus, persistarea în JSONB introduce un cost de
+serializare care nu exista în schema fixă SIR, dar acest cost cumpără flexibilitate:
+aceeași tabelă poate stoca modele cu structuri diferite de stare.
+
+\section{Compararea implementărilor R, Julia și Python}
 \label{sec:comparatie_timp}
 
-\todosec{Tabel comparativ și grafice boxplot. Analiza statistică:
-test Kruskal-Wallis, comparații post-hoc Dunn pentru detectarea diferențelor
-semnificative. Discutarea overhead-ului de start-up al fiecărui limbaj
-față de timpul de calcul pur.}
+Cele trei implementări nu folosesc exact același algoritm numeric. Runner-ul R
+folosește RK4 cu pas fix $h=1$, Python folosește \texttt{solve\_ivp} cu RK45, iar
+Julia folosește \texttt{Tsit5}. Comparația trebuie interpretată ca o comparație
+între implementări practice echivalente funcțional, nu ca un experiment izolat pe
+același solver. Pentru o comparație strictă ar fi necesară implementarea manuală a
+aceleiași metode în toate cele trei limbaje.
 
-\section{Consum de memorie și resurse}
-\label{sec:consum_memorie}
+Avantajul abordării curente este că reflectă utilizarea naturală a fiecărui
+ecosistem: R prin \texttt{deSolve}, Python prin SciPy, Julia prin SciML. Rezultatele
+benchmarkului trebuie deci citite ca o comparație între ecosisteme de calcul
+științific integrate într-un sistem software, nu doar între limbaje de programare.
 
-\todosec{Profile de memorie pentru fiecare implementare. Grafice de utilizare
-a memoriei în timp. Identificarea cauzelor alocărilor excesive.}
-
-\section{Acuratețea numerică a rezultatelor}
+\section{Acuratețe numerică}
 \label{sec:acuratete}
 
-\todosec{Compararea soluțiilor numerice cu soluția de referință.
-Eroarea $L^\infty$ și $L^2$ pentru $S(t)$, $I(t)$, $R(t)$.
-Verificarea conservării $S + I + R = N$ (eroarea de conservare).}
+Corectitudinea rezultatelor este verificată prin conservarea populației. Pentru
+SIDARTH, suma $S+I+D+A+R+T+H$ trebuie să rămână egală cu $N$ la fiecare pas salvat;
+pentru SIR, condiția devine $S+I+R=N$. Un al doilea criteriu este apropierea
+traiectoriilor obținute în cele trei limbaje pentru aceeași configurație.
 
-\section{Performanța bazei de date distribuite}
-\label{sec:performanta_bd}
+O soluție de referință poate fi obținută printr-o metodă adaptivă cu toleranțe mai
+stricte, de exemplu \texttt{DOP853} în SciPy sau \texttt{Vern9} în Julia. În
+absența unei campanii numerice complete, capitolul nu susține o ierarhie finală de
+acuratețe între limbaje, ci definește criteriul prin care ea poate fi stabilită.
 
-\subsection{Latență la scriere și citire}
-\label{subsec:latenta_bd}
-
-\todosec{Măsurarea latenței P50/P95/P99 pentru operații INSERT și SELECT
-pe tabelele epidemiologice. Comparație cu PostgreSQL standalone.}
-
-\subsection{Comportament sub load — teste de stress}
-\label{subsec:stress_bd}
-
-\todosec{Teste de load cu \texttt{pgbench} și/sau \texttt{cassandra-stress}.
-Throughput (tranzacții/secundă) față de numărul de clienți concurenți.
-Comportamentul clusterului la oprirea unuia din cele 3 noduri YugabyteDB.}
-
-\section{Performanța API-ului Go}
-\label{sec:performanta_api}
-
-\todosec{Benchmarking API cu \texttt{wrk} sau \texttt{hey}: RPS (requests/second),
-latență P95/P99, comportament sub concurență (10, 50, 100, 500 clienți simultani).}
-
-\section{Analiză comparativă sintetică}
+\section{Interpretarea rezultatelor}
 \label{sec:analiza_sintetica}
 
-\todosec{Tabel de scoruri normalizate per metrică și per limbaj.
-Radar chart (spider chart) cu performanța relativă.
-Recomandări pentru scenarii de utilizare: volum mic vs. mare, precizie vs. viteză.}
+În forma actuală, infrastructura de măsurare este prezentă, iar fiecare rulare
+produce metrici persistente. Pentru concluzii cantitative finale sunt necesare
+campanii controlate și tabele agregate pe combinații model--limbaj. Fără aceste
+date, afirmații precum „limbajul X este cel mai rapid” ar fi premature.
+
+Rezultatul important în această etapă este metodologic: sistemul permite colectarea
+comparabilă a metricilor pentru modele cu grade diferite de complexitate și pentru
+trei implementări distincte. Această organizare reduce riscul benchmarkurilor
+ad-hoc și oferă baza pentru o evaluare empirică completă.

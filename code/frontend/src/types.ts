@@ -1,5 +1,7 @@
 export type Language = "r" | "julia" | "python";
 
+export type ModelType = "sidarth" | "sir";
+
 export type SimulationStatus = "pending" | "running" | "completed" | "failed";
 
 export interface User {
@@ -27,9 +29,9 @@ export interface SimulationRun {
   id: string;
   user_id: string;
   dataset_id: string;
+  model_type: ModelType;
   language: Language;
-  beta: number;
-  gamma: number;
+  parameters: Record<string, number>;
   population_n: number;
   t_max: number;
   status: SimulationStatus;
@@ -41,12 +43,11 @@ export interface SimulationRun {
 export interface SimulationResultPoint {
   simulation_id: string;
   t: number;
-  s: number;
-  i: number;
-  r: number;
+  compartments: Record<string, number>;
 }
 
 export interface BenchmarkAggregate {
+  model_type: ModelType;
   language: Language;
   run_count: number;
   median_wall_ms: number;
@@ -57,9 +58,9 @@ export interface BenchmarkAggregate {
 
 export interface CreateSimulationPayload {
   dataset_id: string;
+  model_type: ModelType;
   language: Language;
-  beta: number;
-  gamma: number;
+  parameters: Record<string, number>;
   population_n?: number;
   t_max: number;
 }

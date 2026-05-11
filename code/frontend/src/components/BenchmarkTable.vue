@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { MODEL_LABELS } from "@/model-presets";
 import type { BenchmarkAggregate } from "@/types";
 
 defineProps<{ items: BenchmarkAggregate[] }>();
@@ -16,6 +17,7 @@ function fmtMB(v: number): string {
   <table>
     <thead>
       <tr>
+        <th>Model</th>
         <th>Limbaj</th>
         <th>Rulări</th>
         <th>Mediana wall</th>
@@ -25,7 +27,8 @@ function fmtMB(v: number): string {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="row in items" :key="row.language">
+      <tr v-for="row in items" :key="`${row.model_type}-${row.language}`">
+        <td><strong>{{ MODEL_LABELS[row.model_type] }}</strong></td>
         <td><strong>{{ row.language }}</strong></td>
         <td>{{ row.run_count }}</td>
         <td>{{ fmtMs(row.median_wall_ms) }}</td>
@@ -34,7 +37,7 @@ function fmtMB(v: number): string {
         <td>{{ fmtMB(row.median_memory_mb) }}</td>
       </tr>
       <tr v-if="items.length === 0">
-        <td colspan="6" class="muted">Niciun benchmark încă. Rulează o simulare ca să vezi metrici.</td>
+        <td colspan="7" class="muted">Niciun benchmark încă. Rulează o simulare ca să vezi metrici.</td>
       </tr>
     </tbody>
   </table>

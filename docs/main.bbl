@@ -23,6 +23,13 @@ Odo Diekmann, Johan A.~P. Heesterbeek, and Johan A.~J. Metz.
   populations.
 \newblock {\em Journal of Mathematical Biology}, 28(4):365--382, 1990.
 
+\bibitem{giordano2020sidarthe}
+Giulia Giordano, Franco Blanchini, Raffaele Bruno, Patrizio Colaneri,
+  Alessandro Di~Filippo, Angela Di~Matteo, and Marta Colaneri.
+\newblock Modelling the {COVID-19} epidemic and implementation of
+  population-wide interventions in italy.
+\newblock {\em Nature Medicine}, 26:855--860, 2020.
+
 \bibitem{vandendriesschwatmough2002}
 Pauline van~den Driessche and James Watmough.
 \newblock Reproduction numbers and sub-threshold endemic equilibria for
@@ -130,33 +137,5 @@ Edouard Mathieu, Hannah Ritchie, Lucas Rod{\'e}s-Guirao, Cameron Appel, Charlie
   Esteban Ortiz-Ospina, and Max Roser.
 \newblock Coronavirus pandemic ({COVID}-19).
 \newblock Our World in Data, 2020.
-
-\bibitem{nelder1965simplex}
-J.~A. Nelder and R.~Mead.
-\newblock A simplex method for function minimization.
-\newblock {\em The Computer Journal}, 7(4):308--313, 1965.
-
-\bibitem{he2020temporal}
-Xi~He, Eric H.~Y. Lau, Peng Wu, Xilong Deng, Jian Wang, Xinxin Hao, Yiu~Chung
-  Lau, Jessica~Y. Wong, Yujuan Guan, Xinghua Tan, Xiaoneng Mo, Yanqing Chen,
-  Baolin Liao, Weilie Chen, Fengyu Hu, Qing Zhang, Mingqiu Zhong, Yanrong Wu,
-  Lingzhai Zhao, Fuchun Zhang, Benjamin~J. Cowling, Fang Li, and Gabriel~M.
-  Leung.
-\newblock Temporal dynamics in viral shedding and transmissibility of
-  {COVID}-19.
-\newblock {\em Nature Medicine}, 26:672--675, 2020.
-
-\bibitem{tsitouras2011runge}
-Ch. Tsitouras.
-\newblock Runge-{K}utta pairs of order 5(4) satisfying only the first column
-  simplifying assumption.
-\newblock {\em Computers \& Mathematics with Applications}, 62(2):770--775,
-  2011.
-
-\bibitem{dormand1980family}
-J.~R. Dormand and P.~J. Prince.
-\newblock A family of embedded {R}unge-{K}utta formulae.
-\newblock {\em Journal of Computational and Applied Mathematics}, 6(1):19--26,
-  1980.
 
 \end{thebibliography}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: epimodel-config
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/part-of: epimodel
+data:
+  HTTP_ADDR: ":8080"
+  REDIS_URL: "redis://redis:6379/0"
+  JWT_EXPIRY_HOURS: "24"

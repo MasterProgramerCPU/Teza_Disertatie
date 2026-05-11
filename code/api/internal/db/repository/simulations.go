@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 
 	"github.com/google/uuid"
@@ -20,19 +21,28 @@ func NewSimulationRepository(pool *pgxpool.Pool) *SimulationRepository {
 }
 
 func (r *SimulationRepository) Create(ctx context.Context, run *models.SimulationRun) (*models.SimulationRun, error) {
+	paramsJSON, err := json.Marshal(run.Parameters)
+	if err != nil {
+		return nil, err
+	}
+
 	const q = `
-		INSERT INTO simulation_runs (user_id, dataset_id, language, beta, gamma, population_n, t_max, status)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, 'pending')
-		RETURNING id, user_id, dataset_id, language, beta, gamma, population_n, t_max, status, created_at`
+		INSERT INTO simulation_runs (user_id, dataset_id, model_type, language, parameters, population_n, t_max, status)
+		VALUES ($1, $2, $3, $4, $5::jsonb, $6, $7, 'pending')
+		RETURNING id, user_id, dataset_id, model_type, language, parameters, population_n, t_max, status, created_at`
 
 	var out models.SimulationRun
-	err := r.pool.QueryRow(ctx, q,
-		run.UserID, run.DatasetID, run.Language, run.Beta, run.Gamma, run.PopulationN, run.TMax,
+	var params []byte
+	err = r.pool.QueryRow(ctx, q,
+		run.UserID, run.DatasetID, run.ModelType, run.Language, paramsJSON, run.PopulationN, run.TMax,
 	).Scan(
-		&out.ID, &out.UserID, &out.DatasetID, &out.Language, &out.Beta, &out.Gamma,
+		&out.ID, &out.UserID, &out.DatasetID, &out.ModelType, &out.Language, &params,
 		&out.PopulationN, &out.TMax, &out.Status, &out.CreatedAt,
 	)
 	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(params, &out.Parameters); err != nil {
 		return nil, err
 	}
 	return &out, nil
@@ -40,7 +50,7 @@ func (r *SimulationRepository) Create(ctx context.Context, run *models.Simulatio
 
 func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([]models.SimulationRun, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT id, user_id, dataset_id, language, beta, gamma, population_n, t_max,
+		SELECT id, user_id, dataset_id, model_type, language, parameters, population_n, t_max,
 		       status, error_message, created_at, completed_at
 		FROM simulation_runs WHERE user_id = $1 ORDER BY created_at DESC`, userID)
 	if err != nil {
@@ -51,10 +61,14 @@ func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID)
 	var out []models.SimulationRun
 	for rows.Next() {
 		var s models.SimulationRun
+		var params []byte
 		if err := rows.Scan(
-			&s.ID, &s.UserID, &s.DatasetID, &s.Language, &s.Beta, &s.Gamma,
+			&s.ID, &s.UserID, &s.DatasetID, &s.ModelType, &s.Language, &params,
 			&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
 		); err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal(params, &s.Parameters); err != nil {
 			return nil, err
 		}
 		out = append(out, s)
@@ -64,19 +78,23 @@ func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID)
 
 func (r *SimulationRepository) Get(ctx context.Context, userID, id uuid.UUID) (*models.SimulationRun, error) {
 	var s models.SimulationRun
+	var params []byte
 	err := r.pool.QueryRow(ctx, `
-		SELECT id, user_id, dataset_id, language, beta, gamma, population_n, t_max,
+		SELECT id, user_id, dataset_id, model_type, language, parameters, population_n, t_max,
 		       status, error_message, created_at, completed_at
 		FROM simulation_runs WHERE id = $1 AND user_id = $2`,
 		id, userID,
 	).Scan(
-		&s.ID, &s.UserID, &s.DatasetID, &s.Language, &s.Beta, &s.Gamma,
+		&s.ID, &s.UserID, &s.DatasetID, &s.ModelType, &s.Language, &params,
 		&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
 	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(params, &s.Parameters); err != nil {
 		return nil, err
 	}
 	return &s, nil
@@ -92,7 +110,7 @@ func NewResultsRepository(pool *pgxpool.Pool) *ResultsRepository {
 
 func (r *ResultsRepository) ListBySimulation(ctx context.Context, simID uuid.UUID) ([]models.SimulationResult, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT simulation_id, t, s, i, r FROM simulation_results
+		SELECT simulation_id, t, compartments FROM simulation_results
 		WHERE simulation_id = $1 ORDER BY t ASC`, simID)
 	if err != nil {
 		return nil, err
@@ -102,7 +120,11 @@ func (r *ResultsRepository) ListBySimulation(ctx context.Context, simID uuid.UUI
 	var out []models.SimulationResult
 	for rows.Next() {
 		var res models.SimulationResult
-		if err := rows.Scan(&res.SimulationID, &res.T, &res.S, &res.I, &res.R); err != nil {
+		var compartments []byte
+		if err := rows.Scan(&res.SimulationID, &res.T, &compartments); err != nil {
+			return nil, err
+		}
+		if err := json.Unmarshal(compartments, &res.Compartments); err != nil {
 			return nil, err
 		}
 		out = append(out, res)

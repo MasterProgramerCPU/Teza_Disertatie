@@ -7,7 +7,7 @@ const auth = useAuthStore();
 <template>
   <nav class="navbar">
     <div class="nav-inner">
-      <router-link to="/dashboard" class="brand">E-Medicine SIR</router-link>
+      <router-link to="/dashboard" class="brand">E-Medicine SIDARTH</router-link>
       <div class="links">
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/datasets">Seturi de date</router-link>

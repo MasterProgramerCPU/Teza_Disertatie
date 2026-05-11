@@ -9,10 +9,10 @@
 \label{sec:limbaje}
 
 Alegerea limbajului de programare pentru implementarea modelelor matematice
-nu este neutră: performanța, expresivitatea și ecosistemul de biblioteci
-au un impact direct asupra eficienței dezvoltării și calității rezultatelor.
-Această secțiune prezintă fundamentele și caracteristicile tehnice ale
-celor trei limbaje utilizate.
+nu este neutră. Performanța, expresivitatea și ecosistemul de biblioteci
+influențează atât timpul de dezvoltare, cât și comportamentul numeric al aplicației.
+În această lucrare, R, Julia și Python sunt tratate ca ecosisteme de calcul
+științific, nu doar ca sintaxe diferite pentru aceleași formule.
 
 % ---- R ---------------------------------------------------
 \subsection{R}
@@ -31,39 +31,26 @@ iar gramatica limbajului este proiectată pentru manipularea și analiza datelor
 \subsubsection{Caracteristici tehnice relevante}
 
 R este un limbaj \emph{interpretat}, dinamic tipizat, cu suport pentru
-programare funcțională, orientată pe obiecte (sistemele S3, S4 și R5/R6)
-și procedurală. Caracteristici relevante pentru calculul științific:
+programare funcțională, procedurală și orientată pe obiecte prin sistemele S3,
+S4 și R6. Pentru calcul numeric, avantajul său principal vine din vectorizarea
+nativă: operațiile pe vectori și matrice sunt executate frecvent în cod C sau
+Fortran, evitând buclele interpretate. În același timp, modelul de memorie cu
+garbage collector și copiere la scriere poate introduce costuri vizibile atunci
+când sunt manipulate structuri mari. Posibilitatea de a apela cod nativ prin
+\texttt{.C()}, \texttt{.Call()} și \texttt{.Fortran()} explică de ce multe pachete
+R performante ascund implementări compilate în spatele unei interfețe statistice
+convenabile.
 
-\begin{itemize}
-    \item \textbf{Vectorizare nativă:} operațiile aritmetice și logice aplicate
-    pe vectori și matrice sunt automat vectorizate și executate prin cod C/Fortran
-    compilat, evitând buclele interpretate costisitoare.
-    \item \textbf{Lazy evaluation:} argumentele funcțiilor sunt evaluate doar
-    când sunt necesare, permițând construcții expresive.
-    \item \textbf{Gestionarea memoriei:} R utilizează un garbage collector cu
-    copiere la scriere (copy-on-write), care poate genera overhead semnificativ
-    pentru structuri de date mari.
-    \item \textbf{Interfețe C/Fortran:} prin funcțiile \texttt{.C()},
-    \texttt{.Call()} și \texttt{.Fortran()}, R poate apela cod compilat nativ,
-    stând la baza multor pachete de înaltă performanță.
-\end{itemize}
+\subsubsection{Pachete relevante pentru modele compartimentale}
 
-\subsubsection{Pachete relevante pentru modelul SIR}
-
-\begin{itemize}
-    \item \textbf{deSolve} \cite{soetaert2010desolve}: pachetul principal pentru
-    rezolvarea sistemelor de EDO, ecuații diferențiale cu derivate parțiale
-    (EDP) și ecuații algebrico-diferențiale (EAD). Integrează solver-e
-    consacrate: \texttt{lsoda} (Adams/BDF adaptiv), \texttt{ode45}
-    (Dormand-Prince), \texttt{rk4} (Runge-Kutta fix). Interfața principală
-    este funcția \texttt{ode()}.
-    \item \textbf{ggplot2}: sistem de grafică bazat pe \emph{grammar of graphics},
-    utilizat pentru vizualizarea traiectoriilor SIR.
-    \item \textbf{data.table}: manipulare eficientă (în memorie) a seturilor
-    de date mari, cu sintaxă concisă.
-    \item \textbf{microbenchmark} și \textbf{bench}: măsurarea precisă a
-    timpilor de execuție pentru benchmarking.
-\end{itemize}
+Pentru modelele SIDARTH și SIR, pachetul relevant este \texttt{deSolve}
+\cite{soetaert2010desolve}, care oferă funcția \texttt{ode()} și acces la metode
+consacrate precum \texttt{lsoda}, \texttt{ode45} și \texttt{rk4}. În jurul lui se
+pot folosi pachete precum \texttt{ggplot2} pentru vizualizare, \texttt{data.table}
+pentru prelucrare tabulară și \texttt{bench} sau \texttt{microbenchmark} pentru
+măsurarea timpilor de execuție. În implementarea sistemului, runner-ul R folosește
+\texttt{deSolve} pentru integrarea numerică, iar vizualizarea este lăsată aplicației
+web.
 
 % ---- JULIA -----------------------------------------------
 \subsection{Julia}
@@ -86,32 +73,24 @@ este apelată pentru prima dată cu argumente de tipuri specifice, compilatorul
 generează cod mașină optimizat pentru acele tipuri exacte. Apelurile ulterioare
 cu aceleași tipuri rulează direct codul compilat, apropiind performanța de C.
 
-\begin{itemize}
-    \item \textbf{Multiple dispatch:} funcțiile pot fi definite cu comportamente
-    diferite pentru combinații diferite de tipuri ale argumentelor (metode).
-    Compilatorul selectează și compilează metoda corectă la momentul apelului.
-    \item \textbf{Sistem de tipuri parametric:} tipurile pot fi parametrizate
-    (ex.\ \texttt{Array\{Float64, 1\}}), permițând generarea eficientă de cod
-    specializat.
-    \item \textbf{Metaprogramming:} macrocomenzile Julia ($\texttt{@macro}$)
-    permit generarea și transformarea codului la momentul parsării.
-\end{itemize}
+Mecanismul de \emph{multiple dispatch} permite definirea mai multor metode pentru
+aceeași funcție, în funcție de tipurile argumentelor. Împreună cu sistemul de tipuri
+parametric, acesta permite compilatorului să genereze cod specializat pentru cazurile
+folosite efectiv. Macrocomenzile completează acest model prin posibilitatea de a
+transforma codul la momentul parsării, o tehnică utilizată frecvent în ecosistemul
+științific Julia.
 
 \subsubsection{DifferentialEquations.jl}
 
 Ecosistemul \textbf{SciML} (Scientific Machine Learning) al Julia conține
-pachetul \texttt{DifferentialEquations.jl} \cite{rackauckas2017diffeq}, cel
-mai cuprinzător framework open-source pentru rezolvarea ecuațiilor diferențiale.
-Acesta include:
-\begin{itemize}
-    \item Peste 300 de algoritmi de rezolvare pentru EDO, EDP, EAD,
-    ecuații diferențiale stochastice (EDS) și ecuații cu întârziere (DDEs);
-    \item Solver-e de înaltă performanță: \texttt{Tsit5} (Tsitouras RK 4/5),
-    \texttt{Vern7/9} (Verner 7/9), \texttt{Rodas4/5} (pentru probleme stiff);
-    \item Integrare nativă cu GPU-uri și calcul distribuit;
-    \item Diferențiere automată (AD) pentru estimarea parametrilor și
-    identificarea sistemelor.
-\end{itemize}
+pachetul \texttt{DifferentialEquations.jl} \cite{rackauckas2017diffeq}, un
+framework open-source matur pentru rezolvarea ecuațiilor diferențiale.
+Pachetul include solver-e pentru ecuații diferențiale ordinare, parțiale,
+stochastice și cu întârziere. Pentru probleme nestiff, metode precum
+\texttt{Tsit5} și \texttt{Vern7/9} sunt folosite frecvent, iar pentru probleme
+stiff există familii precum \texttt{Rodas}. Ecosistemul SciML integrează și
+diferențiere automată, ceea ce îl face relevant pentru estimarea parametrilor și
+identificarea sistemelor dinamice.
 
 % ---- PYTHON ----------------------------------------------
 \subsection{Python}
@@ -130,23 +109,20 @@ comunității masive.
 Python este un limbaj interpretat, dinamic tipizat, multi-paradigmă. Principala
 limitare pentru calcul intensiv este \textbf{GIL} (Global Interpreter Lock),
 care previne execuția paralelă a thread-urilor Python pure. Performanța este
-recuperată prin biblioteci care rulează cod nativ C/Fortran în afara GIL:
-
-\begin{itemize}
-    \item \textbf{NumPy}: calculul numeric vectorizat pe array-uri dense;
-    operațiile sunt implementate în C/Fortran și nu sunt supuse GIL.
-    \item \textbf{SciPy} \cite{virtanen2020scipy}: algoritmică științifică,
-    incluzând modulul \texttt{scipy.integrate} cu funcțiile \texttt{odeint}
-    (wrapper LSODA) și \texttt{solve\_ivp} (interfață modernă cu multiple
-    metode: RK45, DOP853, Radau, BDF, LSODA).
-    \item \textbf{Matplotlib}: vizualizare 2D/3D flexibilă.
-    \item \textbf{Pandas}: manipularea datelor tabulare.
-\end{itemize}
+recuperată prin biblioteci care rulează cod nativ C sau Fortran în afara GIL.
+NumPy oferă calcul vectorizat pe array-uri dense, SciPy
+\cite{virtanen2020scipy} adaugă algoritmică științifică și modulul
+\texttt{scipy.integrate}, iar Pandas este folosit pe scară largă pentru date
+tabulare. Pentru sistemul dezvoltat aici, componenta esențială este
+\texttt{solve\_ivp}, care expune metode precum RK45, DOP853, Radau, BDF și LSODA.
 
 \subsubsection{Funcțiile de rezolvare a EDO în SciPy}
 
-Interfața \texttt{solve\_ivp} din \texttt{scipy.integrate} este apelată astfel:
-\begin{lstlisting}[language=Python, caption={Interfața solve\_ivp din SciPy pentru rezolvarea sistemului SIR}]
+Interfața \texttt{solve\_ivp} din \texttt{scipy.integrate} este apelată printr-o
+funcție RHS care descrie modelul selectat. Exemplul următor folosește cazul SIR,
+deoarece are doar trei variabile de stare; pentru SIDARTH, aceeași interfață
+primește un vector de șapte compartimente și un dicționar mai mare de parametri.
+\begin{lstlisting}[language=Python, caption={Interfața solve\_ivp din SciPy pentru un sistem compartimental SIR}]
 from scipy.integrate import solve_ivp
 import numpy as np
 
@@ -178,7 +154,8 @@ sol = solve_ivp(
 \label{subsec:comparatie_limbaje}
 
 \Cref{tab:comparatie_limbaje} sintetizează principalele caracteristici ale
-celor trei limbaje din perspectiva utilizării pentru implementarea modelului SIR.
+celor trei limbaje din perspectiva utilizării pentru implementarea modelelor
+compartimentale SIDARTH și SIR.
 
 \begin{table}[htbp]
 \centering
@@ -217,17 +194,13 @@ baza de date ca și cum ar fi centralizată.
 \label{def:cap}
 Teorema CAP (Brewer, 2000) afirmă că un sistem distribuit nu poate garanta
 simultan mai mult de două dintre următoarele trei proprietăți:
-\begin{itemize}
-    \item \textbf{Consistency (C):} toate nodurile văd aceleași date în același
-    moment (citirile reflectă întotdeauna ultima scriere confirmată);
-    \item \textbf{Availability (A):} orice cerere validă primește un răspuns
-    (eventual fără ultima versiune a datelor);
-    \item \textbf{Partition tolerance (P):} sistemul continuă să funcționeze
-    chiar dacă comunicarea între noduri este parțial întreruptă.
-\end{itemize}
+\emph{consistency}, adică nodurile observă aceeași stare logică a datelor;
+\emph{availability}, adică cererile valide primesc răspuns chiar în condiții
+de degradare; și \emph{partition tolerance}, adică sistemul continuă să funcționeze
+în prezența unor întreruperi de comunicare între noduri.
 \end{definitie}
 
-Bazele de date distribuite moderne (YugabyteDB, CockroachDB, Spanner) optează
+Bazele de date distribuite precum YugabyteDB, CockroachDB și Spanner optează
 pentru \textbf{CP} (consistency + partition tolerance), sacrificând disponibilitatea
 perfectă în favoarea coerenței datelor.
 
@@ -243,35 +216,25 @@ pe doi piloni principali:
 distribuit al YugabyteDB, bazat pe arhitectura \textbf{LSM-tree} (Log-Structured
 Merge-tree) derivată din \textbf{RocksDB}. Datele sunt stocate în \emph{tablete}
 --- unități de sharding distribuite pe noduri. Fiecare tabletă este replicată
-pe cel puțin trei noduri prin \textbf{protocolul Raft} (consens distribuit):
-\begin{itemize}
-    \item Un nod este ales \emph{lider}; scrierile trec prin lider;
-    \item Leaderul repl\-ică modificarea pe nodurile urmașe (\emph{followers});
-    \item O scriere este confirmată după ce o \emph{majoritate} (quorum) de
-    noduri o confirmă.
-\end{itemize}
+pe cel puțin trei noduri prin protocolul Raft. Scrierile trec printr-un lider,
+sunt replicate către nodurile urmăritoare și sunt confirmate după ce o majoritate
+de replici a persistat modificarea.
 
-\textbf{2. Nivelurile de interfață API.}
-\begin{itemize}
-    \item \textbf{YSQL} (YugabyteDB SQL): compatibil cu PostgreSQL 11+,
-    suportând SQL complet, tranzacții ACID distribuite, join-uri, indecși,
-    triggere și proceduri stocate;
-    \item \textbf{YCQL} (YugabyteDB CQL): compatibil cu Apache Cassandra,
-    optimizat pentru workload-uri de tip wide-column cu disponibilitate extinsă.
-\end{itemize}
+\textbf{2. Nivelurile de interfață API.} Interfața \textbf{YSQL} este compatibilă
+cu PostgreSQL și suportă SQL, tranzacții ACID distribuite, join-uri și indecși.
+Interfața \textbf{YCQL} este compatibilă cu Apache Cassandra și este orientată
+spre workload-uri wide-column. În această lucrare este folosită interfața YSQL,
+pentru compatibilitatea cu driver-ele PostgreSQL disponibile în Go, R, Julia și
+Python.
 
 \subsection{Sharding și replicare}
 \label{subsec:sharding}
 
-YugabyteDB suportă două strategii de sharding:
-\begin{itemize}
-    \item \textbf{Hash sharding:} cheia primară este hașurată și distribuită
-    uniform pe tablete; asigură echilibru de sarcină dar nu suportă eficient
-    \emph{range scans};
-    \item \textbf{Range sharding:} tabletele acoperă intervale contigue de
-    valori ale cheii; eficient pentru interogări de tip range, dar poate
-    produce \emph{hot spots}.
-\end{itemize}
+YugabyteDB suportă sharding prin hash și sharding pe intervale. Hash sharding
+distribuie uniform cheia primară pe tablete și reduce riscul de noduri fierbinți,
+dar este mai puțin potrivit pentru scanări ordonate pe intervale. Range sharding
+păstrează vecinătatea valorilor și este util pentru serii temporale, însă poate
+concentra scrierile dacă toate valorile noi ajung în același interval.
 
 \begin{observatie}
 Pentru datele epidemiologice cu interogări frecvente pe intervale de date
@@ -302,46 +265,23 @@ la Google pe baza experienței cu sistemul intern Borg, și donată CNCF
 \subsection{Arhitectura Kubernetes}
 \label{subsec:k8s_arhitectura}
 
-Un cluster Kubernetes este compus din:
-
-\textbf{Control Plane:}
-\begin{itemize}
-    \item \textbf{kube-apiserver:} componenta centrală, expune API-ul K8s
-    (REST/gRPC); toate celelalte componente comunică exclusiv prin API server;
-    \item \textbf{etcd:} baza de date distribuită key-value (Raft-based) care
-    stochează starea întregului cluster;
-    \item \textbf{kube-scheduler:} atribuie pod-uri nodurilor disponibile
-    pe baza resurselor disponibile și a constrângerilor de afinitate;
-    \item \textbf{kube-controller-manager:} rulează controllere care reconciliază
-    starea dorită cu starea actuală (Deployment, ReplicaSet, StatefulSet etc.).
-\end{itemize}
-
-\textbf{Worker Nodes:}
-\begin{itemize}
-    \item \textbf{kubelet:} agent pe fiecare nod, gestionează ciclul de
-    viață al pod-urilor (Pull image, start/stop/restart containere);
-    \item \textbf{kube-proxy:} gestionează regulile de rețea (iptables/IPVS)
-    pentru accesul la servicii;
-    \item \textbf{Container runtime:} interfața CRI (containerd, CRI-O).
-\end{itemize}
+Un cluster Kubernetes este împărțit între planul de control și nodurile worker.
+Planul de control expune API-ul clusterului prin \texttt{kube-apiserver}, păstrează
+starea în \texttt{etcd}, programează pod-urile prin \texttt{kube-scheduler} și
+rulează controllerele care aduc starea curentă spre starea dorită. Pe nodurile
+worker, \texttt{kubelet} gestionează ciclul de viață al pod-urilor,
+\texttt{kube-proxy} configurează accesul de rețea la servicii, iar container
+runtime-ul pornește efectiv containerele.
 
 \subsection{Resurse Kubernetes relevante}
 \label{subsec:k8s_resurse}
 
-\begin{itemize}
-    \item \textbf{Pod:} unitatea atomică de deployment; unul sau mai multe
-    containere cu spațiu de rețea și stocare partajate;
-    \item \textbf{Deployment:} gestionează un set de pod-uri identice;
-    asigură restart automat și rolling updates;
-    \item \textbf{StatefulSet:} similar Deployment, dar menține identitate
-    stabilă pentru pod-uri (hostname, persistent volume); \emph{esențial}
-    pentru YugabyteDB;
-    \item \textbf{Service:} abstractizare pentru accesul la un set de pod-uri;
-    asigură load balancing și descoperire de servicii;
-    \item \textbf{PersistentVolume / PersistentVolumeClaim:} stocare persistentă
-    independentă de ciclul de viață al pod-ului;
-    \item \textbf{ConfigMap / Secret:} configurare și date sensibile externalizate.
-\end{itemize}
+Resursele folosite cel mai des sunt \texttt{Pod}, \texttt{Deployment},
+\texttt{StatefulSet}, \texttt{Service}, \texttt{PersistentVolumeClaim},
+\texttt{ConfigMap} și \texttt{Secret}. Pentru API și frontend sunt suficiente
+Deployment-uri, deoarece instanțele nu păstrează stare locală. Pentru YugabyteDB
+este necesar un StatefulSet, care oferă identitate stabilă și volume persistente
+pentru fiecare replică.
 
 % ============================================================
 \section{Backend API — Go}
@@ -356,35 +296,21 @@ la Google de Robert Griesemer, Rob Pike și Ken Thompson, cu prima versiune
 stabilă în 2012 \cite{golangspec2024}. Go a fost proiectat pentru productivitate
 la scară mare, cu accent pe simplitate, compilare rapidă și concurență structurată.
 
-Caracteristici relevante pentru construcția unui API backend:
-\begin{itemize}
-    \item \textbf{Compilare nativă rapidă:} Go compilează direct la cod mașin,
-    producând binare statice fără dependențe externe;
-    \item \textbf{Goroutine și canale (CSP):} concurența este modelată prin
-    goroutine (fire de execuție ușoare, ~2KB stack inițial) și canale (typed,
-    pentru comunicare sincronă/asincronă); modelul Communicating Sequential
-    Processes (CSP, Hoare 1978) este preferat față de memoria partajată cu mutex;
-    \item \textbf{Interfețe structurale (duck typing):} un tip implementează
-    implicit o interfață dacă definește metodele necesare, fără declarație
-    explicită;
-    \item \textbf{Garbage collection:} GC concurrent cu latență redusă
-    ($<1$ms stop-the-world în versiunile recente);
-    \item \textbf{Standard library bogată:} pachetul \texttt{net/http} suportă
-    HTTP/1.1, HTTP/2 și TLS out-of-the-box, fără framework extern.
-\end{itemize}
+Pentru un API backend, Go are câteva proprietăți utile: compilează rapid la cod
+mașină, produce binare statice ușor de containerizat, oferă concurență prin
+goroutine și canale, iar biblioteca standard include un pachet HTTP suficient de
+solid pentru servicii REST. Interfețele structurale reduc cuplarea dintre module,
+iar garbage collectorul concurrent menține latențe acceptabile pentru un API care
+nu face calcul numeric intensiv în procesul HTTP.
 
 \subsection{Ecosistem pentru API-uri REST}
 \label{subsec:go_api}
 
-Deși \texttt{net/http} din biblioteca standard este suficient pentru API-uri
-simple, framework-uri ca \textbf{Gin} sau \textbf{Echo} adaugă:
-\begin{itemize}
-    \item Router performant (radix tree pentru $\mathcal{O}(\log k)$ matching);
-    \item Middleware pipeline (logging, CORS, rate limiting, autentificare JWT);
-    \item Binding și validare automată a parametrilor HTTP (JSON, query params,
-    path params);
-    \item Generare automată a documentației OpenAPI/Swagger.
-\end{itemize}
+Deși \texttt{net/http} din biblioteca standard este suficient pentru API-uri simple,
+proiectul folosește routerul \texttt{chi}, o bibliotecă idiomatică și redusă ca
+suprafață, care oferă rutare ierarhică, middleware-uri compozabile și integrare
+directă cu tipurile standard \texttt{http.Handler}. Această alegere evită un
+framework mai greu și se potrivește cu dimensiunea backend-ului implementat.
 
 % ============================================================
 \section{Frontend — Vue.js}
@@ -400,27 +326,20 @@ interfețelor utilizator, creat de Evan You în 2014. Vue 3 (2020) introduce
 logicii prin funcționalitate (nu prin tip --- data, methods, computed) și
 reutilizarea logicii prin \emph{composables}.
 
-Arhitectura Vue 3 se bazează pe:
-\begin{itemize}
-    \item \textbf{Reactivity system:} bazat pe \texttt{Proxy} ES6, permite
-    urmărirea dependențelor reactive cu granularitate fină;
-    \item \textbf{Virtual DOM:} reconciliere eficientă a arborelui DOM cu
-    algoritmul de diferențiere O(n);
-    \item \textbf{Single File Components (SFC):} fișiere \texttt{.vue}
-    care încapsulează template (HTML), script (JS/TS) și style (CSS)
-    într-o unitate coezivă.
-\end{itemize}
+Arhitectura Vue 3 combină un sistem reactiv bazat pe \texttt{Proxy}, un Virtual DOM
+pentru reconcilierea arborelui de interfață și Single File Components, în care
+template-ul, logica TypeScript și stilurile CSS sunt grupate în fișiere
+\texttt{.vue}. Pentru aplicația de față, această structură permite păstrarea
+componentelor de formular, navigare și grafic în unități ușor de urmărit.
 
 \subsection{Ecosistem și biblioteci utilizate}
 \label{subsec:vue_ecosistem}
 
-\begin{itemize}
-    \item \textbf{Vue Router:} rutare client-side cu suport pentru rute
-    dinamice, navigare programatică și guards de autentificare;
-    \item \textbf{Pinia:} state management bazat pe Composition API, mai
-    simplu decât Vuex și mai bine integrat cu TypeScript;
-    \item \textbf{Axios:} client HTTP cu interceptori, pentru apelurile
-    REST la API-ul Go;
-    \item \textbf{ECharts / Chart.js:} vizualizare date epidemiologice
-    (grafice SIR, comparații de performanță, hărți de densitate).
-\end{itemize}
+În implementare sunt folosite Vue Router pentru rutare client-side, Pinia pentru
+starea globală, Axios pentru apelurile REST și Chart.js, prin \texttt{vue-chartjs},
+pentru reprezentarea curbelor compartimentale ale modelului selectat. Componenta
+de grafic construiește dinamic seriile în funcție de cheile prezente în obiectul
+JSONB \texttt{compartments}, astfel încât același cod afișează atât traiectoriile
+$S(t)$, $I(t)$, $R(t)$ ale modelului SIR, cât și cele șapte traiectorii ale
+modelului SIDARTH. Aceste biblioteci acoperă nevoile aplicației fără a introduce
+un framework frontend suplimentar peste Vue.

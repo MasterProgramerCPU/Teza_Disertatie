@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useSimulationsStore } from "@/stores/simulations.store";
 import SimulationStatus from "@/components/SimulationStatus.vue";
-import SIRChart from "@/components/SIRChart.vue";
+import CompartmentChart from "@/components/CompartmentChart.vue";
+import { MODEL_LABELS, MODEL_PARAMETER_ORDER, PARAMETER_LABELS } from "@/model-presets";
 import type { SimulationResultPoint, SimulationRun } from "@/types";
 
 const props = defineProps<{ id: string }>();
@@ -12,6 +13,16 @@ const run = ref<SimulationRun | null>(null);
 const points = ref<SimulationResultPoint[]>([]);
 const error = ref<string | null>(null);
 let cancelled = false;
+
+const parameterRows = computed(() => {
+  if (!run.value) return [];
+  const ordered = MODEL_PARAMETER_ORDER[run.value.model_type] ?? Object.keys(run.value.parameters);
+  const seen = new Set(ordered);
+  const extra = Object.keys(run.value.parameters).filter((key) => !seen.has(key)).sort();
+  return [...ordered, ...extra]
+    .filter((key) => run.value?.parameters[key] !== undefined)
+    .map((key) => ({ key, value: run.value!.parameters[key] }));
+});
 
 async function load() {
   try {
@@ -72,10 +83,8 @@ async function downloadCSV() {
     <div class="card">
       <dl class="meta">
         <dt>ID</dt><dd><code>{{ run.id }}</code></dd>
+        <dt>Model</dt><dd>{{ MODEL_LABELS[run.model_type] }}</dd>
         <dt>Limbaj</dt><dd>{{ run.language }}</dd>
-        <dt>β</dt><dd>{{ run.beta }}</dd>
-        <dt>γ</dt><dd>{{ run.gamma }}</dd>
-        <dt>R<sub>0</sub></dt><dd>{{ (run.beta / run.gamma).toFixed(2) }}</dd>
         <dt>Populație N</dt><dd>{{ run.population_n.toLocaleString() }}</dd>
         <dt>t_max</dt><dd>{{ run.t_max }} zile</dd>
         <dt>Creată</dt><dd>{{ new Date(run.created_at).toLocaleString() }}</dd>
@@ -87,12 +96,22 @@ async function downloadCSV() {
       </dl>
     </div>
 
+    <div class="card">
+      <h2>Parametri</h2>
+      <dl class="meta">
+        <template v-for="param in parameterRows" :key="param.key">
+          <dt>{{ PARAMETER_LABELS[param.key] ?? param.key }}</dt>
+          <dd>{{ param.value }}</dd>
+        </template>
+      </dl>
+    </div>
+
     <div v-if="run.status === 'completed' && points.length > 0" class="card">
       <div class="row" style="justify-content: space-between; margin-bottom: 16px;">
-        <h2 style="margin-bottom: 0;">Traiectoriile S/I/R</h2>
+        <h2 style="margin-bottom: 0;">Traiectorii compartimentale</h2>
         <button @click="downloadCSV">Export CSV</button>
       </div>
-      <SIRChart :series="[{ label: 'S/I/R', points }]" />
+      <CompartmentChart :series="[{ label: MODEL_LABELS[run.model_type], points }]" />
     </div>
 
     <div v-else-if="run.status === 'pending' || run.status === 'running'" class="alert info">

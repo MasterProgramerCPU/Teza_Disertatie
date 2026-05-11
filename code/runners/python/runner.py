@@ -1,9 +1,9 @@
-"""SIR runner — Python.
+"""Epidemiological model runner — Python.
 
-Consumes simulation jobs from Redis list ``sir:jobs:python`` (BRPOP),
-solves the SIR ODE with ``scipy.integrate.solve_ivp`` (RK45), bulk-inserts
-results into YugabyteDB (table ``simulation_results``) and records the
-benchmark (wall time, CPU time, peak RSS) into ``benchmarks``.
+Consumes simulation jobs from Redis list ``epimodel:jobs:python`` (BRPOP),
+solves SIDARTH or SIR ODE systems with ``scipy.integrate.solve_ivp`` (RK45),
+inserts compartment trajectories into YugabyteDB and records the benchmark
+(wall time, CPU time, peak RSS) into ``benchmarks``.
 """
 
 from __future__ import annotations
@@ -20,9 +20,10 @@ import numpy as np
 import psycopg
 import redis
 from psycopg.rows import dict_row
+from psycopg.types.json import Json
 from scipy.integrate import solve_ivp
 
-QUEUE = "sir:jobs:python"
+QUEUE = "epimodel:jobs:python"
 LANGUAGE = "python"
 BRPOP_TIMEOUT_SEC = 5
 ERROR_BACKOFF_SEC = 2
@@ -36,13 +37,41 @@ def _handle_signal(signum, _frame):
     _running = False
 
 
-def sir_rhs(t: float, y: np.ndarray, beta: float, gamma: float, n: float) -> list[float]:
+def sir_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+    del t
     s, i, r = y
+    beta = params["beta"]
+    gamma = params["gamma"]
     return [
         -beta * s * i / n,
         beta * s * i / n - gamma * i,
         gamma * i,
     ]
+
+
+def sidarth_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+    del t
+    s, i, d, a, r, threatened, h = y
+    force = (params["alpha"] * i + params["beta"] * d + params["gamma"] * a + params["delta"] * r) / n
+    new_infections = s * force
+
+    return [
+        -new_infections,
+        new_infections - (params["epsilon"] + params["zeta"] + params["lambda"]) * i,
+        params["epsilon"] * i - (params["eta"] + params["rho"]) * d,
+        params["zeta"] * i - (params["theta"] + params["mu"] + params["kappa"]) * a,
+        params["eta"] * d + params["theta"] * a - (params["nu"] + params["xi"]) * r,
+        params["mu"] * a + params["nu"] * r - params["sigma"] * threatened,
+        params["lambda"] * i + params["rho"] * d + params["kappa"] * a + params["xi"] * r + params["sigma"] * threatened,
+    ]
+
+
+def model_layout(model_type: str) -> tuple[list[str], Any]:
+    if model_type == "sir":
+        return ["s", "i", "r"], sir_rhs
+    if model_type == "sidarth":
+        return ["s", "i", "d", "a", "r", "t", "h"], sidarth_rhs
+    raise ValueError(f"unsupported model_type: {model_type}")
 
 
 def _peak_rss_mb() -> float:
@@ -58,11 +87,13 @@ def _peak_rss_mb() -> float:
 
 def run_simulation(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     sim_id = job["simulation_id"]
-    beta = float(job["beta"])
-    gamma = float(job["gamma"])
+    model_type = job.get("model_type", "sidarth")
+    params = {str(k): float(v) for k, v in job["parameters"].items()}
+    initial = {str(k): float(v) for k, v in job["initial"].items()}
     n = float(job["population_n"])
     t_max = int(job["t_max"])
-    y0 = [float(job["s0"]), float(job["i0"]), float(job["r0"])]
+    compartments, rhs = model_layout(model_type)
+    y0 = [initial.get(name, 0.0) for name in compartments]
 
     with conn.transaction():
         conn.execute(
@@ -75,12 +106,12 @@ def run_simulation(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     cpu_start = time.process_time()
 
     sol = solve_ivp(
-        fun=sir_rhs,
+        fun=rhs,
         t_span=(0.0, float(t_max)),
         y0=y0,
         method="RK45",
         t_eval=np.arange(0, t_max + 1, dtype=float),
-        args=(beta, gamma, n),
+        args=(params, n),
         rtol=1e-8,
         atol=1e-10,
     )
@@ -91,15 +122,18 @@ def run_simulation(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     cpu_ms = int((time.process_time() - cpu_start) * 1000)
     peak_mb = max(_peak_rss_mb(), rss_before)
 
-    rows = [
-        (sim_id, int(t), float(sol.y[0][i]), float(sol.y[1][i]), float(sol.y[2][i]))
-        for i, t in enumerate(sol.t)
-    ]
+    rows = []
+    for idx, t in enumerate(sol.t):
+        values = {
+            name: max(0.0, float(sol.y[pos][idx]))
+            for pos, name in enumerate(compartments)
+        }
+        rows.append((sim_id, int(t), Json(values)))
 
     with conn.transaction():
         with conn.cursor() as cur:
             cur.executemany(
-                "INSERT INTO simulation_results (simulation_id, t, s, i, r) VALUES (%s, %s, %s, %s, %s)",
+                "INSERT INTO simulation_results (simulation_id, t, compartments) VALUES (%s, %s, %s)",
                 rows,
             )
             cur.execute(

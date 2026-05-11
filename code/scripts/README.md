@@ -2,7 +2,7 @@
 
 ## `preprocess_owid.py`
 
-Generează 10 CSV-uri SIR (câte unul per țară) din datele brute Our World in Data COVID-19.
+Generează 10 CSV-uri cu compartimente observabile (câte unul per țară) din datele brute Our World in Data COVID-19. Schema CSV este aceeași pentru ambele modele suportate de sistem: SIR folosește direct `(susceptible, infected, recovered)` ca $(S_0, I_0, R_0)$, iar SIDARTH plasează cazurile active în compartimentul $I$, populația ieșită din infecție în $H$, iar $D, A, R, T$ pornesc de la zero (vezi cap. 5 al lucrării).
 
 ### Utilizare
 
@@ -42,7 +42,7 @@ make data       # rulează preprocesarea
 | `region`      | ISO 3166-1 alpha-3 | OWID `iso_code` |
 | `infected`    | int   | $\sum_{\tau=t-13}^{t}$ `new_cases` (fereastră 14 zile) |
 | `population`  | int   | OWID `population` (primul non-null) |
-| `recovered`   | int   | `total_cases - infected` (removed = recuperați + decedați) |
+| `recovered`   | int   | `total_cases - infected` (removed = recuperați + decedați; în SIDARTH se mapează la $H$) |
 | `susceptible` | int   | $N$ - `infected` - `recovered` |
 
 ### Cele 10 țări

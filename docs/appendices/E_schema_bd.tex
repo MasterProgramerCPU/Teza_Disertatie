@@ -1,5 +1,17 @@
 \chapter{Schema Bazei de Date}
 \label{app:schema_bd}
 
-\todosec{Diagrama ERD completă și scripturile SQL de creare a tabelelor
-(CREATE TABLE, indecși, constrângeri). Incluse ca listing-uri SQL.}
+Anexa include migrațiile SQL care definesc schema relațională folosită de API și
+runner-e.
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{users}.}]{../code/db/migrations/000001_create_users.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{datasets}.}]{../code/db/migrations/000002_create_datasets.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{epidemiological\_records}.}]{../code/db/migrations/000003_create_epidemiological_records.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{simulation\_runs}.}]{../code/db/migrations/000004_create_simulation_runs.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{simulation\_results}.}]{../code/db/migrations/000005_create_simulation_results.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{benchmarks}.}]{../code/db/migrations/000006_create_benchmarks.up.sql}

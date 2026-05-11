@@ -1,9 +1,9 @@
 #=
-SIR runner -- Julia.
+Epidemiological model runner -- Julia.
 
-Consumes simulation jobs from Redis list `sir:jobs:julia` (BRPOP),
-solves the SIR ODE with DifferentialEquations.jl (Tsit5, saveat=1),
-and bulk-inserts results into YugabyteDB via LibPQ.
+Consumes simulation jobs from Redis list `epimodel:jobs:julia` (BRPOP),
+solves SIDARTH or SIR ODE systems with DifferentialEquations.jl (Tsit5, saveat=1),
+and inserts compartment trajectories into YugabyteDB via LibPQ.
 =#
 
 using DifferentialEquations
@@ -12,7 +12,7 @@ using LibPQ
 using Redis
 using Dates
 
-const QUEUE = "sir:jobs:julia"
+const QUEUE = "epimodel:jobs:julia"
 const LANGUAGE = "julia"
 const BRPOP_TIMEOUT_SEC = 5
 const ERROR_BACKOFF_SEC = 2
@@ -23,11 +23,40 @@ end
 const CTX = RunCtx(true)
 
 function sir_rhs!(du, u, p, t)
+    _ = t
     S, I, R = u
-    β, γ, N = p
+    β = p["beta"]
+    γ = p["gamma"]
+    N = p["N"]
     du[1] = -β * S * I / N
     du[2] =  β * S * I / N - γ * I
     du[3] =  γ * I
+end
+
+function sidarth_rhs!(du, u, p, t)
+    _ = t
+    S, I, D, A, R, T, H = u
+    N = p["N"]
+    force = (p["alpha"] * I + p["beta"] * D + p["gamma"] * A + p["delta"] * R) / N
+    new_infections = S * force
+
+    du[1] = -new_infections
+    du[2] = new_infections - (p["epsilon"] + p["zeta"] + p["lambda"]) * I
+    du[3] = p["epsilon"] * I - (p["eta"] + p["rho"]) * D
+    du[4] = p["zeta"] * I - (p["theta"] + p["mu"] + p["kappa"]) * A
+    du[5] = p["eta"] * D + p["theta"] * A - (p["nu"] + p["xi"]) * R
+    du[6] = p["mu"] * A + p["nu"] * R - p["sigma"] * T
+    du[7] = p["lambda"] * I + p["rho"] * D + p["kappa"] * A + p["xi"] * R + p["sigma"] * T
+    nothing
+end
+
+function model_layout(model_type::AbstractString)
+    if model_type == "sir"
+        return (state_names = ["s", "i", "r"], rhs = sir_rhs!)
+    elseif model_type == "sidarth"
+        return (state_names = ["s", "i", "d", "a", "r", "t", "h"], rhs = sidarth_rhs!)
+    end
+    error("unsupported model_type: $model_type")
 end
 
 peak_rss_mb() = Sys.maxrss() / (1024 * 1024)
@@ -42,11 +71,14 @@ end
 
 function run_simulation(conn::LibPQ.Connection, job::Dict{Symbol, Any})
     sim_id = String(job[:simulation_id])
-    β = Float64(job[:beta])
-    γ = Float64(job[:gamma])
+    model_type = String(get(job, :model_type, "sidarth"))
+    layout = model_layout(model_type)
+    params = Dict{String, Float64}(String(k) => Float64(v) for (k, v) in pairs(job[:parameters]))
     N = Float64(job[:population_n])
     t_max = Int(job[:t_max])
-    y0 = Float64[job[:s0], job[:i0], job[:r0]]
+    params["N"] = N
+    initial = Dict{String, Float64}(String(k) => Float64(v) for (k, v) in pairs(job[:initial]))
+    y0 = Float64[get(initial, name, 0.0) for name in layout.state_names]
 
     LibPQ.execute(conn,
         "UPDATE simulation_runs SET status = 'running' WHERE id = \$1",
@@ -56,7 +88,7 @@ function run_simulation(conn::LibPQ.Connection, job::Dict{Symbol, Any})
     wall_start = time_ns()
     cpu_start  = time()  # process CPU not directly exposed; use elapsed as fallback
 
-    prob = ODEProblem(sir_rhs!, y0, (0.0, Float64(t_max)), (β, γ, N))
+    prob = ODEProblem(layout.rhs, y0, (0.0, Float64(t_max)), params)
     sol = solve(prob, Tsit5(); saveat = 0:1.0:t_max, reltol = 1e-8, abstol = 1e-10)
 
     wall_ms = round(Int, (time_ns() - wall_start) / 1_000_000)
@@ -66,10 +98,11 @@ function run_simulation(conn::LibPQ.Connection, job::Dict{Symbol, Any})
     LibPQ.execute(conn, "BEGIN")
     try
         stmt = LibPQ.prepare(conn,
-            "INSERT INTO simulation_results (simulation_id, t, s, i, r) VALUES (\$1, \$2, \$3, \$4, \$5)")
+            "INSERT INTO simulation_results (simulation_id, t, compartments) VALUES (\$1, \$2, \$3::jsonb)")
         for (idx, t) in enumerate(sol.t)
             u = sol.u[idx]
-            LibPQ.execute(stmt, (sim_id, Int(t), u[1], u[2], u[3]))
+            values = Dict(name => max(0.0, Float64(u[pos])) for (pos, name) in enumerate(layout.state_names))
+            LibPQ.execute(stmt, (sim_id, Int(t), JSON3.write(values)))
         end
         LibPQ.execute(conn,
             "INSERT INTO benchmarks (simulation_id, wall_time_ms, cpu_time_ms, peak_memory_mb) VALUES (\$1, \$2, \$3, \$4)",

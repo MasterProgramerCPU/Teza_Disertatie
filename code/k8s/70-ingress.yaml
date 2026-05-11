@@ -1,0 +1,40 @@
+# Ingress nginx pentru rutarea traficului HTTP extern.
+# Presupune că nginx-ingress controller este deja instalat în cluster
+# (https://kubernetes.github.io/ingress-nginx/deploy/).
+#
+# Pentru testare locală, mapează în /etc/hosts:
+#   <IP-NODE-INGRESS>  epimodel.local
+#
+# Pentru producție, înlocuiește host-ul cu un FQDN real și adaugă o
+# secțiune `tls:` cu un Secret de tip kubernetes.io/tls (cert-manager etc.).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: epimodel-ingress
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/part-of: epimodel
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: epimodel.local
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80

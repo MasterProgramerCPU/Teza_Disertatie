@@ -3,6 +3,7 @@ import { onMounted, computed } from "vue";
 import { useDatasetsStore } from "@/stores/datasets.store";
 import { useSimulationsStore } from "@/stores/simulations.store";
 import SimulationStatus from "@/components/SimulationStatus.vue";
+import { MODEL_LABELS } from "@/model-presets";
 
 const datasets = useDatasetsStore();
 const simulations = useSimulationsStore();
@@ -45,14 +46,13 @@ const statusCounts = computed(() => {
     <h2>Simulări recente</h2>
     <table v-if="recentSimulations.length > 0">
       <thead>
-        <tr><th>Status</th><th>Limbaj</th><th>β</th><th>γ</th><th>t_max</th><th>Creată</th><th></th></tr>
+        <tr><th>Status</th><th>Model</th><th>Limbaj</th><th>t_max</th><th>Creată</th><th></th></tr>
       </thead>
       <tbody>
         <tr v-for="s in recentSimulations" :key="s.id">
           <td><SimulationStatus :status="s.status" /></td>
+          <td>{{ MODEL_LABELS[s.model_type] }}</td>
           <td>{{ s.language }}</td>
-          <td>{{ s.beta.toFixed(4) }}</td>
-          <td>{{ s.gamma.toFixed(4) }}</td>
           <td>{{ s.t_max }}</td>
           <td>{{ new Date(s.created_at).toLocaleString() }}</td>
           <td><router-link :to="`/simulations/${s.id}`">vezi →</router-link></td>

@@ -21,7 +21,7 @@ se ocupă cu dinamica transmiterii bolilor cauzate de agenți patogeni biologici
 \begin{definitie}[Epidemic, pandemic, endemic]
 O boală infecțioasă se numește \textbf{endemică} dacă persistă la nivel constant
 într-o regiune geografică definită. Se numește \textbf{epidemie} dacă numărul de
-cazuri depășește în mod semnificativ nivelul endemic așteptat, și \textbf{pandemie}
+cazuri depășește clar nivelul endemic așteptat, și \textbf{pandemie}
 dacă afectează mai multe continente sau o mare parte a globului.
 \end{definitie}
 
@@ -63,14 +63,11 @@ Este cel mai important parametru al epidemiologiei matematice, deoarece determin
 potențialul epidemic al unui agent patogen.
 \end{definitie}
 
-O consecință imediată a \cref{def:R0} este că:
-\begin{itemize}
-    \item dacă $\Rzero < 1$, fiecare caz infectat generează în medie mai puțin
-    de un caz nou, astfel că epidemia se stinge spontan;
-    \item dacă $\Rzero > 1$, fiecare caz generează în medie mai mult de un caz
-    nou, epidemia se propagă exponențial în stadiul inițial;
-    \item dacă $\Rzero = 1$, epidemia se menține la nivel endemic instabil.
-\end{itemize}
+O consecință imediată a \cref{def:R0} este existența unui prag epidemic. Dacă
+$\Rzero < 1$, fiecare caz infectat produce în medie mai puțin de un caz nou, iar
+epidemia se stinge spontan. Dacă $\Rzero > 1$, numărul de cazuri crește în faza
+inițială, de regulă cu profil aproximativ exponențial. Cazul $\Rzero = 1$ separă
+cele două regimuri și corespunde unei stări de echilibru instabil.
 
 Numărul de reproducere \emph{efectiv} (sau în timp real) $\mathcal{R}(t)$ generalizează
 $\Rzero$ pentru o populație parțial imunizată:
@@ -136,12 +133,10 @@ includerea recuperării fără imunitate, permițând re-infectarea:
 \end{cases}
 \end{equation}
 Parametrul $\gamma > 0$ reprezintă rata de recuperare ($1/\gamma$ este durata
-medie a perioadei infecțioase). Pentru modelul SIS, $\Rzero = \beta/\gamma$, iar:
-\begin{itemize}
-    \item dacă $\Rzero \leq 1$: echilibrul fără boală $I^* = 0$ este stabil global;
-    \item dacă $\Rzero > 1$: există un echilibru endemic stabil
-    $I^* = N(1 - 1/\Rzero) > 0$.
-\end{itemize}
+medie a perioadei infecțioase). Pentru modelul SIS, $\Rzero = \beta/\gamma$.
+Dacă $\Rzero \leq 1$, echilibrul fără boală $I^* = 0$ este stabil global; dacă
+$\Rzero > 1$, sistemul admite un echilibru endemic stabil
+$I^* = N(1 - 1/\Rzero) > 0$.
 
 \subsection{Modelul SEIR}
 \label{subsec:model_seir}
@@ -178,7 +173,62 @@ unde $\xi = 1/T_R$ este rata de pierdere a imunității ($T_R$ = durata medie a
 imunității). Dacă $\Rzero > 1$, modelul SIRS admite un echilibru endemic stabil.
 
 % ============================================================
-\section{Modelul SIR — Analiză Matematică Detaliată}
+\section{Modelul SIDARTH}
+\label{sec:model_sidarth}
+% ============================================================
+
+Modelul SIDARTH folosit în această lucrare este o variantă cu șapte
+compartimente a familiei SIDARTHE propuse pentru analiza epidemiei COVID-19
+\cite{giordano2020sidarthe}. Alegerea lui ca model principal este motivată de
+faptul că separă două dimensiuni care lipsesc din SIR: statutul de diagnosticare
+și severitatea clinică. Într-un sistem de raportare real, persoanele infectate
+dar nedepistate, persoanele diagnosticate, cazurile simptomatice și cazurile
+severe nu au aceeași contribuție la transmitere și nu sunt observate cu aceeași
+probabilitate.
+
+Compartimentele modelului sunt $S$ (susceptibili), $I$ (infectați nedepistați),
+$D$ (diagnosticați asimptomatici), $A$ (simptomatici nedepistați), $R$
+(simptomatici diagnosticați), $T$ (cazuri severe) și $H$ (vindecați). În forma
+implementată, compartimentul $E$ din modelul SIDARTHE original, asociat deceselor,
+este omis. Această alegere reduce numărul de parametri și concentrează analiza pe
+tranzițiile relevante pentru diagnostic, severitate și vindecare; decesele pot fi
+adăugate ulterior printr-un termen de ieșire din $T$.
+
+\begin{align}
+\diff{S}{t} &= - S \cdot \frac{\alpha I + \beta D + \gamma A + \delta R}{N}, \\
+\diff{I}{t} &= S \cdot \frac{\alpha I + \beta D + \gamma A + \delta R}{N}
+              - (\varepsilon + \zeta + \lambda) I, \\
+\diff{D}{t} &= \varepsilon I - (\eta + \rho)D, \\
+\diff{A}{t} &= \zeta I - (\theta + \mu + \kappa)A, \\
+\diff{R}{t} &= \eta D + \theta A - (\nu + \xi)R, \\
+\diff{T}{t} &= \mu A + \nu R - \sigma T, \\
+\diff{H}{t} &= \lambda I + \rho D + \kappa A + \xi R + \sigma T.
+\label{eq:sidarth}
+\end{align}
+
+Parametrii $\alpha$, $\beta$, $\gamma$ și $\delta$ controlează contribuția la
+transmitere a compartimentelor infecțioase. Parametrii $\varepsilon$, $\zeta$ și
+$\lambda$ descriu ieșirile din starea infectată nedepistată: diagnosticare,
+apariția simptomelor și vindecare fără diagnostic. Restul parametrilor descriu
+tranzițiile către forme diagnosticate, severe sau vindecate. Spre deosebire de
+SIR, unde aproape toată interpretarea se concentrează în raportul
+$\beta/\gamma$, SIDARTH distribuie dinamica pe un număr mai mare de rate; de
+aceea, analiza numerică și sensibilitatea la parametri devin mai importante decât
+obținerea unei formule scalare simple.
+
+Conservarea populației se verifică prin însumarea ecuațiilor din
+\eqref{eq:sidarth}. Toți termenii interni se anulează, iar rezultatul este
+\begin{equation}
+\diff{}{t}(S+I+D+A+R+T+H)=0.
+\end{equation}
+Prin urmare, pentru condiții inițiale nenegative, suma compartimentelor rămâne
+egală cu populația totală $N$. Pozitivitatea soluției se obține prin același
+argument folosit la modelele compartimentale clasice: pe frontiera fiecărui
+compartiment, derivata nu poate împinge soluția în regiunea negativă, deoarece
+termenii de ieșire dispar când variabila respectivă este zero.
+
+% ============================================================
+\section{Modelul SIR ca reper secundar}
 \label{sec:model_sir}
 % ============================================================
 
@@ -400,12 +450,9 @@ Valorile proprii sunt $\lambda_1 = 0$ și $\lambda_2 = \beta S^*/N - \gamma$.
 
 \begin{teorema}[Stabilitatea echilibrului fără boală]
 \label{thm:stabilitate_dfe}
-Echilibrul fără boală $(S^*, 0)$ este:
-\begin{itemize}
-    \item stabil (nelinear) dacă $\beta S^*/N < \gamma$, adică dacă
-    $S^*/N < 1/\Rzero$;
-    \item instabil dacă $\beta S^*/N > \gamma$.
-\end{itemize}
+Echilibrul fără boală $(S^*, 0)$ este stabil nelinear dacă
+$\beta S^*/N < \gamma$, adică dacă $S^*/N < 1/\Rzero$, și este instabil dacă
+$\beta S^*/N > \gamma$.
 \end{teorema}
 
 \begin{proof}
@@ -416,7 +463,7 @@ $I(t)$ este descrescătoare dacă $S(t) < \gamma N/\beta$ pentru tot $t > 0$, ce
 ce se întâmplă când $S_0 < \gamma N/\beta$, implicând stingerea epidemiei.
 \end{proof}
 
-\subsection{Numărul de reproducere de bază $\Rzero$}
+\subsection{Numărul de reproducere de bază \texorpdfstring{$\Rzero$}{R0}}
 \label{subsec:R0}
 
 \subsubsection{Definiție prin matricea generației următoare}
@@ -525,7 +572,7 @@ epidemiei este:
 Pentru rujeolă, $\Rzero \approx 12$--$18$, deci $p_c \approx 92$--$94\%$.
 Pentru COVID-19 (tulpina originală), $\Rzero \approx 2$--$3$, deci
 $p_c \approx 50$--$67\%$. Variantele ulterioare (Delta, Omicron) au $\Rzero$
-semnificativ mai mare, crescând corespunzător pragul de imunizare.
+mai mare, crescând corespunzător pragul de imunizare.
 \end{exemplu}
 
 \subsection{Ecuația dimensiunii finale a epidemiei}
@@ -594,21 +641,14 @@ crește monoton cu $\Rzero$. Limita $\lim_{\Rzero \to \infty} z^* = 1$.
 \subsection{Extensii ale modelului SIR}
 \label{subsec:sir_extensii}
 
-Modelul SIR de bază poate fi extins în multiple direcții pentru a acomoda
-realități biologice mai complexe:
-\begin{itemize}
-    \item \textbf{Demografie:} includerea nașterilor și mortalității naturale
-    permite studiul echilibrelor endemice pe termen lung.
-    \item \textbf{Structura pe vârste:} matricele de contact structurate
-    pe grupe de vârstă (modele de tip POLYMOD) capturează heterogenitatea
-    contactelor sociale.
-    \item \textbf{Spațialitate:} modelele cu patch-uri sau ecuații
-    diferențiale parțiale descriu propagarea geografică.
-    \item \textbf{Stochasticitate:} modelele stochastice (proces de ramificare,
-    lanțuri Markov în timp continuu) sunt esențiale pentru populații mici.
-    \item \textbf{Control:} vaccinarea, izolarea și tratamentul pot fi modelate
-    ca fluxuri suplimentare între compartimente.
-\end{itemize}
+Modelul SIR de bază poate fi extins în mai multe direcții. Introducerea nașterilor
+și mortalității naturale permite studiul echilibrelor endemice pe termen lung.
+Structura pe vârste poate fi inclusă prin matrice de contact, iar propagarea
+geografică prin modele cu patch-uri sau ecuații diferențiale parțiale. Pentru
+populații mici sau pentru fazele incipiente ale unei epidemii, modelele stochastice
+devin mai potrivite decât formularea deterministă. Intervențiile precum vaccinarea,
+izolarea și tratamentul se pot introduce ca fluxuri suplimentare între
+compartimente.
 
 % ============================================================
 \section{Metode Numerice pentru Ecuații Diferențiale Ordinare}
@@ -628,20 +668,14 @@ O metodă numerică pentru problema cu valori inițiale (PVI):
 generează o secvență de aproximații $\mathbf{y}_n \approx \mathbf{y}(t_n)$ la
 punctele $t_n = t_0 + nh$.
 
-Metodele numerice se clasifică după mai multe criterii:
-\begin{itemize}
-    \item \textbf{Explicite vs.\ implicite:} la metodele explicite,
-    $\mathbf{y}_{n+1}$ se calculează direct din valorile anterioare; la cele
-    implicite, apare $\mathbf{y}_{n+1}$ și în membrul drept (sistem nonlinear
-    de rezolvat la fiecare pas).
-    \item \textbf{Un-pas vs.\ multi-pas:} metodele un-pas folosesc doar
-    $\mathbf{y}_n$ pentru a calcula $\mathbf{y}_{n+1}$; metodele multi-pas
-    folosesc mai mulți pași anteriori.
-    \item \textbf{Ordin de convergență:} ordinul $p$ al metodei determină
-    că eroarea globală $\|\mathbf{y}(t_n) - \mathbf{y}_n\| = \mathcal{O}(h^p)$.
-    \item \textbf{Pas fix vs.\ adaptiv:} metodele adaptive ajustează
-    $h$ dinamic pe baza unei estimări a erorii locale.
-\end{itemize}
+Metodele numerice pot fi privite din mai multe unghiuri. Metodele explicite
+calculează direct $\mathbf{y}_{n+1}$ din valorile anterioare, în timp ce metodele
+implicite includ necunoscuta și în membrul drept, necesitând rezolvarea unui sistem
+la fiecare pas. Metodele un-pas folosesc doar starea curentă, pe când metodele
+multi-pas folosesc și stări anterioare. Ordinul de convergență $p$ determină
+comportamentul erorii globale, $\|\mathbf{y}(t_n)-\mathbf{y}_n\|=\mathcal{O}(h^p)$.
+În sfârșit, metodele cu pas adaptiv ajustează $h$ pe baza unei estimări a erorii
+locale, spre deosebire de schemele cu pas fix.
 
 \subsection{Metoda Euler explicită}
 \label{subsec:euler}
@@ -806,10 +840,10 @@ de eroare de ordinul 4.
 
 Tabloul Butcher complet al metodei Dormand-Prince este:
 
+{\small
 \begin{equation}
 \label{eq:butcher_dopri5}
 \renewcommand{\arraystretch}{1.4}
-\small
 \begin{array}{c|ccccccc}
     0       &              &             &            &           &             &          & \\
     1/5     & 1/5          &             &            &           &             &          & \\
@@ -823,6 +857,7 @@ Tabloul Butcher complet al metodei Dormand-Prince este:
     \tilde{b}& 5179/57600  & 0           & 7571/16695 & 393/640   & -92097/339200 & 187/2100 & 1/40
 \end{array}
 \end{equation}
+}
 
 \subsubsection{Control adaptiv al pasului}
 
@@ -878,52 +913,31 @@ la fiecare pas).
 \label{subsec:surse_date}
 
 Implementarea și validarea modelelor epidemiologice computaționale necesită date
-empirice de calitate. Principalele surse de date epidemiologice utilizate în
-lucrare sunt:
-
-\begin{itemize}
-    \item \textbf{WHO (Organizația Mondială a Sănătății):} rapoarte de situație,
-    baze de date privind mortalitatea și morbiditatea, date de supraveghere a
-    bolilor infecțioase.
-    \item \textbf{ECDC (Centrul European pentru Prevenirea și Controlul Bolilor):}
-    date de supraveghere pentru statele membre UE, inclusiv serii temporale
-    zilnice pentru COVID-19 și alte boli infecțioase.
-    \item \textbf{Johns Hopkins University CSSE:} setul de date COVID-19
-    (cazuri confirmate, decese, recuperați) la nivel de țară și regiune,
-    disponibil public pe GitHub.
-    \item \textbf{Our World in Data:} date armonizate din surse multiple,
-    incluzând rate de vaccinare, indicatori de mobilitate și date socioeconomice.
-\end{itemize}
+empirice de calitate. Sursele folosite frecvent includ rapoartele Organizației
+Mondiale a Sănătății, seriile de supraveghere publicate de ECDC, datasetul COVID-19
+al Johns Hopkins University CSSE și colecțiile armonizate de Our World in Data.
+Această lucrare folosește OWID deoarece oferă serii temporale publice, comparabile
+între țări și ușor de prelucrat într-un format comun.
 
 \subsection{Structura datelor și preprocesare}
 \label{subsec:preprocesare}
 
-Datele epidemiologice brute prezintă probleme tipice care necesită preprocesare:
-\begin{itemize}
-    \item \textbf{Valori lipsă:} interpolate liniar sau propagate din ultimul
-    valor disponibil (forward fill);
-    \item \textbf{Raportări retrospective:} corecții retroactive care produc
-    valori negative în seriile de incidență zilnică;
-    \item \textbf{Efecte de weekend:} ciclicitate săptămânală în raportare,
-    uniformizată prin media mobilă de 7 zile;
-    \item \textbf{Inconsistențe geografice:} modificări de granițe sau
-    reorganizări administrative.
-\end{itemize}
+Datele epidemiologice brute conțin frecvent valori lipsă, raportări retrospective,
+efecte de weekend și schimbări administrative ale unităților geografice. Înainte de
+utilizarea lor într-un model compartimental, seriile trebuie ordonate temporal,
+corectate pentru valori imposibile și aduse la o granularitate compatibilă cu pasul
+de integrare ales. În caz contrar, erorile de raportare pot fi confundate cu variații
+reale ale dinamicii infecției.
 
 \subsection{Estimarea parametrilor din date reale}
 \label{subsec:estimare_parametri}
 
-Parametrii $\beta$ și $\gamma$ ai modelului SIR pot fi estimați din date
-observate prin metode statistice:
-\begin{itemize}
-    \item \textbf{Cel mai mic pătrat neliniar (NLS):} minimizarea erorii
-    pătratice dintre datele observate și soluția numerică a modelului;
-    \item \textbf{Estimarea maximă a verosimilității (MLE):} presupunând un
-    model de zgomot (Poisson sau binomial negativ pentru date de incidență),
-    se maximizează funcția de log-verosimilitate;
-    \item \textbf{Inferență bayesiană (MCMC):} permite cuantificarea
-    incertitudinii parametrilor prin distribuții posterioare.
-\end{itemize}
+Parametrii $\beta$ și $\gamma$ ai modelului SIR pot fi estimați din date observate
+prin minimizarea erorii pătratice dintre seria raportată și soluția numerică, prin
+estimare de verosimilitate maximă cu un model de zgomot adecvat sau prin inferență
+bayesiană. Alegerea metodei depinde de natura datelor: pentru incidență zilnică,
+modelele Poisson sau binomial negativ sunt mai potrivite decât o eroare gaussiană
+simplă, în timp ce inferența bayesiană oferă o descriere explicită a incertitudinii.
 
 Estimatorul $\hat{\gamma}$ poate fi obținut direct dacă durata medie a
 perioadei infecțioase este disponibilă din studii clinice:
