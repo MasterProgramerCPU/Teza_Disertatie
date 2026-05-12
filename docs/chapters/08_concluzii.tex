@@ -51,6 +51,16 @@ Ea face sistemul mai flexibil și permite adăugarea unor modele noi fără migr
 ale tabelei de rezultate. Costul acestei flexibilități este o serializare mai
 generală și o nevoie mai mare de validare la nivel de aplicație.
 
+Pe latura operațională, sistemul a fost deployat efectiv pe un cluster Kubernetes
+v1.31 găzduit pe o platformă cloud privată, cu trei noduri control plane și trei
+workeri, YugabyteDB la factor de replicare~3 și Helm pentru ciclul de viață al
+bazei de date. Această experiență confirmă portabilitatea arhitecturii și pune
+în evidență câteva ajustări specifice mediilor distribuite, precum aplicarea
+migrațiilor prin \texttt{psql} în locul \texttt{golang-migrate} sau adăugarea
+extensiei \texttt{pgcrypto} la momentul instalării, datorită bazei PostgreSQL~11
+a YugabyteDB. Aceste ajustări sunt locale și nu afectează nici codul aplicativ,
+nici interfața REST.
+
 \section{Limitări}
 \label{sec:limitari}
 
@@ -85,7 +95,12 @@ adăugarea unei suite automate de teste. Pentru backend, aceasta înseamnă test
 unitare și de integrare cu o bază de date izolată; pentru frontend, teste care
 verifică fluxurile reale din browser. În zona de infrastructură, ar fi utilă
 introducerea unor mecanisme explicite de retry și dead-letter queue pentru job-urile
-care eșuează repetat.
+care eșuează repetat, precum și activarea autoscalării orizontale (HPA) a
+runner-elor pe metrici personalizate (de exemplu lungimea cozii Redis) și a
+politicilor de rețea (NetworkPolicy) pentru izolare zero-trust intra-cluster.
+Terminarea TLS automată prin \texttt{cert-manager} și un stack de
+observabilitate (Prometheus + Grafana) ar completa profilul operațional al
+deployment-ului Kubernetes.
 
 Pe termen mai lung, sistemul poate fi extins cu vizualizări geografice, surse de
 date actualizate periodic și module de alertare. Aceste extensii trebuie construite

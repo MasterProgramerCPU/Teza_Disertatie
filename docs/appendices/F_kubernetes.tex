@@ -5,93 +5,122 @@ Această anexă include manifestele declarative pentru rularea sistemului
 pe un cluster Kubernetes. Toate resursele sunt aplicate în namespace-ul
 \texttt{epimodel} și urmează structura arhitecturală descrisă în
 capitolul~\ref{ch:arhitectura}: API stateless, frontend servit prin Nginx,
-runner-e scalabile independent, Redis pentru cozi de mesaje și YugabyteDB
-pentru persistență.
+runnere scalabile independent, Redis pentru coada de mesaje și YugabyteDB
+pentru persistență (3~master + 3~tserver, RF=3).
 
 Manifestele se află în directorul \texttt{code/k8s/} al repository-ului și
-sunt organizate cu prefixe numerice pentru aplicare secvențială
-(\texttt{kubectl apply -f code/k8s/}). \Cref{tab:k8s_manifeste} sintetizează
-conținutul directorului.
+sunt organizate cu prefixe numerice pentru aplicare secvențială.
+\Cref{tab:k8s_manifeste} sintetizează conținutul directorului.
 
 \begin{table}[htbp]
 \centering
 \caption{Manifestele Kubernetes incluse în repository.}
 \label{tab:k8s_manifeste}
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{p{4cm}p{4cm}p{5cm}}
+\begin{tabular}{p{4.6cm}p{4.2cm}p{5.5cm}}
 \toprule
 \textbf{Fișier} & \textbf{Resurse principale} & \textbf{Rol} \\
 \midrule
-\texttt{00-namespace.yaml}         & \texttt{Namespace}                 & Izolează aplicația într-un namespace dedicat \\
-\texttt{01-configmap.yaml}         & \texttt{ConfigMap}                 & Variabile non-sensibile pentru API \\
-\texttt{02-secret.example.yaml}    & \texttt{Secret} (template)         & Șablon pentru JWT și DSN-ul bazei de date \\
-\texttt{10-yugabyte-master.yaml}   & \texttt{StatefulSet} ($\times 3$)  & YugabyteDB master (coordonatorul cluster-ului) \\
-\texttt{11-yugabyte-tserver.yaml}  & \texttt{StatefulSet} ($\times 3$)  & YugabyteDB tserver (YSQL pe portul 5433) \\
-\texttt{20-redis.yaml}             & \texttt{StatefulSet} ($\times 1$)  & Coadă Redis cu persistență AOF \\
-\texttt{30-migrate-job.yaml}       & \texttt{Job}                       & Aplică migrațiile SQL prin \texttt{golang-migrate} \\
-\texttt{40-api.yaml}               & \texttt{Deployment} + \texttt{Service} & Backend Go (REST API) \\
-\texttt{50-runner-python.yaml}     & \texttt{Deployment}                & Runner Python (\texttt{scipy.solve\_ivp}) \\
-\texttt{51-runner-r.yaml}          & \texttt{Deployment}                & Runner R (\texttt{deSolve::ode}) \\
-\texttt{52-runner-julia.yaml}      & \texttt{Deployment}                & Runner Julia (\texttt{DifferentialEquations.jl}) \\
-\texttt{60-frontend.yaml}          & \texttt{Deployment} + \texttt{Service} & Frontend Vue.js servit prin Nginx \\
-\texttt{70-ingress.yaml}           & \texttt{Ingress}                   & Rutare HTTP externă (\texttt{/api} și \texttt{/}) \\
+\texttt{00-namespace.yaml}                  & \texttt{Namespace}                       & Izolează aplicația într-un namespace dedicat \\
+\texttt{01-configmap.yaml}                  & \texttt{ConfigMap}                       & Variabile non-sensibile (HTTP, Redis, JWT) \\
+\texttt{02-secret.example.yaml}             & \texttt{Secret} (template)               & Șablon pentru \texttt{JWT\_SECRET} și \texttt{DATABASE\_URL} \\
+\texttt{10-yugabyte-values.yaml}            & Helm values                              & Configurarea chart-ului oficial \texttt{yugabytedb/yugabyte} (RF=3, sizing custom) \\
+\texttt{12-yugabyte-tserver-service.yaml}   & \texttt{Service}                         & \texttt{ClusterIP} \texttt{yb-tserver-service} expus pe portul 5433 (YSQL) \\
+\texttt{20-redis.yaml}                      & \texttt{Deployment} + \texttt{Service}   & Coadă Redis (\texttt{emptyDir}, fără persistență) \\
+\texttt{30-migrate-job.yaml}                & \texttt{Job}                             & Aplică migrațiile SQL prin \texttt{psql} \\
+\texttt{40-api.yaml}                        & \texttt{Deployment} + \texttt{Service}   & Backend Go (REST API) \\
+\texttt{50-runner-python.yaml}              & \texttt{Deployment}                      & Runner Python (\texttt{scipy.solve\_ivp}) \\
+\texttt{51-runner-r.yaml}                   & \texttt{Deployment}                      & Runner R (\texttt{deSolve::ode}) \\
+\texttt{52-runner-julia.yaml}               & \texttt{Deployment}                      & Runner Julia (\texttt{DifferentialEquations.jl}) \\
+\texttt{60-frontend.yaml}                   & \texttt{Deployment} + \texttt{Service}   & Frontend Vue.js servit prin Nginx \\
+\texttt{70-ingress.yaml}                    & \texttt{Ingress}                         & Rutare HTTP externă (\texttt{/api} și \texttt{/}) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Listările care urmează reproduc manifestele cele mai relevante pentru
-explicitarea arhitecturii: namespace-ul de izolare, stratul de persistență
-(YugabyteDB tserver), coada de mesaje (Redis), API-ul, un exemplu de runner
-(Julia, cel mai mare consumator de memorie) și ingress-ul de rutare. Restul
-manifestelor (master-ul YugabyteDB, ConfigMap-ul, template-ul Secret, Job-ul
-de migrare, celelalte două runnere, frontend-ul) urmează aceleași convenții
-și pot fi consultate direct în repository.
+Listările care urmează reproduc fișierele cele mai relevante pentru
+explicitarea arhitecturii: namespace-ul de izolare, fișierul de
+\texttt{values} pentru YugabyteDB, Service-ul de acces YSQL, coada
+Redis, Job-ul de migrații, API-ul, un exemplu de runner (Julia, cel
+mai mare consumator de memorie) și ingress-ul de rutare. Celelalte
+manifeste --- ConfigMap-ul, template-ul Secret, frontend-ul, runner-ele
+R și Python --- urmează aceleași convenții și pot fi consultate direct
+în repository.
 
 \section*{Namespace dedicat}
 
 \lstinputlisting[language=bash, caption={\texttt{00-namespace.yaml} --- Namespace-ul dedicat aplicației.}]{../code/k8s/00-namespace.yaml}
 
-\section*{YugabyteDB tserver}
+\section*{YugabyteDB --- valori Helm}
 
-Tserver-ul rulează ca \texttt{StatefulSet} cu trei replici și expune două
-servicii: unul \emph{headless} pentru descoperirea internă a peer-urilor
-(necesar protocolului Raft) și unul \texttt{ClusterIP} pentru consumatorii
-de YSQL (API-ul și runner-ele).
+YugabyteDB rulează ca două \texttt{StatefulSet}-uri (\texttt{yb-master}
+și \texttt{yb-tserver}) cu câte 3 replici, generate de Helm chart-ul
+oficial. Fișierul de \texttt{values} suprascrie sizing-ul implicit
+pentru a se potrivi resurselor cluster-ului (workeri 4~vCPU / 8~GiB)
+și dezactivează componentele neutilizate (\texttt{yugabytedUi},
+\texttt{enableLoadBalancer}).
 
-\lstinputlisting[language=bash, caption={\texttt{11-yugabyte-tserver.yaml} --- StatefulSet și servicii pentru YugabyteDB tserver.}]{../code/k8s/11-yugabyte-tserver.yaml}
+\lstinputlisting[language=bash, caption={\texttt{10-yugabyte-values.yaml} --- Valorile Helm pentru YugabyteDB.}]{../code/k8s/10-yugabyte-values.yaml}
+
+\section*{Service de acces la YugabyteDB}
+
+Chart-ul oficial generează două Service-uri \emph{headless}
+(\texttt{yb-masters} și \texttt{yb-tservers}) pentru DNS-ul intern
+necesar protocolului Raft, dar nu un Service \texttt{ClusterIP}
+clasic pe care îl pot folosi consumatorii YSQL. Acest Service este
+adăugat printr-un manifest separat.
+
+\lstinputlisting[language=bash, caption={\texttt{12-yugabyte-tserver-service.yaml} --- \texttt{ClusterIP} \texttt{yb-tserver-service} (port 5433, YSQL).}]{../code/k8s/12-yugabyte-tserver-service.yaml}
 
 \section*{Redis}
 
-Redis-ul este implementat ca \texttt{StatefulSet} cu o singură replică și
-volum persistent pentru AOF (\emph{append-only file}), pentru ca starea
-cozilor să supraviețuiască restartărilor pod-ului.
+Redis este deployat ca \texttt{Deployment} cu o singură replică și volum
+efemer (\texttt{emptyDir}). Cozile de mesaje nu sunt persistente între
+restarturi, ceea ce este acceptabil pentru job-uri de simulare care
+durează secunde sau minute. Pentru retenție durabilă, structura poate
+fi convertită într-un \texttt{StatefulSet} cu \texttt{PersistentVolumeClaim}
+fără modificări la nivelul aplicației.
 
-\lstinputlisting[language=bash, caption={\texttt{20-redis.yaml} --- Redis cu persistență AOF.}]{../code/k8s/20-redis.yaml}
+\lstinputlisting[language=bash, caption={\texttt{20-redis.yaml} --- Redis cu volum efemer.}]{../code/k8s/20-redis.yaml}
+
+\section*{Job-ul de migrare}
+
+Migrațiile SQL sunt aplicate printr-un \texttt{Job} care folosește
+clientul \texttt{psql} (în loc de \texttt{golang-migrate}) pentru a
+evita dependența de \emph{advisory locks} PostgreSQL, pe care YugabyteDB
+nu le implementează încă. Job-ul iterează fișierele \texttt{*.up.sql}
+în ordine alfabetică și le aplică cu \texttt{ON\_ERROR\_STOP=1}.
+
+\lstinputlisting[language=bash, caption={\texttt{30-migrate-job.yaml} --- Job care aplică migrațiile prin \texttt{psql}.}]{../code/k8s/30-migrate-job.yaml}
 
 \section*{API Go}
 
-API-ul rulează ca \texttt{Deployment} cu două replici pentru toleranță la
-pierderea unui pod. Configurația non-sensibilă vine din \texttt{ConfigMap},
-iar parolele și secretele din \texttt{Secret}. Probele HTTP pe
-\texttt{/api/health} verifică atât pod-ul, cât și conectivitatea efectivă
-către baza de date și Redis.
+API-ul rulează ca \texttt{Deployment} cu două replici pentru toleranță
+la pierderea unui pod. Configurația non-sensibilă provine din
+\texttt{ConfigMap}, iar parolele și secretele din \texttt{Secret}.
+Probele HTTP pe \texttt{/api/health} verifică atât pod-ul, cât și
+conectivitatea efectivă către baza de date și Redis.
 
 \lstinputlisting[language=bash, caption={\texttt{40-api.yaml} --- Deployment și Service pentru API-ul Go.}]{../code/k8s/40-api.yaml}
 
 \section*{Runner Julia}
 
-Runner-ul Julia este Deployment-ul cu cele mai generoase limite de resurse
-($512$~MiB request, $2$~GiB limit) din cauza costului de compilare JIT al
-\texttt{DifferentialEquations.jl}. Runner-ele R și Python au structuri
-identice, dar cu limite mai mici.
+Runner-ul Julia este \texttt{Deployment}-ul cu cele mai generoase limite
+de resurse (512~MiB request, 2~GiB limit) din cauza costului inițial de
+încărcare al pachetelor \texttt{DifferentialEquations.jl}. Runner-ele
+R și Python au structuri identice, dar cu limite mai mici.
 
 \lstinputlisting[language=bash, caption={\texttt{52-runner-julia.yaml} --- Deployment pentru runner-ul Julia.}]{../code/k8s/52-runner-julia.yaml}
 
 \section*{Ingress de rutare}
 
-Ingress-ul nginx ruteză cererile externe către cele două servicii vizibile
-public: API-ul Go pentru cererile sub prefixul \texttt{/api} și frontend-ul
-Vue.js pentru restul.
+Ingress-ul nginx rutează cererile externe către cele două servicii
+vizibile public: API-ul Go pentru cererile sub prefixul \texttt{/api}
+și frontend-ul Vue.js pentru restul. Hostname-ul implicit
+(\texttt{epimodel.local}) este destinat utilizării prin \texttt{/etc/hosts}
+local; într-un deployment cu DNS public, se înlocuiește cu un FQDN
+real și se adaugă o secțiune \texttt{tls:} cu certificate gestionate
+prin \texttt{cert-manager}.
 
 \lstinputlisting[language=bash, caption={\texttt{70-ingress.yaml} --- Ingress nginx pentru rutare HTTP.}]{../code/k8s/70-ingress.yaml}
 

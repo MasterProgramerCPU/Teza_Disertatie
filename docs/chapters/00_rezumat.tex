@@ -19,7 +19,9 @@ runner-e specializate, coordonate prin Redis.
 
 Componenta web, alcătuită dintr-un API Go și o interfață Vue.js, oferă fluxurile
 necesare încărcării seturilor de date, lansării simulărilor, urmăririi statusului și
-vizualizării traiectoriilor compartimentale. Accentul lucrării cade pe legătura
+vizualizării traiectoriilor compartimentale. Întregul sistem este deployabil pe un
+cluster Kubernetes prin manifeste declarative, pe o platformă cloud privată cu
+factor de replicare~3 pentru baza de date. Accentul lucrării cade pe legătura
 dintre modelul matematic, implementarea numerică și arhitectura software care face
 posibilă evaluarea reproductibilă a rezultatelor pentru modele cu grade diferite
 de complexitate.

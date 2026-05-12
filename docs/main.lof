@@ -6,7 +6,7 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către SPA sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}}{30}{figure.caption.23}%
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama entitate-relație a bazei de date. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit {FK}; raportul de cardinalitate 1\,:\,N este indicat pe fiecare relație.}}{32}{figure.caption.24}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Topologia cluster-ului Kubernetes. Ingressul este expus ca LoadBalancer Service în fața clusterului. Worker Node~1 găzduiește frontend-ul, primul runner și prima instanță YugabyteDB tserver; Worker Node~2 găzduiește celelalte două runner-e și doi tserveri.}}{40}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Topologia cluster-ului Kubernetes cu 3 noduri control plane HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform prin \texttt {podAntiAffinity}, garantând că pierderea unui worker afectează cel mult o replică \texttt {yb-master} și o replică \texttt {yb-tserver} --- în limita toleranței quorum-ului Raft.}}{40}{figure.caption.26}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

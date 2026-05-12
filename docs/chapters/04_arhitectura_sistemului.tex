@@ -654,128 +654,256 @@ grafic, diferențiindu-le prin stil de linie (continuu, întrerupt, punctat).
 \section{Infrastructura Kubernetes}
 \label{sec:infrastructura_k8s}
 
+Sistemul rulează pe un cluster Kubernetes versiunea v1.31, găzduit pe o
+platformă cloud privată; detaliile specifice provider-ului IaaS rămân în
+afara domeniului acestei lucrări. Ciclul de viață al nodurilor (creare,
+redimensionare, rolling updates) este gestionat declarativ prin
+Cluster~API, care permite descrierea topologiei prin obiecte Kubernetes
+într-un cluster de management separat. Această abordare oferă reproducibilitate
+și uniformitate între medii: aceleași manifeste aplicative pot fi deployate
+pe orice cluster K8s conform standardelor CNCF, indiferent de provider-ul
+de infrastructură.
+
 \subsection{Topologia cluster-ului}
 \label{subsec:topologie_k8s}
 
-Clusterul Kubernetes este compus din trei noduri: un nod de control plane și
-doi workeri, conform \cref{fig:k8s_topology}. Configurația hardware minimă
-recomandată este de 4~vCPU, 8~GiB RAM și 50~GiB SSD per nod, cu 8~vCPU și
-16~GiB RAM recomandate pentru nodurile worker care găzduiesc
-runner-ele și instanțele YugabyteDB.
+Clusterul este compus din șase noduri (\cref{fig:k8s_topology}): trei
+noduri în rolul de control plane (2~vCPU, 4~GiB RAM fiecare) care
+găzduiesc componentele standard --- \texttt{kube-apiserver}, \texttt{etcd}
+stacked, \texttt{kube-scheduler}, \texttt{kube-controller-manager} ---
+și trei noduri \emph{worker} (4~vCPU, 8~GiB RAM fiecare) pe care rulează
+pod-urile aplicației, baza de date și componentele add-on. Toate nodurile
+rulează Ubuntu~22.04 LTS cu \texttt{containerd}~1.7 ca runtime de container.
+
+Interfața de rețea este implementată prin Cilium~CNI, care oferă rețeaua
+de pod, DNS intern (prin \texttt{CoreDNS}) și posibilitatea de a aplica
+politici de rețea (NetworkPolicy, CiliumNetworkPolicy) la nivel de
+namespace. Stocarea persistentă este asigurată de un driver CSI de tip
+block storage cu \texttt{reclaimPolicy: Delete} și expansion de volum
+activat, ceea ce permite scalarea în sus a volumelor YugabyteDB fără
+migrare manuală. \texttt{metrics-server} este instalat pentru a permite
+atât utilitarul \texttt{kubectl top}, cât și autoscalarea bazată pe
+metrici CPU/memorie (Horizontal Pod Autoscaler).
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
     pod/.style={
         draw=gray!60, rounded corners=2pt, thick,
-        minimum width=2.55cm, minimum height=0.55cm,
+        minimum width=2.55cm, minimum height=0.5cm,
         align=center, font=\scriptsize
+    },
+    cp/.style={
+        draw=gray!60, rounded corners=2pt, thick,
+        minimum width=2.55cm, minimum height=0.5cm,
+        align=center, font=\scriptsize, fill=gray!18
     }
 ]
 
 %% ---- cluster outline ----
 \draw[very thick, blue!35, rounded corners=8pt, fill=blue!4]
-    (-0.4, -5.8) rectangle (14.4, 1.0);
-\node[font=\small\bfseries, blue!55] at (7.0, 0.75) {Cluster Kubernetes};
+    (-0.4, -7.4) rectangle (14.4, 1.0);
+\node[font=\small\bfseries, blue!55] at (7.0, 0.7) {Cluster Kubernetes (6 noduri)};
 
-%% ---- Control Plane ----
-\draw[thick, gray!60, rounded corners=5pt, fill=gray!12]
-    (0.0, -5.5) rectangle (4.2, 0.3);
-\node[font=\small\bfseries]          at (2.1,  0.05) {Control Plane};
-\draw[gray!40, thin]                 (0.0, -0.35) -- (4.2, -0.35);
-\node[pod, fill=gray!20]             at (2.1, -0.90) {kube-apiserver};
-\node[pod, fill=gray!20]             at (2.1, -1.65) {etcd};
-\node[pod, fill=gray!20]             at (2.1, -2.40) {scheduler};
-\node[pod, fill=gray!20]             at (2.1, -3.15) {controller-manager};
+%% ===== Control Plane (3 noduri) =====
+\node[font=\small\bfseries] at (7.0, 0.1) {Control Plane};
+\draw[gray!40, thin] (0.0, -0.25) -- (14.2, -0.25);
 
-%% ---- Worker Node 1 ----
+%% Master 1
+\draw[thick, gray!60, rounded corners=5pt, fill=gray!8]
+    (0.0, -2.8) rectangle (4.55, -0.45);
+\node[font=\scriptsize\bfseries] at (2.27, -0.65) {Master 1};
+\node[cp] at (2.27, -1.15) {kube-apiserver};
+\node[cp] at (2.27, -1.65) {etcd};
+\node[cp] at (2.27, -2.15) {scheduler / CM};
+
+%% Master 2
+\draw[thick, gray!60, rounded corners=5pt, fill=gray!8]
+    (4.825, -2.8) rectangle (9.375, -0.45);
+\node[font=\scriptsize\bfseries] at (7.1, -0.65) {Master 2};
+\node[cp] at (7.1, -1.15) {kube-apiserver};
+\node[cp] at (7.1, -1.65) {etcd};
+\node[cp] at (7.1, -2.15) {scheduler / CM};
+
+%% Master 3
+\draw[thick, gray!60, rounded corners=5pt, fill=gray!8]
+    (9.65, -2.8) rectangle (14.2, -0.45);
+\node[font=\scriptsize\bfseries] at (11.925, -0.65) {Master 3};
+\node[cp] at (11.925, -1.15) {kube-apiserver};
+\node[cp] at (11.925, -1.65) {etcd};
+\node[cp] at (11.925, -2.15) {scheduler / CM};
+
+%% ===== Workers (3 noduri) =====
+\node[font=\small\bfseries] at (7.0, -3.05) {Workeri};
+\draw[gray!40, thin] (0.0, -3.30) -- (14.2, -3.30);
+
+%% Worker 1
 \draw[thick, gray!60, rounded corners=5pt, fill=green!10]
-    (4.8, -5.5) rectangle (9.2, 0.3);
-\node[font=\small\bfseries]          at (7.0,  0.05) {Worker Node 1};
-\draw[gray!40, thin]                 (4.8, -0.35) -- (9.2, -0.35);
-\node[pod, fill=green!18]            at (7.0, -0.90) {api (replica 1)};
-\node[pod, fill=blue!15]             at (7.0, -1.65) {frontend (Nginx)};
-\node[pod, fill=purple!18]           at (7.0, -2.40) {runner-r};
-\node[pod, fill=red!14]              at (7.0, -3.15) {redis};
-\node[pod, fill=yellow!30]           at (7.0, -3.90) {yb-tserver-0};
+    (0.0, -7.1) rectangle (4.55, -3.50);
+\node[font=\scriptsize\bfseries] at (2.27, -3.70) {Worker 1};
+\node[pod, fill=gray!18]   at (2.27, -4.10) {yb-master-0};
+\node[pod, fill=yellow!30] at (2.27, -4.60) {yb-tserver-0};
+\node[pod, fill=green!18]  at (2.27, -5.10) {api (replica 1)};
+\node[pod, fill=purple!18] at (2.27, -5.60) {runner-r};
+\node[pod, fill=red!14]    at (2.27, -6.10) {redis};
+\node[pod, fill=orange!22] at (2.27, -6.70) {ingress-nginx};
 
-%% ---- Worker Node 2 ----
+%% Worker 2
 \draw[thick, gray!60, rounded corners=5pt, fill=green!10]
-    (9.8, -5.5) rectangle (14.2, 0.3);
-\node[font=\small\bfseries]          at (12.0,  0.05) {Worker Node 2};
-\draw[gray!40, thin]                 (9.8, -0.35) -- (14.2, -0.35);
-\node[pod, fill=green!18]            at (12.0, -0.90) {api (replica 2)};
-\node[pod, fill=purple!18]           at (12.0, -1.65) {runner-julia};
-\node[pod, fill=purple!18]           at (12.0, -2.40) {runner-python};
-\node[pod, fill=yellow!30]           at (12.0, -3.15) {yb-tserver-1};
-\node[pod, fill=yellow!30]           at (12.0, -3.90) {yb-tserver-2};
+    (4.825, -7.1) rectangle (9.375, -3.50);
+\node[font=\scriptsize\bfseries] at (7.1, -3.70) {Worker 2};
+\node[pod, fill=gray!18]   at (7.1, -4.10) {yb-master-1};
+\node[pod, fill=yellow!30] at (7.1, -4.60) {yb-tserver-1};
+\node[pod, fill=green!18]  at (7.1, -5.10) {api (replica 2)};
+\node[pod, fill=purple!18] at (7.1, -5.60) {runner-julia};
+\node[pod, fill=blue!15]   at (7.1, -6.10) {frontend (Nginx)};
+\node[pod, fill=cyan!18]   at (7.1, -6.70) {metrics-server};
 
-%% ---- Ingress (extern, deasupra clusterului) ----
-\node[pod, fill=orange!25, minimum width=3.2cm] (ing) at (7.0, 1.7)
-    {Ingress Nginx (LoadBalancer)};
+%% Worker 3
+\draw[thick, gray!60, rounded corners=5pt, fill=green!10]
+    (9.65, -7.1) rectangle (14.2, -3.50);
+\node[font=\scriptsize\bfseries] at (11.925, -3.70) {Worker 3};
+\node[pod, fill=gray!18]   at (11.925, -4.10) {yb-master-2};
+\node[pod, fill=yellow!30] at (11.925, -4.60) {yb-tserver-2};
+\node[pod, fill=purple!18] at (11.925, -5.10) {runner-python};
+\node[pod, fill=gray!8, draw=gray!40, dashed]
+                           at (11.925, -5.60) {(rezervă HPA)};
+
+%% ---- Ingress overlay (deasupra) ----
+\node[pod, fill=orange!25, minimum width=3.5cm] (ing) at (7.0, 1.6)
+    {Ingress (\texttt{ingress-nginx})};
 \draw[-{Stealth[length=5pt]}, thick, gray!60] (ing.south) -- (7.0, 1.0);
 
 \end{tikzpicture}
-\caption{Topologia cluster-ului Kubernetes. Ingressul este expus ca
-LoadBalancer Service în fața clusterului. Worker Node~1 găzduiește
-frontend-ul, primul runner și prima instanță YugabyteDB tserver;
-Worker Node~2 găzduiește celelalte două runner-e și doi tserveri.}
+\caption{Topologia cluster-ului Kubernetes cu 3 noduri control plane
+HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform
+prin \texttt{podAntiAffinity}, garantând că pierderea unui worker
+afectează cel mult o replică \texttt{yb-master} și o replică
+\texttt{yb-tserver} --- în limita toleranței quorum-ului Raft.}
 \label{fig:k8s_topology}
 \end{figure}
 
-Toate resursele aplicației sunt grupate în namespace-ul \texttt{emedicine},
-separat de namespace-ul \texttt{yugabyte} al bazei de date, facilitând
-aplicarea politicilor de rețea (NetworkPolicy) și controlul accesului bazat
-pe roluri (RBAC) la nivel de namespace.
+Toate resursele aplicației sunt grupate în namespace-ul
+\texttt{epimodel}, ceea ce permite aplicarea politicilor de rețea
+(NetworkPolicy) și controlul accesului bazat pe roluri (RBAC) la nivel
+de namespace. Add-on-urile sunt separate în namespace-urile lor proprii
+(\texttt{ingress-nginx}, \texttt{kube-system}) conform convenției
+standard.
 
 \subsection{Deployment YugabyteDB pe Kubernetes}
 \label{subsec:deploy_yugabyte}
 
-YugabyteDB este deploiat prin Helm chart-ul oficial \cite{yugabyte_helm},
-configurând câte un StatefulSet cu 3 replici pentru componentele
-\texttt{yb-master} și \texttt{yb-tserver}:
+YugabyteDB este deploiat prin Helm chart-ul oficial. Cu chart-ul vine un
+set complet de manifeste --- două \texttt{StatefulSet}-uri, două Service-uri
+\emph{headless} pentru DNS intern, ConfigMap-uri pentru \texttt{gflags} și
+volumele persistente --- pe care îl putem suprascrie printr-un singur fișier
+de \texttt{values} custom adaptat resurselor disponibile:
 
-\begin{lstlisting}[language=bash, caption={Instalare YugabyteDB cu Helm.}]
+\begin{lstlisting}[language=bash, caption={Instalarea YugabyteDB cu Helm \v si fi\c{s}ierul de \texttt{values} custom.}]
 helm repo add yugabytedb https://charts.yugabyte.com
 helm install yugabyte yugabytedb/yugabyte \
-  --namespace yugabyte --create-namespace \
-  --set replicas.master=3 \
-  --set replicas.tserver=3 \
-  --set storage.master.size=10Gi \
-  --set storage.tserver.size=50Gi \
-  --set resource.tserver.requests.cpu=2 \
-  --set resource.tserver.requests.memory=4Gi \
-  --set gflags.tserver.ysql_enable_auth=true
+  --namespace epimodel \
+  -f code/k8s/10-yugabyte-values.yaml \
+  --wait --timeout 10m
 \end{lstlisting}
 
-Helm chart-ul creează automat StatefulSet-urile \texttt{yb-master} și
-\texttt{yb-tserver} cu câte 3 pod-uri fiecare, un
-\texttt{PersistentVolumeClaim} per pod (pe StorageClass \texttt{fast-ssd}
-dacă este disponibil, altfel \texttt{standard}), un headless Service pentru
-DNS intern stabil al pod-urilor (ex.\
-\texttt{yb-tserver-0.yb-tservers.yugabyte.svc.cluster.local}), și un
-Service de tip ClusterIP pe portul 5433 (YSQL) utilizat de API-ul Go pentru
-conexiunea la baza de date.
+Fișierul \texttt{10-yugabyte-values.yaml} declară factor de replicare~3
+pentru ambele componente, sizing adaptat workerilor (1~GiB request /
+1.5~GiB limit pentru \texttt{yb-master}; 2~GiB request / 3~GiB limit pentru
+\texttt{yb-tserver}), un singur volum persistent per replică
+(5~GiB master, 10~GiB tserver), și gflag-uri specifice pentru clustere
+mici (\texttt{default\_memory\_limit\_to\_ram\_ratio: 0.6},
+\texttt{ysql\_num\_shards\_per\_tserver: 2}). Chart-ul creează:
 
-\subsection{Deployment API Go și frontend Vue.js}
-\label{subsec:deploy_api_frontend}
+\begin{itemize}\itemsep0pt
+    \item două \texttt{StatefulSet}-uri (\texttt{yb-master} și
+          \texttt{yb-tserver}) cu câte 3 replici fiecare;
+    \item șase \texttt{PersistentVolumeClaim}-uri (3$\times$5~GiB pentru
+          masteri + 3$\times$10~GiB pentru tserveri = 45~GiB cumulat);
+    \item două \texttt{Service}-uri headless (\texttt{yb-masters} și
+          \texttt{yb-tservers}) pentru descoperirea peer-urilor prin DNS
+          intern stabil (\texttt{yb-master-0.yb-masters.epimodel.svc.cluster.local}),
+          necesar protocolului Raft;
+    \item un \texttt{Service} \texttt{ClusterIP} numit
+          \texttt{yb-tserver-service} pe portul 5433 (YSQL), folosit de
+          API-ul Go și de runnere pentru conexiunea la baza de date.
+\end{itemize}
 
-Imaginea Docker a API-ului este construită cu un \emph{multi-stage build}:
-primul stage compilează binarul Go static (\texttt{CGO\_ENABLED=0}), iar
-al doilea stage copiază doar binarul într-o imagine \texttt{distroless/static},
-obținând o imagine finală de aproximativ 15~MiB. Deployment-ul Kubernetes
-configurează 2 replici, un liveness probe pe \texttt{GET /api/health} și un
-readiness probe care verifică conectivitatea la YugabyteDB înainte de a
-admite trafic.
+\subsection{Stratul aplicativ: imagini container și registru}
+\label{subsec:deploy_aplicatii}
 
-Aplicația Vue.js este compilată în fișiere statice (\texttt{npm run build})
-și servită printr-un container Nginx configurat ca SPA: toate rutele
-necunoscute sunt redirecționate la \texttt{index.html}, permițând Vue Router
-să gestioneze navigarea côté client.
+Cele cinci componente proprii ale sistemului --- API Go, frontend Vue.js,
+și cele trei runnere R / Python / Julia --- sunt împachetate ca imagini
+Docker construite pentru arhitectura \texttt{linux/amd64} și publicate
+într-un registru de imagini compatibil OCI (GitHub Container Registry
+în cazul de față). Pod-urile cluster-ului fac \texttt{pull} autentificat
+prin \texttt{imagePullSecrets} de tip \texttt{docker-registry}, configurat
+o singură dată per namespace.
 
-Un singur Ingress resource (nginx-ingress controller) rutează traficul
-extern: cererile cu prefix \texttt{/api} sunt direcționate spre Service-ul
-\texttt{api-service} pe portul 8080, iar toate celelalte spre Service-ul
-\texttt{frontend-service} pe portul 80. În mediul de producție, terminarea
-TLS se configurează la nivel de Ingress prin cert-manager cu certificate
-Let's Encrypt; în mediul local (k3d), Ingress-ul este expus fără TLS.
+Imaginea API-ului este construită cu un \emph{multi-stage build}: primul
+stage compilează binarul Go static (\texttt{CGO\_ENABLED=0}), iar al doilea
+copiază doar binarul rezultat într-o imagine \texttt{distroless/static}
+(\texttt{nonroot}), obținând o imagine finală de aproximativ 18~MiB,
+fără shell și fără pachete de sistem inutile. Frontend-ul Vue este
+compilat în fișiere statice (\texttt{npm run build}) și servit printr-un
+container Nginx configurat ca SPA: toate rutele necunoscute sunt
+redirecționate la \texttt{index.html}, permițând Vue~Router să gestioneze
+navigarea côté client. Runner-ele utilizează imagini de bază specifice
+fiecărui limbaj (Python 3.12 slim, R 4.4 base, Julia 1.11), cu dependențele
+instalate la build time pentru a evita orice descărcare la pornire.
+
+API-ul este deployat ca \texttt{Deployment} cu 2 replici și un \texttt{Service}
+\texttt{ClusterIP} pe portul 8080; probele \texttt{readinessProbe} și
+\texttt{livenessProbe} interoghează \texttt{GET /api/health}, care
+verifică intern conexiunile către YugabyteDB și Redis. Runner-ele
+funcționează ca \texttt{Deployment}-uri cu o replică fiecare, fără
+Service expus --- comunicarea se face exclusiv prin coada Redis, ceea
+ce le face independente de adresele lor de rețea și ușor de scalat
+orizontal prin \texttt{kubectl scale} sau HPA pe metrici personalizate
+(de exemplu lungimea cozii Redis).
+
+\subsection{Coadă de mesaje și migrațiile bazei de date}
+\label{subsec:redis_si_migratii}
+
+Redis este deployat ca \texttt{Deployment} cu o singură replică și volum
+efemer (\texttt{emptyDir}); datele cozilor nu sunt persistente între
+restarturi, ceea ce este acceptabil pentru job-uri de simulare care durează
+secunde sau minute, nu zile. În scenarii cu cerințe stricte de durabilitate
+(de exemplu retenția istorică a job-urilor pentru audit), Redis poate fi
+convertit într-un \texttt{StatefulSet} cu \texttt{PersistentVolumeClaim}
+fără modificări la nivelul aplicației.
+
+Migrațiile SQL sunt aplicate printr-un \texttt{Job} Kubernetes care folosește
+clientul \texttt{psql} în locul utilitarului \texttt{golang-migrate}.
+Această decizie este motivată de faptul că YugabyteDB nu implementează încă
+\emph{advisory locks} PostgreSQL, pe care multe utilitare de migrare le
+folosesc pentru a se asigura că o singură instanță aplică schema la un
+moment dat. Job-ul nostru iterează fișierele \texttt{*.up.sql} în ordine
+alfabetică și le aplică cu \texttt{psql -v ON\_ERROR\_STOP=1}, ceea ce
+oferă același efect de \emph{all-or-nothing} fără a depinde de blocaje
+distribuite. Prima migrare creează extensia \texttt{pgcrypto}, necesară
+pentru funcția \texttt{gen\_random\_uuid()} pe baza PostgreSQL~11 a
+YugabyteDB~2024.1.
+
+\subsection{Expunere externă și ingress}
+\label{subsec:ingress}
+
+Ingress controller-ul \texttt{ingress-nginx} este instalat în namespace-ul
+\texttt{ingress-nginx} prin Helm chart-ul oficial, înregistrând un singur
+\texttt{IngressClass} (\texttt{nginx}) marcat ca \emph{default} pe cluster.
+Un singur obiect \texttt{Ingress} (\texttt{epimodel-ingress}) rutează
+cererile externe către cele două servicii vizibile public: prefixul
+\texttt{/api} către \texttt{Service} \texttt{api} (API Go pe portul 8080),
+iar restul către \texttt{Service} \texttt{frontend} (Nginx pe portul 80).
+
+Modul de expunere a ingress-controller-ului depinde de capabilitățile
+provider-ului cloud. Pe un cluster cu \texttt{LoadBalancer Service}
+funcțional, controller-ul primește un IP public alocat automat și
+poate fi accesat direct prin DNS. Pe medii fără provider de \texttt{LoadBalancer}
+disponibil --- sau pentru sesiuni de demonstrație controlată --- ingress-controller-ul
+poate fi expus indirect prin \texttt{kubectl port-forward} la portul~80
+intern al Service-ului. În mediul de producție, terminarea TLS se
+configurează la nivel de Ingress prin \texttt{cert-manager} cu certificate
+Let's Encrypt; pentru disertație, traficul rămâne necriptat pe legătura
+locală \texttt{port-forward}, urmând ca activarea TLS să fie un pas
+operațional ulterior.

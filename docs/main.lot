@@ -7,15 +7,15 @@
 \contentsline {table}{\numberline {4.1}{\ignorespaces Structura minimă a fișierului CSV de date epidemiologice.}}{33}{table.caption.25}%
 \contentsline {table}{\numberline {4.2}{\ignorespaces Endpointurile REST ale API-ului backend.}}{36}{table.4.2}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{43}{table.caption.27}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{44}{table.caption.27}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Metricile colectate pentru fiecare rulare.}}{47}{table.caption.28}%
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Metricile colectate pentru fiecare rulare.}}{48}{table.caption.28}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {E.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{82}{table.caption.30}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {E.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{83}{table.caption.30}%
 \addvspace {10\p@ }

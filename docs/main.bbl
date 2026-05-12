@@ -126,11 +126,6 @@ Evan You and {contributors}.
 \newblock Pinia --- the intuitive store for {Vue.js}.
 \newblock Documentație oficială, 2024.
 
-\bibitem{yugabyte_helm}
-{Yugabyte, Inc.}
-\newblock {YugabyteDB} {Helm} chart for {Kubernetes}.
-\newblock Depozit {GitHub}, 2024.
-
 \bibitem{owid_covid}
 Edouard Mathieu, Hannah Ritchie, Lucas Rod{\'e}s-Guirao, Cameron Appel, Charlie
   Giattino, Joe Hasell, Bobbie Macdonald, Saloni Dattani, Diana Beltekian,

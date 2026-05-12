@@ -91,40 +91,42 @@
 \contentsline {subsection}{\numberline {4.5.2}Fluxul de date și state management}{38}{subsection.4.5.2}%
 \contentsline {section}{\numberline {4.6}Infrastructura Kubernetes}{39}{section.4.6}%
 \contentsline {subsection}{\numberline {4.6.1}Topologia cluster-ului}{39}{subsection.4.6.1}%
-\contentsline {subsection}{\numberline {4.6.2}Deployment YugabyteDB pe Kubernetes}{39}{subsection.4.6.2}%
-\contentsline {subsection}{\numberline {4.6.3}Deployment API Go și frontend Vue.js}{40}{subsection.4.6.3}%
-\contentsline {chapter}{\numberline {5}Implementarea modelelor SIDARTH și SIR}{42}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{42}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{43}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTH}{44}{section.5.3}%
-\contentsline {section}{\numberline {5.4}SIR ca model secundar}{45}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{45}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Metrici de performanță}{46}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{47}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Principiul evaluării}{47}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Metrici colectate}{47}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Protocol experimental}{48}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Scalabilitate și complexitatea modelului}{48}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Compararea implementărilor R, Julia și Python}{48}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Acuratețe numerică}{49}{section.6.6}%
-\contentsline {section}{\numberline {6.7}Interpretarea rezultatelor}{49}{section.6.7}%
-\contentsline {chapter}{\numberline {7}Aplicația Web E-Medicine}{50}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Rolul aplicației}{50}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Backend Go}{50}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Gestionarea dataseturilor}{51}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Execuția simulărilor}{51}{section.7.4}%
-\contentsline {section}{\numberline {7.5}Frontend Vue.js}{51}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Validare funcțională}{52}{section.7.6}%
-\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{53}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Sinteza lucrării}{53}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Concluzii privind modelele}{53}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Concluzii privind implementarea}{54}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Limitări}{54}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Direcții viitoare}{54}{section.8.5}%
-\contentsline {chapter}{Bibliografie}{56}{section.8.5}%
-\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{58}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{65}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{71}{appendix.C}%
-\contentsline {chapter}{\numberline {D}Schema Bazei de Date}{78}{appendix.D}%
-\contentsline {chapter}{\numberline {E}Configurații Kubernetes}{81}{appendix.E}%
-\contentsline {chapter}{\numberline {F}Documentația API REST}{98}{appendix.F}%
+\contentsline {subsection}{\numberline {4.6.2}Deployment YugabyteDB pe Kubernetes}{40}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Stratul aplicativ: imagini container și registru}{41}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Coadă de mesaje și migrațiile bazei de date}{42}{subsection.4.6.4}%
+\contentsline {subsection}{\numberline {4.6.5}Expunere externă și ingress}{42}{subsection.4.6.5}%
+\contentsline {chapter}{\numberline {5}Implementarea modelelor SIDARTH și SIR}{43}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{43}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{44}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTH}{45}{section.5.3}%
+\contentsline {section}{\numberline {5.4}SIR ca model secundar}{46}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{46}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Metrici de performanță}{47}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Evaluarea Performanței și Scalabilității}{48}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Principiul evaluării}{48}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Metrici colectate}{48}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Protocol experimental}{49}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Scalabilitate și complexitatea modelului}{49}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Compararea implementărilor R, Julia și Python}{49}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Acuratețe numerică}{50}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Interpretarea rezultatelor}{50}{section.6.7}%
+\contentsline {chapter}{\numberline {7}Aplicația Web E-Medicine}{51}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Rolul aplicației}{51}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Backend Go}{51}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Gestionarea dataseturilor}{52}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Execuția simulărilor}{52}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Frontend Vue.js}{52}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Validare funcțională}{53}{section.7.6}%
+\contentsline {chapter}{\numberline {8}Concluzii și Direcții de Dezvoltare Viitoare}{54}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Sinteza lucrării}{54}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Concluzii privind modelele}{54}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Concluzii privind implementarea}{55}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Limitări}{55}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Direcții viitoare}{56}{section.8.5}%
+\contentsline {chapter}{Bibliografie}{57}{section.8.5}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{59}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{66}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{72}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Schema Bazei de Date}{79}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Configurații Kubernetes}{82}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Documentația API REST}{101}{appendix.F}%
