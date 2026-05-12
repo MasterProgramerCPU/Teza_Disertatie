@@ -40,6 +40,8 @@ spec:
         app.kubernetes.io/part-of: epimodel
     spec:
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-pull
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -51,8 +53,8 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: api
-          image: emedicine/api:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/masterprogramercpu/sidarth-api:latest
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: epimodel-config

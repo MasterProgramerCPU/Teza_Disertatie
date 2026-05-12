@@ -1,0 +1,107 @@
+# Helm values pentru YugabyteDB pe clusterul kube-4kdhb
+# Profil "PoC pentru disertatie": RF=3, dar requests mici pentru workeri 2vCPU/4GiB.
+#
+# Instalare:
+#   helm install yugabyte yugabytedb/yugabyte \
+#     --namespace epimodel \
+#     --create-namespace=false \
+#     -f code/k8s/10-yugabyte-values.yaml \
+#     --wait --timeout 10m
+#
+# Verifica:
+#   kubectl -n epimodel get pods,svc,pvc
+#   kubectl -n epimodel exec -it yb-tserver-0 -- ysqlsh -h yb-tserver-service -U yugabyte -c "\l"
+#
+# Deinstalare (atenție, șterge PVC-urile):
+#   helm uninstall yugabyte -n epimodel
+#   kubectl -n epimodel delete pvc -l app.kubernetes.io/name=yb-master
+#   kubectl -n epimodel delete pvc -l app.kubernetes.io/name=yb-tserver
+
+Image:
+  tag: "2024.1.3.0-b105"   # versiune stabilă LTS (2025.2.x e foarte recentă)
+  pullPolicy: IfNotPresent
+
+storage:
+  ephemeral: false
+  master:
+    count: 1               # 1 PV per master (default e 2)
+    size: 5Gi
+    storageClass: "block-ceph"
+  tserver:
+    count: 1               # 1 PV per tserver
+    size: 10Gi
+    storageClass: "block-ceph"
+
+resource:
+  # Workeri 4 vCPU / 8 GiB: tserver primeste 2 GiB request / 3 GiB limit pentru
+  # cache decent. Master ramane mai mic (1 GiB) — tine metadata, nu date.
+  master:
+    requests:
+      cpu: "500m"
+      memory: 1Gi
+    limits:
+      cpu: "1"
+      memory: 1.5Gi
+  tserver:
+    requests:
+      cpu: "1"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 3Gi
+
+replicas:
+  master: 3
+  tserver: 3
+
+# Octavia nu functioneaza pe acest cluster, asa ca folosim ClusterIP peste tot.
+enableLoadBalancer: false
+
+# Disable UI yugabyted (consuma resurse, deschide ports pe care nu le expunem).
+yugabytedUi:
+  enabled: false
+
+# Personalizam gflags pentru cluster mic.
+gflags:
+  master:
+    default_memory_limit_to_ram_ratio: "0.6"
+  tserver:
+    default_memory_limit_to_ram_ratio: "0.6"
+    ysql_num_shards_per_tserver: "2"
+
+# Endpoints expuse — toate ClusterIP, fara LoadBalancer.
+serviceEndpoints:
+  - name: "yb-master-ui"
+    type: ClusterIP
+    app: "yb-master"
+    ports:
+      http-ui: "7000"
+
+  - name: "yb-tserver-service"
+    type: ClusterIP
+    app: "yb-tserver"
+    ports:
+      tcp-yql-port: "9042"
+      tcp-ysql-port: "5433"
+
+# Distribuim pod-urile pe noduri diferite (anti-affinity soft default in chart).
+# Pe 3 workeri vrem cate un master si cate un tserver pe fiecare.
+masterAffinity: |
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app: "yb-master"
+          topologyKey: kubernetes.io/hostname
+
+tserverAffinity: |
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app: "yb-tserver"
+          topologyKey: kubernetes.io/hostname

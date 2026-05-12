@@ -40,10 +40,12 @@ spec:
         app.kubernetes.io/part-of: epimodel
     spec:
       terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: ghcr-pull
       containers:
         - name: frontend
-          image: emedicine/frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/masterprogramercpu/sidarth-frontend:latest
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80

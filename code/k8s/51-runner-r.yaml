@@ -22,10 +22,12 @@ spec:
         app.kubernetes.io/part-of: epimodel
     spec:
       terminationGracePeriodSeconds: 60
+      imagePullSecrets:
+        - name: ghcr-pull
       containers:
         - name: runner-r
-          image: emedicine/runner-r:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/masterprogramercpu/sidarth-runner-r:latest
+          imagePullPolicy: Always
           env:
             - name: REDIS_URL
               valueFrom:

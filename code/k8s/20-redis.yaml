@@ -16,7 +16,7 @@ spec:
     app.kubernetes.io/name: redis
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: redis
   namespace: epimodel
@@ -24,8 +24,9 @@ metadata:
     app.kubernetes.io/name: redis
     app.kubernetes.io/part-of: epimodel
 spec:
-  serviceName: redis
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: redis
@@ -36,17 +37,23 @@ spec:
         app.kubernetes.io/part-of: epimodel
     spec:
       terminationGracePeriodSeconds: 30
+      volumes:
+        - name: data
+          emptyDir:
+            sizeLimit: 512Mi
       containers:
         - name: redis
           image: redis:7-alpine
           imagePullPolicy: IfNotPresent
+          # Fara persistenta — folosim emptyDir pentru a economisi un volum OpenStack
+          # (quota tenant 10 vol, prioritizam Yugabyte RF=3). Cozile se pierd la restart Pod,
+          # dar simularile dureaza secunde, nu zile.
           args:
             - redis-server
-            - --appendonly
-            - "yes"
             - --save
-            - "60"
-            - "100"
+            - ""
+            - --appendonly
+            - "no"
           ports:
             - name: redis
               containerPort: 6379
@@ -72,11 +79,3 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 15
             timeoutSeconds: 5
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 5Gi

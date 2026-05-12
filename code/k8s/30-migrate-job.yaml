@@ -7,8 +7,9 @@
 #     --namespace=epimodel \
 #     --from-file=code/db/migrations/
 #
-# Job-ul re-rulează idempotent; dacă vrei să-l forțezi după o nouă migrație,
-# șterge-l (kubectl delete job db-migrate -n epimodel) și aplică-l din nou.
+# YugabyteDB nu suportă (încă) advisory locks pe care golang-migrate le folosește,
+# așa că rulăm migrațiile direct cu psql, în ordine alfabetică a fișierelor *.up.sql.
+# Job-ul foloseste IF NOT EXISTS în migrații pentru idempotență.
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -18,7 +19,7 @@ metadata:
     app.kubernetes.io/name: db-migrate
     app.kubernetes.io/part-of: epimodel
 spec:
-  backoffLimit: 6
+  backoffLimit: 3
   ttlSecondsAfterFinished: 600
   template:
     metadata:
@@ -29,19 +30,25 @@ spec:
       restartPolicy: OnFailure
       initContainers:
         - name: wait-for-ysql
-          image: busybox:1.36
+          image: postgres:16-alpine
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: epimodel-secrets
+                  key: DATABASE_URL
           command:
             - /bin/sh
             - -c
             - |
-              until nc -z yb-tserver 5433; do
-                echo "waiting for yb-tserver:5433..."
+              until pg_isready -d "$DATABASE_URL"; do
+                echo "waiting for YSQL on $DATABASE_URL ..."
                 sleep 3
               done
-              echo "yb-tserver is ready"
+              echo "YSQL is ready"
       containers:
         - name: migrate
-          image: migrate/migrate:v4.17.1
+          image: postgres:16-alpine
           imagePullPolicy: IfNotPresent
           env:
             - name: DATABASE_URL
@@ -50,10 +57,19 @@ spec:
                   name: epimodel-secrets
                   key: DATABASE_URL
           command:
-            - migrate
-            - -path=/migrations
-            - -database=$(DATABASE_URL)
-            - up
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Applying migrations in order..."
+              for f in $(ls /migrations/*.up.sql | sort); do
+                echo ""
+                echo "=== Applying $f ==="
+                psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"
+              done
+              echo ""
+              echo "All migrations applied successfully."
+              psql "$DATABASE_URL" -c "\dt"
           volumeMounts:
             - name: migrations
               mountPath: /migrations

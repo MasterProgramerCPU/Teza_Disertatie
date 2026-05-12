@@ -27,6 +27,9 @@ func main() {
 		log.Fatalf("config: %v", err)
 	}
 
+	log.Printf("DEBUG: DatabaseURL=%q", cfg.DatabaseURL)
+	log.Printf("DEBUG: RedisURL=%q", cfg.RedisURL)
+
 	ctx := context.Background()
 
 	pool, err := pgxpool.New(ctx, cfg.DatabaseURL)
@@ -34,9 +37,13 @@ func main() {
 		log.Fatalf("postgres pool: %v", err)
 	}
 	defer pool.Close()
-	if err := pool.Ping(ctx); err != nil {
+	startPingCtx, cancelDB := context.WithTimeout(ctx, 15*time.Second)
+	if err := pool.Ping(startPingCtx); err != nil {
+		cancelDB()
 		log.Fatalf("postgres ping: %v", err)
 	}
+	cancelDB()
+	log.Printf("DEBUG: postgres ping OK")
 
 	redisOpts, err := redis.ParseURL(cfg.RedisURL)
 	if err != nil {
@@ -44,9 +51,13 @@ func main() {
 	}
 	rdb := redis.NewClient(redisOpts)
 	defer rdb.Close()
-	if err := rdb.Ping(ctx).Err(); err != nil {
+	rStartCtx, cancelR := context.WithTimeout(ctx, 15*time.Second)
+	if err := rdb.Ping(rStartCtx).Err(); err != nil {
+		cancelR()
 		log.Fatalf("redis ping: %v", err)
 	}
+	cancelR()
+	log.Printf("DEBUG: redis ping OK")
 
 	users := repository.NewUserRepository(pool)
 	datasets := repository.NewDatasetRepository(pool)
