@@ -1,23 +1,30 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { api, setToken, setUnauthorizedHandler, getToken } from "@/api/client";
-import type { AuthResponse } from "@/types";
+import type { AuthResponse, MeResponse } from "@/types";
 import router from "@/router";
+
+const LS_USER_ID = "emedicine.user_id";
+const LS_EMAIL = "emedicine.email";
+const LS_SUPER_ADMIN = "emedicine.is_super_admin";
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref<string | null>(getToken());
-  const userId = ref<string | null>(localStorage.getItem("emedicine.user_id"));
-  const email = ref<string | null>(localStorage.getItem("emedicine.email"));
+  const userId = ref<string | null>(localStorage.getItem(LS_USER_ID));
+  const email = ref<string | null>(localStorage.getItem(LS_EMAIL));
+  const isSuperAdmin = ref<boolean>(localStorage.getItem(LS_SUPER_ADMIN) === "true");
 
   const isAuthenticated = computed(() => !!token.value);
 
-  function persistUser(id: string | null, mail: string | null) {
-    if (id) localStorage.setItem("emedicine.user_id", id);
-    else localStorage.removeItem("emedicine.user_id");
-    if (mail) localStorage.setItem("emedicine.email", mail);
-    else localStorage.removeItem("emedicine.email");
+  function persistUser(id: string | null, mail: string | null, superAdmin: boolean) {
+    if (id) localStorage.setItem(LS_USER_ID, id);
+    else localStorage.removeItem(LS_USER_ID);
+    if (mail) localStorage.setItem(LS_EMAIL, mail);
+    else localStorage.removeItem(LS_EMAIL);
+    localStorage.setItem(LS_SUPER_ADMIN, superAdmin ? "true" : "false");
     userId.value = id;
     email.value = mail;
+    isSuperAdmin.value = superAdmin;
   }
 
   async function login(emailIn: string, password: string) {
@@ -27,7 +34,7 @@ export const useAuthStore = defineStore("auth", () => {
     });
     token.value = auth.token;
     setToken(auth.token);
-    persistUser(auth.user_id, emailIn);
+    persistUser(auth.user_id, auth.email, auth.is_super_admin);
   }
 
   async function register(emailIn: string, password: string) {
@@ -37,10 +44,22 @@ export const useAuthStore = defineStore("auth", () => {
     });
   }
 
+  /** Citește profilul curent (folosit la load SPA pentru a sincroniza is_super_admin). */
+  async function refreshMe(): Promise<MeResponse | null> {
+    if (!token.value) return null;
+    try {
+      const me = await api.get<MeResponse>("/me");
+      persistUser(me.id, me.email, me.is_super_admin);
+      return me;
+    } catch {
+      return null;
+    }
+  }
+
   function logout() {
     token.value = null;
     setToken(null);
-    persistUser(null, null);
+    persistUser(null, null, false);
     router.push({ name: "login" });
   }
 
@@ -48,5 +67,5 @@ export const useAuthStore = defineStore("auth", () => {
     logout();
   });
 
-  return { token, userId, email, isAuthenticated, login, register, logout };
+  return { token, userId, email, isSuperAdmin, isAuthenticated, login, register, refreshMe, logout };
 });

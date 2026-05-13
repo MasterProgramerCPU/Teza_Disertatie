@@ -43,7 +43,7 @@ convenabile.
 
 \subsubsection{Pachete relevante pentru modele compartimentale}
 
-Pentru modelele SIDARTH și SIR, pachetul relevant este \texttt{deSolve}
+Pentru modelele compartimentale implementate, pachetul relevant este \texttt{deSolve}
 \cite{soetaert2010desolve}, care oferă funcția \texttt{ode()} și acces la metode
 consacrate precum \texttt{lsoda}, \texttt{ode45} și \texttt{rk4}. În jurul lui se
 pot folosi pachete precum \texttt{ggplot2} pentru vizualizare, \texttt{data.table}
@@ -120,8 +120,9 @@ tabulare. Pentru sistemul dezvoltat aici, componenta esențială este
 
 Interfața \texttt{solve\_ivp} din \texttt{scipy.integrate} este apelată printr-o
 funcție RHS care descrie modelul selectat. Exemplul următor folosește cazul SIR,
-deoarece are doar trei variabile de stare; pentru SIDARTH, aceeași interfață
-primește un vector de șapte compartimente și un dicționar mai mare de parametri.
+deoarece are doar trei variabile de stare; pentru SIDARTHE, aceeași
+interfață primește un vector de opt compartimente și un dicționar mai
+mare de parametri.
 \begin{lstlisting}[language=Python, caption={Interfața solve\_ivp din SciPy pentru un sistem compartimental SIR}]
 from scipy.integrate import solve_ivp
 import numpy as np
@@ -155,9 +156,9 @@ sol = solve_ivp(
 
 \Cref{tab:comparatie_limbaje} sintetizează principalele caracteristici ale
 celor trei limbaje din perspectiva utilizării pentru implementarea modelelor
-compartimentale SIDARTH și SIR.
+compartimentale implementate în sistem.
 
-\begin{table}[htbp]
+\begin{table*}[t]
 \centering
 \caption{Comparație a limbajelor de programare utilizate}
 \label{tab:comparatie_limbaje}
@@ -175,7 +176,7 @@ Maturitate ecos. & Înaltă      & Medie       & Înaltă      \\
 Utilizare acad.  & Ridicată    & Medie       & Ridicată    \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 % ============================================================
 \section{Baze de date distribuite — YugabyteDB}
@@ -278,7 +279,7 @@ runtime-ul pornește efectiv containerele.
 
 Resursele folosite cel mai des sunt \texttt{Pod}, \texttt{Deployment},
 \texttt{StatefulSet}, \texttt{Service}, \texttt{PersistentVolumeClaim},
-\texttt{ConfigMap} și \texttt{Secret}. Pentru API și frontend sunt suficiente
+\texttt{ConfigMap} și \texttt{Secret}. Pentru API și frontend-uri sunt suficiente
 Deployment-uri, deoarece instanțele nu păstrează stare locală. Pentru YugabyteDB
 este necesar un StatefulSet, care oferă identitate stabilă și volume persistente
 pentru fiecare replică.
@@ -340,6 +341,6 @@ starea globală, Axios pentru apelurile REST și Chart.js, prin \texttt{vue-char
 pentru reprezentarea curbelor compartimentale ale modelului selectat. Componenta
 de grafic construiește dinamic seriile în funcție de cheile prezente în obiectul
 JSONB \texttt{compartments}, astfel încât același cod afișează atât traiectoriile
-$S(t)$, $I(t)$, $R(t)$ ale modelului SIR, cât și cele șapte traiectorii ale
-modelului SIDARTH. Aceste biblioteci acoperă nevoile aplicației fără a introduce
+$S(t)$, $I(t)$, $R(t)$ ale modelului SIR, cât și cele opt traiectorii ale
+modelului SIDARTHE. Aceste biblioteci acoperă nevoile aplicației fără a introduce
 un framework frontend suplimentar peste Vue.

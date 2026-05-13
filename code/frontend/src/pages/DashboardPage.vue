@@ -64,5 +64,15 @@ const statusCounts = computed(() => {
 </template>
 
 <style scoped>
-.metric-value { font-size: 28px; font-weight: 700; }
+.metric {
+  min-width: 160px;
+  background: linear-gradient(180deg, #f8f6ed 0%, #ece9d8 100%);
+}
+.metric-value {
+  margin-top: 6px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #003399;
+  text-shadow: 1px 1px 0 #ffffff;
+}
 </style>

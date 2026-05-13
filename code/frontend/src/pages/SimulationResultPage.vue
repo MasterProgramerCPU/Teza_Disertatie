@@ -24,6 +24,10 @@ const parameterRows = computed(() => {
     .map((key) => ({ key, value: run.value!.parameters[key] }));
 });
 
+const resultTitle = computed(() =>
+  run.value?.model_type === "lstm" ? "Predicție LSTM" : "Traiectorii compartimentale",
+);
+
 async function load() {
   try {
     run.value = await simulations.get(props.id);
@@ -108,7 +112,7 @@ async function downloadCSV() {
 
     <div v-if="run.status === 'completed' && points.length > 0" class="card">
       <div class="row" style="justify-content: space-between; margin-bottom: 16px;">
-        <h2 style="margin-bottom: 0;">Traiectorii compartimentale</h2>
+        <h2 style="margin-bottom: 0;">{{ resultTitle }}</h2>
         <button @click="downloadCSV">Export CSV</button>
       </div>
       <CompartmentChart :series="[{ label: MODEL_LABELS[run.model_type], points }]" />
@@ -122,6 +126,10 @@ async function downloadCSV() {
 
 <style scoped>
 .meta { display: grid; grid-template-columns: 180px 1fr; gap: 8px 16px; }
-.meta dt { font-weight: 500; color: var(--c-text-muted); }
+.meta dt { font-weight: 700; color: var(--c-text-muted); }
 .meta dd { margin: 0; }
+
+@media (max-width: 640px) {
+  .meta { grid-template-columns: 1fr; gap: 3px; }
+}
 </style>

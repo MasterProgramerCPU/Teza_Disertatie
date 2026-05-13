@@ -1,0 +1,271 @@
+% ============================================================
+% CAPITOLUL 8 — EVALUAREA SOFTWARE, PERFORMANȚEI ȘI SCALABILITĂȚII
+% ============================================================
+
+\chapter{Evaluarea Software, Performanței și Scalabilității}
+\label{ch:evaluare}
+
+\section{Scopul evaluării}
+\label{sec:scop_evaluare_software}
+
+Evaluarea software completează analiza numerică din
+Capitolul~\ref{ch:comparatie_calibrare}. Dacă analiza numerică măsoară cât de
+bine se potrivește un model cu datele, evaluarea software măsoară cât costă
+obținerea acelui rezultat într-un sistem real. În aplicația implementată,
+simularea nu este un apel local către o funcție, ci un flux distribuit: API-ul
+creează o rulare, Redis transportă job-ul, runner-ul execută solver-ul,
+YugabyteDB persistă rezultatele, iar frontend-ul afișează statusul și graficul.
+
+Prin urmare, evaluarea trebuie să separe patru componente:
+\begin{itemize}
+    \item costul numeric al solverului;
+    \item costul de serializare și persistare a rezultatelor;
+    \item costul operațional introdus de coadă și de baza de date;
+    \item costul de utilizare perceput în interfața web.
+\end{itemize}
+
+Această separare este importantă deoarece optimizarea unei singure componente nu
+garantează îmbunătățirea întregului sistem. Un solver rapid poate fi mascat de
+scrieri lente în baza de date, iar un model cu puține compartimente poate deveni
+costisitor dacă este rulat de multe ori în cadrul calibrării.
+
+\section{Metrici colectate}
+\label{subsec:metrici}
+
+\begin{table*}[t]
+\centering
+\caption{Metricile colectate sau derivabile pentru evaluarea software.}
+\label{tab:metrici_benchmark}
+\begin{tabularx}{0.95\textwidth}{l l X}
+\toprule
+\textbf{Metrică} & \textbf{Nivel} & \textbf{Interpretare} \\
+\midrule
+\texttt{wall\_time\_ms} & runner & durata observată între începutul execuției și finalizarea persistării rezultatelor \\
+\texttt{cpu\_time\_ms} & runner & timpul de procesor consumat de procesul numeric \\
+\texttt{peak\_memory\_mb} & runner & vârful de memorie rezidentă raportat de runtime \\
+\texttt{queue\_wait\_ms} & sistem & timpul dintre crearea rulării și preluarea job-ului de către runner \\
+\texttt{result\_rows} & bază de date & numărul de puncte temporale persistate pentru rulare \\
+\texttt{compartment\_count} & model & dimensiunea vectorului de stare salvat la fiecare pas \\
+\texttt{api\_latency\_ms} & API & timpul de răspuns pentru crearea unei simulări și citirea rezultatului \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Primele trei metrici sunt deja scrise în tabela \texttt{benchmarks}. Celelalte
+pot fi derivate din timestampurile existente sau adăugate ca extensii. De
+exemplu, \texttt{queue\_wait\_ms} se poate calcula ca diferență între momentul
+în care rularea a fost creată și momentul în care runner-ul o marchează
+\texttt{running}.
+
+\testtodo{Pentru completarea acestei secțiuni cu rezultate trebuie colectate
+valorile efective din tabela \texttt{benchmarks} și, unde este cazul, trebuie
+adăugate timestampuri suplimentare pentru \texttt{queue\_wait\_ms} și latențele
+API. Fără aceste rulări, tabelul de metrici descrie instrumentarea disponibilă,
+nu rezultatele măsurate.}
+
+\section{Matricea experimentală}
+\label{sec:matrice_experimentala}
+
+O evaluare completă trebuie să acopere toate combinațiile relevante dintre model,
+limbaj și orizont temporal. Matricea minimă recomandată este prezentată în
+Tabelul~\ref{tab:matrice_benchmark}.
+
+\begin{table*}[t]
+\centering
+\caption{Matrice minimă pentru campania de benchmark.}
+\label{tab:matrice_benchmark}
+\begin{tabularx}{0.95\textwidth}{l l l X}
+\toprule
+\textbf{Dimensiune} & \textbf{Valori} & \textbf{Scop} & \textbf{Observații} \\
+\midrule
+Model & SIS, SIR, SEIR, SIRS, SIDARTHE & cost în funcție de complexitate & două până la opt compartimente \\
+Limbaj & R, Julia, Python & comparație între ecosisteme & prima rulare Julia trebuie separată de rulările calde \\
+Orizont & 30, 90, 180, 365 zile & scalare cu numărul de puncte salvate & același pas zilnic pentru toate modelele \\
+Repetări & minim 10 & robustețe statistică & raportare prin mediană și IQR \\
+Concurență & 1, 3, 5 job-uri & comportament operațional & măsoară coadă, DB și scheduling \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Această matrice permite două tipuri de întrebări. Prima este numerică: cât crește
+durata când modelul trece de la două compartimente la opt? A doua este
+operațională: cum se schimbă timpul total când mai multe simulări sunt lansate
+simultan?
+
+\begin{table*}[t]
+\centering
+\caption{Teste necesare pentru obținerea rezultatelor de evaluare software.}
+\label{tab:teste_necesare_software}
+\begin{tabularx}{0.96\textwidth}{lX X}
+\toprule
+\textbf{Zonă evaluată} & \textbf{Test necesar} & \textbf{Rezultat de raportat} \\
+\midrule
+Runner numeric & rulări repetate pentru fiecare model, limbaj și orizont temporal & mediană, IQR, minim și maxim pentru timp și memorie \\
+Cold-start/Warm-start & separarea primei rulări de rulările ulterioare & costul de inițializare al runtime-ului, în special pentru Julia \\
+Concurență & lansarea simultană a 1, 3 și 5 job-uri & timp total, timp de așteptare în coadă și degradarea latenței \\
+Persistență rezultate & rulări cu 30, 90, 180 și 365 puncte temporale & timp de scriere, număr de rânduri și dimensiunea JSONB \\
+API și frontend & citirea rezultatelor și exportul CSV pentru fiecare model & latență endpoint, dimensiune răspuns și timp de export \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\section{Protocol de rulare}
+\label{subsec:protocoale}
+
+Pentru rezultate reproductibile, campania de benchmark trebuie să respecte un
+protocol fix:
+\begin{enumerate}
+    \item se pornește aceeași versiune de cod și aceeași configurație Docker;
+    \item se rulează migrațiile bazei de date și se curăță datele experimentale
+    vechi;
+    \item se execută rulări de încălzire pentru fiecare limbaj și model;
+    \item se rulează combinațiile din matricea experimentală;
+    \item se exportă tabela \texttt{benchmarks} și metadatele din
+    \texttt{simulation\_runs};
+    \item se agregă rezultatele prin mediană, IQR, minim și maxim;
+    \item se păstrează separat rezultatele cold-start și warm-start.
+\end{enumerate}
+
+Separarea cold-start/warm-start este necesară în special pentru Julia, unde prima
+rulare poate include cost de compilare JIT. Pentru Python și R, costurile mari
+apar de obicei la pornirea containerului și la importul bibliotecilor, nu la
+fiecare job.
+
+\testtodo{Această secțiune devine una de rezultate doar după executarea
+protocolului pe o configurație hardware documentată. În textul final trebuie
+introduse configurația mașinii sau clusterului, versiunea imaginilor Docker,
+numărul de repetări și agregările rezultate.}
+
+\section{Scalabilitate și complexitatea modelului}
+\label{sec:scalabilitate_date}
+
+În modelele compartimentale agregate, mărimea populației $N$ nu crește direct
+dimensiunea sistemului diferențial. O simulare SIDARTHE pentru $N=10^3$ și una
+pentru $N=10^7$ au același număr de ecuații; se schimbă doar scara valorilor.
+Costul crește în schimb cu numărul de compartimente, cu orizontul temporal
+$t_{\max}$, cu numărul de puncte salvate și cu numărul de fluxuri calculate în
+funcția RHS.
+
+SIDARTHE este mai costisitor decât SIR/SIS/SEIR/SIRS nu pentru că populația este
+mai mare, ci pentru că fiecare evaluare RHS calculează mai multe tranziții
+clinice și fiecare punct salvat conține mai multe valori. În plus, persistarea în
+JSONB introduce un cost de serializare care nu exista într-o schemă rigidă
+dedicată unui singur model, dar acest cost cumpără flexibilitate: aceeași tabelă
+poate stoca modele cu structuri diferite de stare.
+
+\section{Compararea implementărilor R, Julia și Python}
+\label{sec:comparatie_timp}
+
+Cele trei implementări nu folosesc exact același algoritm numeric. Runner-ul R
+folosește RK4 cu pas fix $h=1$, Python folosește \texttt{solve\_ivp} cu RK45, iar
+Julia folosește \texttt{Tsit5}. Comparația trebuie interpretată ca o comparație
+între implementări practice echivalente funcțional, nu ca un experiment izolat pe
+același solver. Pentru o comparație strictă ar fi necesară implementarea manuală a
+aceleiași metode în toate cele trei limbaje.
+
+Avantajul abordării curente este că reflectă utilizarea naturală a fiecărui
+ecosistem: R prin \texttt{deSolve}, Python prin SciPy, Julia prin SciML.
+Rezultatele benchmarkului trebuie deci citite ca o comparație între ecosisteme de
+calcul științific integrate într-un sistem software, nu doar între limbaje de
+programare.
+
+\section{Indicatori agregați}
+\label{sec:indicatori_agregati}
+
+Pentru fiecare combinație model--limbaj se raportează mediana timpului wall-clock:
+\begin{equation}
+\widetilde{T}_{m,l} = \operatorname{median}
+\left(T_{m,l}^{(1)}, T_{m,l}^{(2)}, \ldots, T_{m,l}^{(r)}\right),
+\end{equation}
+unde $r$ este numărul de repetări. Variabilitatea este exprimată prin intervalul
+intercuartilic:
+\begin{equation}
+\operatorname{IQR}_{m,l}=Q_{3,m,l}-Q_{1,m,l}.
+\end{equation}
+
+Pentru comparații între limbaje se poate raporta raportul de viteză față de
+Python:
+\begin{equation}
+\operatorname{speedup}_{l} =
+\frac{\widetilde{T}_{m,\text{Python}}}{\widetilde{T}_{m,l}}.
+\end{equation}
+Această valoare trebuie interpretată per model și per orizont temporal. Un limbaj
+poate fi mai rapid pentru SIDARTHE pe 365 de zile și mai lent pentru SIR pe 30 de
+zile dacă overheadul runtime-ului domină calculul numeric.
+
+\testtodo{Indicatorii agregați trebuie calculați din rulări reale, nu estimați
+teoretic. Pentru fiecare model trebuie raportate cel puțin mediana, IQR și
+raportul de viteză față de un limbaj de referință, folosind același dataset și
+aceleași condiții inițiale.}
+
+\section{Acuratețe numerică și verificări de regresie}
+\label{sec:acuratete}
+
+Corectitudinea rezultatelor este verificată prin conservarea populației. Pentru
+SIDARTHE, suma $S+I+D+A+R+T+H+E$ trebuie să rămână egală cu $N$ la fiecare pas
+salvat; pentru SEIR, $S+E+I+R=N$; iar pentru modelele SIR/SIS/SIRS se verifică
+suma compartimentelor definite de fiecare model.
+
+Un al doilea criteriu este apropierea traiectoriilor obținute în cele trei
+limbaje pentru aceeași configurație. Deoarece solverele diferă, egalitatea exactă
+nu este realistă. Se verifică în schimb abaterea maximă normalizată:
+\begin{equation}
+\Delta_{l_1,l_2} =
+\max_{t,c}
+\frac{\left|x_{l_1,c}(t)-x_{l_2,c}(t)\right|}{N}.
+\end{equation}
+Dacă această abatere rămâne sub un prag ales, implementările sunt considerate
+compatibile funcțional pentru scopul aplicației.
+
+\testtodo{Verificarea de regresie numerică trebuie rulată pentru același set de
+parametri în R, Julia și Python. Rezultatul de raportat este abaterea maximă
+normalizată între limbaje și verificarea conservării populației pentru fiecare
+model.}
+
+\section{Evaluarea API-ului și a bazei de date}
+\label{sec:evaluare_api_db}
+
+Performanța percepută de utilizator depinde și de API și baza de date. Pentru
+crearea unei simulări, latența API include validarea inputului, citirea primului
+rând epidemiologic, inserarea în \texttt{simulation\_runs} și publicarea în
+Redis. Pentru vizualizarea rezultatului, latența include citirea rândurilor din
+\texttt{simulation\_results}, deserializarea JSONB și construirea răspunsului.
+
+Din acest motiv, benchmarkul numeric trebuie completat cu teste de API:
+\begin{itemize}
+    \item latența endpointului de creare simulare;
+    \item latența endpointului de status;
+    \item latența endpointului de rezultat pentru 30, 90, 180 și 365 puncte;
+    \item dimensiunea răspunsului JSON pentru fiecare model;
+    \item timpul de export CSV.
+\end{itemize}
+
+Aceste teste arată dacă limita sistemului este solverul, baza de date sau
+transportul datelor către frontend.
+
+\testtodo{Pentru această secțiune trebuie măsurate endpointurile reale ale
+API-ului, ideal printr-un script reproductibil. Rezultatele trebuie să includă
+latența mediană, percentila 95, dimensiunea răspunsului și timpul de export CSV
+pentru fiecare model.}
+
+\section{Interpretarea rezultatelor}
+\label{sec:analiza_sintetica}
+
+Evaluarea corectă trebuie să combine trei axe: eroarea numerică, timpul de
+execuție și complexitatea modelului. Un model nu este automat superior doar
+pentru că are eroare mai mică. Dacă obține această eroare cu un număr mare de
+parametri și cu timp de calibrare ridicat, poate fi mai puțin potrivit pentru
+analize rapide. În sens invers, un model simplu și rapid poate fi foarte util
+pentru explorare, dar insuficient pentru întrebări clinice.
+
+În forma curentă, infrastructura de măsurare este prezentă, iar fiecare rulare
+produce metrici persistente. Capitolul definește cadrul de evaluare completă și
+modul în care rezultatele trebuie agregate. Pentru concluzii cantitative finale
+sunt necesare campanii controlate pe configurații hardware documentate; fără
+aceste date, afirmații precum „limbajul X este cel mai rapid” ar fi premature.
+
+\testtodo{Înainte de forma finală a lucrării, această secțiune trebuie
+completată cu un tabel de rezultate agregate și cu o interpretare bazată pe
+valori măsurate. Fără aceste date, concluzia corectă rămâne că sistemul are
+infrastructură de benchmark, nu că un model sau un limbaj este demonstrabil
+superior.}

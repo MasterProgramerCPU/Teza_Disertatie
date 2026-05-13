@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	authmw "github.com/tudorgeana/emedicine-api/internal/api/middleware"
 	"github.com/tudorgeana/emedicine-api/internal/db/repository"
 	"github.com/tudorgeana/emedicine-api/internal/models"
 )
@@ -16,7 +17,12 @@ func NewBenchmarksHandler(benches *repository.BenchmarkRepository) *BenchmarksHa
 }
 
 func (h *BenchmarksHandler) Aggregate(w http.ResponseWriter, r *http.Request) {
-	out, err := h.benches.AggregateByModelAndLanguage(r.Context())
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
+	out, err := h.benches.AggregateByModelAndLanguage(r.Context(), sid)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "aggregate query failure: "+err.Error())
 		return

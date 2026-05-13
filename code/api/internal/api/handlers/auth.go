@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -71,6 +72,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err != nil {
+		log.Printf("register: users.Create error: %v", err)
 		writeError(w, http.StatusInternalServerError, "could not create user")
 		return
 	}
@@ -119,8 +121,10 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusOK, map[string]any{
-		"token":      signed,
-		"expires_at": now.Add(h.jwtExpiry),
-		"user_id":    user.ID,
+		"token":          signed,
+		"expires_at":     now.Add(h.jwtExpiry),
+		"user_id":        user.ID,
+		"email":          user.Email,
+		"is_super_admin": user.IsSuperAdmin,
 	})
 }

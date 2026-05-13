@@ -1,7 +1,8 @@
 """Epidemiological model runner — Python.
 
 Consumes simulation jobs from Redis list ``epimodel:jobs:python`` (BRPOP),
-solves SIDARTH or SIR ODE systems with ``scipy.integrate.solve_ivp`` (RK45),
+solves SIS/SIR/SEIR/SIRS/SIDARTHE ODE systems with
+``scipy.integrate.solve_ivp`` (RK45),
 inserts compartment trajectories into YugabyteDB and records the benchmark
 (wall time, CPU time, peak RSS) into ``benchmarks``.
 """
@@ -49,9 +50,47 @@ def sir_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list
     ]
 
 
-def sidarth_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+def sis_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
     del t
-    s, i, d, a, r, threatened, h = y
+    s, i = y
+    beta = params["beta"]
+    gamma = params["gamma"]
+    infections = beta * s * i / n
+    recoveries = gamma * i
+    return [-infections + recoveries, infections - recoveries]
+
+
+def seir_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+    del t
+    s, e, i, r = y
+    beta = params["beta"]
+    sigma = params["sigma"]
+    gamma = params["gamma"]
+    infections = beta * s * i / n
+    return [
+        -infections,
+        infections - sigma * e,
+        sigma * e - gamma * i,
+        gamma * i,
+    ]
+
+
+def sirs_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+    del t
+    s, i, r = y
+    beta = params["beta"]
+    gamma = params["gamma"]
+    xi = params["xi"]
+    infections = beta * s * i / n
+    recoveries = gamma * i
+    waning = xi * r
+    return [-infections + waning, infections - recoveries, recoveries - waning]
+
+
+def sidarthe_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> list[float]:
+    del t
+    s, i, d, a, r, threatened, h, extinct = y
+    del extinct
     force = (params["alpha"] * i + params["beta"] * d + params["gamma"] * a + params["delta"] * r) / n
     new_infections = s * force
 
@@ -61,16 +100,23 @@ def sidarth_rhs(t: float, y: np.ndarray, params: dict[str, float], n: float) -> 
         params["epsilon"] * i - (params["eta"] + params["rho"]) * d,
         params["zeta"] * i - (params["theta"] + params["mu"] + params["kappa"]) * a,
         params["eta"] * d + params["theta"] * a - (params["nu"] + params["xi"]) * r,
-        params["mu"] * a + params["nu"] * r - params["sigma"] * threatened,
+        params["mu"] * a + params["nu"] * r - (params["sigma"] + params["tau"]) * threatened,
         params["lambda"] * i + params["rho"] * d + params["kappa"] * a + params["xi"] * r + params["sigma"] * threatened,
+        params["tau"] * threatened,
     ]
 
 
 def model_layout(model_type: str) -> tuple[list[str], Any]:
+    if model_type == "sis":
+        return ["s", "i"], sis_rhs
     if model_type == "sir":
         return ["s", "i", "r"], sir_rhs
-    if model_type == "sidarth":
-        return ["s", "i", "d", "a", "r", "t", "h"], sidarth_rhs
+    if model_type == "seir":
+        return ["s", "e", "i", "r"], seir_rhs
+    if model_type == "sirs":
+        return ["s", "i", "r"], sirs_rhs
+    if model_type == "sidarthe":
+        return ["s", "i", "d", "a", "r", "t", "h", "e"], sidarthe_rhs
     raise ValueError(f"unsupported model_type: {model_type}")
 
 
@@ -87,7 +133,7 @@ def _peak_rss_mb() -> float:
 
 def run_simulation(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     sim_id = job["simulation_id"]
-    model_type = job.get("model_type", "sidarth")
+    model_type = job.get("model_type", "sidarthe")
     params = {str(k): float(v) for k, v in job["parameters"].items()}
     initial = {str(k): float(v) for k, v in job["initial"].items()}
     n = float(job["population_n"])

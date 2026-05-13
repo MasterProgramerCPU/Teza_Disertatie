@@ -22,8 +22,9 @@ tranzițiile dintre stări prin ecuații diferențiale. Modelul SIR
 \cite{kermack1927}, rămâne un reper important deoarece permite o analiză
 matematică transparentă. Totuși, pentru epidemii în care testarea, diagnosticul și
 severitatea clinică modifică puternic raportarea, un model cu trei compartimente
-este prea agregat. Din acest motiv, lucrarea folosește SIDARTH ca model principal
-de explorare, păstrând SIR ca model secundar pentru comparații și verificări.
+este prea agregat. Din acest motiv, lucrarea folosește SIDARTHE ca model clinic
+principal, păstrând modelele SIR, SIS, SEIR și SIRS ca repere secundare pentru
+comparații și verificări.
 
 În practica actuală, problema nu se oprește la scrierea ecuațiilor. Datele provin
 din surse eterogene, sunt actualizate frecvent și conțin corecții, goluri sau
@@ -34,21 +35,22 @@ consumul de memorie, modul de integrare cu infrastructura și reproductibilitate
 analizei.
 
 Pornind de la aceste observații, lucrarea propune un sistem e-medicine în care
-modelul SIDARTH este integrat într-un flux complet: ingestie de date
+modelul SIDARTHE este integrat într-un flux complet: ingestie de date
 epidemiologice, execuție asincronă a simulărilor, stocare a rezultatelor și
-vizualizare în interfață web. SIR și variațiunile apropiate rămân utile ca repere
-mai simple, prin care se poate observa ce se pierde sau ce se câștigă atunci când
-modelul introduce compartimente suplimentare.
+vizualizare în interfață web. Modelele SIR, SIS, SEIR și SIRS rămân utile ca
+repere mai simple, prin care se poate observa ce se pierde sau ce se câștigă
+atunci când modelul introduce compartimente suplimentare.
 
 \section{Obiectivele lucrării}
 \label{sec:obiective}
 
 Obiectivul principal este proiectarea unui sistem care leagă explicit modelarea
-matematică de implementarea software. Modelul SIDARTH este tratat ca model de
+matematică de implementarea software. Modelul SIDARTHE este tratat ca model de
 lucru principal, deoarece separă cazurile nedepistate, diagnosticate,
-simptomatice, severe și vindecate. Modelul SIR este analizat în continuare,
-dar rolul său devine acela de reper teoretic și computațional, util pentru
-înțelegerea proprietăților de bază ale modelelor compartimentale.
+simptomatice, severe, vindecate și decedate. Familia
+SIR/SIS/SEIR/SIRS este analizată în continuare, dar rolul său devine acela de
+reper teoretic și computațional, util pentru înțelegerea proprietăților de bază
+ale modelelor compartimentale.
 
 Al doilea obiectiv este implementarea aceluiași contract de simulare în R, Julia
 și Python, folosind bibliotecile uzuale ale fiecărui ecosistem pentru rezolvarea
@@ -56,10 +58,20 @@ ecuațiilor diferențiale. Comparația urmărește atât compatibilitatea rezult
 cât și costurile practice ale execuției: timp wall-clock, timp CPU, memorie și
 integrare cu baza de date.
 
+Al treilea obiectiv este definirea unei metodologii explicite de comparație și
+calibrare. Modelele nu sunt evaluate doar vizual, ci prin operatori de observație,
+metrici de eroare precum MAE și RMSE, separare între fereastra de calibrare și
+fereastra de test și raportarea costului software asociat fiecărei rulări.
+
+Un obiectiv suplimentar este integrarea unei extensii predictive bazate pe LSTM.
+Aceasta este tratată ca model de serie temporală pentru predicții numerice pe
+termen scurt, implementat prin runner dedicat, și ca posibilă corecție a
+reziduurilor produse de modelele compartimentale calibrate.
+
 În paralel, lucrarea construiește infrastructura necesară rulării acestor
 experimente într-un cadru accesibil prin web. API-ul Go, baza de date
-YugabyteDB, coada Redis și interfața Vue.js sunt tratate ca părți ale aceluiași
-instrument de cercetare, nu ca module izolate.
+YugabyteDB, coada Redis și cele două interfețe Vue.js sunt tratate ca părți ale
+aceluiași instrument de cercetare, nu ca module izolate.
 
 \section{Contribuții originale}
 \label{sec:contributii}
@@ -77,20 +89,25 @@ bază de date și salvează metrici comparabile. Această disciplină de integra
 necesară pentru a evita comparațiile informale între limbaje, care pot fi ușor
 influențate de diferențe de I/O, inițializare sau serializare.
 
-În fine, sistemul web rezultat permite folosirea modelelor într-un flux apropiat de
-un scenariu real de analiză: încărcarea unui set de date, alegerea modelului și a
-parametrilor, execuția asincronă, vizualizarea traiectoriilor și compararea
-rulărilor.
+O altă contribuție este separarea între comparația epidemiologică și comparația
+software. Lucrarea definește operatori de observație pentru a transforma stările
+interne ale modelelor în serii comparabile cu datele reale și introduce un cadru
+de calibrare care poate fi extins ulterior într-un job dedicat în aplicație.
+
+În fine, sistemul web rezultat permite folosirea modelelor într-un flux apropiat
+de un scenariu real de analiză colaborativă: crearea unui studiu, acordarea
+rolurilor, încărcarea unui set de date, alegerea modelului și a parametrilor,
+execuția asincronă, vizualizarea traiectoriilor și compararea rulărilor.
 
 \section{Structura lucrării}
 \label{sec:structura}
 
-Lucrarea este organizată în opt capitole.
+Lucrarea este organizată în zece capitole.
 
 \textbf{Capitolul~\ref{ch:epidemiologie}} (\emph{Epidemiologie Computațională și
 Modelarea Matematică}) prezintă fundamentele epidemiologiei matematice. Sunt
-introduse modelele compartimentale (SI, SIS, SIR, SEIR, SIRS), apoi este prezentat
-modelul SIDARTH ca model principal de explorare. Modelul SIR este păstrat pentru
+introduse modelele compartimentale (SIR, SIS, SEIR, SIRS), apoi este prezentat
+modelul SIDARTHE ca model clinic principal. Modelul SIR este păstrat pentru
 analiza matematică de bază, deoarece permite discutarea clară a pozitivității,
 conservării populației și pragului epidemic $\Rzero$. Capitolul include și o
 trecere în revistă a metodelor numerice utilizate pentru rezolvarea sistemelor de
@@ -99,25 +116,37 @@ ecuații diferențiale ordinare.
 \textbf{Capitolul~\ref{ch:tehnologii}} (\emph{Tehnologii și Instrumente Utilizate})
 explică de ce au fost alese limbajele R, Julia și Python, baza de date
 YugabyteDB, orchestrarea containerelor prin Kubernetes, backend-ul Go și
-frontend-ul Vue.js.
+frontend-urile Vue.js.
 
 \textbf{Capitolul~\ref{ch:arhitectura}} (\emph{Arhitectura Sistemului E-Medicine})
 descrie arhitectura globală a sistemului, cerințele funcționale și non-funcționale,
 schema bazei de date distribuite, arhitectura API-ului backend și structura
 componentelor frontend.
 
-\textbf{Capitolul~\ref{ch:implementare}} (\emph{Implementarea Modelelor SIDARTH și
-SIR}) detaliază implementările practice ale modelelor în fiecare limbaj de
+\textbf{Capitolul~\ref{ch:implementare}} (\emph{Implementarea modelelor
+compartimentale}) detaliază implementările practice ale modelelor în fiecare limbaj de
 programare, inclusiv seturile de date utilizate, parametrii, schema generică de
 rezultate și interfața de integrare cu API-ul Go.
 
-\textbf{Capitolul~\ref{ch:evaluare}} (\emph{Evaluarea Performanței și
-Scalabilității}) prezintă metodologia de benchmarking, configurațiile hardware
-utilizate și rezultatele comparative ale evaluărilor de performanță.
+\textbf{Capitolul~\ref{ch:lstm}} (\emph{Predicție Epidemiologică folosind Rețele
+LSTM}) prezintă rolul unei componente LSTM pentru prognoza seriilor temporale,
+formularea problemei de predicție, integrarea cu modelele compartimentale și
+evaluarea unui model hibrid compartimental--LSTM.
+
+\textbf{Capitolul~\ref{ch:comparatie_calibrare}} (\emph{Comparația Modelelor,
+Analiză Numerică și Calibrare}) introduce tabelul comparativ al modelelor,
+operatorii de observație, metricile MAE/RMSE și formularea calibrării
+parametrilor ca problemă de optimizare.
+
+\textbf{Capitolul~\ref{ch:evaluare}} (\emph{Evaluarea Software, Performanței și
+Scalabilității}) prezintă metodologia de benchmarking, matricea experimentală,
+metricile colectate, verificările de regresie numerică și evaluarea API-ului și a
+bazei de date.
 
 \textbf{Capitolul~\ref{ch:aplicatie}} (\emph{Aplicația Web E-Medicine})
-detaliază implementarea aplicației web, documentând atât backend-ul Go, cât și
-frontend-ul Vue.js, cu descrierea funcționalităților și a fluxurilor de utilizare.
+detaliază implementarea aplicației web, documentând backend-ul Go, aplicația
+principală Vue.js și consola Vue.js pentru super-admini, cu descrierea
+funcționalităților și a fluxurilor de utilizare.
 
 \textbf{Capitolul~\ref{ch:concluzii}} (\emph{Concluzii și Direcții Viitoare})
 sintetizează contribuțiile lucrării, discută limitele sistemului și identifică

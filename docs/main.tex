@@ -1,4 +1,4 @@
-\documentclass[12pt, a4paper, oneside]{report}
+\documentclass[10pt, a4paper, oneside, twocolumn]{report}
 
 % ============================================================
 % ENCODING & LANGUAGE
@@ -21,12 +21,14 @@
 % LAYOUT
 % ============================================================
 \usepackage[a4paper,
-            top=2.5cm, bottom=2.5cm,
-            left=3cm,  right=2.5cm]{geometry}
+            top=2.0cm, bottom=2.2cm,
+            left=1.6cm,  right=1.6cm]{geometry}
 \usepackage{setspace}
-\onehalfspacing
+\setstretch{1.05}
 \usepackage{microtype}
 \usepackage{emptypage}
+\setlength{\columnsep}{0.75cm}
+\raggedbottom
 
 % ============================================================
 % GRAPHICS & FIGURES
@@ -55,6 +57,8 @@
 % ============================================================
 \usepackage{listings}
 \usepackage{xcolor}
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos,textsize=footnotesize]{todonotes}
 
 \definecolor{clrBackground}{RGB}{248,248,248}
 \definecolor{clrComment}{RGB}{0,128,0}
@@ -156,10 +160,10 @@
 % HYPERLINKS
 % ============================================================
 \usepackage[hidelinks,
-            pdftitle={Sistem E-Medicine bazat pe Modelul SIDARTH},
+            pdftitle={Sistem E-Medicine cu modele compartimentale din familia SIR},
             pdfauthor={},
             pdfsubject={Lucrare de disertație},
-            pdfkeywords={SIDARTH, SIR, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
+            pdfkeywords={SIDARTHE, SIR, SIS, SEIR, SIRS, calibrare parametri, LSTM, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
             ]{hyperref}
 \usepackage[capitalise]{cleveref}
 
@@ -209,11 +213,15 @@
 \newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\testtodo}[1]{%
+    \todo[inline,color=yellow!20]{\textbf{Necesită testare experimentală:} #1}%
+}
 
 % ============================================================
 % DOCUMENT
 % ============================================================
 \begin{document}
+\onecolumn
 \hypersetup{pageanchor=false}
 
 %------------------------------------------------------------
@@ -233,7 +241,7 @@
     {\LARGE\bfseries
         Sistem E-Medicine pentru Analizarea\\[0.3cm]
         și Monitorizarea Datelor Epidemiologice\\[0.3cm]
-        bazat pe Modelul Matematic SIDARTH
+        cu Modele Compartimentale din Familia SIR
     }\\[0.4cm]
     \rule{\textwidth}{1.5pt}
 
@@ -292,15 +300,18 @@
 \cleardoublepage
 \pagenumbering{arabic}
 \setcounter{page}{1}
+\twocolumn
 
 \input{chapters/01_introducere}
 \input{chapters/02_epidemiologie_si_modelare}
 \input{chapters/03_tehnologii}
 \input{chapters/04_arhitectura_sistemului}
 \input{chapters/05_implementare_modele}
-\input{chapters/06_evaluare_performanta}
-\input{chapters/07_aplicatia_web}
-\input{chapters/08_concluzii}
+\input{chapters/06_predictie_lstm}
+\input{chapters/07_comparatie_si_calibrare}
+\input{chapters/08_evaluare_performanta}
+\input{chapters/09_aplicatia_web}
+\input{chapters/10_concluzii}
 
 %------------------------------------------------------------
 % BIBLIOGRAFIE
@@ -315,9 +326,11 @@
 % ANEXE
 %------------------------------------------------------------
 \appendix
+\onecolumn
 \input{appendices/A_cod_r}
 \input{appendices/B_cod_julia}
 \input{appendices/C_cod_python}
+\input{appendices/D_cod_lstm}
 \input{appendices/E_schema_bd}
 \input{appendices/F_kubernetes}
 \input{appendices/G_api_rest}

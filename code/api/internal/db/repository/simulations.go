@@ -27,16 +27,16 @@ func (r *SimulationRepository) Create(ctx context.Context, run *models.Simulatio
 	}
 
 	const q = `
-		INSERT INTO simulation_runs (user_id, dataset_id, model_type, language, parameters, population_n, t_max, status)
-		VALUES ($1, $2, $3, $4, $5::jsonb, $6, $7, 'pending')
-		RETURNING id, user_id, dataset_id, model_type, language, parameters, population_n, t_max, status, created_at`
+		INSERT INTO simulation_runs (user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, status)
+		VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, 'pending')
+		RETURNING id, user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, status, created_at`
 
 	var out models.SimulationRun
 	var params []byte
 	err = r.pool.QueryRow(ctx, q,
-		run.UserID, run.DatasetID, run.ModelType, run.Language, paramsJSON, run.PopulationN, run.TMax,
+		run.UserID, run.StudyID, run.DatasetID, run.ModelType, run.Language, paramsJSON, run.PopulationN, run.TMax,
 	).Scan(
-		&out.ID, &out.UserID, &out.DatasetID, &out.ModelType, &out.Language, &params,
+		&out.ID, &out.UserID, &out.StudyID, &out.DatasetID, &out.ModelType, &out.Language, &params,
 		&out.PopulationN, &out.TMax, &out.Status, &out.CreatedAt,
 	)
 	if err != nil {
@@ -48,11 +48,11 @@ func (r *SimulationRepository) Create(ctx context.Context, run *models.Simulatio
 	return &out, nil
 }
 
-func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([]models.SimulationRun, error) {
+func (r *SimulationRepository) ListByStudy(ctx context.Context, studyID uuid.UUID) ([]models.SimulationRun, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT id, user_id, dataset_id, model_type, language, parameters, population_n, t_max,
+		SELECT id, user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max,
 		       status, error_message, created_at, completed_at
-		FROM simulation_runs WHERE user_id = $1 ORDER BY created_at DESC`, userID)
+		FROM simulation_runs WHERE study_id = $1 ORDER BY created_at DESC`, studyID)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID)
 		var s models.SimulationRun
 		var params []byte
 		if err := rows.Scan(
-			&s.ID, &s.UserID, &s.DatasetID, &s.ModelType, &s.Language, &params,
+			&s.ID, &s.UserID, &s.StudyID, &s.DatasetID, &s.ModelType, &s.Language, &params,
 			&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
 		); err != nil {
 			return nil, err
@@ -76,16 +76,16 @@ func (r *SimulationRepository) ListByUser(ctx context.Context, userID uuid.UUID)
 	return out, rows.Err()
 }
 
-func (r *SimulationRepository) Get(ctx context.Context, userID, id uuid.UUID) (*models.SimulationRun, error) {
+func (r *SimulationRepository) Get(ctx context.Context, studyID, id uuid.UUID) (*models.SimulationRun, error) {
 	var s models.SimulationRun
 	var params []byte
 	err := r.pool.QueryRow(ctx, `
-		SELECT id, user_id, dataset_id, model_type, language, parameters, population_n, t_max,
+		SELECT id, user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max,
 		       status, error_message, created_at, completed_at
-		FROM simulation_runs WHERE id = $1 AND user_id = $2`,
-		id, userID,
+		FROM simulation_runs WHERE id = $1 AND study_id = $2`,
+		id, studyID,
 	).Scan(
-		&s.ID, &s.UserID, &s.DatasetID, &s.ModelType, &s.Language, &params,
+		&s.ID, &s.UserID, &s.StudyID, &s.DatasetID, &s.ModelType, &s.Language, &params,
 		&s.PopulationN, &s.TMax, &s.Status, &s.ErrorMessage, &s.CreatedAt, &s.CompletedAt,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {

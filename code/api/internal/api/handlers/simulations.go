@@ -3,10 +3,12 @@ package handlers
 import (
 	"encoding/csv"
 	"errors"
+	"math"
 	"net/http"
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -48,7 +50,25 @@ type createSimulationReq struct {
 }
 
 var defaultParameters = map[models.ModelType]map[string]float64{
-	models.ModelSIDARTH: {
+	models.ModelSIS: {
+		"beta":  0.3,
+		"gamma": 0.0714,
+	},
+	models.ModelSIR: {
+		"beta":  0.3,
+		"gamma": 0.0714,
+	},
+	models.ModelSEIR: {
+		"beta":  0.3,
+		"sigma": 0.1923,
+		"gamma": 0.0714,
+	},
+	models.ModelSIRS: {
+		"beta":  0.3,
+		"gamma": 0.0714,
+		"xi":    0.0055,
+	},
+	models.ModelSIDARTHE: {
 		"alpha":   0.57,
 		"beta":    0.011,
 		"gamma":   0.456,
@@ -64,20 +84,27 @@ var defaultParameters = map[models.ModelType]map[string]float64{
 		"nu":      0.027,
 		"xi":      0.017,
 		"sigma":   0.017,
+		"tau":     0.010,
 	},
-	models.ModelSIR: {
-		"beta":  0.3,
-		"gamma": 0.0714,
+	models.ModelLSTM: {
+		"lookback":      14,
+		"hidden_size":   12,
+		"epochs":        150,
+		"learning_rate": 0.01,
 	},
 }
 
 var requiredParameters = map[models.ModelType][]string{
-	models.ModelSIDARTH: {
+	models.ModelSIS:  {"beta", "gamma"},
+	models.ModelSIR:  {"beta", "gamma"},
+	models.ModelSEIR: {"beta", "sigma", "gamma"},
+	models.ModelSIRS: {"beta", "gamma", "xi"},
+	models.ModelSIDARTHE: {
 		"alpha", "beta", "gamma", "delta",
 		"epsilon", "zeta", "lambda",
-		"eta", "rho", "theta", "mu", "kappa", "nu", "xi", "sigma",
+		"eta", "rho", "theta", "mu", "kappa", "nu", "xi", "sigma", "tau",
 	},
-	models.ModelSIR: {"beta", "gamma"},
+	models.ModelLSTM: {"lookback", "hidden_size", "epochs", "learning_rate"},
 }
 
 func normalizedParameters(model models.ModelType, input map[string]float64) (map[string]float64, error) {
@@ -97,37 +124,85 @@ func normalizedParameters(model models.ModelType, input map[string]float64) (map
 			return nil, errors.New("parameter must be >= 0: " + k)
 		}
 	}
-	if model == models.ModelSIR && (out["beta"] <= 0 || out["gamma"] <= 0) {
-		return nil, errors.New("beta and gamma must be > 0 for SIR")
+	switch model {
+	case models.ModelSIS, models.ModelSIR, models.ModelSEIR, models.ModelSIRS:
+		if out["beta"] <= 0 {
+			return nil, errors.New("beta must be > 0 for " + string(model))
+		}
 	}
-	if model == models.ModelSIDARTH && out["alpha"]+out["beta"]+out["gamma"]+out["delta"] <= 0 {
-		return nil, errors.New("at least one SIDARTH transmission parameter must be > 0")
+	switch model {
+	case models.ModelSIS, models.ModelSIR, models.ModelSEIR, models.ModelSIRS:
+		if out["gamma"] <= 0 {
+			return nil, errors.New("gamma must be > 0 for " + string(model))
+		}
+	}
+	if model == models.ModelSEIR && out["sigma"] <= 0 {
+		return nil, errors.New("sigma must be > 0 for seir")
+	}
+	if model == models.ModelSIDARTHE && out["alpha"]+out["beta"]+out["gamma"]+out["delta"] <= 0 {
+		return nil, errors.New("at least one SIDARTHE transmission parameter must be > 0")
+	}
+	if model == models.ModelLSTM {
+		if err := validateIntegerParameter(out, "lookback", 2, 90); err != nil {
+			return nil, err
+		}
+		if err := validateIntegerParameter(out, "hidden_size", 1, 128); err != nil {
+			return nil, err
+		}
+		if err := validateIntegerParameter(out, "epochs", 1, 5000); err != nil {
+			return nil, err
+		}
+		if out["learning_rate"] <= 0 || out["learning_rate"] > 1 {
+			return nil, errors.New("learning_rate must be in (0, 1] for lstm")
+		}
 	}
 	return out, nil
 }
 
+func validateIntegerParameter(params map[string]float64, key string, min, max int) error {
+	value := params[key]
+	if value != math.Trunc(value) {
+		return errors.New(key + " must be an integer")
+	}
+	if value < float64(min) || value > float64(max) {
+		return errors.New(key + " must be between " + strconv.Itoa(min) + " and " + strconv.Itoa(max))
+	}
+	return nil
+}
+
 func initialCompartments(model models.ModelType, popN int64, first *models.EpidemiologicalRecord) map[string]float64 {
 	i0 := float64(first.Infected)
-	h0 := 0.0
+	removed0 := 0.0
 	if first.Recovered != nil {
-		h0 = float64(*first.Recovered)
+		removed0 = float64(*first.Recovered)
 	}
-	s0 := float64(popN) - i0 - h0
+	s0 := float64(popN) - i0 - removed0
 	if first.Susceptible != nil {
 		s0 = float64(*first.Susceptible)
 	}
 
-	if model == models.ModelSIR {
-		return map[string]float64{"s": s0, "i": i0, "r": h0}
-	}
-	return map[string]float64{
-		"s": s0,
-		"i": i0,
-		"d": 0,
-		"a": 0,
-		"r": 0,
-		"t": 0,
-		"h": h0,
+	switch model {
+	case models.ModelSIS:
+		return map[string]float64{"s": s0 + removed0, "i": i0}
+	case models.ModelSIR, models.ModelSIRS:
+		return map[string]float64{"s": s0, "i": i0, "r": removed0}
+	case models.ModelSEIR:
+		return map[string]float64{"s": s0, "e": 0, "i": i0, "r": removed0}
+	case models.ModelSIDARTHE:
+		return map[string]float64{
+			"s": s0,
+			"i": i0,
+			"d": 0,
+			"a": 0,
+			"r": 0,
+			"t": 0,
+			"h": removed0,
+			"e": 0,
+		}
+	case models.ModelLSTM:
+		return map[string]float64{"observed": i0}
+	default:
+		return map[string]float64{"s": s0, "i": i0, "r": removed0}
 	}
 }
 
@@ -141,6 +216,11 @@ func validateInitialCompartments(initial map[string]float64) error {
 }
 
 func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	uid, _ := authmw.UserIDFrom(r.Context())
 
 	var req createSimulationReq
@@ -154,10 +234,10 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if req.ModelType == "" {
-		req.ModelType = string(models.ModelSIDARTH)
+		req.ModelType = string(models.ModelSIDARTHE)
 	}
 	if !models.ValidModelType(req.ModelType) {
-		writeError(w, http.StatusBadRequest, "model_type must be one of sidarth, sir")
+		writeError(w, http.StatusBadRequest, "model_type must be one of "+supportedModelTypesString())
 		return
 	}
 	if !models.ValidLanguage(req.Language) {
@@ -169,18 +249,27 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	modelType := models.ModelType(req.ModelType)
+	if modelType == models.ModelLSTM && models.Language(req.Language) != models.LangPython {
+		writeError(w, http.StatusBadRequest, "lstm is executed by the dedicated LSTM runner and must use language=python")
+		return
+	}
 	parameters, err := normalizedParameters(modelType, req.Parameters)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if _, err := h.datasets.Get(r.Context(), uid, req.DatasetID); err != nil {
+	dataset, err := h.datasets.Get(r.Context(), sid, req.DatasetID)
+	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {
-			writeError(w, http.StatusNotFound, "dataset not found")
+			writeError(w, http.StatusNotFound, "dataset not found in study")
 			return
 		}
 		writeError(w, http.StatusInternalServerError, "dataset lookup failure")
+		return
+	}
+	if modelType == models.ModelLSTM && dataset.RecordCount <= int(parameters["lookback"]) {
+		writeError(w, http.StatusBadRequest, "dataset must contain more records than lookback for lstm")
 		return
 	}
 
@@ -202,6 +291,7 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	run := &models.SimulationRun{
 		UserID:      uid,
+		StudyID:     sid,
 		DatasetID:   req.DatasetID,
 		ModelType:   modelType,
 		Language:    models.Language(req.Language),
@@ -230,7 +320,11 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Initial:      initial,
 		DBDSN:        dsn,
 	}
-	if err := h.dispatcher.Publish(r.Context(), req.Language, msg); err != nil {
+	dispatchTarget := req.Language
+	if modelType == models.ModelLSTM {
+		dispatchTarget = "lstm"
+	}
+	if err := h.dispatcher.Publish(r.Context(), dispatchTarget, msg); err != nil {
 		writeError(w, http.StatusInternalServerError, "could not dispatch job: "+err.Error())
 		return
 	}
@@ -239,8 +333,12 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SimulationsHandler) List(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
-	out, err := h.sims.ListByUser(r.Context(), uid)
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
+	out, err := h.sims.ListByStudy(r.Context(), sid)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "could not list simulations")
 		return
@@ -252,13 +350,17 @@ func (h *SimulationsHandler) List(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SimulationsHandler) Get(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	s, err := h.sims.Get(r.Context(), uid, id)
+	s, err := h.sims.Get(r.Context(), sid, id)
 	if errors.Is(err, repository.ErrNotFound) {
 		writeError(w, http.StatusNotFound, "simulation not found")
 		return
@@ -271,13 +373,17 @@ func (h *SimulationsHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SimulationsHandler) Results(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	if _, err := h.sims.Get(r.Context(), uid, id); err != nil {
+	if _, err := h.sims.Get(r.Context(), sid, id); err != nil {
 		writeError(w, http.StatusNotFound, "simulation not found")
 		return
 	}
@@ -293,13 +399,17 @@ func (h *SimulationsHandler) Results(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *SimulationsHandler) Export(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	if _, err := h.sims.Get(r.Context(), uid, id); err != nil {
+	if _, err := h.sims.Get(r.Context(), sid, id); err != nil {
 		writeError(w, http.StatusNotFound, "simulation not found")
 		return
 	}
@@ -332,7 +442,13 @@ func resultCompartmentKeys(rows []models.SimulationResult) []string {
 			seen[key] = true
 		}
 	}
-	preferred := []string{"s", "i", "d", "a", "r", "t", "h"}
+	preferred := []string{"s", "i", "d", "a", "r", "t", "h", "e"}
+	if seen["e"] && !seen["d"] && !seen["a"] && !seen["t"] && !seen["h"] {
+		preferred = []string{"s", "e", "i", "r"}
+	}
+	if seen["observed"] || seen["fitted"] || seen["predicted"] {
+		preferred = []string{"observed", "fitted", "predicted"}
+	}
 	var keys []string
 	for _, key := range preferred {
 		if seen[key] {
@@ -346,4 +462,12 @@ func resultCompartmentKeys(rows []models.SimulationResult) []string {
 	}
 	sort.Strings(extra)
 	return append(keys, extra...)
+}
+
+func supportedModelTypesString() string {
+	types := make([]string, 0, len(models.SupportedModelTypes))
+	for _, model := range models.SupportedModelTypes {
+		types = append(types, string(model))
+	}
+	return strings.Join(types, ", ")
 }

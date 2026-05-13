@@ -3,9 +3,10 @@
 # (https://kubernetes.github.io/ingress-nginx/deploy/).
 #
 # Pentru testare locală, mapează în /etc/hosts:
-#   <IP-NODE-INGRESS>  epimodel.local
+#   127.0.0.1  sir-workbench.ro
+#   127.0.0.1  admin.sir-workbench.ro
 #
-# Pentru producție, înlocuiește host-ul cu un FQDN real și adaugă o
+# Pentru producție, înlocuiește host-urile cu FQDN-uri reale și adaugă o
 # secțiune `tls:` cu un Secret de tip kubernetes.io/tls (cert-manager etc.).
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -21,7 +22,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: epimodel.local
+    # Host principal — aplicația user-facing + API
+    - host: sir-workbench.ro
       http:
         paths:
           - path: /api
@@ -36,5 +38,25 @@ spec:
             backend:
               service:
                 name: frontend
+                port:
+                  number: 80
+    # Host dedicat pentru consola super-admin
+    - host: admin.sir-workbench.ro
+      http:
+        paths:
+          # API-ul rămâne accesibil și de pe sub-domain (apelurile XHR
+          # din admin SPA folosesc /api/... relativ la admin.sir-workbench.ro).
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-admin
                 port:
                   number: 80

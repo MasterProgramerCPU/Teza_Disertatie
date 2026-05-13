@@ -85,20 +85,24 @@ async function submit() {
 
 <style scoped>
 .dropzone {
-  border: 2px dashed var(--c-border);
-  border-radius: var(--radius);
+  border: 1px inset #808080;
+  border-radius: 0;
   padding: 24px;
   text-align: center;
   transition: border-color 0.15s, background 0.15s;
   position: relative;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.6) 0 6px, rgba(236, 233, 216, 0.8) 6px 12px),
+    var(--c-surface-soft);
 }
 .dropzone.over {
   border-color: var(--c-primary);
-  background: #ddf4ff;
+  background: #dbeafe;
 }
 .dropzone.has {
   border-color: var(--c-success);
   border-style: solid;
+  background: #e1f5d6;
 }
 .dropzone input[type="file"] {
   position: absolute;

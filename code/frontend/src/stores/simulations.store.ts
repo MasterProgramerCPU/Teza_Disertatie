@@ -6,8 +6,17 @@ import type {
   SimulationResultPoint,
   SimulationRun,
 } from "@/types";
+import { useStudiesStore } from "@/stores/studies.store";
 
 const TERMINAL = new Set(["completed", "failed"]);
+
+function basePath(): string {
+  const studies = useStudiesStore();
+  if (!studies.currentStudyId) {
+    throw new Error("no study selected");
+  }
+  return `/studies/${studies.currentStudyId}/simulations`;
+}
 
 export const useSimulationsStore = defineStore("simulations", () => {
   const items = ref<SimulationRun[]>([]);
@@ -18,7 +27,7 @@ export const useSimulationsStore = defineStore("simulations", () => {
     loading.value = true;
     error.value = null;
     try {
-      items.value = await api.get<SimulationRun[]>("/simulations");
+      items.value = (await api.get<SimulationRun[] | null>(basePath())) ?? [];
     } catch (e) {
       error.value = (e as Error).message;
     } finally {
@@ -27,15 +36,15 @@ export const useSimulationsStore = defineStore("simulations", () => {
   }
 
   async function get(id: string): Promise<SimulationRun> {
-    return api.get<SimulationRun>(`/simulations/${id}`);
+    return api.get<SimulationRun>(`${basePath()}/${id}`);
   }
 
   async function results(id: string): Promise<SimulationResultPoint[]> {
-    return api.get<SimulationResultPoint[]>(`/simulations/${id}/results`);
+    return api.get<SimulationResultPoint[]>(`${basePath()}/${id}/results`);
   }
 
   async function create(payload: CreateSimulationPayload): Promise<SimulationRun> {
-    const run = await api.post<SimulationRun>("/simulations", payload);
+    const run = await api.post<SimulationRun>(basePath(), payload);
     items.value = [run, ...items.value];
     return run;
   }
@@ -60,7 +69,7 @@ export const useSimulationsStore = defineStore("simulations", () => {
   }
 
   async function exportCSV(id: string): Promise<Blob> {
-    return api.getBlob(`/simulations/${id}/export`);
+    return api.getBlob(`${basePath()}/${id}/export`);
   }
 
   return { items, loading, error, fetchAll, get, results, create, pollUntilDone, exportCSV };

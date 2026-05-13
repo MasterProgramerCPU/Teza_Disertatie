@@ -1,12 +1,15 @@
 \babel@toc {romanian}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagrama de flux a compartimentelor modelului SIR. Fluxul $\beta SI/N$ reprezintă rata de noi infecții, iar $\gamma I$ reprezintă rata de recuperare.}}{10}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Diagrama de flux a compartimentelor modelului SIR. Fluxul $\beta SI/N$ reprezintă rata de noi infecții, iar $\gamma I$ reprezintă rata de recuperare.}}{5}{figure.caption.6}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către SPA sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}}{30}{figure.caption.23}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama entitate-relație a bazei de date. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit {FK}; raportul de cardinalitate 1\,:\,N este indicat pe fiecare relație.}}{32}{figure.caption.24}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Topologia cluster-ului Kubernetes cu 3 noduri control plane HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform prin \texttt {podAntiAffinity}, garantând că pierderea unui worker afectează cel mult o replică \texttt {yb-master} și o replică \texttt {yb-tserver} --- în limita toleranței quorum-ului Raft.}}{40}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către cele două SPA-uri sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}}{16}{figure.caption.23}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Diagrama entitate-relație a bazei de date curente. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit {FK}. Tabelele \texttt {datasets} și \texttt {simulation\_runs} sunt scope-uite pe \texttt {study\_id}, iar tabela \texttt {study\_members} definește rolul fiecărui utilizator într-un studiu.}}{18}{figure.caption.24}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Topologia cluster-ului Kubernetes cu 3 noduri control plane HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform prin \texttt {podAntiAffinity}, garantând că pierderea unui worker afectează cel mult o replică \texttt {yb-master} și o replică \texttt {yb-tserver} --- în limita toleranței quorum-ului Raft.}}{22}{figure.caption.27}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

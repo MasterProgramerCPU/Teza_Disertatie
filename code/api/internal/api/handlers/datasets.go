@@ -28,8 +28,12 @@ func NewDatasetsHandler(datasets *repository.DatasetRepository, maxUpload int64)
 }
 
 func (h *DatasetsHandler) List(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
-	out, err := h.datasets.ListByUser(r.Context(), uid)
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
+	out, err := h.datasets.ListByStudy(r.Context(), sid)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "could not list datasets")
 		return
@@ -41,13 +45,17 @@ func (h *DatasetsHandler) List(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DatasetsHandler) Get(w http.ResponseWriter, r *http.Request) {
-	uid, _ := authmw.UserIDFrom(r.Context())
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	d, err := h.datasets.Get(r.Context(), uid, id)
+	d, err := h.datasets.Get(r.Context(), sid, id)
 	if errors.Is(err, repository.ErrNotFound) {
 		writeError(w, http.StatusNotFound, "dataset not found")
 		return
@@ -60,13 +68,27 @@ func (h *DatasetsHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DatasetsHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	uid, _ := authmw.UserIDFrom(r.Context())
+	role, _ := authmw.StudyRoleFrom(r.Context())
+
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	err = h.datasets.Delete(r.Context(), uid, id)
+
+	// Admin sterge orice. Contributor sterge doar dataseturile proprii.
+	var ownerFilter *uuid.UUID
+	if role == models.RoleContributor {
+		ownerFilter = &uid
+	}
+
+	err = h.datasets.Delete(r.Context(), sid, id, ownerFilter)
 	if errors.Is(err, repository.ErrNotFound) {
 		writeError(w, http.StatusNotFound, "dataset not found")
 		return
@@ -79,6 +101,11 @@ func (h *DatasetsHandler) Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *DatasetsHandler) Create(w http.ResponseWriter, r *http.Request) {
+	sid, ok := authmw.StudyIDFrom(r.Context())
+	if !ok {
+		writeError(w, http.StatusBadRequest, "missing study context")
+		return
+	}
 	uid, _ := authmw.UserIDFrom(r.Context())
 
 	if err := r.ParseMultipartForm(h.maxUploadBytes); err != nil {
@@ -110,7 +137,7 @@ func (h *DatasetsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	d, err := h.datasets.Create(r.Context(), uid, name, disease, records)
+	d, err := h.datasets.Create(r.Context(), sid, uid, name, disease, records)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "could not save dataset: "+err.Error())
 		return

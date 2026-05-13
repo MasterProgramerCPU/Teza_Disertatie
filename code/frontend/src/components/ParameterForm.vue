@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, watch } from "vue";
-import { defaultParameters, MODEL_LABELS, MODEL_PARAMETER_ORDER, PARAMETER_LABELS } from "@/model-presets";
+import { defaultParameters, MODEL_OPTIONS, MODEL_PARAMETER_ORDER, PARAMETER_LABELS } from "@/model-presets";
 import type { Language, ModelType } from "@/types";
 
 interface Model {
@@ -23,11 +23,13 @@ watch(() => props.modelValue, (v) => Object.assign(local, v));
 
 watch(() => local.model_type, (modelType) => {
   local.parameters = defaultParameters(modelType);
+  if (modelType === "lstm") local.language = "python";
 });
 
 const parameterKeys = computed(() => MODEL_PARAMETER_ORDER[local.model_type]);
+const languageDisabled = computed(() => props.disabled || local.model_type === "lstm");
 const r0 = computed(() => {
-  if (local.model_type !== "sir") return null;
+  if (!["sis", "sir", "seir", "sirs"].includes(local.model_type)) return null;
   const beta = local.parameters.beta;
   const gamma = local.parameters.gamma;
   return gamma > 0 ? (beta / gamma).toFixed(2) : "—";
@@ -40,17 +42,21 @@ const r0 = computed(() => {
       <div class="flex-1">
         <label>Model</label>
         <select v-model="local.model_type" :disabled="disabled">
-          <option value="sidarth">{{ MODEL_LABELS.sidarth }}</option>
-          <option value="sir">{{ MODEL_LABELS.sir }}</option>
+          <option v-for="model in MODEL_OPTIONS" :key="model.value" :value="model.value">
+            {{ model.label }}
+          </option>
         </select>
       </div>
       <div class="flex-1">
         <label>Limbaj</label>
-        <select v-model="local.language" :disabled="disabled">
+        <select v-model="local.language" :disabled="languageDisabled">
           <option value="python">Python</option>
           <option value="r">R</option>
           <option value="julia">Julia</option>
         </select>
+        <small v-if="local.model_type === 'lstm'" class="muted">
+          LSTM este executat de runner-ul dedicat <code>runner-lstm</code>.
+        </small>
       </div>
       <div class="flex-1">
         <label>t_max (zile)</label>
@@ -78,6 +84,10 @@ const r0 = computed(() => {
 .parameter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  gap: 10px;
+  padding: 10px;
+  border: 1px inset #ffffff;
+  background: #d6d1bd;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff;
 }
 </style>

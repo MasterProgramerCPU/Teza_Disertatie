@@ -10,16 +10,60 @@ type User struct {
 	ID           uuid.UUID `json:"id"`
 	Email        string    `json:"email"`
 	PasswordHash string    `json:"-"`
+	IsSuperAdmin bool      `json:"is_super_admin"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Dataset struct {
 	ID          uuid.UUID `json:"id"`
 	UserID      uuid.UUID `json:"user_id"`
+	StudyID     uuid.UUID `json:"study_id"`
 	Name        string    `json:"name"`
 	DiseaseCode string    `json:"disease_code"`
 	UploadedAt  time.Time `json:"uploaded_at"`
 	RecordCount int       `json:"record_count"`
+}
+
+type Study struct {
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	DiseaseCode string    `json:"disease_code"`
+	Description string    `json:"description,omitempty"`
+	CreatedBy   uuid.UUID `json:"created_by"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+type StudyRole string
+
+const (
+	RoleAdmin       StudyRole = "admin"
+	RoleResearcher  StudyRole = "researcher"
+	RoleContributor StudyRole = "contributor"
+	RoleViewer      StudyRole = "viewer"
+)
+
+func ValidStudyRole(s string) bool {
+	switch StudyRole(s) {
+	case RoleAdmin, RoleResearcher, RoleContributor, RoleViewer:
+		return true
+	}
+	return false
+}
+
+type StudyMember struct {
+	StudyID  uuid.UUID `json:"study_id"`
+	UserID   uuid.UUID `json:"user_id"`
+	Email    string    `json:"email,omitempty"`
+	Role     StudyRole `json:"role"`
+	JoinedAt time.Time `json:"joined_at"`
+}
+
+// MembershipForUser e folosit cand listam studiile vizibile unui user
+// impreuna cu rolul lui in fiecare.
+type MembershipForUser struct {
+	Study Study     `json:"study"`
+	Role  StudyRole `json:"role"`
 }
 
 type EpidemiologicalRecord struct {
@@ -61,14 +105,28 @@ func ValidLanguage(s string) bool {
 type ModelType string
 
 const (
-	ModelSIDARTH ModelType = "sidarth"
-	ModelSIR     ModelType = "sir"
+	ModelSIS      ModelType = "sis"
+	ModelSIR      ModelType = "sir"
+	ModelSEIR     ModelType = "seir"
+	ModelSIRS     ModelType = "sirs"
+	ModelSIDARTHE ModelType = "sidarthe"
+	ModelLSTM     ModelType = "lstm"
 )
 
+var SupportedModelTypes = []ModelType{
+	ModelSIS,
+	ModelSIR,
+	ModelSEIR,
+	ModelSIRS,
+	ModelSIDARTHE,
+	ModelLSTM,
+}
+
 func ValidModelType(s string) bool {
-	switch ModelType(s) {
-	case ModelSIDARTH, ModelSIR:
-		return true
+	for _, model := range SupportedModelTypes {
+		if ModelType(s) == model {
+			return true
+		}
 	}
 	return false
 }
@@ -76,6 +134,7 @@ func ValidModelType(s string) bool {
 type SimulationRun struct {
 	ID           uuid.UUID          `json:"id"`
 	UserID       uuid.UUID          `json:"user_id"`
+	StudyID      uuid.UUID          `json:"study_id"`
 	DatasetID    uuid.UUID          `json:"dataset_id"`
 	ModelType    ModelType          `json:"model_type"`
 	Language     Language           `json:"language"`

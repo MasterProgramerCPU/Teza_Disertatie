@@ -1,2 +1,4 @@
-\contentsline {algorithm}{\numberline {2.1}{\ignorespaces Metoda Euler pentru sistemul SIR}}{17}{algorithm.2.1}%
-\contentsline {algorithm}{\numberline {2.2}{\ignorespaces Metoda Runge-Kutta de ordinul 4 pentru sistemul SIR}}{18}{algorithm.2.2}%
+\contentsline {algorithm}{\numberline {2.1}{\ignorespaces Metoda Euler pentru sistemul SIR}}{8}{algorithm.2.1}%
+\contentsline {algorithm}{\numberline {2.2}{\ignorespaces Metoda Runge-Kutta de ordinul 4 pentru sistemul SIR}}{9}{algorithm.2.2}%
+\contentsline {algorithm}{\numberline {6.1}{\ignorespaces Evaluarea unei componente LSTM pentru serii epidemiologice}}{28}{algorithm.6.1}%
+\contentsline {algorithm}{\numberline {7.1}{\ignorespaces Calibrarea unui model compartimental pe date observate}}{32}{algorithm.7.1}%

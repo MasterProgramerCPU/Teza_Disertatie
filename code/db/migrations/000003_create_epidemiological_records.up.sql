@@ -1,4 +1,4 @@
-CREATE TABLE epidemiological_records (
+CREATE TABLE IF NOT EXISTS epidemiological_records (
     id            UUID DEFAULT gen_random_uuid(),
     dataset_id    UUID NOT NULL REFERENCES datasets(id) ON DELETE CASCADE,
     recorded_date DATE NOT NULL,
@@ -14,4 +14,4 @@ CREATE TABLE epidemiological_records (
     CHECK (susceptible IS NULL OR susceptible >= 0)
 );
 
-CREATE INDEX idx_epi_records_region ON epidemiological_records(region_code);
+CREATE INDEX IF NOT EXISTS idx_epi_records_region ON epidemiological_records(region_code);

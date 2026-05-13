@@ -4,9 +4,9 @@
 Această anexă include manifestele declarative pentru rularea sistemului
 pe un cluster Kubernetes. Toate resursele sunt aplicate în namespace-ul
 \texttt{epimodel} și urmează structura arhitecturală descrisă în
-capitolul~\ref{ch:arhitectura}: API stateless, frontend servit prin Nginx,
-runnere scalabile independent, Redis pentru coada de mesaje și YugabyteDB
-pentru persistență (3~master + 3~tserver, RF=3).
+capitolul~\ref{ch:arhitectura}: API stateless, două frontend-uri servite prin
+Nginx, runnere scalabile independent, Redis pentru coada de mesaje și
+YugabyteDB pentru persistență (3~master + 3~tserver, RF=3).
 
 Manifestele se află în directorul \texttt{code/k8s/} al repository-ului și
 sunt organizate cu prefixe numerice pentru aplicare secvențială.
@@ -16,6 +16,7 @@ sunt organizate cu prefixe numerice pentru aplicare secvențială.
 \centering
 \caption{Manifestele Kubernetes incluse în repository.}
 \label{tab:k8s_manifeste}
+\small
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{p{4.6cm}p{4.2cm}p{5.5cm}}
 \toprule
@@ -25,15 +26,17 @@ sunt organizate cu prefixe numerice pentru aplicare secvențială.
 \texttt{01-configmap.yaml}                  & \texttt{ConfigMap}                       & Variabile non-sensibile (HTTP, Redis, JWT) \\
 \texttt{02-secret.example.yaml}             & \texttt{Secret} (template)               & Șablon pentru \texttt{JWT\_SECRET} și \texttt{DATABASE\_URL} \\
 \texttt{10-yugabyte-values.yaml}            & Helm values                              & Configurarea chart-ului oficial \texttt{yugabytedb/yugabyte} (RF=3, sizing custom) \\
-\texttt{12-yugabyte-tserver-service.yaml}   & \texttt{Service}                         & \texttt{ClusterIP} \texttt{yb-tserver-service} expus pe portul 5433 (YSQL) \\
+\texttt{12-yugabyte-}\\\texttt{tserver-service.yaml} & \texttt{Service}                         & \texttt{ClusterIP} \texttt{yb-tserver-service} expus pe portul 5433 (YSQL) \\
 \texttt{20-redis.yaml}                      & \texttt{Deployment} + \texttt{Service}   & Coadă Redis (\texttt{emptyDir}, fără persistență) \\
 \texttt{30-migrate-job.yaml}                & \texttt{Job}                             & Aplică migrațiile SQL prin \texttt{psql} \\
-\texttt{40-api.yaml}                        & \texttt{Deployment} + \texttt{Service}   & Backend Go (REST API) \\
+\texttt{40-api.yaml}                        & \texttt{Deployment} + \texttt{Service}   & Backend Go (REST API + RBAC pe studii) \\
 \texttt{50-runner-python.yaml}              & \texttt{Deployment}                      & Runner Python (\texttt{scipy.solve\_ivp}) \\
 \texttt{51-runner-r.yaml}                   & \texttt{Deployment}                      & Runner R (\texttt{deSolve::ode}) \\
 \texttt{52-runner-julia.yaml}               & \texttt{Deployment}                      & Runner Julia (\texttt{DifferentialEquations.jl}) \\
-\texttt{60-frontend.yaml}                   & \texttt{Deployment} + \texttt{Service}   & Frontend Vue.js servit prin Nginx \\
-\texttt{70-ingress.yaml}                    & \texttt{Ingress}                         & Rutare HTTP externă (\texttt{/api} și \texttt{/}) \\
+\texttt{53-runner-lstm.yaml}                & \texttt{Deployment}                      & Runner LSTM dedicat pentru predicții pe seria \texttt{infected} \\
+\texttt{60-frontend.yaml}                   & \texttt{Deployment} + \texttt{Service}   & Frontend user-facing servit prin Nginx \\
+\texttt{61-frontend-admin.yaml}             & \texttt{Deployment} + \texttt{Service}   & Consolă super-admin servită prin Nginx \\
+\texttt{70-ingress.yaml}                    & \texttt{Ingress}                         & Rutare HTTP pentru \texttt{sir-workbench.ro} și \texttt{admin.sir-workbench.ro} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -42,9 +45,9 @@ Listările care urmează reproduc fișierele cele mai relevante pentru
 explicitarea arhitecturii: namespace-ul de izolare, fișierul de
 \texttt{values} pentru YugabyteDB, Service-ul de acces YSQL, coada
 Redis, Job-ul de migrații, API-ul, un exemplu de runner (Julia, cel
-mai mare consumator de memorie) și ingress-ul de rutare. Celelalte
-manifeste --- ConfigMap-ul, template-ul Secret, frontend-ul, runner-ele
-R și Python --- urmează aceleași convenții și pot fi consultate direct
+mai mare consumator de memorie), runner-ul LSTM dedicat, frontend-ul admin și
+ingress-ul de rutare. Celelalte manifeste --- ConfigMap-ul, template-ul Secret,
+frontend-ul principal, runner-ele R și Python --- urmează aceleași convenții și pot fi consultate direct
 în repository.
 
 \section*{Namespace dedicat}
@@ -112,15 +115,31 @@ R și Python au structuri identice, dar cu limite mai mici.
 
 \lstinputlisting[language=bash, caption={\texttt{52-runner-julia.yaml} --- Deployment pentru runner-ul Julia.}]{../code/k8s/52-runner-julia.yaml}
 
+\section*{Runner LSTM}
+
+Runner-ul LSTM este separat de runner-ul Python pentru simulări
+compartimentale. El consumă exclusiv coada \texttt{epimodel:jobs:lstm},
+antrenează modelul recurent pe seria \texttt{infected} și persistă separat
+valorile observate, potrivite și prezise.
+
+\lstinputlisting[language=bash, caption={\texttt{53-runner-lstm.yaml} --- Deployment pentru runner-ul LSTM.}]{../code/k8s/53-runner-lstm.yaml}
+
+\section*{Frontend admin}
+
+Consola super-admin rulează ca un \texttt{Deployment} separat față de aplicația
+principală, deși ambele folosesc același API. Această separare produce imagini
+Docker distincte și permite rutarea prin host-ul \texttt{admin.sir-workbench.ro}.
+
+\lstinputlisting[language=bash, caption={\texttt{61-frontend-admin.yaml} --- Deployment și Service pentru consola super-admin.}]{../code/k8s/61-frontend-admin.yaml}
+
 \section*{Ingress de rutare}
 
-Ingress-ul nginx rutează cererile externe către cele două servicii
-vizibile public: API-ul Go pentru cererile sub prefixul \texttt{/api}
-și frontend-ul Vue.js pentru restul. Hostname-ul implicit
-(\texttt{epimodel.local}) este destinat utilizării prin \texttt{/etc/hosts}
-local; într-un deployment cu DNS public, se înlocuiește cu un FQDN
-real și se adaugă o secțiune \texttt{tls:} cu certificate gestionate
-prin \texttt{cert-manager}.
+Ingress-ul nginx rutează cererile externe pe două host-uri: \texttt{sir-workbench.ro}
+pentru aplicația principală și \texttt{admin.sir-workbench.ro} pentru consola
+super-admin. Pe ambele host-uri, prefixul \texttt{/api} este trimis către API-ul
+Go; restul traficului ajunge la frontend-ul corespunzător. Într-un deployment
+cu DNS public, host-urile se înlocuiesc cu FQDN-uri reale și se adaugă o
+secțiune \texttt{tls:} cu certificate gestionate prin \texttt{cert-manager}.
 
 \lstinputlisting[language=bash, caption={\texttt{70-ingress.yaml} --- Ingress nginx pentru rutare HTTP.}]{../code/k8s/70-ingress.yaml}
 

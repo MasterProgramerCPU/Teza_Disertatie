@@ -1,0 +1,154 @@
+% ============================================================
+% CAPITOLUL 9 — APLICAȚIA WEB E-MEDICINE
+% ============================================================
+
+\chapter{Aplicația Web E-Medicine}
+\label{ch:aplicatie}
+
+\section{Rolul aplicației}
+\label{sec:functionalitati}
+
+Aplicația web este interfața prin care modelul matematic și infrastructura de
+execuție devin utilizabile. Ea nu este un sistem clinic complet, ci un mediu de
+lucru pentru organizarea datelor pe studii epidemiologice, încărcarea
+dataseturilor, configurarea simulărilor SIDARTHE, SIR, SIS, SEIR sau SIRS și
+compararea rezultatelor obținute în R, Julia și Python. Din această
+perspectivă, aplicația are rol de instrument experimental și colaborativ.
+
+Fluxul principal începe cu autentificarea utilizatorului. După autentificare,
+acesta alege un studiu sau creează unul nou. Toate operațiile ulterioare se
+raportează la studiul curent, iar interfața afișează acțiunile disponibile în
+funcție de rolul utilizatorului: \texttt{admin}, \texttt{researcher},
+\texttt{contributor} sau \texttt{viewer}. Utilizatorii cu rol suficient pot
+încărca un fișier CSV cu date epidemiologice, pot alege modelul, pot introduce
+parametrii și pot urmări statusul execuției. Când runner-ul finalizează job-ul,
+interfața afișează traiectoriile compartimentale și permite exportul
+rezultatelor în format CSV. O pagină separată permite compararea mai multor
+rulări finalizate, iar pagina de benchmark prezintă agregările calculate la
+nivel de model și limbaj.
+
+Pe lângă aplicația principală există o interfață \texttt{frontend-admin},
+servită de pe host-ul \texttt{admin.sir-workbench.ro}. Aceasta este disponibilă doar
+conturilor cu \texttt{is\_super\_admin=true} și oferă statistici globale,
+gestionarea utilizatorilor și vizualizarea tuturor studiilor.
+
+\section{Backend Go}
+\label{sec:backend_go}
+
+Backend-ul este implementat în Go și expune un API REST sub prefixul
+\texttt{/api}. Serverul folosește routerul \texttt{chi}, middleware pentru
+logging, recuperare după panică, timeout de request și CORS, iar accesul la rutele
+protejate este controlat prin JWT. Alegerea Go este potrivită pentru această
+componentă deoarece API-ul este stateless, are nevoie de latențe predictibile și
+poate fi distribuit ușor sub formă de binar static în container.
+
+Structura codului separă intrarea HTTP de accesul la date. Pachetul
+\texttt{handlers} parsează cererile, validează input-ul și construiește
+răspunsurile JSON. Pachetul \texttt{repository} conține interogările SQL și
+operațiile tranzacționale peste \texttt{pgx}. Pachetul \texttt{runner} definește
+schema mesajului trimis în Redis și publicarea job-urilor. Contractul de simulare
+include tipul modelului, parametrii, condițiile inițiale și conexiunea la baza de
+date.
+
+Rutele aplicației principale sunt organizate sub
+\texttt{/api/studies/\{studyId\}}. Middleware-ul RBAC verifică membership-ul și
+rolul înainte ca handler-ul să ajungă la date. Super-adminii au acces global,
+dar consola administrativă folosește rute dedicate sub \texttt{/api/admin}.
+
+\section{Gestionarea dataseturilor}
+\label{sec:dataseturi_web}
+
+Dataseturile sunt încărcate printr-un formular multipart, în contextul studiului
+curent. API-ul acceptă câmpurile \texttt{name}, \texttt{disease\_code} și
+\texttt{file}; fișierul trebuie să conțină cel puțin coloanele \texttt{date},
+\texttt{region}, \texttt{infected} și \texttt{population}. Coloanele
+\texttt{recovered} și \texttt{susceptible} sunt opționale, dar atunci când sunt
+prezente sunt folosite pentru condițiile inițiale. Pentru SIDARTHE, cazurile
+active sunt plasate inițial în compartimentul $I$, persoanele ieșite din
+infecție în $H$, iar compartimentul $E$ al deceselor pornește de la zero.
+Pentru SEIR, compartimentul expușilor pornește de asemenea de la zero,
+deoarece nu este observat direct în CSV.
+
+Persistarea datasetului se face într-o tranzacție. Mai întâi este creat rândul din
+\texttt{datasets}, apoi înregistrările epidemiologice sunt inserate prin
+\texttt{CopyFrom}. Această alegere reduce costul încărcării CSV-urilor față de
+inserarea rând-cu-rând și păstrează atomicitatea: dacă una dintre înregistrări nu
+poate fi scrisă, datasetul nu rămâne într-o stare parțială. La ștergere,
+\texttt{admin}-ul poate elimina orice dataset din studiu, în timp ce
+\texttt{contributor}-ul poate elimina doar dataseturile încărcate de el.
+
+\section{Execuția simulărilor}
+\label{sec:executie_simulari_web}
+
+Crearea unei simulări este un proces scurt în API și un proces asincron în
+ansamblul sistemului. Endpointul
+\texttt{POST /api/studies/\{studyId\}/simulations} verifică existența
+datasetului în studiul curent, modelul, limbajul selectat, parametrii și
+$t_{\max}$, apoi extrage prima înregistrare epidemiologică pentru a determina
+valorile inițiale. După ce rândul din \texttt{simulation\_runs} este creat cu
+status \texttt{pending}, API-ul publică mesajul JSON în coada Redis
+corespunzătoare limbajului.
+
+Runner-ele sunt responsabile pentru tranzițiile ulterioare. Ele marchează rularea
+ca \texttt{running}, execută solver-ul pentru \texttt{model\_type}, inserează
+rezultatele și benchmarkul, apoi marchează rularea ca \texttt{completed}. Dacă
+apare o eroare, statusul devine \texttt{failed}, iar mesajul este salvat în baza de
+date. Interfața web nu trebuie să țină o conexiune deschisă pe durata calculului;
+pagina de rezultat interoghează periodic endpointul de status până la finalizare.
+
+\section{Frontend Vue.js}
+\label{sec:frontend_vue}
+
+Frontend-ul principal este o aplicație Vue 3 construită cu Vite și TypeScript.
+Rutarea este gestionată cu Vue Router, iar starea aplicației cu Pinia. Clientul
+HTTP este o instanță Axios configurată cu prefixul \texttt{/api}; un interceptor
+adaugă automat headerul \texttt{Authorization} atunci când există token în
+\texttt{localStorage}. Store-ul \texttt{studies.store.ts} păstrează studiul
+curent și rolul curent, iar store-urile pentru dataseturi, simulări și
+benchmarkuri construiesc URL-urile în funcție de acest \texttt{studyId}.
+
+Paginile sunt organizate după fluxurile principale ale aplicației:
+\texttt{StudiesPage} selectează contextul de lucru,
+\texttt{CreateStudyPage} creează un studiu nou,
+\texttt{StudyManagementPage} gestionează membrii și rolurile,
+\texttt{DashboardPage} sumarizează dataseturile și simulările recente,
+\texttt{DatasetsPage} gestionează încărcarea CSV-urilor,
+\texttt{NewSimulationPage} colectează modelul și parametrii,
+\texttt{SimulationResultPage} afișează statusul și rezultatele,
+\texttt{ComparePage} suprapune seriile mai multor rulări, iar
+\texttt{BenchmarksPage} afișează agregările pe model și limbaj. Componenta
+\texttt{CompartmentChart} folosește Chart.js prin \texttt{vue-chartjs} și
+construiește dinamic seriile în funcție de cheile disponibile în
+\texttt{compartments}. Astfel, același grafic poate afișa modele cu două,
+trei, patru sau opt compartimente fără modificări suplimentare.
+
+\section{Consola super-admin}
+\label{sec:frontend_admin}
+
+Consola administrativă este un build Vue separat, cu propriul router și propriul
+token în \texttt{localStorage}. La autentificare, aplicația verifică răspunsul
+\texttt{/api/auth/login}; dacă utilizatorul nu este super-admin, tokenul nu este
+păstrat și login-ul este refuzat. Store-ul \texttt{admin.store.ts} consumă
+endpointurile \texttt{/api/admin/stats}, \texttt{/api/admin/users} și
+\texttt{/api/admin/studies}. Această separare reduce riscul ca acțiunile globale
+de administrare să fie amestecate cu fluxurile obișnuite de lucru ale unui
+studiu.
+
+Decizia de a folosi polling la două secunde este simplă, dar adecvată pentru
+durata așteptată a simulărilor. O soluție bazată pe WebSocket sau Server-Sent
+Events ar reduce numărul de cereri, însă ar introduce stare suplimentară în
+backend. Pentru un API stateless și pentru job-uri care durează de la câteva
+secunde la câteva minute, polling-ul păstrează implementarea previzibilă.
+
+\section{Validare funcțională}
+\label{sec:testare_functionala}
+
+Validarea funcțională a aplicației poate fi făcută prin fluxuri end-to-end care
+urmează operațiile reale ale utilizatorului: înregistrare, autentificare, creare
+sau selectare studiu, adăugare membru, încărcare dataset, pornire simulare
+SIDARTHE, așteptare finalizare, afișare grafic și export CSV. Aceeași suită ar
+trebui să verifice și rulările SIR/SIS/SEIR/SIRS, deoarece acestea asigură
+compatibilitatea cu familia de modele discutată în capitolul teoretic și cu
+comparațiile simple. Un flux separat validează consola
+admin: login cu un cont super-admin, listarea utilizatorilor, modificarea
+flag-ului \texttt{is\_super\_admin} și listarea studiilor globale.

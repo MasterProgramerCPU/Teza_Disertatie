@@ -1,4 +1,4 @@
-CREATE TABLE datasets (
+CREATE TABLE IF NOT EXISTS datasets (
     id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name          VARCHAR(255) NOT NULL,
@@ -7,5 +7,5 @@ CREATE TABLE datasets (
     record_count  INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE INDEX idx_datasets_user_id ON datasets(user_id);
-CREATE INDEX idx_datasets_disease_code ON datasets(disease_code);
+CREATE INDEX IF NOT EXISTS idx_datasets_user_id ON datasets(user_id);
+CREATE INDEX IF NOT EXISTS idx_datasets_disease_code ON datasets(disease_code);

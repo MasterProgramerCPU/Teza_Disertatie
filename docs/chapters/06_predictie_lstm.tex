@@ -1,0 +1,197 @@
+% ============================================================
+% CAPITOLUL 6 — PREDICȚIE CU REȚELE LSTM
+% ============================================================
+
+\chapter{Predicție Epidemiologică folosind Rețele LSTM}
+\label{ch:lstm}
+
+\section{Rolul componentei LSTM}
+\label{sec:rol_lstm}
+
+Modelele compartimentale oferă interpretabilitate: fiecare compartiment are o
+semnificație epidemiologică, iar parametrii descriu rate de tranziție între stări.
+Această proprietate este esențială pentru o lucrare care urmărește modelele din
+familia SIR și extensia SIDARTHE. Totuși, seriile epidemiologice reale conțin
+tipare care nu sunt întotdeauna modelate explicit prin ecuații diferențiale:
+întârzieri de raportare, efecte de weekend, modificări administrative ale
+datelor, schimbări bruște de comportament sau intervenții care nu sunt codificate
+direct în parametri.
+
+Din acest motiv, o componentă LSTM este utilă ca instrument auxiliar de predicție
+pe serii temporale. Ea nu înlocuiește modelele SIR/SIS/SEIR/SIRS/SIDARTHE, ci
+oferă o linie de comparație statistică și o posibilă corecție a reziduurilor
+rămase după rularea unui model compartimental calibrat.
+
+\section{Motivația alegerii LSTM}
+\label{sec:motivatie_lstm}
+
+LSTM (\emph{Long Short-Term Memory}) este o arhitectură recurentă proiectată
+pentru modelarea dependențelor temporale pe termen lung \cite{hochreiter1997lstm}.
+Într-o serie epidemiologică, valoarea observată într-o zi depinde de un istoric
+recent: numărul de cazuri din zilele anterioare, tendința de creștere sau scădere
+și regularitățile de raportare. O rețea recurentă poate învăța astfel de tipare
+direct din date, fără a impune explicit o structură de compartimente.
+
+Această flexibilitate este în același timp avantaj și risc. LSTM poate aproxima
+relații dificil de exprimat prin ecuații simple, dar poate învăța și artefacte
+ale datelor. De aceea, în această lucrare LSTM este tratat ca instrument
+predictiv experimental, nu ca model epidemiologic explicativ.
+
+\section{Formularea problemei de predicție}
+\label{sec:formulare_predictie_lstm}
+
+Fie $y_t$ seria observată la ziua $t$, de exemplu cazuri active, cazuri noi sau
+decese. O rețea LSTM primește o fereastră de lungime $\ell$ și produce o
+predicție pentru un orizont $h$:
+\begin{equation}
+\hat{y}_{t+h} =
+f_{\phi}\left(y_{t-\ell+1}, y_{t-\ell+2}, \ldots, y_t\right),
+\end{equation}
+unde $\phi$ reprezintă parametrii rețelei. Pentru predicție multi-pas, ieșirea
+poate fi extinsă la un vector:
+\begin{equation}
+\left(\hat{y}_{t+1}, \hat{y}_{t+2}, \ldots, \hat{y}_{t+h}\right)
+= f_{\phi}\left(y_{t-\ell+1:t}\right).
+\end{equation}
+
+În contextul aplicației, intrarea poate fi univariată sau multivariată. Varianta
+univariată folosește o singură serie, de exemplu cazuri active. Varianta
+multivariată poate include:
+\begin{itemize}
+    \item cazuri noi zilnice;
+    \item cazuri active estimate;
+    \item decese zilnice sau cumulative;
+    \item populația regiunii;
+    \item ziua săptămânii, pentru efecte de raportare;
+    \item traiectorii produse de un model compartimental.
+\end{itemize}
+
+Datele trebuie împărțite cronologic. O împărțire aleatoare ar produce scurgeri de
+informație, deoarece exemple din viitor ar putea ajunge în antrenare. Normalizarea
+se calculează doar pe fereastra de antrenare și se aplică neschimbat pe validare
+și test.
+
+\section{Integrarea cu modelele compartimentale}
+\label{sec:integrare_lstm_compartimental}
+
+Există două moduri naturale de integrare a LSTM în sistemul propus. Primul este
+modelul LSTM independent, folosit ca linie de bază predictivă. În acest caz,
+rețeaua primește doar date observate și produce o predicție numerică. Rezultatul
+poate fi comparat cu predicția SIR, SEIR sau SIDARTHE calibrată pe aceeași
+fereastră.
+
+Al doilea mod este modelul hibrid compartimental--LSTM. Modelul compartimental
+produce o predicție interpretabilă $\hat{y}^{(c)}_t$, iar LSTM învață reziduul:
+\begin{equation}
+r_t = y_t - \hat{y}^{(c)}_t.
+\end{equation}
+Predicția finală este:
+\begin{equation}
+\hat{y}^{(hibrid)}_{t+h} =
+\hat{y}^{(c)}_{t+h} + f_{\phi}(r_{t-\ell+1}, \ldots, r_t).
+\end{equation}
+
+Această variantă păstrează rolul central al modelului epidemiologic. LSTM nu
+încearcă să explice mecanismul de transmitere, ci corectează deviațiile
+statistice rămase după simularea compartimentală. Dacă reziduurile au un tipar
+stabil, modelul hibrid poate îmbunătăți predicția pe termen scurt.
+
+\section{Fluxul de antrenare și evaluare}
+\label{sec:flux_lstm}
+
+\begin{algorithm}[t]
+\caption{Evaluarea unei componente LSTM pentru serii epidemiologice}
+\label{alg:evaluare_lstm}
+\begin{lstlisting}[style=pseudocode]
+Input: dataset temporal Y, lungime fereastra l,
+       orizont h, model compartimental optional m
+Output: predictii LSTM, metrici MAE/RMSE/nRMSE
+
+ordoneaza datele cronologic
+imparte datele in train, validare si test
+calculeaza normalizarea doar pe train
+construieste exemple din ferestre de lungime l
+daca exista model compartimental m:
+    ruleaza modelul m si calculeaza reziduuri
+    foloseste reziduurile ca tinta pentru LSTM
+altfel:
+    foloseste seria observata ca tinta
+antreneaza LSTM pentru numarul configurat de epoci
+calculeaza predictii pe fereastra de test
+raporteaza MAE, RMSE si nRMSE
+\end{lstlisting}
+\end{algorithm}
+
+Evaluarea trebuie făcută pe o fereastră de test care nu a fost folosită la
+antrenare sau la alegerea hiperparametrilor. Pentru comparație corectă, aceeași
+fereastră de test trebuie folosită pentru modelul compartimental calibrat,
+pentru LSTM independent și pentru modelul hibrid.
+
+\section{Metrici și linii de bază}
+\label{sec:metrici_lstm}
+
+Componenta LSTM folosește aceleași metrici ca analiza comparativă a modelelor:
+MAE, RMSE și nRMSE. Pentru a evita concluzii exagerate, rezultatele trebuie
+comparate cu linii de bază simple:
+\begin{itemize}
+    \item persistență: $\hat{y}_{t+1}=y_t$;
+    \item medie mobilă pe ultimele $k$ zile;
+    \item model compartimental calibrat;
+    \item LSTM independent;
+    \item model hibrid compartimental--LSTM.
+\end{itemize}
+
+O componentă LSTM este justificată doar dacă îmbunătățește fereastra de test față
+de aceste repere. O eroare mică pe fereastra de antrenare nu este suficientă,
+deoarece seriile epidemiologice sunt scurte și zgomotoase, iar riscul de
+supraînvățare este ridicat.
+
+\section{Locul în arhitectura aplicației}
+\label{sec:arhitectura_lstm}
+
+Integrarea practică a LSTM se face printr-un runner separat, nu prin extinderea
+runner-ului Python folosit pentru modelele compartimentale. Separarea este
+importantă deoarece predicția LSTM are alt profil de calcul, alți parametri,
+altă logică de citire a datelor și altă semantică a rezultatelor. Runner-ul
+\texttt{runner-lstm} consumă coada Redis \texttt{epimodel:jobs:lstm}, în timp ce
+runner-ele R, Julia și Python rămân dedicate simulărilor ODE.
+
+Fluxul rămâne compatibil cu arhitectura curentă:
+\begin{itemize}
+    \item API-ul creează un job de predicție;
+    \item API-ul rutează explicit modelul \texttt{lstm} către coada
+    \texttt{epimodel:jobs:lstm};
+    \item Redis decuplează cererea de execuția efectivă;
+    \item runner-ul LSTM citește seria \texttt{infected} din dataset;
+    \item modelul LSTM este antrenat pe o fereastră glisantă de lungime
+    \texttt{lookback};
+    \item predicțiile și metricile sunt persistate în baza de date;
+    \item frontend-ul afișează seriile \texttt{observed}, \texttt{fitted} și
+    \texttt{predicted}.
+\end{itemize}
+
+Această separare păstrează clară distincția dintre simulare epidemiologică și
+predicție statistică. Modelul compartimental rămâne responsabil pentru
+interpretarea mecanismului, iar LSTM este folosit pentru prognoză pe termen
+scurt și pentru analiza reziduurilor.
+
+\section{Limitări}
+\label{sec:limitari_lstm}
+
+LSTM necesită mai multe date decât modelele compartimentale simple. Pentru regiuni
+cu serii scurte sau raportări instabile, rețeaua poate învăța artefacte
+administrative în locul dinamicii epidemiologice. De asemenea, rezultatul LSTM
+este mai puțin interpretabil: o predicție bună numeric nu explică prin ce
+tranziții epidemiologice se produce evoluția.
+
+Din acest motiv, LSTM trebuie prezentat ca extensie complementară. El poate ajuta
+la prognoză și la detectarea reziduurilor sistematice, dar nu înlocuiește
+analiza modelelor SIR/SIS/SEIR/SIRS/SIDARTHE și nici calibrarea parametrilor
+epidemiologici.
+
+\testtodo{Implementarea rulează prin \texttt{runner-lstm}, dar pentru rezultatul
+final al lucrării trebuie executată o campanie experimentală pe un dataset
+concret și comparată cu persistență, medie mobilă și un model compartimental
+calibrat. Rezultatele minime de raportat sunt MAE, RMSE, nRMSE, lungimea
+ferestrei de intrare, orizontul de predicție, numărul de epoci și timpul de
+antrenare.}

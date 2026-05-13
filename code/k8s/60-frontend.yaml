@@ -44,7 +44,7 @@ spec:
         - name: ghcr-pull
       containers:
         - name: frontend
-          image: ghcr.io/masterprogramercpu/sidarth-frontend:latest
+          image: ghcr.io/masterprogramercpu/emedicine-frontend:latest
           imagePullPolicy: Always
           ports:
             - name: http

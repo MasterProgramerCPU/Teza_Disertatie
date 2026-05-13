@@ -3,29 +3,45 @@
 % ============================================================
 
 Această lucrare tratează proiectarea unui sistem e-medicine pentru analiza datelor
-epidemiologice prin modele compartimentale, cu modelul SIDARTH folosit ca direcție
-principală de explorare. Spre deosebire de SIR, care reduce dinamica la trei
-stări agregate, SIDARTH separă infecțiile nedepistate, cazurile diagnosticate,
-formele simptomatice, formele severe și vindecările. Această granularitate face
-modelul mai potrivit pentru discutarea efectelor testării, diagnosticării și
-severității clinice asupra evoluției unei epidemii.
+epidemiologice prin modele compartimentale, cu modelul SIDARTHE folosit ca
+direcție clinică principală de explorare. Spre deosebire de modelele
+SIR/SIS/SEIR/SIRS, care agregă dinamica în câteva stări canonice, SIDARTHE separă
+infecțiile nedepistate, cazurile diagnosticate, formele simptomatice, formele
+severe, vindecările și decesele.
+Această granularitate face modelele mai potrivite pentru discutarea efectelor
+testării, diagnosticării și severității clinice asupra evoluției unei epidemii.
 
-SIR rămâne prezent în lucrare ca model secundar, folosit pentru comparații și
-pentru verificarea comportamentului numeric al implementărilor. Sistemul construit
-separă explicit stocarea datelor, expunerea API-ului și execuția simulărilor.
+Modelele SIR, SIS, SEIR și SIRS rămân prezente în lucrare ca repere
+secundare, folosite pentru comparații și pentru verificarea comportamentului
+numeric al implementărilor. Sistemul construit separă explicit stocarea datelor,
+expunerea API-ului și execuția simulărilor.
 Datele epidemiologice sunt persistate într-o schemă relațională compatibilă
 PostgreSQL, rulată peste YugabyteDB, iar simulările sunt executate asincron de
 runner-e specializate, coordonate prin Redis.
 
-Componenta web, alcătuită dintr-un API Go și o interfață Vue.js, oferă fluxurile
-necesare încărcării seturilor de date, lansării simulărilor, urmăririi statusului și
-vizualizării traiectoriilor compartimentale. Întregul sistem este deployabil pe un
-cluster Kubernetes prin manifeste declarative, pe o platformă cloud privată cu
-factor de replicare~3 pentru baza de date. Accentul lucrării cade pe legătura
-dintre modelul matematic, implementarea numerică și arhitectura software care face
-posibilă evaluarea reproductibilă a rezultatelor pentru modele cu grade diferite
-de complexitate.
+Lucrarea introduce un cadru explicit pentru compararea modelelor și calibrarea
+parametrilor. Modelele sunt comparate structural, prin compartimente și ipoteze,
+și numeric, prin operatori de observație, MAE, RMSE și nRMSE. Calibrarea este
+formulată ca problemă de optimizare pe parametrii fiecărui model, cu accent pe
+separarea dintre fereastra de antrenare și fereastra de test. În plus, este
+integrată o extensie predictivă bazată pe LSTM, cu runner dedicat, folosită ca
+model de serie temporală și ca posibilă corecție a reziduurilor modelelor
+compartimentale.
+
+Componenta web, alcătuită dintr-un API Go și două interfețe Vue.js separate,
+oferă fluxurile necesare organizării datelor pe studii epidemiologice,
+gestionării rolurilor de acces, încărcării seturilor de date, lansării
+simulărilor, urmăririi statusului și vizualizării traiectoriilor
+compartimentale. Aplicația principală este destinată cercetătorilor și
+colaboratorilor dintr-un studiu, iar consola administrativă este rezervată
+utilizatorilor cu drepturi globale de super-admin. Întregul sistem este
+deployabil pe un cluster Kubernetes prin manifeste declarative, pe o platformă
+cloud privată cu factor de replicare~3 pentru baza de date. Accentul lucrării
+cade pe legătura dintre modelul matematic, implementarea numerică și arhitectura
+software care face posibilă evaluarea reproductibilă a rezultatelor pentru
+modele cu grade diferite de complexitate.
 
 \bigskip
-\noindent\textbf{Cuvinte cheie:} model SIDARTH, model SIR, epidemiologie computațională, e-medicine,
-calcul comparativ, YugabyteDB, Kubernetes, Go, Vue.js, benchmark de performanță.
+\noindent\textbf{Cuvinte cheie:} model SIDARTHE, modele SIR, epidemiologie computațională, e-medicine,
+calibrare de parametri, LSTM, RBAC, YugabyteDB, Kubernetes, Go, Vue.js,
+benchmark de performanță.

@@ -58,6 +58,6 @@ async function submit() {
 </template>
 
 <style scoped>
-.auth-page { display: flex; justify-content: center; padding-top: 80px; }
-.auth-card { max-width: 400px; width: 100%; }
+.auth-page { display: flex; justify-content: center; padding-top: 56px; }
+.auth-card { max-width: 420px; width: 100%; }
 </style>

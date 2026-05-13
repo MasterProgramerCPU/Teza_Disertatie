@@ -30,16 +30,18 @@ const props = defineProps<{
 }>();
 
 const COLORS: Record<string, string> = {
-  s: "9, 105, 218",
-  i: "207, 34, 46",
-  d: "130, 80, 223",
-  a: "191, 135, 0",
-  r: "31, 111, 235",
-  t: "188, 76, 0",
-  h: "26, 127, 55",
+  s: "0, 88, 238",
+  e: "96, 96, 96",
+  i: "192, 0, 0",
+  d: "96, 40, 180",
+  a: "156, 101, 0",
+  r: "21, 130, 31",
+  t: "196, 91, 0",
+  h: "0, 92, 48",
+  observed: "0, 88, 238",
+  fitted: "21, 130, 31",
+  predicted: "192, 0, 0",
 };
-
-const ORDER = ["s", "i", "d", "a", "r", "t", "h"];
 
 function dash(style?: string): number[] {
   if (style === "dashed") return [8, 6];
@@ -50,8 +52,18 @@ function dash(style?: string): number[] {
 function compartmentKeys(points: SimulationResultPoint[]): string[] {
   const seen = new Set<string>();
   points.forEach((p) => Object.keys(p.compartments).forEach((key) => seen.add(key)));
-  const ordered = ORDER.filter((key) => seen.has(key));
-  const extra = Array.from(seen).filter((key) => !ORDER.includes(key)).sort();
+  const order = seen.has("e") && !seen.has("d") && !seen.has("a") && !seen.has("t") && !seen.has("h")
+    ? ["s", "e", "i", "r"]
+    : ["s", "i", "d", "a", "r", "t", "h", "e"];
+  const lstmOrder = ["observed", "fitted", "predicted"];
+  if (lstmOrder.some((key) => seen.has(key))) {
+    return [
+      ...lstmOrder.filter((key) => seen.has(key)),
+      ...Array.from(seen).filter((key) => !lstmOrder.includes(key)).sort(),
+    ];
+  }
+  const ordered = order.filter((key) => seen.has(key));
+  const extra = Array.from(seen).filter((key) => !order.includes(key)).sort();
   return [...ordered, ...extra];
 }
 
@@ -84,18 +96,48 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
   maintainAspectRatio: false,
   interaction: { intersect: false, mode: "index" },
   plugins: {
-    legend: { position: "bottom" },
-    tooltip: { mode: "index", intersect: false },
+    legend: {
+      position: "bottom",
+      labels: { font: { family: "Tahoma", size: 11 }, boxWidth: 18 },
+    },
+    tooltip: {
+      mode: "index",
+      intersect: false,
+      titleFont: { family: "Tahoma", size: 12 },
+      bodyFont: { family: "Tahoma", size: 12 },
+      backgroundColor: "rgba(255, 255, 225, 0.96)",
+      titleColor: "#000000",
+      bodyColor: "#000000",
+      borderColor: "#808080",
+      borderWidth: 1,
+    },
   },
   scales: {
-    x: { title: { display: true, text: "t (zile)" } },
-    y: { title: { display: true, text: "populație" }, beginAtZero: true },
+    x: {
+      title: { display: true, text: "t (zile)", font: { family: "Tahoma", size: 12 } },
+      grid: { color: "#d6d1bd" },
+      ticks: { font: { family: "Tahoma", size: 11 } },
+    },
+    y: {
+      title: { display: true, text: "populație", font: { family: "Tahoma", size: 12 } },
+      beginAtZero: true,
+      grid: { color: "#d6d1bd" },
+      ticks: { font: { family: "Tahoma", size: 11 } },
+    },
   },
 }));
 </script>
 
 <template>
-  <div :style="{ height: (height ?? 420) + 'px' }">
+  <div class="chart-shell" :style="{ height: (height ?? 420) + 'px' }">
     <Line :data="chartData" :options="chartOptions" />
   </div>
 </template>
+
+<style scoped>
+.chart-shell {
+  padding: 8px;
+  background: #ffffff;
+  border: 1px inset #808080;
+}
+</style>

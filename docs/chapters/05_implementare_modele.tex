@@ -1,8 +1,8 @@
 % ============================================================
-% CAPITOLUL 5 — IMPLEMENTAREA MODELELOR SIDARTH ȘI SIR
+% CAPITOLUL 5 — IMPLEMENTAREA MODELELOR COMPARTIMENTALE
 % ============================================================
 
-\chapter{Implementarea modelelor SIDARTH și SIR}
+\chapter{Implementarea modelelor compartimentale}
 \label{ch:implementare}
 
 \section{Datele de intrare și inițializarea compartimentelor}
@@ -10,7 +10,7 @@
 
 Datele epidemiologice utilizate de sistem provin din setul public
 \emph{Our World in Data} (OWID) COVID-19 \cite{owid_covid}. Fișierele brute
-nu conțin direct toate compartimentele necesare unui model SIDARTH, ci serii
+nu conțin direct toate compartimentele necesare modelului SIDARTHE, ci serii
 temporale agregate, cum ar fi cazurile noi, cazurile cumulate, decesele
 cumulate și populația. Din acest motiv, etapa de preprocesare nu pretinde că
 recuperează starea epidemiologică completă a populației. Ea construiește o
@@ -34,56 +34,58 @@ iar susceptibilii se obțin din bilanțul populației,
 S(t)=N-I(t)-R_{\text{removed}}(t).
 \end{equation}
 
-Pentru modelul SIR, aceste trei valori pot fi folosite direct ca
-$(S_0,I_0,R_0)$. Pentru SIDARTH, aceeași informație este distribuită într-o
-stare inițială mai bogată: cazurile active observabile sunt plasate în
+Pentru modelele SIR, SIS, SEIR și SIRS, aceste trei valori sunt mapate direct sau
+printr-o transformare simplă, în funcție de existența compartimentului
+\emph{removed}. Pentru SIDARTHE, aceeași informație este distribuită
+într-o stare inițială clinică mai bogată: cazurile active observabile sunt plasate în
 compartimentul $I$, persoanele ieșite din infecție sunt plasate în $H$, iar
-compartimentele $D$, $A$, $R$ și $T$ pornesc de la zero. Această alegere este
-deliberat conservatoare. Ea nu afirmă că distribuția clinică reală este
-cunoscută, ci oferă o condiție inițială reproductibilă, potrivită pentru
-compararea implementărilor și pentru analiza sensibilității la parametri.
+compartimentele clinice neobservabile pornesc de la zero. Această alegere este
+deliberat conservatoare. Ea nu afirmă că distribuția clinică reală este cunoscută,
+ci oferă o condiție inițială reproductibilă, potrivită pentru compararea
+implementărilor și pentru analiza sensibilității la parametri.
 
-\begin{table}[htbp]
+\begin{table*}[t]
 \centering
 \caption{Maparea datelor observabile în condiții inițiale pentru modelele suportate.}
 \label{tab:initializare_modele}
-\begin{tabular}{lll}
+\begin{tabularx}{0.95\textwidth}{lXX}
 \toprule
 \textbf{Model} & \textbf{Compartimente inițiale} & \textbf{Interpretare} \\
 \midrule
-SIR & $S_0$, $I_0$, $R_0$ & model agregat cu stare minimă \\
-SIDARTH & $S_0$, $I_0$, $D_0=A_0=R_0=T_0=0$, $H_0$ & model clinic stratificat \\
+SIS & $S_0 + R_{\text{removed},0}$, $I_0$ & recuperații redevin susceptibili \\
+SIR și SIRS & $S_0$, $I_0$, $R_{\text{removed},0}$ & stare agregată cu imunitate permanentă sau temporară \\
+SEIR & $S_0$, $E_0=0$, $I_0$, $R_{\text{removed},0}$ & latența pornește neobservată \\
+SIDARTHE & $S_0$, $I_0$, $D_0=A_0=R_0=T_0=0$, $H_0$, $E_0=0$ & model clinic cu decese explicite \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 \section{Contractul comun de simulare}
 \label{sec:contract_simulare}
 
-Pivotarea către SIDARTH a impus schimbarea contractului intern dintre API și
-runnere. Versiunea inițială a sistemului transmitea doar parametrii
-$\beta$ și $\gamma$ și presupunea implicit că rezultatul conține curbele
-$S$, $I$ și $R$. Noua versiune introduce câmpul \texttt{model\_type}, un obiect
-\texttt{parameters} și un obiect \texttt{initial}. În acest fel, același flux
-poate executa SIDARTH ca model principal și SIR ca model secundar, fără a
-modifica interfața de cozi sau mecanismul de benchmark.
+Extinderea aplicației la SIDARTHE și la modelele SIR/SIS/SEIR/SIRS a impus
+generalizarea contractului intern dintre API și runnere. Versiunea inițială a
+sistemului transmitea doar parametrii $\beta$ și $\gamma$ și presupunea implicit
+că rezultatul conține curbele $S$, $I$ și $R$. Versiunea curentă folosește
+câmpul \texttt{model\_type}, un obiect \texttt{parameters} și un obiect
+\texttt{initial}. În acest fel, același flux poate executa toate modelele
+suportate fără a modifica interfața de cozi sau mecanismul de benchmark.
 
-\begin{lstlisting}[language=bash, caption={Structura job-ului publicat în Redis pentru o simulare SIDARTH.}]
+\begin{lstlisting}[language=bash, caption={Structura job-ului publicat în Redis pentru o simulare SIDARTHE.}]
 {
   "simulation_id": "a3f9c2d1-...",
   "dataset_id": "7b4e1a02-...",
-  "model_type": "sidarth",
-  "language": "python",
+  "model_type": "sidarthe",
   "parameters": {
     "alpha": 0.57, "beta": 0.011, "gamma": 0.456, "delta": 0.011,
     "epsilon": 0.171, "zeta": 0.125, "lambda": 0.034,
     "eta": 0.125, "rho": 0.034, "theta": 0.370,
     "mu": 0.017, "kappa": 0.017, "nu": 0.027,
-    "xi": 0.017, "sigma": 0.017
+    "xi": 0.017, "sigma": 0.017, "tau": 0.010
   },
   "initial": {
     "s": 19000000, "i": 1200, "d": 0, "a": 0,
-    "r": 0, "t": 0, "h": 18000
+    "r": 0, "t": 0, "h": 18000, "e": 0
   },
   "population_n": 19019200,
   "t_max": 160,
@@ -94,30 +96,37 @@ modifica interfața de cozi sau mecanismul de benchmark.
 Coada Redis a fost redenumită din \texttt{sir:jobs:<language>} în
 \texttt{epimodel:jobs:<language>}. Schimbarea este mică în cod, dar importantă
 conceptual: runner-ul nu mai este o implementare exclusivă SIR, ci un executor
-pentru modele compartimentale compatibile cu schema comună. Rezultatele sunt
-stocate în \texttt{simulation\_results} ca obiect JSONB \texttt{compartments},
-nu ca trei coloane fixe. Pentru o rulare SIDARTH, un punct temporal conține
-cheile \texttt{s}, \texttt{i}, \texttt{d}, \texttt{a}, \texttt{r}, \texttt{t}
-și \texttt{h}; pentru SIR, același câmp conține doar \texttt{s}, \texttt{i}
-și \texttt{r}.
+pentru modele compartimentale compatibile cu schema comună. Pentru LSTM există
+o coadă separată, \texttt{epimodel:jobs:lstm}, consumată de runner-ul
+\texttt{runner-lstm}. Limbajul nu trebuie transmis în payload pentru modelele
+compartimentale, deoarece este deja codificat în numele cozii Redis
+(\texttt{epimodel:jobs:r}, \texttt{epimodel:jobs:julia} sau
+\texttt{epimodel:jobs:python}); pentru LSTM, rutarea este determinată de
+\texttt{model\_type}. Rezultatele sunt stocate în
+\texttt{simulation\_results} ca obiect JSONB \texttt{compartments},
+nu ca trei coloane fixe. Pentru o rulare SIDARTHE, un punct temporal conține
+cheile \texttt{s}, \texttt{i}, \texttt{d}, \texttt{a}, \texttt{r}, \texttt{t},
+\texttt{h} și \texttt{e}; pentru SIR, același câmp conține doar
+\texttt{s}, \texttt{i} și \texttt{r}; pentru SEIR, ordinea este
+\texttt{s}, \texttt{e}, \texttt{i}, \texttt{r}; pentru LSTM, câmpul conține
+serii predictive precum \texttt{observed}, \texttt{fitted} și
+\texttt{predicted}.
 
-\section{Implementarea modelului SIDARTH}
-\label{sec:implementare_sidarth}
+\section{Implementarea modelului SIDARTHE}
+\label{sec:implementare_sidarthe}
 
-Modelul implementat în această lucrare este o variantă SIDARTH derivată din
-familia SIDARTHE propusă de Giordano et al. \cite{giordano2020sidarthe}. Se
-păstrează compartimentele $S$, $I$, $D$, $A$, $R$, $T$ și $H$, iar
-compartimentul $E$ al deceselor este omis pentru a concentra aplicația pe
-dinamica infecției, diagnosticării, severității și vindecării. Ecuația pentru
-$T$ folosește astfel doar ieșirea către $H$, prin rata $\sigma$, nu și termenul
-de mortalitate $\tau$.
+Sistemul include varianta clinică \texttt{sidarthe}. Modelul folosește
+compartimentele $S$, $I$, $D$, $A$, $R$, $T$, $H$ și $E$, iar ieșirea din $T$ este
+împărțită între vindecare ($\sigma T$) și deces ($\tau T$). Această alegere
+elimină ambiguitatea dintre vindecări și decese și păstrează explicit bilanțul
+populației în toate rezultatele.
 
 În Python, nucleul modelului este o funcție RHS compatibilă cu
 \texttt{scipy.integrate.solve\_ivp}. Ea primește vectorul de stare, dicționarul
 de parametri și populația totală:
-\begin{lstlisting}[language=Python, caption={Funcția RHS SIDARTH în runner-ul Python.}]
-def sidarth_rhs(t, y, params, n):
-    s, i, d, a, r, threatened, h = y
+\begin{lstlisting}[language=Python, caption={Funcția RHS SIDARTHE în runner-ul Python.}]
+def sidarthe_rhs(t, y, params, n):
+    s, i, d, a, r, threatened, h, extinct = y
     force = (
         params["alpha"] * i +
         params["beta"] * d +
@@ -132,10 +141,20 @@ def sidarth_rhs(t, y, params, n):
         params["epsilon"] * i - (params["eta"] + params["rho"]) * d,
         params["zeta"] * i - (params["theta"] + params["mu"] + params["kappa"]) * a,
         params["eta"] * d + params["theta"] * a - (params["nu"] + params["xi"]) * r,
-        params["mu"] * a + params["nu"] * r - params["sigma"] * threatened,
+        params["mu"] * a + params["nu"] * r - (params["sigma"] + params["tau"]) * threatened,
         params["lambda"] * i + params["rho"] * d + params["kappa"] * a
             + params["xi"] * r + params["sigma"] * threatened,
+        params["tau"] * threatened,
     ]
+\end{lstlisting}
+
+În ultimele trei ecuații se vede separarea cazurilor severe în vindecare și deces:
+\begin{lstlisting}[language=Python, caption={Ieșirea din compartimentul sever în SIDARTHE.}]
+dT = params["mu"] * a + params["nu"] * r \
+     - (params["sigma"] + params["tau"]) * threatened
+dH = params["lambda"] * i + params["rho"] * d + params["kappa"] * a \
+     + params["xi"] * r + params["sigma"] * threatened
+dE = params["tau"] * threatened
 \end{lstlisting}
 
 Aceeași structură este implementată în R și Julia. În R, funcția este transmisă
@@ -148,29 +167,30 @@ compactă pentru ODE-uri clasice, Julia urmărește performanța și controlul f
 al solverului, iar Python oferă integrare directă cu infrastructura software și
 cu bibliotecile științifice uzuale.
 
-\section{SIR ca model secundar}
+\section{Variantele SIR, SIS, SEIR și SIRS}
 \label{sec:sir_secundar}
 
-Modelul SIR rămâne în sistem pentru comparații și pentru verificări de regresie.
-El are un rol diferit față de versiunea inițială a lucrării. Nu mai este modelul
-principal prin care se discută dinamica clinică a epidemiei, ci un reper
-minimal: dacă două limbaje produc rezultate apropiate pentru SIR, diferențele
-observate ulterior în SIDARTH pot fi analizate în raport cu complexitatea
-modelului, nu cu erori elementare de integrare sau de persistare.
-
-În contractul comun, SIR folosește același câmp \texttt{parameters}, dar cu
-doar două rate, \texttt{beta} și \texttt{gamma}. Condițiile inițiale sunt
-transmise prin \texttt{initial = \{s, i, r\}}, iar rezultatele sunt stocate tot
-în câmpul \texttt{compartments}. Această simetrie simplifică interfața web:
-graficul citește cheile disponibile în fiecare punct temporal și construiește
-curbele fără să presupună apriori numărul de compartimente.
+Modelele din familia SIR rămân în sistem pentru comparații, verificări de
+regresie și explorarea ipotezelor epidemiologice de bază. Ele folosesc același
+câmp \texttt{parameters}, dar cu seturi diferite de rate:
+\texttt{sir} și \texttt{sis} folosesc
+\texttt{beta}, \texttt{gamma}; \texttt{seir} adaugă \texttt{sigma} pentru
+tranziția expuși--infecțioși; iar \texttt{sirs} adaugă \texttt{xi} pentru
+pierderea imunității. Condițiile inițiale sunt transmise prin același obiect
+\texttt{initial}, iar rezultatele sunt stocate tot în \texttt{compartments}.
+Această simetrie simplifică interfața web: graficul citește cheile disponibile
+în fiecare punct temporal și construiește curbele fără să presupună apriori
+numărul de compartimente.
 
 \section{Persistența rezultatelor și exportul}
 \label{sec:persistenta_rezultate}
 
 Tabela \texttt{simulation\_runs} reține metadatele execuției: utilizatorul,
-dataset-ul, modelul, limbajul, populația, orizontul temporal și parametrii sub
-formă JSONB. Tabela \texttt{simulation\_results} reține câte un rând pentru
+studiul, dataset-ul, modelul, limbajul, populația, orizontul temporal și
+parametrii sub formă JSONB. Câmpul \texttt{study\_id} păstrează izolarea
+logică dintre studiile epidemiologice și permite ca aceeași tabelă să conțină
+simulări aparținând unor echipe diferite. Tabela \texttt{simulation\_results}
+reține câte un rând pentru
 fiecare zi simulată, identificat prin perechea \texttt{(simulation\_id, t)}.
 În locul coloanelor fixe \texttt{s}, \texttt{i}, \texttt{r}, rândul conține
 obiectul JSONB \texttt{compartments}. Această decizie evită migrații repetate
@@ -188,11 +208,14 @@ CREATE TABLE simulation_results (
 \end{lstlisting}
 
 Exportul CSV este generat dinamic. API-ul inspectează cheile prezente în
-rezultate, le ordonează în secvența epidemiologică $S,I,D,A,R,T,H$ și scrie
-doar coloanele existente pentru modelul respectiv. Prin urmare, o simulare SIR
-se exportă cu coloanele \texttt{t,s,i,r}, iar o simulare SIDARTH cu
-\texttt{t,s,i,d,a,r,t,h}. Această convenție păstrează fișierele lizibile și
-evită completarea artificială a unor compartimente care nu există în model.
+rezultate, le ordonează în secvența epidemiologică potrivită și scrie doar
+coloanele existente pentru modelul respectiv. Prin urmare, o simulare SIR se
+exportă cu coloanele \texttt{t,s,i,r}, o simulare SEIR cu
+\texttt{t,s,e,i,r}, iar o simulare SIDARTHE cu
+\texttt{t,s,i,d,a,r,t,h,e}. O predicție LSTM se exportă cu coloanele
+\texttt{t,observed,fitted,predicted}. Această convenție păstrează
+fișierele lizibile și evită completarea artificială a unor compartimente care nu
+există în model.
 
 \section{Metrici de performanță}
 \label{sec:metrici_implementare}

@@ -133,4 +133,14 @@ Edouard Mathieu, Hannah Ritchie, Lucas Rod{\'e}s-Guirao, Cameron Appel, Charlie
 \newblock Coronavirus pandemic ({COVID}-19).
 \newblock Our World in Data, 2020.
 
+\bibitem{hochreiter1997lstm}
+Sepp Hochreiter and J{\"u}rgen Schmidhuber.
+\newblock Long short-term memory.
+\newblock {\em Neural Computation}, 9(8):1735--1780, 1997.
+
+\bibitem{nelder1965simplex}
+J.~A. Nelder and R.~Mead.
+\newblock A simplex method for function minimization.
+\newblock {\em The Computer Journal}, 7(4):308--313, 1965.
+
 \end{thebibliography}

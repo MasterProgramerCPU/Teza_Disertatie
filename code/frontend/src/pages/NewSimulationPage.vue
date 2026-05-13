@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDatasetsStore } from "@/stores/datasets.store";
 import { useSimulationsStore } from "@/stores/simulations.store";
+import { useStudiesStore } from "@/stores/studies.store";
 import ParameterForm from "@/components/ParameterForm.vue";
 import { defaultParameters } from "@/model-presets";
 import type { Language, ModelType } from "@/types";
@@ -11,6 +12,7 @@ const route = useRoute();
 const router = useRouter();
 const datasets = useDatasetsStore();
 const simulations = useSimulationsStore();
+const studies = useStudiesStore();
 
 const datasetId = ref<string>((route.query.dataset_id as string) ?? "");
 const params = ref<{
@@ -19,8 +21,8 @@ const params = ref<{
   t_max: number;
   language: Language;
 }>({
-  model_type: "sidarth",
-  parameters: defaultParameters("sidarth"),
+  model_type: "sidarthe",
+  parameters: defaultParameters("sidarthe"),
   t_max: 365,
   language: "python",
 });
@@ -61,7 +63,14 @@ async function submit() {
 <template>
   <h1>Simulare nouă</h1>
 
-  <div class="card">
+  <div v-if="!studies.canWriteSimulations" class="card">
+    <p class="alert info">
+      Rolul tău (<strong>{{ studies.currentRole }}</strong>) nu permite lansarea de simulări.
+      Doar administratorii și cercetătorii pot crea simulări noi.
+    </p>
+  </div>
+
+  <div v-else class="card">
     <form @submit.prevent="submit">
       <div class="col">
         <div>

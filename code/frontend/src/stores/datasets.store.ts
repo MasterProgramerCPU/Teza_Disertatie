@@ -2,6 +2,15 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { api } from "@/api/client";
 import type { Dataset } from "@/types";
+import { useStudiesStore } from "@/stores/studies.store";
+
+function basePath(): string {
+  const studies = useStudiesStore();
+  if (!studies.currentStudyId) {
+    throw new Error("no study selected");
+  }
+  return `/studies/${studies.currentStudyId}/datasets`;
+}
 
 export const useDatasetsStore = defineStore("datasets", () => {
   const items = ref<Dataset[]>([]);
@@ -12,7 +21,7 @@ export const useDatasetsStore = defineStore("datasets", () => {
     loading.value = true;
     error.value = null;
     try {
-      items.value = await api.get<Dataset[]>("/datasets");
+      items.value = (await api.get<Dataset[] | null>(basePath())) ?? [];
     } catch (e) {
       error.value = (e as Error).message;
     } finally {
@@ -21,7 +30,7 @@ export const useDatasetsStore = defineStore("datasets", () => {
   }
 
   async function get(id: string): Promise<Dataset> {
-    return api.get<Dataset>(`/datasets/${id}`);
+    return api.get<Dataset>(`${basePath()}/${id}`);
   }
 
   async function upload(name: string, diseaseCode: string, file: File) {
@@ -29,13 +38,13 @@ export const useDatasetsStore = defineStore("datasets", () => {
     form.append("name", name);
     form.append("disease_code", diseaseCode);
     form.append("file", file);
-    const created = await api.postForm<Dataset>("/datasets", form);
+    const created = await api.postForm<Dataset>(basePath(), form);
     items.value = [created, ...items.value];
     return created;
   }
 
   async function remove(id: string) {
-    await api.delete<unknown>(`/datasets/${id}`);
+    await api.delete<unknown>(`${basePath()}/${id}`);
     items.value = items.value.filter((d) => d.id !== id);
   }
 

@@ -60,6 +60,8 @@ func main() {
 	log.Printf("DEBUG: redis ping OK")
 
 	users := repository.NewUserRepository(pool)
+	studies := repository.NewStudyRepository(pool)
+	members := repository.NewStudyMemberRepository(pool)
 	datasets := repository.NewDatasetRepository(pool)
 	sims := repository.NewSimulationRepository(pool)
 	results := repository.NewResultsRepository(pool)
@@ -67,14 +69,19 @@ func main() {
 
 	dispatcher := runner.NewDispatcher(rdb)
 	jwt := authmw.NewJWTMiddleware(cfg.JWTSecret)
+	rbac := authmw.NewRBAC(users, members)
 
 	deps := router.Deps{
 		Health:      handlers.NewHealthHandler(pool, rdb),
 		Auth:        handlers.NewAuthHandler(users, cfg.JWTSecret, cfg.JWTExpiry, cfg.BcryptCost),
+		Users:       handlers.NewUsersHandler(users, studies),
+		Studies:     handlers.NewStudiesHandler(studies, members, users),
 		Datasets:    handlers.NewDatasetsHandler(datasets, cfg.MaxUploadBytes),
 		Simulations: handlers.NewSimulationsHandler(sims, datasets, results, benches, dispatcher),
 		Benchmarks:  handlers.NewBenchmarksHandler(benches),
+		Admin:       handlers.NewAdminHandler(users, studies, pool),
 		JWT:         jwt,
+		RBAC:        rbac,
 	}
 
 	srv := &http.Server{

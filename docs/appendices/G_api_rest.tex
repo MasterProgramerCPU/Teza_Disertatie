@@ -3,11 +3,14 @@
 
 API-ul REST este implementat în pachetul \texttt{internal/api} al backend-ului Go.
 Rutele sunt definite centralizat în routerul \texttt{chi}, iar handler-ele sunt
-separate pe domenii: autentificare, dataseturi, simulări, benchmarkuri și health
-check. Specificația tabelară a endpointurilor se află în
+separate pe domenii: autentificare, profil utilizator, studii, membri,
+dataseturi, simulări, benchmarkuri, super-admin și health check. Specificația
+tabelară a endpointurilor se află în
 \cref{tab:endpoints}; în această anexă sunt incluse fișierele relevante pentru
 definirea rutelor și a formatului comun de răspuns.
 
 \lstinputlisting[language=Go, caption={Routerul REST al API-ului Go.}]{../code/api/internal/api/router/router.go}
+
+\lstinputlisting[language=Go, caption={Middleware-ul RBAC pentru studii și super-admin.}]{../code/api/internal/api/middleware/rbac.go}
 
 \lstinputlisting[language=Go, caption={Formatul comun al răspunsurilor JSON.}]{../code/api/internal/api/handlers/response.go}

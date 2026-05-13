@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/tudorgeana/emedicine-api/internal/models"
@@ -16,7 +17,9 @@ func NewBenchmarkRepository(pool *pgxpool.Pool) *BenchmarkRepository {
 	return &BenchmarkRepository{pool: pool}
 }
 
-func (r *BenchmarkRepository) AggregateByModelAndLanguage(ctx context.Context) ([]models.BenchmarkAggregate, error) {
+// AggregateByModelAndLanguage returneaza statistici de benchmark filtrate
+// pe un studiu specific.
+func (r *BenchmarkRepository) AggregateByModelAndLanguage(ctx context.Context, studyID uuid.UUID) ([]models.BenchmarkAggregate, error) {
 	const q = `
 		SELECT
 			s.model_type,
@@ -28,11 +31,11 @@ func (r *BenchmarkRepository) AggregateByModelAndLanguage(ctx context.Context) (
 			percentile_cont(0.5) WITHIN GROUP (ORDER BY b.peak_memory_mb) AS median_memory_mb
 		FROM benchmarks b
 		JOIN simulation_runs s ON s.id = b.simulation_id
-		WHERE s.status = 'completed'
+		WHERE s.status = 'completed' AND s.study_id = $1
 		GROUP BY s.model_type, s.language
 		ORDER BY s.model_type, s.language`
 
-	rows, err := r.pool.Query(ctx, q)
+	rows, err := r.pool.Query(ctx, q, studyID)
 	if err != nil {
 		return nil, err
 	}

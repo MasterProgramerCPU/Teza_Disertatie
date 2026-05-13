@@ -81,6 +81,21 @@ services:
       DATABASE_URL: "postgres://yugabyte:yugabyte@yugabyte:5433/yugabyte?sslmode=disable"
     restart: unless-stopped
 
+  runner-lstm:
+    build:
+      context: ./runners/lstm
+      dockerfile: Dockerfile
+    container_name: emedicine-runner-lstm
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgres://yugabyte:yugabyte@yugabyte:5433/yugabyte?sslmode=disable"
+    restart: unless-stopped
+
   runner-r:
     build:
       context: ./runners/r

@@ -19,7 +19,7 @@ func NewDatasetRepository(pool *pgxpool.Pool) *DatasetRepository {
 	return &DatasetRepository{pool: pool}
 }
 
-func (r *DatasetRepository) Create(ctx context.Context, userID uuid.UUID, name, diseaseCode string, records []models.EpidemiologicalRecord) (*models.Dataset, error) {
+func (r *DatasetRepository) Create(ctx context.Context, studyID, userID uuid.UUID, name, diseaseCode string, records []models.EpidemiologicalRecord) (*models.Dataset, error) {
 	tx, err := r.pool.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -28,11 +28,11 @@ func (r *DatasetRepository) Create(ctx context.Context, userID uuid.UUID, name, 
 
 	var d models.Dataset
 	err = tx.QueryRow(ctx, `
-		INSERT INTO datasets (user_id, name, disease_code, record_count)
-		VALUES ($1, $2, $3, $4)
-		RETURNING id, user_id, name, disease_code, uploaded_at, record_count`,
-		userID, name, diseaseCode, len(records),
-	).Scan(&d.ID, &d.UserID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount)
+		INSERT INTO datasets (user_id, study_id, name, disease_code, record_count)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING id, user_id, study_id, name, disease_code, uploaded_at, record_count`,
+		userID, studyID, name, diseaseCode, len(records),
+	).Scan(&d.ID, &d.UserID, &d.StudyID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount)
 	if err != nil {
 		return nil, err
 	}
@@ -58,10 +58,10 @@ func (r *DatasetRepository) Create(ctx context.Context, userID uuid.UUID, name, 
 	return &d, nil
 }
 
-func (r *DatasetRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([]models.Dataset, error) {
+func (r *DatasetRepository) ListByStudy(ctx context.Context, studyID uuid.UUID) ([]models.Dataset, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT id, user_id, name, disease_code, uploaded_at, record_count
-		FROM datasets WHERE user_id = $1 ORDER BY uploaded_at DESC`, userID)
+		SELECT id, user_id, study_id, name, disease_code, uploaded_at, record_count
+		FROM datasets WHERE study_id = $1 ORDER BY uploaded_at DESC`, studyID)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (r *DatasetRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([
 	var out []models.Dataset
 	for rows.Next() {
 		var d models.Dataset
-		if err := rows.Scan(&d.ID, &d.UserID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount); err != nil {
+		if err := rows.Scan(&d.ID, &d.UserID, &d.StudyID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount); err != nil {
 			return nil, err
 		}
 		out = append(out, d)
@@ -78,13 +78,13 @@ func (r *DatasetRepository) ListByUser(ctx context.Context, userID uuid.UUID) ([
 	return out, rows.Err()
 }
 
-func (r *DatasetRepository) Get(ctx context.Context, userID, id uuid.UUID) (*models.Dataset, error) {
+func (r *DatasetRepository) Get(ctx context.Context, studyID, id uuid.UUID) (*models.Dataset, error) {
 	var d models.Dataset
 	err := r.pool.QueryRow(ctx, `
-		SELECT id, user_id, name, disease_code, uploaded_at, record_count
-		FROM datasets WHERE id = $1 AND user_id = $2`,
-		id, userID,
-	).Scan(&d.ID, &d.UserID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount)
+		SELECT id, user_id, study_id, name, disease_code, uploaded_at, record_count
+		FROM datasets WHERE id = $1 AND study_id = $2`,
+		id, studyID,
+	).Scan(&d.ID, &d.UserID, &d.StudyID, &d.Name, &d.DiseaseCode, &d.UploadedAt, &d.RecordCount)
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, ErrNotFound
 	}
@@ -94,12 +94,23 @@ func (r *DatasetRepository) Get(ctx context.Context, userID, id uuid.UUID) (*mod
 	return &d, nil
 }
 
-func (r *DatasetRepository) Delete(ctx context.Context, userID, id uuid.UUID) error {
-	tag, err := r.pool.Exec(ctx, `DELETE FROM datasets WHERE id = $1 AND user_id = $2`, id, userID)
+// Delete sterge un dataset din studiu. Daca requireOwner e adevarat, doar
+// creatorul (user_id) il poate sterge; altfel, oricine cu permisiuni de admin
+// in studiu (verificarea facuta in handler) poate sterge.
+func (r *DatasetRepository) Delete(ctx context.Context, studyID, id uuid.UUID, ownerID *uuid.UUID) error {
+	var (
+		tag any
+		err error
+	)
+	if ownerID != nil {
+		tag, err = r.pool.Exec(ctx, `DELETE FROM datasets WHERE id = $1 AND study_id = $2 AND user_id = $3`, id, studyID, *ownerID)
+	} else {
+		tag, err = r.pool.Exec(ctx, `DELETE FROM datasets WHERE id = $1 AND study_id = $2`, id, studyID)
+	}
 	if err != nil {
 		return err
 	}
-	if tag.RowsAffected() == 0 {
+	if t, ok := tag.(interface{ RowsAffected() int64 }); ok && t.RowsAffected() == 0 {
 		return ErrNotFound
 	}
 	return nil

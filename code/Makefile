@@ -1,17 +1,18 @@
-.PHONY: help up down logs logs-api logs-runners rebuild rebuild-api rebuild-python rebuild-r rebuild-julia rebuild-frontend migrate health tidy build clean data data-clean ui-dev ui-build ui-install
+.PHONY: help up down logs logs-api logs-runners rebuild rebuild-api rebuild-python rebuild-lstm rebuild-r rebuild-julia rebuild-frontend migrate health tidy build clean data data-clean ui-dev ui-build ui-install
 
 COMPOSE := docker compose
 
 help:
 	@echo "Targets:"
-	@echo "  up              - start full stack (yugabyte, redis, migrate, api, 3 runners)"
+	@echo "  up              - start full stack (yugabyte, redis, migrate, api, 4 runners)"
 	@echo "  down            - stop and remove containers"
 	@echo "  logs            - tail all logs"
 	@echo "  logs-api        - tail api logs"
-	@echo "  logs-runners    - tail logs of all 3 runners"
+	@echo "  logs-runners    - tail logs of all 4 runners"
 	@echo "  rebuild         - rebuild + restart api and all runners"
 	@echo "  rebuild-api     - rebuild api image only"
 	@echo "  rebuild-python  - rebuild python runner only"
+	@echo "  rebuild-lstm    - rebuild LSTM runner only"
 	@echo "  rebuild-r       - rebuild R runner only"
 	@echo "  rebuild-julia   - rebuild Julia runner only"
 	@echo "  migrate         - re-run migrations only"
@@ -19,7 +20,7 @@ help:
 	@echo "  tidy            - go mod tidy in ./api"
 	@echo "  build           - go build in ./api"
 	@echo "  clean           - down + remove yugabyte volume"
-	@echo "  data            - generate 10 country CSVs from OWID (scripts/preprocess_owid.py)"
+	@echo "  data            - generate European country CSVs from OWID (scripts/preprocess_owid.py)"
 	@echo "  data-clean      - delete data/processed/ output CSVs"
 	@echo "  rebuild-frontend- rebuild frontend image only"
 	@echo "  ui-install      - npm install in ./frontend"
@@ -39,16 +40,19 @@ logs-api:
 	$(COMPOSE) logs -f api
 
 logs-runners:
-	$(COMPOSE) logs -f runner-python runner-r runner-julia
+	$(COMPOSE) logs -f runner-python runner-lstm runner-r runner-julia
 
 rebuild:
-	$(COMPOSE) up -d --build api runner-python runner-r runner-julia
+	$(COMPOSE) up -d --build api runner-python runner-lstm runner-r runner-julia
 
 rebuild-api:
 	$(COMPOSE) up -d --build api
 
 rebuild-python:
 	$(COMPOSE) up -d --build runner-python
+
+rebuild-lstm:
+	$(COMPOSE) up -d --build runner-lstm
 
 rebuild-r:
 	$(COMPOSE) up -d --build runner-r

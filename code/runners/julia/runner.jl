@@ -2,7 +2,8 @@
 Epidemiological model runner -- Julia.
 
 Consumes simulation jobs from Redis list `epimodel:jobs:julia` (BRPOP),
-solves SIDARTH or SIR ODE systems with DifferentialEquations.jl (Tsit5, saveat=1),
+solves SIS/SIR/SEIR/SIRS/SIDARTHE ODE systems with
+DifferentialEquations.jl (Tsit5, saveat=1),
 and inserts compartment trajectories into YugabyteDB via LibPQ.
 =#
 
@@ -25,17 +26,59 @@ const CTX = RunCtx(true)
 function sir_rhs!(du, u, p, t)
     _ = t
     S, I, R = u
-    β = p["beta"]
-    γ = p["gamma"]
+    beta = p["beta"]
+    gamma = p["gamma"]
     N = p["N"]
-    du[1] = -β * S * I / N
-    du[2] =  β * S * I / N - γ * I
-    du[3] =  γ * I
+    du[1] = -beta * S * I / N
+    du[2] =  beta * S * I / N - gamma * I
+    du[3] =  gamma * I
 end
 
-function sidarth_rhs!(du, u, p, t)
+function sis_rhs!(du, u, p, t)
     _ = t
-    S, I, D, A, R, T, H = u
+    S, I = u
+    beta = p["beta"]
+    gamma = p["gamma"]
+    N = p["N"]
+    infections = beta * S * I / N
+    recoveries = gamma * I
+    du[1] = -infections + recoveries
+    du[2] =  infections - recoveries
+end
+
+function seir_rhs!(du, u, p, t)
+    _ = t
+    S, E, I, R = u
+    beta = p["beta"]
+    sigma = p["sigma"]
+    gamma = p["gamma"]
+    N = p["N"]
+    infections = beta * S * I / N
+    du[1] = -infections
+    du[2] =  infections - sigma * E
+    du[3] =  sigma * E - gamma * I
+    du[4] =  gamma * I
+end
+
+function sirs_rhs!(du, u, p, t)
+    _ = t
+    S, I, R = u
+    beta = p["beta"]
+    gamma = p["gamma"]
+    xi = p["xi"]
+    N = p["N"]
+    infections = beta * S * I / N
+    recoveries = gamma * I
+    waning = xi * R
+    du[1] = -infections + waning
+    du[2] =  infections - recoveries
+    du[3] =  recoveries - waning
+end
+
+function sidarthe_rhs!(du, u, p, t)
+    _ = t
+    S, I, D, A, R, T, H, E = u
+    _ = E
     N = p["N"]
     force = (p["alpha"] * I + p["beta"] * D + p["gamma"] * A + p["delta"] * R) / N
     new_infections = S * force
@@ -45,16 +88,23 @@ function sidarth_rhs!(du, u, p, t)
     du[3] = p["epsilon"] * I - (p["eta"] + p["rho"]) * D
     du[4] = p["zeta"] * I - (p["theta"] + p["mu"] + p["kappa"]) * A
     du[5] = p["eta"] * D + p["theta"] * A - (p["nu"] + p["xi"]) * R
-    du[6] = p["mu"] * A + p["nu"] * R - p["sigma"] * T
+    du[6] = p["mu"] * A + p["nu"] * R - (p["sigma"] + p["tau"]) * T
     du[7] = p["lambda"] * I + p["rho"] * D + p["kappa"] * A + p["xi"] * R + p["sigma"] * T
+    du[8] = p["tau"] * T
     nothing
 end
 
 function model_layout(model_type::AbstractString)
-    if model_type == "sir"
+    if model_type == "sis"
+        return (state_names = ["s", "i"], rhs = sis_rhs!)
+    elseif model_type == "sir"
         return (state_names = ["s", "i", "r"], rhs = sir_rhs!)
-    elseif model_type == "sidarth"
-        return (state_names = ["s", "i", "d", "a", "r", "t", "h"], rhs = sidarth_rhs!)
+    elseif model_type == "seir"
+        return (state_names = ["s", "e", "i", "r"], rhs = seir_rhs!)
+    elseif model_type == "sirs"
+        return (state_names = ["s", "i", "r"], rhs = sirs_rhs!)
+    elseif model_type == "sidarthe"
+        return (state_names = ["s", "i", "d", "a", "r", "t", "h", "e"], rhs = sidarthe_rhs!)
     end
     error("unsupported model_type: $model_type")
 end
@@ -71,7 +121,7 @@ end
 
 function run_simulation(conn::LibPQ.Connection, job::Dict{Symbol, Any})
     sim_id = String(job[:simulation_id])
-    model_type = String(get(job, :model_type, "sidarth"))
+    model_type = String(get(job, :model_type, "sidarthe"))
     layout = model_layout(model_type)
     params = Dict{String, Float64}(String(k) => Float64(v) for (k, v) in pairs(job[:parameters]))
     N = Float64(job[:population_n])

@@ -53,7 +53,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: api
-          image: ghcr.io/masterprogramercpu/sidarth-api:latest
+          image: ghcr.io/masterprogramercpu/emedicine-api:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

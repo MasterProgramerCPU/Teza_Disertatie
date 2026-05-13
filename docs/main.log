@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  12 MAY 2026 13:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  13 MAY 2026 15:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -11,9 +11,9 @@ L3 programming layer <2025-01-18>
 .cls
 Document Class: report 2024/06/29 v1.4n Standard LaTeX document class
 
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/size12
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/size10
 .clo
-File: size12.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
+File: size10.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count196
 \c@chapter=\count197
@@ -936,8 +936,34 @@ stings.cfg
 File: listings.cfg 2024/09/23 1.10c listings configuration
 ))
 Package: listings 2024/09/23 1.10c (Carsten Heinz)
-\@float@every@algorithm=\toks60
-\c@algorithm=\count347
+
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/todonotes/t
+odonotes.sty
+Package: todonotes 2024/01/05 v1.1.7 Todonotes source and documentation.
+Package: todonotes 2024/01/05
+
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/base/ifthen
+.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+)
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/xkeyval/xke
+yval.sty
+Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/generic/xkeyval/x
+keyval.tex
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/generic/xkeyval/x
+kvutils.tex
+\XKV@toks=\toks60
+\XKV@tempa@toks=\toks61
+)
+\XKV@depth=\count347
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\c@@todonotes@numberoftodonotes=\count348
+)
+\@float@every@algorithm=\toks62
+\c@algorithm=\count349
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/natbib/natb
 ib.sty
@@ -945,18 +971,18 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip70
 \bibsep=\skip71
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count348
+\c@NAT@ctr=\count350
 )
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/csquotes/cs
 quotes.sty
 Package: csquotes 2024-04-04 v5.2o context-sensitive quotations (JAW)
-\csq@reset=\count349
-\csq@gtype=\count350
-\csq@glevel=\count351
-\csq@qlevel=\count352
-\csq@maxlvl=\count353
-\csq@tshold=\count354
-\csq@ltx@everypar=\toks61
+\csq@reset=\count351
+\csq@gtype=\count352
+\csq@glevel=\count353
+\csq@qlevel=\count354
+\csq@maxlvl=\count355
+\csq@tshold=\count356
+\csq@ltx@everypar=\toks63
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/csquotes/cs
 quotes.def
@@ -1022,7 +1048,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 voptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count355
+\c@section@level=\count357
 )
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/generic/stringenc
 /stringenc.sty
@@ -1030,8 +1056,8 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
 \@linkdim=\dimen331
-\Hy@linkcounter=\count356
-\Hy@pagecounter=\count357
+\Hy@linkcounter=\count358
+\Hy@pagecounter=\count359
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/hyperref/pd
 1enc.def
@@ -1043,7 +1069,7 @@ Now handling font encoding PD1 ...
 ntcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count358
+\Hy@SavedSpaceFactor=\count360
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/hyperref/pu
 enc.def
@@ -1058,7 +1084,7 @@ Package hyperref Info: Plain pages OFF on input line 4172.
 Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
-\c@Hy@tempcnt=\count359
+\c@Hy@tempcnt=\count361
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip18
@@ -1076,7 +1102,7 @@ c/bigintcalc.sty
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count360
+\Fld@menulength=\count362
 \Field@Width=\dimen333
 \Fld@charsize=\dimen334
 Package hyperref Info: Hyper figures OFF on input line 6042.
@@ -1092,9 +1118,9 @@ hi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count361
-\c@Item=\count362
-\c@Hfootnote=\count363
+\Hy@abspage=\count363
+\c@Item=\count364
+\c@Hfootnote=\count365
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
@@ -1108,8 +1134,8 @@ Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
 kage
 with kernel methods
 )
-\Fld@listcount=\count364
-\c@bookmark@seq@number=\count365
+\Fld@listcount=\count366
+\c@bookmark@seq@number=\count367
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/rerunfilech
 eck/rerunfilecheck.sty
@@ -1163,9 +1189,9 @@ Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@widthL=\skip84
 \f@nch@widthC=\skip85
 \f@nch@widthR=\skip86
-\@temptokenb=\toks62
+\@temptokenb=\toks64
 )
-\c@teorema=\count366
+\c@teorema=\count368
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -1174,29 +1200,29 @@ Package csquotes Info: Redefining alias 'default' -> 'romanian'.
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/l3backend/l
 3backend-pdftex.def
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count367
+\l__color_backend_stack_int=\count369
 \l__pdf_internal_box=\box79
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 216.
-LaTeX Font Info:    ... okay on input line 216.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 223.
+LaTeX Font Info:    ... okay on input line 223.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1206,46 +1232,46 @@ LaTeX Font Info:    ... okay on input line 216.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(85.35826pt, 441.01773pt, 71.13188pt)
-* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* h-part:(L,W,R)=(45.52458pt, 506.45871pt, 45.52458pt)
+* v-part:(T,H,B)=(56.9055pt, 725.54538pt, 62.59596pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=441.01773pt
-* \textheight=702.78308pt
-* \oddsidemargin=13.08827pt
-* \evensidemargin=13.08827pt
-* \topmargin=-38.1381pt
+* \textwidth=506.45871pt
+* \textheight=725.54538pt
+* \oddsidemargin=-26.7454pt
+* \evensidemargin=-26.7454pt
+* \topmargin=-52.36449pt
 * \headheight=14.0pt
 * \headsep=25.0pt
-* \topskip=12.0pt
+* \topskip=10.0pt
 * \footskip=30.0pt
-* \marginparwidth=35.0pt
+* \marginparwidth=56.9055pt
 * \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \columnsep=21.33955pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
-* \@twocolumnfalse
+* \@twocolumntrue
 * \@twosidefalse
 * \@mparswitchfalse
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 216.
-Package microtype Info: Applying patch `item' on input line 216.
-Package microtype Info: Applying patch `toc' on input line 216.
-Package microtype Info: Applying patch `eqnum' on input line 216.
-Package microtype Info: Applying patch `footnote' on input line 216.
-Package microtype Info: Applying patch `verbatim' on input line 216.
-LaTeX Info: Redefining \microtypesetup on input line 216.
+LaTeX Info: Redefining \microtypecontext on input line 223.
+Package microtype Info: Applying patch `item' on input line 223.
+Package microtype Info: Applying patch `toc' on input line 223.
+Package microtype Info: Applying patch `eqnum' on input line 223.
+Package microtype Info: Applying patch `footnote' on input line 223.
+Package microtype Info: Applying patch `verbatim' on input line 223.
+LaTeX Info: Redefining \microtypesetup on input line 223.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 216.
+LaTeX Info: Redefining \showhyphens on input line 223.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -1258,17 +1284,17 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/context/base/mkii
 /supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count368
+\scratchcounter=\count370
 \scratchdimen=\dimen335
 \scratchbox=\box80
-\nofMPsegments=\count369
-\nofMParguments=\count370
-\everyMPshowfont=\toks63
-\MPscratchCnt=\count371
+\nofMPsegments=\count371
+\nofMParguments=\count372
+\everyMPshowfont=\toks65
+\MPscratchCnt=\count373
 \MPscratchDim=\dimen336
-\MPnumerator=\count372
-\makeMPintoPDFobject=\count373
-\everyMPtoPDFconversion=\toks64
+\MPnumerator=\count374
+\makeMPintoPDFobject=\count375
+\everyMPtoPDFconversion=\toks66
 )
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/epstopdf-pk
 g/epstopdf-base.sty
@@ -1295,14 +1321,14 @@ Package caption Info: End \AtBeginDocument code.
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
-\c@lstlisting=\count374
-Package hyperref Info: Link coloring OFF on input line 216.
+\c@lstlisting=\count376
+Package hyperref Info: Link coloring OFF on input line 223.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-Package hyperref Info: Option `pageanchor' set `false' on input line 217.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 226
+Package hyperref Info: Option `pageanchor' set `false' on input line 225.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 234
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1313,7 +1339,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 t-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 226
+LaTeX Font Info:    Trying to load font information for U+msb on input line 234
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1324,8 +1350,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 t-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 22
-6.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 23
+4.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/jknapltx/ur
 sfs.fd
@@ -1334,10 +1360,11 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 
 [1
 
+
 {/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updm
 ap/pdftex.map}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
 nc/dvips/cm-super/cm-super-t1.enc}]
-Package hyperref Info: Option `pageanchor' set `true' on input line 262.
+Package hyperref Info: Option `pageanchor' set `true' on input line 270.
  (./chapters/00_rezumat.tex)
 
 [1
@@ -1393,333 +1420,666 @@ Package microtype Info: Loading generic protrusion settings for font family
 \bbl@ensure@romanian {Capitolul} 1.
 
 
+
+
 [1
 
 
+
 ]
 
-[2]) (./chapters/02_epidemiologie_si_modelare.tex
+) (./chapters/02_epidemiologie_si_modelare.tex
 
-[3]
+[2]
 \bbl@ensure@romanian {Capitolul} 2.
 
 
-[4
+
+Underfull \hbox (badness 1132) in paragraph at lines 81--81
+[]\T1/cmr/bx/n/14.4 (+20) Modele com-par-ti-men-tale în
+ []
+
+
+
+[3
 
 ]
 
+
+
+[4]
+
+
+Underfull \hbox (badness 1721) in paragraph at lines 298--309
+[]\T1/cmr/m/n/10 (+20) Definim $\OT1/cmr/bx/n/10 (+20) x \OT1/cmr/m/n/10 (+20) 
+= (\OML/cmm/m/it/10 S; I; R\OT1/cmr/m/n/10 (+20) )[]$ []\T1/cmr/m/n/10 (+20) i 
+$\OT1/cmr/bx/n/10 (+20) f\OT1/cmr/m/n/10 (+20) (\OT1/cmr/bx/n/10 (+20) x\OT1/cm
+r/m/n/10 (+20) ) =
+ []
+
+
+
 [5]
 
+
+
 [6]
-Overfull \hbox (14.11281pt too wide) in paragraph at lines 189--196
-\T1/cmr/m/n/12 (-20) (diagnostica[]i asimp-to-ma-tici), $\OML/cmm/m/it/12 A$ \T
-1/cmr/m/n/12 (-20) (simp-to-ma-tici nedepista[]i), $\OML/cmm/m/it/12 R$ \T1/cmr
-/m/n/12 (-20) (simp-to-ma-tici diagnostica[]i),
+Underfull \hbox (badness 1661) in paragraph at lines 506--507
+[]\T1/cmr/bx/n/10 (+20) Teorem  2.13 \T1/cmr/m/n/10 (+20) (Pra-gul epi-de-mic)\
+T1/cmr/bx/n/10 (+20) . []\T1/cmr/m/it/10 (+20) Con-si-de-r m o
  []
+
+
 
 
 
 [7]
-
-[8]
-
-[9]
-
-[10]
-
-[11]
-
-[12]
-
-[13]
-
-[14]
-
-[15]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 708.
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 711.
-
-
-[16]
-
-[17]
-
-[18]
-Overfull \hbox (20.80786pt too wide) detected at line 859
-[][][][][]
+Underfull \hbox (badness 10000) in paragraph at lines 636--636
+[]\T1/cmr/bx/n/14.4 (+20) Metode Nu-me-rice pen-tru
  []
 
 
 
-[19]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 693.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <9> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 696.
 
-[20]) (./chapters/03_tehnologii.tex
 
-[21]
+[8]
+Underfull \hbox (badness 4713) in paragraph at lines 794--794
+[]\T1/cmr/bx/n/12 (+20) Metode Runge-Kutta adap-tive
+ []
+
+
+
+
+
+[9]) (./chapters/03_tehnologii.tex
+
+
+
+[10
+
+]
 \bbl@ensure@romanian {Capitolul} 3.
 
 
-[22
+
+
+[11
 
 ]
-Overfull \hbox (80.48424pt too wide) in paragraph at lines 85--94
-\T1/cmr/m/n/12 (-20) Ecosistemul \T1/cmr/bx/n/12 (-20) SciML \T1/cmr/m/n/12 (-2
-0) (Scien-ti-fic Ma-chine Lear-ning) al Julia con[]ine pa-che-tul \T1/cmtt/m/n/
-12 DifferentialEquations.jl
- []
-
-
-
-[23]
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 125.
+nput line 126.
 
 
-[24]
+
+
+[12]
+Underfull \hbox (badness 1783) in paragraph at lines 224--230
+[]\T1/cmr/bx/n/10 (+20) 2. Nive-lu-rile de interfa[]  API. \T1/cmr/m/n/10 (+20)
+ Interfa[]a
+ []
+
+
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 280--286
+\T1/cmtt/m/n/10 StatefulSet\T1/cmr/m/n/10 (+20) , \T1/cmtt/m/n/10 Service\T1/cm
+r/m/n/10 (+20) , \T1/cmtt/m/n/10 PersistentVolumeClaim\T1/cmr/m/n/10 (+20) ,
+ []
+
+
+
+[13]) (./chapters/04_arhitectura_sistemului.tex
+
+
+
+[14
+
+]
+\bbl@ensure@romanian {Capitolul} 4.
+
+
+
+Underfull \hbox (badness 1852) in paragraph at lines 142--142
+[]\T1/cmr/bx/n/14.4 (+20) Cerin[]e func[]ionale []i non-
+ []
+
+
+
+[15
+
+]
+
+
+
+[16]
+Underfull \hbox (badness 1394) in paragraph at lines 243--253
+\T1/cmr/m/n/10 (+20) sunt: \T1/cmtt/m/n/10 users\T1/cmr/m/n/10 (+20) , \T1/cmtt
+/m/n/10 studies\T1/cmr/m/n/10 (+20) , \T1/cmtt/m/n/10 study_members\T1/cmr/m/n/
+10 (+20) , \T1/cmtt/m/n/10 datasets\T1/cmr/m/n/10 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 243--253
+\T1/cmtt/m/n/10 epidemiological_records\T1/cmr/m/n/10 (+20) , \T1/cmtt/m/n/10 s
+imulation_runs\T1/cmr/m/n/10 (+20) ,
+ []
+
+
+Underfull \hbox (badness 6332) in paragraph at lines 243--253
+\T1/cmtt/m/n/10 simulation_results []\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 ben
+chmarks\T1/cmr/m/n/10 (+20) . Re-sur-sele
+ []
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <7> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 363.
+
+
+
+Underfull \hbox (badness 1360) in paragraph at lines 444--453
+[]\T1/cmr/m/n/10 (+20) Tabelul \T1/cmtt/m/n/10 epidemiological_records \T1/cmr/
+m/n/10 (+20) este pro-iec-tat
+ []
+
+
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
+tlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+)
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 466--467
+[][][][] 
+ []
+
+
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 467--468
+[][][][] 
+ []
+
+
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 468--469
+[][][][] 
+ []
+
+
+
+[17]
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
+tlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+)
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
+tlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+)
+
+
+
+[18]
+Underfull \hbox (badness 2478) in paragraph at lines 525--539
+\T1/cmr/m/n/10 (+20) Autentificarea se ba-zeaz  pe JSON Web To-kens
+ []
+
+
+
+
+
+[19]
+Underfull \hbox (badness 2875) in paragraph at lines 636--648
+\T1/cmr/m/n/10 (+20) exe-c-u-tor (\T1/cmtt/m/n/10 epimodel:jobs:r\T1/cmr/m/n/10
+ (+20) , \T1/cmtt/m/n/10 epimodel:jobs:julia\T1/cmr/m/n/10 (+20) ,
+ []
+
+
+
+
+
+[20]
+Underfull \hbox (badness 3209) in paragraph at lines 704--712
+\T1/cmr/m/n/10 (+20) la API []i îl sto-cheaz  în \T1/cmtt/m/n/10 localStorage \
+T1/cmr/m/n/10 (+20) pen-tru
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 721--730
+[]\T1/cmr/m/n/10 (+20) Fluxul de si-mu-lare în-cepe din pa-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 721--730
+\T1/cmr/m/n/10 (+20) gina \T1/cmtt/m/n/10 NewSimulationPage\T1/cmr/m/n/10 (+20)
+ , care ape-leaz 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 721--730
+\T1/cmtt/m/n/10 simulationsStore.create() \T1/cmr/m/n/10 (+20) cu pa-ra-me-trii
+ for-
+ []
+
+
+Underfull \hbox (badness 1874) in paragraph at lines 736--742
+\T1/cmr/m/n/10 (+20) La lo-gin, aplica[]ia re-fuz  uti-li-za-to-rii care nu au
+ []
+
+
+
+
+
+[21]
+Underfull \hbox (badness 1117) in paragraph at lines 902--909
+[]\T1/cmr/m/n/10 (+20) Fi[]ierul \T1/cmtt/m/n/10 10-yugabyte-values.yaml \T1/cm
+r/m/n/10 (+20) de-clar  fac-tor
+ []
+
+
+Underfull \hbox (badness 1845) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) de re-pli-care 3 pen-tru am-bele com-po-nente, si-zing
+ []
+
+
+Underfull \hbox (badness 1655) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) adap-tat wor-ke-ri-lor (1 GiB requ-est / 1.5 GiB li-
+ []
+
+
+Underfull \hbox (badness 1859) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) mit pen-tru \T1/cmtt/m/n/10 yb-master\T1/cmr/m/n/10 (+20) 
+; 2 GiB requ-est / 3 GiB
+ []
+
+
+Underfull \hbox (badness 2591) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) li-mit pen-tru \T1/cmtt/m/n/10 yb-tserver\T1/cmr/m/n/10 (+
+20) ), un sin-gur vo-lum per-
+ []
+
+
+Underfull \hbox (badness 1888) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) sis-tent per re-plic  (5 GiB mas-ter, 10 GiB tser-
+ []
+
+
+Underfull \hbox (badness 5622) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) ver), []i gflag-uri spe-ci-fice pen-tru clus-tere mici
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 902--909
+\T1/cmr/m/n/10 (+20) (\T1/cmtt/m/n/10 default_memory_limit_to_ram_ratio: 0.6\T1
+/cmr/m/n/10 (+20) ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 902--909
+\T1/cmtt/m/n/10 ysql_num_shards_per_tserver: 2\T1/cmr/m/n/10 (+20) ). Chart-ul
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--920
+[]\T1/cmr/m/n/10 (+20) dou  \T1/cmtt/m/n/10 Service\T1/cmr/m/n/10 (+20) -uri he
+a-d-less (\T1/cmtt/m/n/10 yb-masters
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--920
+[]\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 yb-tservers\T1/cmr/m/n/10 (+20) ) pen-
+tru des-co-pe-ri-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--920
+\T1/cmr/m/n/10 (+20) rea peer-urilor prin DNS in-tern sta-bil
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--920
+\T1/cmr/m/n/10 (+20) (de exem-plu \T1/cmtt/m/n/10 yb-master-0.yb-masters.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 915--920
+\T1/cmtt/m/n/10 epimodel.svc.cluster.local\T1/cmr/m/n/10 (+20) ), ne-ce-sar pro
+-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 920--923
+[]\T1/cmr/m/n/10 (+20) un \T1/cmtt/m/n/10 Service ClusterIP \T1/cmr/m/n/10 (+20
+) nu-mit
+ []
+
+
+Underfull \hbox (badness 2460) in paragraph at lines 920--923
+\T1/cmtt/m/n/10 yb-tserver-service \T1/cmr/m/n/10 (+20) pe por-tul 5433 (YSQL),
+
+ []
+
+
+Underfull \hbox (badness 3525) in paragraph at lines 920--923
+\T1/cmr/m/n/10 (+20) fo-lo-sit de API-ul Go []i de ru-n-nere pen-tru
+ []
+
+
+
+
+Underfull \hbox (badness 1286) in paragraph at lines 937--948
+\T1/cmr/m/it/10 (+20) bu-ild\T1/cmr/m/n/10 (+20) : pri-mul stage com-pi-leaz  b
+i-na-rul Go sta-tic
+ []
+
+
+
+[22{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
+-super/cm-super-ts1.enc}]) (./chapters/05_implementare_modele.tex
+
+
+
+[23]
+\bbl@ensure@romanian {Capitolul} 5.
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--8
+[]\T1/cmr/bx/n/14.4 (+20) Datele de in-trare []i
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 8--8
+\T1/cmr/bx/n/14.4 (+20) ini[]ializarea com-par-ti-men-
+ []
+
+
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--114
+[]\T1/cmr/m/n/10 (+20) Coada Re-dis a fost re-de-nu-mit  din
+ []
+
+
+Underfull \hbox (badness 3590) in paragraph at lines 96--114
+\T1/cmtt/m/n/10 epimodel:jobs:julia \T1/cmr/m/n/10 (+20) sau \T1/cmtt/m/n/10 ep
+imodel:jobs:python\T1/cmr/m/n/10 (+20) );
+ []
+
+
+
+[24
+
+]
+
+
 
 [25]
-Overfull \hbox (22.51225pt too wide) in paragraph at lines 254--259
-\T1/cmr/m/n/12 (-20) Containerizarea (Do-c-ker) per-mite îm-pa-che-ta-rea unei 
-aplica[]ii îm-pre-un  cu toate dependen[]ele
+Underfull \hbox (badness 1383) in paragraph at lines 188--198
+\T1/cmr/m/n/10 (+20) uti-li-za-to-rul, stu-diul, dataset-ul, mo-de-lul, lim-ba-
+jul,
  []
+
+) (./chapters/06_predictie_lstm.tex
+Underfull \hbox (badness 1077) in paragraph at lines 223--4
+\T1/cmr/m/n/10 (+20) pul wall-clock, tim-pul CPU []i vâr-ful de me-mo-rie
+ []
+
+
+Underfull \hbox (badness 4819) in paragraph at lines 223--4
+\T1/cmtt/m/n/10 time.process_time() []\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 re
+source.getrusage\T1/cmr/m/n/10 (+20) ; R
+ []
+
+
 
 
 
 [26]
-Overfull \hbox (73.55736pt too wide) in paragraph at lines 279--285
-\T1/cmr/m/n/12 (-20) Resursele fo-lo-site cel mai des sunt \T1/cmtt/m/n/12 Pod\
-T1/cmr/m/n/12 (-20) , \T1/cmtt/m/n/12 Deployment\T1/cmr/m/n/12 (-20) , \T1/cmtt
-/m/n/12 StatefulSet\T1/cmr/m/n/12 (-20) , \T1/cmtt/m/n/12 Service\T1/cmr/m/n/12
- (-20) , \T1/cmtt/m/n/12 PersistentVolumeClaim\T1/cmr/m/n/12 (-20) ,
+\bbl@ensure@romanian {Capitolul} 6.
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--40
+[]\T1/cmr/bx/n/14.4 (+20) Formularea pro-ble-mei de
  []
 
 
 
-[27]) (./chapters/04_arhitectura_sistemului.tex
+
+
+[27
+
+]
+
+
 
 [28]
-\bbl@ensure@romanian {Capitolul} 4.
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input l
+ine 197.
+) (./chapters/07_comparatie_si_calibrare.tex
+
 
 
 [29
 
 ]
+\bbl@ensure@romanian {Capitolul} 7.
 
-[30]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 231.
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+[]|\T1/cmr/m/n/10 (+20) exist  o faz  la-tent 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+\T1/cmr/m/n/10 (+20) neinfec[]ioas  sau slab
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+[]|\T1/cmr/m/n/10 (+20) active prin $\OML/cmm/m/it/10 I$\T1/cmr/m/n/10 (+20) , 
+laten[]a
+ []
+
+
+Underfull \hbox (badness 2626) in paragraph at lines 47--47
+[]|\T1/cmr/m/n/10 (+20) imunitatea se pierde în
+ []
+
+
+Underfull \hbox (badness 1242) in paragraph at lines 47--47
+[]|\T1/cmr/m/n/10 (+20) active di-a-gnos-ti-cate prin
+ []
+
+
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 77--82
+\T1/cmr/m/n/10 (+20) deoarece com-par-ti-men-tul $\OML/cmm/m/it/10 I$ \T1/cmr/m
+/n/10 (+20) re-pre-zint  infecta[]i
+ []
+
+
+
+[30
+
+]
+
+
+Underfull \hbox (badness 1990) in paragraph at lines 186--191
+[]\T1/cmr/m/n/10 (+20) Pentru mo-de-lele SI-R/-SIS/-SEI-R/-SIRS, ca-li-bra-rea
+ []
+
 
 
 [31]
 
+) (./chapters/08_evaluare_performanta.tex
+
 [32]
-Underfull \hbox (badness 10000) in paragraph at lines 383--384
-[]|\T1/cmr/m/n/12 (+20) Popula[]ia sus-cep-ti-bil  es-ti-mat 
+
+
+
+[33
+
+]
+\bbl@ensure@romanian {Capitolul} 8.
+
+
+
+Underfull \hbox (badness 1024) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (+20) prima ru-lare
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (+20) se-pa-rat  de
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (+20) acela[]i pas
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (+20) toate mo-de-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (+20) raportare
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (+20) m soar 
+ []
+
+
+Underfull \hbox (badness 6001) in paragraph at lines 142--148
+\T1/cmr/m/n/10 (+20) În mo-de-lele com-par-ti-men-tale agre-gate, m -ri-mea
  []
 
 
 
-[33]
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
-tlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-)
-Overfull \hbox (4.42365pt too wide) in paragraph at lines 436--440
-[]\T1/cmr/m/n/12 (-20) Tabelul \T1/cmtt/m/n/12 simulation_results \T1/cmr/m/n/1
-2 (-20) uti-li-zeaz , în schimb, hash shar-ding pe \T1/cmtt/m/n/12 simulation_i
-d\T1/cmr/m/n/12 (-20) ,
- []
+[34
+
+]
 
 
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
-tlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-)
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
-tlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-)
-
-[34]
 
 [35]
-Overfull \hbox (21.71356pt too wide) in alignment at lines 509--515
- [] [] [] [] 
+
+
+
+[36]) (./chapters/09_aplicatia_web.tex
+
+
+
+[37
+
+]
+\bbl@ensure@romanian {Capitolul} 9.
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
+[]\T1/cmr/m/n/10 (+20) Pe lâng  aplica[]ia prin-ci-pal  exist  o
  []
 
 
-Overfull \hbox (21.71356pt too wide) in alignment at lines 515--520
- [] [] [] [] 
+Underfull \hbox (badness 4242) in paragraph at lines 30--34
+\T1/cmr/m/n/10 (+20) interfa[]  \T1/cmtt/m/n/10 frontend-admin\T1/cmr/m/n/10 (+
+20) , ser-vit  de pe host-ul
  []
 
 
-Overfull \hbox (21.71356pt too wide) in alignment at lines 520--522
- [] [] [] [] 
- []
-
-
-Underfull \hbox (badness 1796) in paragraph at lines 537--537
-[]|\T1/cmr/m/n/12 (+20) Benchmark-uri agre-gate per
- []
-
-
-Overfull \hbox (21.71356pt too wide) in alignment at lines 522--541
- [] [] [] [] 
+Underfull \hbox (badness 2418) in paragraph at lines 30--34
+\T1/cmr/m/n/10 (+20) doar con-tu-ri-lor cu \T1/cmtt/m/n/10 is_super_admin=true 
+[]\T1/cmr/m/n/10 (+20) i ofer 
  []
 
 
 
-[36]
 
-[37]
-
-[38]
-Overfull \hbox (11.76253pt too wide) in paragraph at lines 632--637
-[]\T1/cmr/m/n/12 (-20) La au-ten-ti-fi-care, \T1/cmtt/m/n/12 authStore \T1/cmr/
-m/n/12 (-20) prime[]te JWT-ul de la API []i îl sto-cheaz  în \T1/cmtt/m/n/12 lo
-calStorage
+Underfull \hbox (badness 2035) in paragraph at lines 53--57
+[]\T1/cmr/m/n/10 (+20) Rutele aplica[]iei prin-ci-pale sunt or-ga-ni-zate sub
  []
 
 
-Overfull \hbox (91.76451pt too wide) in paragraph at lines 638--647
-[]\T1/cmr/m/n/12 (-20) Fluxul de si-mu-lare în-cepe din pa-gina \T1/cmtt/m/n/12
- NewSimulationPage\T1/cmr/m/n/12 (-20) , care ape-leaz  \T1/cmtt/m/n/12 simulat
-ionsStore.create()
+
+[38
+
+]
+Underfull \hbox (badness 4416) in paragraph at lines 110--124
+[]\T1/cmr/m/n/10 (+20) Paginile sunt or-ga-ni-zate dup  flu-xu-rile prin-ci-
  []
 
 
-Overfull \hbox (44.32712pt too wide) in paragraph at lines 638--647
-\T1/cmtt/m/n/12 SimulationStatus \T1/cmr/m/n/12 (-20) porne[]te un po-l-ling la
- in-ter-val de 2 se-cunde pe \T1/cmtt/m/n/12 GET /api/simulations/{id}\T1/cmr/m
-/n/12 (-20) ,
+Underfull \hbox (badness 10000) in paragraph at lines 128--136
+\T1/cmr/m/n/10 (+20) Consola ad-mi-nis-tra-tiv  este un bu-ild Vue se-
  []
 
 
-Overfull \hbox (30.68326pt too wide) in paragraph at lines 638--647
-\T1/cmr/m/n/12 (-20) oprindu-se când sta-tu-sul de-vine \T1/cmtt/m/n/12 complet
-ed \T1/cmr/m/n/12 (-20) sau \T1/cmtt/m/n/12 failed\T1/cmr/m/n/12 (-20) . La fi-
-na-li-zare, \T1/cmtt/m/n/12 SimulationResultPage
+Underfull \hbox (badness 4819) in paragraph at lines 128--136
+\T1/cmr/m/n/10 (+20) pa-rat, cu pro-priul ro-u-ter []i pro-priul to-ken în
  []
 
 
-Overfull \hbox (0.8414pt too wide) in paragraph at lines 670--677
-\T1/cmr/m/n/12 (-20) (2 vCPU, 4 GiB RAM fi-e-care) care g -z-du-iesc com-po-nen
--tele stan-dard --- \T1/cmtt/m/n/12 kube-apiserver\T1/cmr/m/n/12 (-20) ,
+Underfull \hbox (badness 1087) in paragraph at lines 128--136
+\T1/cmtt/m/n/10 localStorage\T1/cmr/m/n/10 (+20) . La au-ten-ti-fi-care, aplica
+[]ia ve-ri-fic 
  []
 
 
+Underfull \hbox (badness 3386) in paragraph at lines 128--136
+\T1/cmr/m/n/10 (+20) r s-pun-sul \T1/cmtt/m/n/10 /api/auth/login\T1/cmr/m/n/10 
+(+20) ; dac  uti-li-za-to-rul nu
+ []
+
+
+Underfull \hbox (badness 1062) in paragraph at lines 128--136
+\T1/cmr/m/n/10 (+20) po-in-tu-rile \T1/cmtt/m/n/10 /api/admin/stats\T1/cmr/m/n/
+10 (+20) , \T1/cmtt/m/n/10 /api/admin/users []\T1/cmr/m/n/10 (+20) i
+ []
+
+
+
+) (./chapters/10_concluzii.tex
 
 [39]
-Overfull \hbox (5.69446pt too wide) in paragraph at lines 810--817
-\T1/cmr/m/n/12 (-20) (\T1/cmtt/m/n/12 default_memory_limit_to_ram_ratio: 0.6\T1
-/cmr/m/n/12 (-20) , \T1/cmtt/m/n/12 ysql_num_shards_per_tserver: 2\T1/cmr/m/n/1
-2 (-20) ).
+\bbl@ensure@romanian {Capitolul} 10.
+
+
+
+
+[40
+
+]
+
+)
+
+[41] (./main.bbl
+Underfull \hbox (badness 1226) in paragraph at lines 27--32
+\T1/cmr/m/n/10 (+20) Pa-tri-zio Co-la-neri, Ales-san-dro Di Fi-li-ppo, An-
  []
 
 
 
-[40]
-Overfull \hbox (68.78117pt too wide) in paragraph at lines 823--827
-\T1/cmr/m/n/12 (-20) peer-urilor prin DNS in-tern sta-bil (\T1/cmtt/m/n/12 yb-m
-aster-0.yb-masters.epimodel.svc.cluster.local\T1/cmr/m/n/12 (-20) ),
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--107
+[]\T1/cmr/m/n/10 (+20) Evan You et al.  Vue.js do-cu-men-ta-tion.
  []
 
 
 
-[41{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
--super/cm-super-ts1.enc}]) (./chapters/05_implementare_modele.tex
+[42
 
-[42]
-\bbl@ensure@romanian {Capitolul} 5.
+
+])
+
 
 
 [43
 
-]
-
-[44]
-Overfull \hbox (29.7968pt too wide) in paragraph at lines 94--103
-[]\T1/cmr/m/n/12 (-20) Coada Re-dis a fost re-de-nu-mit  din \T1/cmtt/m/n/12 si
-r:jobs:<language> \T1/cmr/m/n/12 (-20) în \T1/cmtt/m/n/12 epimodel:jobs:<langua
-ge>\T1/cmr/m/n/12 (-20) .
- []
-
-
-Overfull \hbox (47.13483pt too wide) in paragraph at lines 115--118
-[]\T1/cmr/m/n/12 (-20) În Py-thon, nu-cleul mo-de-lu-lui este o func[]ie RHS co
-m-pa-ti-bil  cu \T1/cmtt/m/n/12 scipy.integrate.solve_ivp\T1/cmr/m/n/12 (-20) .
-
- []
-
-
-
-[45]
-
-[46]) (./chapters/06_evaluare_performanta.tex
-Overfull \hbox (3.93188pt too wide) in paragraph at lines 200--4
-[]\T1/cmr/m/n/12 (-20) i \T1/cmtt/m/n/12 resource.getrusage\T1/cmr/m/n/12 (-20)
- ; R folose[]te \T1/cmtt/m/n/12 proc.time() []\T1/cmr/m/n/12 (-20) i \T1/cmtt/m
-/n/12 /proc/self/status\T1/cmr/m/n/12 (-20) ; Julia folose[]te
- []
-
-
-
-[47]
-\bbl@ensure@romanian {Capitolul} 6.
-
-
-[48
-
-]
-
-[49]) (./chapters/07_aplicatia_web.tex
-
-[50]
-\bbl@ensure@romanian {Capitolul} 7.
-
-Overfull \hbox (0.617pt too wide) in paragraph at lines 35--42
-\T1/cmr/m/n/12 (-20) seaz  ce-re-rile, va-li-deaz  input-ul []i construie[]te r
- s-pun-su-rile JSON. Pa-che-tul \T1/cmtt/m/n/12 repository
- []
-
-
-
-[51
-
-]
-Overfull \hbox (3.57886pt too wide) in paragraph at lines 85--95
-\T1/cmtt/m/n/12 BenchmarksPage \T1/cmr/m/n/12 (-20) afi[]eaz  agre-g -rile pe m
-o-del []i lim-baj. Com-po-nenta \T1/cmtt/m/n/12 CompartmentChart
- []
-
-
-
-[52]) (./chapters/08_concluzii.tex
-
-[53]
-\bbl@ensure@romanian {Capitolul} 8.
-
-
-[54
-
-]
-
-[55])
-
-[56] (./main.bbl
-
-[57
-
-
-]) (./appendices/A_cod_r.tex
-
-[58]
+] (./appendices/A_cod_r.tex
 \bbl@ensure@romanian {Anexa} A.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
@@ -1735,6 +2095,49 @@ tlang3.sty
 File: lstlang3.sty 2024/09/23 1.10c listings language file
 ) (../code/runners/r/runner.R
 
+[44
+
+
+]
+
+[45]
+
+[46]
+
+[47])) (./appendices/B_cod_julia.tex
+
+[48]
+\bbl@ensure@romanian {Anexa} B.
+(../code/runners/julia/runner.jl
+
+[49
+
+]
+
+[50]
+
+[51]
+
+[52])) (./appendices/C_cod_python.tex
+
+[53]
+\bbl@ensure@romanian {Anexa} C.
+(../code/runners/python/runner.py
+
+[54
+
+]
+
+[55]
+
+[56]
+
+[57])) (./appendices/D_cod_lstm.tex
+
+[58]
+\bbl@ensure@romanian {Anexa} D.
+(../code/runners/lstm/runner.py
+
 [59
 
 ]
@@ -1747,252 +2150,191 @@ File: lstlang3.sty 2024/09/23 1.10c listings language file
 
 [63]
 
-[64])) (./appendices/B_cod_julia.tex
+[64])) (./appendices/E_schema_bd.tex
 
 [65]
-\bbl@ensure@romanian {Anexa} B.
-(../code/runners/julia/runner.jl
+\bbl@ensure@romanian {Anexa} E.
+(../code/db/migrations/000001_create_users.up.sql)
+(../code/db/migrations/000002_create_datasets.up.sql)
+(../code/db/migrations/000003_create_epidemiological_records.up.sql)
 
 [66
 
-]
+] (../code/db/migrations/000004_create_simulation_runs.up.sql)
+(../code/db/migrations/000005_create_simulation_results.up.sql)
+(../code/db/migrations/000006_create_benchmarks.up.sql)
+(../code/db/migrations/000007_create_studies.up.sql
 
-[67]
+[67]) (../code/db/migrations/000008_create_study_members.up.sql)
+(../code/db/migrations/000009_add_super_admin.up.sql)
+(../code/db/migrations/000010_add_study_id_to_resources.up.sql)
+(../code/db/migrations/000011_expand_model_type_constraint.up.sql)
 
-[68]
+[68] (../code/db/migrations/000012_add_lstm_model.up.sql))
+(./appendices/F_kubernetes.tex
 
 [69]
+\bbl@ensure@romanian {Anexa} F.
 
-[70])) (./appendices/C_cod_python.tex
+Underfull \hbox (badness 10000) in paragraph at lines 27--28
+[]|[]\T1/cmr/m/n/9 (+20) ablon pen-tru \T1/cmtt/m/n/9 JWT_SECRET []\T1/cmr/m/n/
+9 (+20) i
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
+[]|\T1/cmr/m/n/9 (+20) Configurarea chart-ului ofi-cial
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
+\T1/cmtt/m/n/9 yugabytedb/yugabyte \T1/cmr/m/n/9 (+20) (RF=3, si-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--31
+[]|\T1/cmr/m/n/9 (+20) Coad  Re-dis (\T1/cmtt/m/n/9 emptyDir\T1/cmr/m/n/9 (+20)
+ , f r 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--36
+[]|\T1/cmr/m/n/9 (+20) Runner Julia
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
+[]|\T1/cmr/m/n/9 (+20) Rutare HTTP pen-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
+\T1/cmr/m/n/9 (+20) tru \T1/cmtt/m/n/9 sir-workbench.ro []\T1/cmr/m/n/9 (+20) i
+
+ []
+
+
+
+[70
+
+] (../code/k8s/00-namespace.yaml) (../code/k8s/10-yugabyte-values.yaml
 
 [71]
-\bbl@ensure@romanian {Anexa} C.
-(../code/runners/python/runner.py
 
-[72
+[72]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
 
-]
 
 [73]
 
-[74]
+[74]) (../code/k8s/30-migrate-job.yaml
 
-[75]
+[75]) (../code/k8s/40-api.yaml
 
 [76]
 
-[77])) (./appendices/E_schema_bd.tex
+[77]) (../code/k8s/52-runner-julia.yaml
 
-[78]
-\bbl@ensure@romanian {Anexa} D.
-(../code/db/migrations/000001_create_users.up.sql)
-(../code/db/migrations/000002_create_datasets.up.sql)
-(../code/db/migrations/000003_create_epidemiological_records.up.sql
+[78]) (../code/k8s/53-runner-lstm.yaml)
 
-[79
+[79] (../code/k8s/61-frontend-admin.yaml
 
-]) (../code/db/migrations/000004_create_simulation_runs.up.sql
+[80]) (../code/k8s/70-ingress.yaml
 
-[80]) (../code/db/migrations/000005_create_simulation_results.up.sql)
-(../code/db/migrations/000006_create_benchmarks.up.sql))
-(./appendices/F_kubernetes.tex
+[81]) (../code/docker-compose.yml
 
-[81]
-\bbl@ensure@romanian {Anexa} E.
+[82]
 
-Overfull \hbox (4.93399pt too wide) in paragraph at lines 26--26
-[]|\T1/cmtt/m/n/12 02-secret.example.yaml| 
- []
+[83])) (./appendices/G_api_rest.tex
 
+[84]
+\bbl@ensure@romanian {Anexa} G.
+(../code/api/internal/api/router/router.go
 
-Overfull \hbox (11.10748pt too wide) in paragraph at lines 27--27
-[]|\T1/cmtt/m/n/12 10-yugabyte-values.yaml| 
- []
-
-
-Underfull \hbox (badness 6575) in paragraph at lines 27--28
-[]|\T1/cmr/m/n/12 (+20) Configurarea chart-ului ofi-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
-\T1/cmr/m/n/12 (+20) cial \T1/cmtt/m/n/12 yugabytedb/yugabyte
- []
-
-
-Overfull \hbox (66.66891pt too wide) in paragraph at lines 28--28
-[]|\T1/cmtt/m/n/12 12-yugabyte-tserver-service.yaml| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 28--29
-[]|\T1/cmtt/m/n/12 ClusterIP
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 28--29
-\T1/cmtt/m/n/12 yb-tserver-service \T1/cmr/m/n/12 (+20) ex-
- []
-
-
-Underfull \hbox (badness 2229) in paragraph at lines 30--31
-[]|\T1/cmr/m/n/12 (+20) Aplic  migra[]iile SQL prin
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 32--33
-[]|\T1/cmr/m/n/12 (+20) Runner Py-thon
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 34--35
-[]|\T1/cmr/m/n/12 (+20) Runner Julia
- []
-
-
-Underfull \hbox (badness 1867) in paragraph at lines 35--36
-[]|\T1/cmr/m/n/12 (+20) Frontend Vue.js ser-vit prin
- []
-
-
-Overfull \hbox (1.85674pt too wide) in paragraph at lines 20--39
- [][] 
- []
-
-(../code/k8s/00-namespace.yaml)
-
-[82
+[85
 
 ]
 
-[83] (../code/k8s/10-yugabyte-values.yaml
-
-[84]
-
-[85])
-
-[86] (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
+[86]) (../code/api/internal/api/middleware/rbac.go
 
 [87]
 
-[88])
+[88]) (../code/api/internal/api/handlers/response.go
 
-[89] (../code/k8s/30-migrate-job.yaml
+[89]))
 
-[90]
-
-[91]) (../code/k8s/40-api.yaml
-
-[92]
-
-[93])
-Overfull \hbox (63.40042pt too wide) in paragraph at lines 108--112
-\T1/cmr/m/n/12 (-20) requ-est, 2 GiB li-mit) din ca-uza cos-tu-lui ini[]ial de 
-în-c r-care al pa-che-te-lor \T1/cmtt/m/n/12 DifferentialEquations.jl\T1/cmr/m/
-n/12 (-20) .
- []
-
-(../code/k8s/52-runner-julia.yaml
-
-[94]
-
-[95]) (../code/k8s/70-ingress.yaml
-
-[96]) (../code/docker-compose.yml
-
-[97]
-
-[98]
-
-[99])) (./appendices/G_api_rest.tex
-
-[100]
-\bbl@ensure@romanian {Anexa} F.
-(../code/api/internal/api/router/router.go
-
-[101
-
-]
-
-[102]) (../code/api/internal/api/handlers/response.go
-
-[103]))
-
-[104] (./main.aux)
+[90] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B83F64111EA518194B0C44012A2CEE68;23957.
+(rerunfilecheck)             Checksum: B92EC2F81C3A6600A24B9EDA6C87E546;29068.
  ) 
 Here is how much of TeX's memory you used:
- 47785 strings out of 473190
- 1032798 string characters out of 5704334
- 2167191 words of memory out of 5000000
- 67841 multiletter control sequences out of 15000+600000
- 619081 words of font info for 361 fonts, out of 8000000 for 9000
+ 49967 strings out of 473190
+ 1072451 string characters out of 5704334
+ 2510926 words of memory out of 5000000
+ 68834 multiletter control sequences out of 15000+600000
+ 622639 words of font info for 408 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,19n,91p,1001b,3269s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,19n,97p,1001b,3407s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmbx12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmbx8.pfb></opt/homebrew/Cellar/texlive/202503
+amsfonts/cm/cmbx10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmbx7.pfb></opt/homebrew/Cellar/texlive/202503
 08_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></opt/homebrew/
 Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
 0.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmmi12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></opt/homebrew/Cellar/texlive/20
-250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></opt/homebr
+-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></opt/homebrew/Cellar/texlive/20
+250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></opt/homebr
 ew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 mib10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmr10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></opt/homebrew/Cellar/texlive
-/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></opt/home
-brew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr8.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></opt/homebrew/Cellar/texlive
-/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></o
-pt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfo
-nts/symbols/msbm10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dis
-t/fonts/type1/public/cm-super/sfbx0600.pfb></opt/homebrew/Cellar/texlive/202503
-08_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx0700.pfb></opt/homebrew/C
-ellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx0800.
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></opt/homebrew/Cellar/texlive/
+20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></opt/homeb
+rew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr8.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></opt/homebrew/Cellar/texlive/
+20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam7.pfb></opt
+/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfont
+s/symbols/msbm10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/
+fonts/type1/public/cm-super/sfbx0500.pfb></opt/homebrew/Cellar/texlive/20250308
+_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx0600.pfb></opt/homebrew/Cel
+lar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx0700.pf
+b></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
+cm-super/sfbx0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist
+/fonts/type1/public/cm-super/sfbx0900.pfb></opt/homebrew/Cellar/texlive/2025030
+8_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></opt/homebrew/Ce
+llar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.p
+fb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public
+/cm-super/sfbx1440.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dis
+t/fonts/type1/public/cm-super/sfbx1728.pfb></opt/homebrew/Cellar/texlive/202503
+08_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx2074.pfb></opt/homebrew/C
+ellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx2488.
 pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/publi
-c/cm-super/sfbx1000.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-di
-st/fonts/type1/public/cm-super/sfbx1095.pfb></opt/homebrew/Cellar/texlive/20250
-308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></opt/homebrew/
-Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx1440
+c/cm-super/sfit0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-di
+st/fonts/type1/public/cm-super/sfit0900.pfb></opt/homebrew/Cellar/texlive/20250
+308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm0500.pfb></opt/homebrew/
+Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600
 .pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/publ
-ic/cm-super/sfbx1728.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-d
-ist/fonts/type1/public/cm-super/sfbx2074.pfb></opt/homebrew/Cellar/texlive/2025
-0308_1/share/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></opt/homebrew
-/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfit080
+ic/cm-super/sfrm0700.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-d
+ist/fonts/type1/public/cm-super/sfrm0800.pfb></opt/homebrew/Cellar/texlive/2025
+0308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></opt/homebrew
+/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm100
 0.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pub
-lic/cm-super/sfit1095.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
-dist/fonts/type1/public/cm-super/sfrm0500.pfb></opt/homebrew/Cellar/texlive/202
-50308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></opt/homebre
-w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm07
+lic/cm-super/sfrm1200.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
+dist/fonts/type1/public/cm-super/sfti0500.pfb></opt/homebrew/Cellar/texlive/202
+50308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti0700.pfb></opt/homebre
+w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti10
 00.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pu
-blic/cm-super/sfrm0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
--dist/fonts/type1/public/cm-super/sfrm1000.pfb></opt/homebrew/Cellar/texlive/20
-250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb></opt/homebr
-ew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfrm1
-200.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/p
-ublic/cm-super/sfrm1440.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texm
-f-dist/fonts/type1/public/cm-super/sfti0500.pfb></opt/homebrew/Cellar/texlive/2
-0250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti0600.pfb></opt/homeb
-rew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti
-0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/
-public/cm-super/sfti1200.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
-mf-dist/fonts/type1/public/cm-super/sftt0800.pfb></opt/homebrew/Cellar/texlive/
-20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></opt/home
-brew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sft
-t1200.pfb>
-Output written on main.pdf (113 pages, 1175265 bytes).
+blic/cm-super/sftt0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
+-dist/fonts/type1/public/cm-super/sftt0900.pfb></opt/homebrew/Cellar/texlive/20
+250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on main.pdf (99 pages, 1386191 bytes).
 PDF statistics:
- 3580 PDF objects out of 3580 (max. 8388607)
- 3344 compressed objects within 34 object streams
- 1997 named destinations out of 2073 (max. 500000)
- 101805 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 4883 PDF objects out of 5155 (max. 8388607)
+ 4650 compressed objects within 47 object streams
+ 3030 named destinations out of 3580 (max. 500000)
+ 102501 words of extra memory for PDF output out of 106986 (max. 10000000)
 

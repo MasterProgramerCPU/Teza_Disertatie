@@ -26,7 +26,7 @@ spec:
         - name: ghcr-pull
       containers:
         - name: runner-python
-          image: ghcr.io/masterprogramercpu/sidarth-runner-python:latest
+          image: ghcr.io/masterprogramercpu/emedicine-runner-python:latest
           imagePullPolicy: Always
           env:
             - name: REDIS_URL

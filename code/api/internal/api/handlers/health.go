@@ -20,9 +20,8 @@ func NewHealthHandler(db *pgxpool.Pool, rdb *redis.Client) *HealthHandler {
 }
 
 func (h *HealthHandler) Get(w http.ResponseWriter, r *http.Request) {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
-	_ = r
 
 	dbErr := h.DB.Ping(ctx)
 	redisErr := h.Redis.Ping(ctx).Err()

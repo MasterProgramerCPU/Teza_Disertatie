@@ -59,7 +59,10 @@ async function submit() {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 80px;
+  padding-top: 56px;
 }
-.auth-card { max-width: 400px; width: 100%; }
+.auth-card {
+  max-width: 420px;
+  width: 100%;
+}
 </style>

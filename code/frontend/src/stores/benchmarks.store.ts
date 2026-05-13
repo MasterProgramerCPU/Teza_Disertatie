@@ -2,6 +2,15 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { api } from "@/api/client";
 import type { BenchmarkAggregate } from "@/types";
+import { useStudiesStore } from "@/stores/studies.store";
+
+function path(): string {
+  const studies = useStudiesStore();
+  if (!studies.currentStudyId) {
+    throw new Error("no study selected");
+  }
+  return `/studies/${studies.currentStudyId}/benchmarks`;
+}
 
 export const useBenchmarksStore = defineStore("benchmarks", () => {
   const items = ref<BenchmarkAggregate[]>([]);
@@ -12,7 +21,7 @@ export const useBenchmarksStore = defineStore("benchmarks", () => {
     loading.value = true;
     error.value = null;
     try {
-      items.value = await api.get<BenchmarkAggregate[]>("/benchmarks");
+      items.value = (await api.get<BenchmarkAggregate[] | null>(path())) ?? [];
     } catch (e) {
       error.value = (e as Error).message;
     } finally {

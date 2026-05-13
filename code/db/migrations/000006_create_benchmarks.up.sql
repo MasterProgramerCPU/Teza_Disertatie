@@ -1,4 +1,4 @@
-CREATE TABLE benchmarks (
+CREATE TABLE IF NOT EXISTS benchmarks (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     simulation_id   UUID NOT NULL REFERENCES simulation_runs(id) ON DELETE CASCADE,
     wall_time_ms    BIGINT NOT NULL,
@@ -9,4 +9,4 @@ CREATE TABLE benchmarks (
     CHECK (peak_memory_mb >= 0)
 );
 
-CREATE INDEX idx_benchmarks_simulation_id ON benchmarks(simulation_id);
+CREATE INDEX IF NOT EXISTS idx_benchmarks_simulation_id ON benchmarks(simulation_id);

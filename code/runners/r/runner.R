@@ -1,7 +1,8 @@
 ## Epidemiological model runner -- R.
 ##
 ## Consumes simulation jobs from Redis list ``epimodel:jobs:r`` (BRPOP via redux),
-## solves SIDARTH or SIR ODE systems with ``deSolve::ode`` (RK4, fixed step h = 1),
+## solves SIS/SIR/SEIR/SIRS/SIDARTHE ODE systems with
+## ``deSolve::ode`` (RK4, fixed step h = 1),
 ## and inserts compartment trajectories into YugabyteDB.
 
 suppressPackageStartupMessages({
@@ -35,7 +36,43 @@ sir_rhs <- function(t, state, parms) {
   })
 }
 
-sidarth_rhs <- function(t, state, parms) {
+sis_rhs <- function(t, state, parms) {
+  invisible(t)
+  with(as.list(c(state, parms)), {
+    infections <- beta * S * I / N
+    recoveries <- gamma * I
+    dS <- -infections + recoveries
+    dI <-  infections - recoveries
+    list(c(dS, dI))
+  })
+}
+
+seir_rhs <- function(t, state, parms) {
+  invisible(t)
+  with(as.list(c(state, parms)), {
+    infections <- beta * S * I / N
+    dS <- -infections
+    dE <-  infections - sigma * E
+    dI <-  sigma * E - gamma * I
+    dR <-  gamma * I
+    list(c(dS, dE, dI, dR))
+  })
+}
+
+sirs_rhs <- function(t, state, parms) {
+  invisible(t)
+  with(as.list(c(state, parms)), {
+    infections <- beta * S * I / N
+    recoveries <- gamma * I
+    waning <- xi * R
+    dS <- -infections + waning
+    dI <-  infections - recoveries
+    dR <-  recoveries - waning
+    list(c(dS, dI, dR))
+  })
+}
+
+sidarthe_rhs <- function(t, state, parms) {
   invisible(t)
   with(as.list(c(state, parms)), {
     force <- (alpha * S_I + beta * D + gamma * A + delta * R) / N
@@ -45,13 +82,21 @@ sidarth_rhs <- function(t, state, parms) {
     dD <- epsilon * S_I - (eta + rho) * D
     dA <- zeta * S_I - (theta + mu + kappa) * A
     dR <- eta * D + theta * A - (nu + xi) * R
-    dT <- mu * A + nu * R - sigma * T
+    dT <- mu * A + nu * R - (sigma + tau) * T
     dH <- lambda * S_I + rho * D + kappa * A + xi * R + sigma * T
-    list(c(dS, dI, dD, dA, dR, dT, dH))
+    dE <- tau * T
+    list(c(dS, dI, dD, dA, dR, dT, dH, dE))
   })
 }
 
 model_layout <- function(model_type) {
+  if (identical(model_type, "sis")) {
+    return(list(
+      names = c("S", "I"),
+      json_names = c("s", "i"),
+      rhs = sis_rhs
+    ))
+  }
   if (identical(model_type, "sir")) {
     return(list(
       names = c("S", "I", "R"),
@@ -59,11 +104,25 @@ model_layout <- function(model_type) {
       rhs = sir_rhs
     ))
   }
-  if (identical(model_type, "sidarth")) {
+  if (identical(model_type, "seir")) {
     return(list(
-      names = c("S", "S_I", "D", "A", "R", "T", "H"),
-      json_names = c("s", "i", "d", "a", "r", "t", "h"),
-      rhs = sidarth_rhs
+      names = c("S", "E", "I", "R"),
+      json_names = c("s", "e", "i", "r"),
+      rhs = seir_rhs
+    ))
+  }
+  if (identical(model_type, "sirs")) {
+    return(list(
+      names = c("S", "I", "R"),
+      json_names = c("s", "i", "r"),
+      rhs = sirs_rhs
+    ))
+  }
+  if (identical(model_type, "sidarthe")) {
+    return(list(
+      names = c("S", "S_I", "D", "A", "R", "T", "H", "E"),
+      json_names = c("s", "i", "d", "a", "r", "t", "h", "e"),
+      rhs = sidarthe_rhs
     ))
   }
   stop(sprintf("unsupported model_type: %s", model_type))
@@ -102,7 +161,7 @@ db_connect <- function(dsn) {
 
 run_simulation <- function(conn, job) {
   sim_id <- job$simulation_id
-  model_type <- if (!is.null(job$model_type)) job$model_type else "sidarth"
+  model_type <- if (!is.null(job$model_type)) job$model_type else "sidarthe"
   layout <- model_layout(model_type)
   parameters <- as.list(job$parameters)
   parameters <- lapply(parameters, as.numeric)

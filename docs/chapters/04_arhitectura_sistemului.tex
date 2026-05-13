@@ -10,28 +10,33 @@
 \label{sec:arhitectura_overview}
 
 Sistemul e-medicine propus în această lucrare este o aplicație distribuită,
-organizată în componente independente, care permite utilizatorilor să încarce seturi de
-date epidemiologice reale, să declanșeze simulări SIDARTH sau SIR în trei
-limbaje de programare distincte --- R, Julia și Python --- și să compare
+organizată în componente independente, care permite utilizatorilor să
+organizeze date epidemiologice pe studii, să încarce seturi de date reale, să
+declanșeze simulări pentru SIDARTHE, SIR, SIS, SEIR și SIRS în
+trei limbaje de programare distincte --- R, Julia și Python --- și să compare
 rezultatele atât din punct de vedere numeric, cât și al performanței
-computaționale. Arhitectura globală este organizată în patru straturi
-funcționale, ilustrate în \cref{fig:arhitectura_globala}.
+computaționale. Arhitectura globală este
+organizată în patru straturi funcționale, ilustrate în
+\cref{fig:arhitectura_globala}.
 
-\textbf{Stratul de prezentare} constă dintr-o aplicație web single-page
-(SPA) implementată în Vue.js, servită printr-un container Nginx.
+\textbf{Stratul de prezentare} constă din două aplicații web single-page
+(SPA) implementate în Vue.js și servite prin containere Nginx: aplicația
+principală pentru utilizatorii unui studiu și consola separată pentru
+super-admini.
 \textbf{Stratul API} este un server REST implementat în Go, responsabil cu
-autentificarea prin JWT, orchestrarea job-urilor de simulare și medierea
-accesului la baza de date.
-\textbf{Stratul de calcul} cuprinde trei microservicii dedicate --- numite
-\emph{runnere} --- fiecare implementând același contract de model compartimental într-un limbaj
-distinct; acestea comunică asincron cu API-ul printr-o coadă de mesaje Redis.
+autentificarea prin JWT, autorizarea pe baza rolurilor din studii, orchestrarea
+job-urilor de simulare și medierea accesului la baza de date.
+\textbf{Stratul de calcul} cuprinde runner-ele compartimentale R, Julia și
+Python, plus runner-ul LSTM dedicat predicției pe serii temporale; acestea
+comunică asincron cu API-ul prin cozi Redis separate.
 \textbf{Stratul de stocare} este asigurat de YugabyteDB, care persistă atât
 datele epidemiologice de intrare, cât și rezultatele simulărilor. În mediul local,
 componentele sunt pornite prin Docker Compose; pentru un deployment de producție,
 aceeași separare a responsabilităților permite descrierea resurselor în Kubernetes.
 
-\begin{figure}[htbp]
+\begin{figure*}[t]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     sbox/.style={
         draw=gray!70, thick, rounded corners=4pt,
@@ -44,9 +49,10 @@ aceeași separare a responsabilităților permite descrierea resurselor în Kube
 
 %% ---- noduri ----
 \node[sbox, fill=cyan!20]                (browser) at (5.5,  9.2) {Browser};
-\node[sbox, fill=orange!25]              (ingress) at (5.5,  7.6) {Ingress Nginx};
-\node[sbox, fill=blue!18]                (spa)     at (1.8,  6.0) {Vue.js SPA\\{\footnotesize(Nginx)}};
-\node[sbox, fill=green!20]               (api)     at (9.2,  6.0) {API Go\\{\footnotesize REST + JWT}};
+\node[sbox, fill=orange!25]              (ingress) at (5.5,  7.6) {Ingress Nginx\\{\footnotesize sir-workbench.ro / admin.sir-workbench.ro}};
+\node[sbox, fill=blue!18]                (spa)     at (1.8,  6.0) {Frontend user\\{\footnotesize Vue 3 + Nginx}};
+\node[sbox, fill=blue!10]                (adminspa) at (5.5,  6.0) {Frontend admin\\{\footnotesize Vue 3 + Nginx}};
+\node[sbox, fill=green!20]               (api)     at (9.2,  6.0) {API Go\\{\footnotesize REST + JWT + RBAC}};
 \node[sbox, fill=red!18]                 (redis)   at (9.2,  4.2) {Redis\\{\footnotesize Job Queue}};
 \node[sbox, fill=purple!15, minimum width=2.2cm] (rr) at (5.5, 2.6) {Runner R};
 \node[sbox, fill=purple!15, minimum width=2.2cm] (rj) at (8.0, 2.6) {Runner Julia};
@@ -59,7 +65,11 @@ aceeași separare a responsabilităților permite descrierea resurselor în Kube
 
 \draw[arr] (ingress.south west)
     to[out=240, in=90] (spa.north)
-    node[lbl, left=2pt] {\texttt{/*}};
+    node[lbl, left=2pt] {\texttt{sir-workbench.ro}};
+
+\draw[arr] (ingress.south)
+    -- (adminspa.north)
+    node[lbl, right=2pt] {\texttt{admin.sir-workbench.ro}};
 
 \draw[arr] (ingress.south east)
     to[out=300, in=90] (api.north)
@@ -101,26 +111,32 @@ aceeași separare a responsabilităților permite descrierea resurselor în Kube
 \node[font=\scriptsize\itshape, gray!80] at (12.5, 1.0) {Stocare};
 
 \end{tikzpicture}
+}
 \caption{Arhitectura globală a sistemului e-medicine.
 Săgețile indică direcția de flux a datelor: browserul accesează
-aplicația prin Ingress, care rutează cererile către SPA sau API;
+aplicația prin Ingress, care rutează cererile către cele două SPA-uri sau API;
 API-ul publică job-uri în Redis și le consumă runner-ele dedicate;
 atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}
 \label{fig:arhitectura_globala}
-\end{figure}
+\end{figure*}
 
-Fluxul principal de date începe cu autentificarea utilizatorului și obținerea unui
-token JWT, după care acesta poate încărca
-un fișier CSV cu date epidemiologice; API-ul validează structura fișierului,
-stochează metadatele în tabelul \texttt{datasets} și înregistrările brute în
-\texttt{epidemiological\_records}. La inițierea unei simulări, utilizatorul
-specifică modelul, limbajul dorit, parametrii, populația $N$ și orizontul
-$t_{\max}$; API-ul creează o înregistrare în \texttt{simulation\_runs} cu
-statusul \texttt{pending} și publică un mesaj JSON în coada Redis corespunzătoare
-limbajului ales. Runner-ul consumă job-ul, execută simularea cerută, scrie
-traiectoriile compartimentale în \texttt{simulation\_results} și actualizează
-statusul la \texttt{completed}. Frontend-ul interoghează periodic API-ul și
-afișează graficele imediat ce simularea este finalizată.
+Fluxul principal de date începe cu autentificarea utilizatorului și obținerea
+unui token JWT. Utilizatorul selectează un studiu în care este membru, iar toate
+operațiile ulterioare sunt evaluate în contextul acelui \texttt{study\_id}.
+În funcție de rolul său (\texttt{admin}, \texttt{researcher},
+\texttt{contributor} sau \texttt{viewer}), el poate încărca un fișier CSV cu
+date epidemiologice, poate porni simulări sau poate administra membrii
+studiului. API-ul validează structura fișierului, stochează metadatele în
+\texttt{datasets}, înregistrările brute în
+\texttt{epidemiological\_records} și păstrează toate resursele scope-uite pe
+studiu. La inițierea unei simulări, utilizatorul specifică modelul, limbajul
+dorit, parametrii, populația $N$ și orizontul $t_{\max}$; API-ul creează o
+înregistrare în \texttt{simulation\_runs} cu statusul \texttt{pending} și
+publică un mesaj JSON în coada Redis corespunzătoare limbajului ales.
+Runner-ul consumă job-ul, execută simularea cerută, scrie traiectoriile
+compartimentale în \texttt{simulation\_results} și actualizează statusul la
+\texttt{completed}. Frontend-ul interoghează periodic API-ul și afișează
+graficele imediat ce simularea este finalizată.
 
 % ------------------------------------------------------------
 \section{Cerințe funcționale și non-funcționale}
@@ -132,23 +148,37 @@ afișează graficele imediat ce simularea este finalizată.
 Prima cerință funcțională privește \textbf{autentificarea și autorizarea}:
 utilizatorii trebuie să se poată înregistra și autentifica, iar toate
 operațiile asupra datelor și simulărilor sunt protejate prin token JWT cu
-durată de valabilitate configurabilă.
+durată de valabilitate configurabilă. Autorizarea nu este doar globală, ci și
+contextuală: resursele sunt grupate în studii, iar accesul depinde de rolul
+utilizatorului în studiul curent. Pe lângă aceste roluri există flag-ul
+\texttt{is\_super\_admin}, folosit pentru consola administrativă și pentru
+vizibilitate cross-study.
 
-\textbf{Gestionarea seturilor de date epidemiologice} presupune că utilizatorul
-poate încărca fișiere CSV ce conțin serii temporale epidemiologice --- date
-calendaristice, numere de cazuri, populație, regiune geografică. Sistemul
-validează structura, calculează numărul de înregistrări și stochează datele persistent
-în baza de date.
+\textbf{Gestionarea studiilor epidemiologice} permite crearea unui context de
+lucru cu nume, cod de boală și descriere. Creatorul devine automat
+\texttt{admin} al studiului și poate adăuga membri cu rolurile
+\texttt{researcher}, \texttt{contributor} sau \texttt{viewer}. Această
+separare permite ca aceiași utilizatori să participe în mai multe studii cu
+drepturi diferite.
 
-\textbf{Configurarea și declanșarea simulărilor} permite utilizatorului să
-selecteze un set de date, să aleagă limbajul de execuție (R, Julia sau Python)
-și să introducă tipul modelului, parametrii și dimensiunea populației $N$.
-Sistemul execută simularea asincron, printr-un runner dedicat,
-și notifică finalizarea fără a bloca interfața.
+\textbf{Gestionarea seturilor de date epidemiologice} presupune că un
+utilizator cu rol \texttt{admin} sau \texttt{contributor} poate încărca
+fișiere CSV ce conțin serii temporale epidemiologice --- date calendaristice,
+numere de cazuri, populație, regiune geografică. Sistemul validează structura,
+calculează numărul de înregistrări și stochează datele persistent în baza de
+date, asociindu-le cu studiul curent.
+
+\textbf{Configurarea și declanșarea simulărilor} permite utilizatorului cu rol
+\texttt{admin} sau \texttt{researcher} să selecteze un set de date din studiul
+curent, să aleagă limbajul de execuție (R, Julia sau Python) și să introducă
+tipul modelului, parametrii și dimensiunea populației $N$. Sistemul execută
+simularea asincron, printr-un runner dedicat, și notifică finalizarea fără a
+bloca interfața.
 
 \textbf{Vizualizarea rezultatelor} presupune afișarea curbelor compartimentale
-ca grafice interactive, indiferent dacă simularea are trei compartimente, ca SIR,
-sau șapte compartimente, ca SIDARTH.
+ca grafice interactive, indiferent dacă simularea are două compartimente, ca SIS,
+trei compartimente, ca SIR/SIRS, patru compartimente, ca SEIR, sau opt
+compartimente, ca SIDARTHE.
 
 \textbf{Compararea inter-limbaj} permite utilizatorului să selecteze mai multe
 simulări efectuate pe același set de date, cu aceiași parametri, în limbaje
@@ -162,6 +192,11 @@ temporală a unei simulări în format CSV.
 automat timpii de execuție (wall-clock și CPU) și consumul de memorie pentru
 fiecare rulare și le expune printr-un endpoint dedicat, accesibil în
 interfața de comparare.
+
+\textbf{Administrarea globală} este separată de interfața principală.
+Utilizatorii marcați \texttt{is\_super\_admin=true} pot accesa consola
+\texttt{admin.sir-workbench.ro}, unde văd statistici globale, lista utilizatorilor,
+promovarea sau revocarea drepturilor de super-admin și lista tuturor studiilor.
 
 \subsection{Cerințe non-funcționale}
 \label{subsec:cerinte_nonfunctionale}
@@ -205,161 +240,161 @@ suportă Kubernetes 1.28+.
 \subsection{Schema relațională}
 \label{subsec:schema_bd}
 
-Baza de date a sistemului este structurată în șase tabele principale, ale
-căror relații sunt ilustrate în \cref{fig:erd}.
+Baza de date a sistemului este structurată în jurul conceptului de studiu.
+Schema include tabele pentru identitate, membership, resurse epidemiologice,
+simulări și benchmarkuri, iar relațiile principale sunt ilustrate în
+\cref{fig:erd}. În forma curentă, tabelele aplicative principale sunt:
+\texttt{users}, \texttt{studies}, \texttt{study\_members},
+\texttt{datasets}, \texttt{epidemiological\_records},
+\texttt{simulation\_runs}, \texttt{simulation\_results} și
+\texttt{benchmarks}. Resursele de lucru (\texttt{datasets} și
+\texttt{simulation\_runs}) conțin explicit \texttt{study\_id}, astfel încât
+autorizarea și interogările să fie făcute în contextul unui studiu.
 
-\begin{figure}[htbp]
+\begin{figure*}[t]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     ent/.style={
         draw=gray!70, thick, rounded corners=3pt,
         fill=white, align=left,
         font=\scriptsize\ttfamily,
-        inner sep=5pt
+        inner sep=5pt,
+        minimum width=3.45cm
     },
     fk/.style={
         -{Stealth[length=5pt, width=3.5pt]},
-        thick, gray!50
-    },
-    pk/.style={font=\scriptsize\ttfamily\bfseries\underline}
+        thick, gray!55
+    }
 ]
 
-%% ---- users ------------------------------------------------
-\node[ent, minimum width=3.6cm] (users) at (0, 0) {%
+\node[ent] (users) at (0, 0) {%
     \normalfont\small\bfseries users\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{id}\normalfont\ \ uuid\\%
-    email\ \ varchar\\%
-    password\_hash\ \ varchar\\%
-    created\_at\ \ timestamptz%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    email\ varchar\\%
+    password\_hash\ varchar\\%
+    is\_super\_admin\ bool\\%
+    created\_at\ timestamptz%
 };
 
-%% ---- datasets --------------------------------------------
-\node[ent, minimum width=3.6cm] (datasets) at (7.0, 0) {%
+\node[ent] (studies) at (4.6, 0) {%
+    \normalfont\small\bfseries studies\\[2pt]%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    name\ varchar\\%
+    disease\_code\ varchar\\%
+    description\ text\\%
+    created\_by\ uuid\ \textit{FK}%
+};
+
+\node[ent] (members) at (9.2, 0) {%
+    \normalfont\small\bfseries study\_members\\[2pt]%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{study\_id}\normalfont\ uuid\ \textit{FK}\\%
+    \bfseries\underline{user\_id}\normalfont\ uuid\ \textit{FK}\\%
+    role\ varchar\\%
+    joined\_at\ timestamptz%
+};
+
+\node[ent] (datasets) at (4.6, -4.2) {%
     \normalfont\small\bfseries datasets\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{id}\normalfont\ \ uuid\\%
-    user\_id\ \ uuid\ \textit{FK}\\%
-    name\ \ varchar\\%
-    disease\_code\ \ varchar\\%
-    uploaded\_at\ \ timestamptz\\%
-    record\_count\ \ integer%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    user\_id\ uuid\ \textit{FK}\\%
+    study\_id\ uuid\ \textit{FK}\\%
+    name\ varchar\\%
+    disease\_code\ varchar\\%
+    record\_count\ integer%
 };
 
-%% ---- simulation_runs -------------------------------------
-\node[ent, minimum width=3.6cm] (runs) at (0, -4.8) {%
-    \normalfont\small\bfseries simulation\_runs\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{id}\normalfont\ \ uuid\\%
-    user\_id\ \ uuid\ \textit{FK}\\%
-    dataset\_id\ \ uuid\ \textit{FK}\\%
-    model\_type\ \ varchar\\%
-    language\ \ varchar\\%
-    parameters\ \ jsonb\\%
-    population\_n\ \ bigint\\%
-    t\_max\ \ integer\\%
-    status\ \ varchar\\%
-    error\_message\ \ text\\%
-    created\_at\ \ timestamptz\\%
-    completed\_at\ \ timestamptz%
-};
-
-%% ---- epidemiological_records ----------------------------
-\node[ent, minimum width=3.6cm] (epi) at (7.0, -4.2) {%
+\node[ent] (epi) at (9.2, -4.2) {%
     \normalfont\small\bfseries epidemiological\_records\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{dataset\_id}\normalfont\ \ uuid\ \textit{FK}\\%
-    \bfseries\underline{recorded\_date}\normalfont\ \ date\\%
-    \bfseries\underline{id}\normalfont\ \ uuid\\%
-    region\_code\ \ varchar\\%
-    susceptible\ \ bigint\\%
-    infected\ \ bigint\\%
-    recovered\ \ bigint\\%
-    population\ \ bigint%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{dataset\_id}\normalfont\ uuid\ \textit{FK}\\%
+    \bfseries\underline{recorded\_date}\normalfont\ date\\%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    region\_code\ varchar\\%
+    susceptible/infected/recovered\\%
+    population\ bigint%
 };
 
-%% ---- simulation_results ----------------------------------
-\node[ent, minimum width=3.6cm] (results) at (0, -10.5) {%
+\node[ent] (runs) at (0, -4.2) {%
+    \normalfont\small\bfseries simulation\_runs\\[2pt]%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    user\_id\ uuid\ \textit{FK}\\%
+    study\_id\ uuid\ \textit{FK}\\%
+    dataset\_id\ uuid\ \textit{FK}\\%
+    model\_type/language/status\\%
+    parameters\ jsonb%
+};
+
+\node[ent] (results) at (0, -8.1) {%
     \normalfont\small\bfseries simulation\_results\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{simulation\_id}\normalfont\ \ uuid\ \textit{FK}\\%
-    \bfseries\underline{t}\normalfont\ \ integer\\%
-    compartments\ \ jsonb%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{simulation\_id}\normalfont\ uuid\ \textit{FK}\\%
+    \bfseries\underline{t}\normalfont\ integer\\%
+    compartments\ jsonb%
 };
 
-%% ---- benchmarks ------------------------------------------
-\node[ent, minimum width=3.6cm] (bench) at (7.0, -10.5) {%
+\node[ent] (bench) at (4.6, -8.1) {%
     \normalfont\small\bfseries benchmarks\\[2pt]%
-    \rule{3.2cm}{0.4pt}\\[1pt]%
-    \bfseries\underline{id}\normalfont\ \ uuid\\%
-    simulation\_id\ \ uuid\ \textit{FK}\\%
-    wall\_time\_ms\ \ bigint\\%
-    cpu\_time\_ms\ \ bigint\\%
-    peak\_memory\_mb\ \ real%
+    \rule{3.0cm}{0.4pt}\\[1pt]%
+    \bfseries\underline{id}\normalfont\ uuid\\%
+    simulation\_id\ uuid\ \textit{FK}\\%
+    wall\_time\_ms\ bigint\\%
+    cpu\_time\_ms\ bigint\\%
+    peak\_memory\_mb\ real%
 };
 
-%% ---- relatii FK ------------------------------------------
-% users -> datasets
-\draw[fk] (datasets.north west)
-    to[out=150, in=30] node[font=\tiny, above, midway] {1\,:\,N}
-    (users.north east);
-
-% users -> simulation_runs
-\draw[fk] (runs.north)
-    -- node[font=\tiny, left, midway] {1\,:\,N}
-    (users.south);
-
-% datasets -> epidemiological_records
-\draw[fk] (epi.north)
-    -- node[font=\tiny, right, midway] {1\,:\,N}
-    (datasets.south);
-
-% datasets -> simulation_runs  (L-path: right of runs, below datasets)
-\draw[fk] (runs.east)
-    -- ++(0.8, 0)
-    |- node[font=\tiny, right, near end] {1\,:\,N}
-    (datasets.south west);
-
-% simulation_runs -> simulation_results
-\draw[fk] (results.north)
-    -- node[font=\tiny, left, midway] {1\,:\,N}
-    (runs.south);
-
-% simulation_runs -> benchmarks (L-path)
-\draw[fk] (runs.south east)
-    ++(0,0) to[out=300, in=90]
-    node[font=\tiny, right, near end] {1\,:\,N}
-    (bench.north);
+\draw[fk] (studies.west) -- node[font=\tiny, above] {created by} (users.east);
+\draw[fk] (members.west) -- node[font=\tiny, above] {N:1} (studies.east);
+\draw[fk] (members.north west) to[out=145, in=35] node[font=\tiny, above] {N:1} (users.north east);
+\draw[fk] (datasets.north) -- node[font=\tiny, right] {N:1} (studies.south);
+\draw[fk] (runs.east) -- node[font=\tiny, above] {N:1} (datasets.west);
+\draw[fk] (epi.west) -- node[font=\tiny, above] {N:1} (datasets.east);
+\draw[fk] (runs.north west) to[out=145, in=260] node[font=\tiny, left] {N:1} (users.south west);
+\draw[fk] (runs.north) to[out=80, in=260] node[font=\tiny, left] {N:1} (studies.south west);
+\draw[fk] (results.north) -- node[font=\tiny, left] {N:1} (runs.south);
+\draw[fk] (bench.north west) to[out=145, in=300] node[font=\tiny, right] {N:1} (runs.south east);
 
 \end{tikzpicture}
-\caption{Diagrama entitate-relație a bazei de date. PK-urile sunt marcate
-cu aldine și subliniere; FK-urile sunt marcate cu \textit{FK}; raportul de
-cardinalitate 1\,:\,N este indicat pe fiecare relație.}
+}
+\caption{Diagrama entitate-relație a bazei de date curente. PK-urile sunt
+marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit{FK}.
+Tabelele \texttt{datasets} și \texttt{simulation\_runs} sunt scope-uite pe
+\texttt{study\_id}, iar tabela \texttt{study\_members} definește rolul fiecărui
+utilizator într-un studiu.}
 \label{fig:erd}
-\end{figure}
+\end{figure*}
 
 Tabelul \texttt{users} stochează datele de autentificare ale utilizatorilor;
 parola nu este reținută în clar, ci ca hash bcrypt cu factor de cost 12.
-Tabelul \texttt{datasets} conține metadatele seturilor de date epidemiologice
-încărcate: autorul, codul bolii (ex.\ \texttt{COVID-19}, \texttt{SARS}), data
-încărcării și numărul total de înregistrări. Tabelul
-\texttt{epidemiological\_records} stochează valorile brute ale seriei temporale;
-câmpurile \texttt{susceptible}, \texttt{infected} și \texttt{recovered} conțin
-valorile observate sau valorile inițiale folosite la calibrarea parametrilor,
-iar \texttt{region\_code} urmează standardul ISO~3166-2. Tabelul
-\texttt{simulation\_runs} reprezintă job-ul de simulare și include tipul modelului
-(\texttt{sidarth} sau \texttt{sir}), parametrii în format JSONB, populația,
-orizontul temporal, limbajul ales, statusul execuției
-(\texttt{pending}, \texttt{running}, \texttt{completed}, \texttt{failed}),
-câmpul \texttt{error\_message} pentru capturarea erorilor de execuție și
-timestampurile de creare și finalizare. Tabelul \texttt{simulation\_results}
-stochează seria temporală de ieșire: pentru fiecare pas de timp
-$t \in \{0,1,\ldots,t_{\max}\}$, câmpul \texttt{compartments} conține un obiect
-JSONB cu valorile compartimentelor modelului. Cheia primară compusă
-\texttt{(simulation\_id, t)} identifică unic fiecare punct și asigură interogări
-eficiente ale seriei complete. Tabelul \texttt{benchmarks} reține metricile
-de performanță colectate automat la finalul fiecărei rulări: timpul wall-clock,
-timpul CPU și consumul maxim de memorie.
+Câmpul \texttt{is\_super\_admin} acordă acces la consola administrativă și la
+vizibilitatea globală asupra studiilor. Tabelul \texttt{studies} definește
+unitatea de izolare logică a datelor, iar \texttt{study\_members} leagă
+utilizatorii de studii prin unul dintre rolurile \texttt{admin},
+\texttt{researcher}, \texttt{contributor} sau \texttt{viewer}. Tabelul
+\texttt{datasets} conține metadatele seturilor de date epidemiologice
+încărcate: autorul, studiul, codul bolii, data încărcării și numărul total de
+înregistrări. Tabelul \texttt{epidemiological\_records} stochează valorile
+brute ale seriei temporale; câmpurile \texttt{susceptible},
+\texttt{infected} și \texttt{recovered} conțin valorile observate sau valorile
+inițiale folosite la calibrarea parametrilor, iar \texttt{region\_code} urmează
+standardul ISO~3166-1 alpha-3 în dataseturile preprocesate din OWID.
+Tabelul \texttt{simulation\_runs} reprezintă job-ul de simulare și include
+studiul, datasetul, tipul modelului (\texttt{sidarthe}, \texttt{sir},
+\texttt{sis}, \texttt{seir} sau \texttt{sirs}),
+parametrii în format JSONB, populația, orizontul temporal, limbajul ales,
+statusul execuției (\texttt{pending}, \texttt{running}, \texttt{completed},
+\texttt{failed}), câmpul \texttt{error\_message} și timestampurile de creare și
+finalizare. Tabelul \texttt{simulation\_results} stochează seria temporală de
+ieșire: pentru fiecare pas de timp $t \in \{0,1,\ldots,t_{\max}\}$, câmpul
+\texttt{compartments} conține un obiect JSONB cu valorile compartimentelor
+modelului. Tabelul \texttt{benchmarks} reține metricile de performanță
+colectate automat la finalul fiecărei rulări: timpul wall-clock, timpul CPU și
+consumul maxim de memorie.
 
 \subsection{Modelul datelor epidemiologice}
 \label{subsec:model_date}
@@ -367,11 +402,11 @@ timpul CPU și consumul maxim de memorie.
 Datele epidemiologice sunt ingerate în sistem prin fișiere CSV cu structura
 minimă prezentată în \cref{tab:csv_schema}.
 
-\begin{table}[htbp]
+\begin{table*}[t]
 \centering
 \caption{Structura minimă a fișierului CSV de date epidemiologice.}
 \label{tab:csv_schema}
-\begin{tabular}{llp{7cm}}
+\begin{tabularx}{0.92\textwidth}{llX}
 \toprule
 \textbf{Câmp} & \textbf{Tip} & \textbf{Descriere} \\
 \midrule
@@ -382,8 +417,8 @@ minimă prezentată în \cref{tab:csv_schema}.
 \texttt{recovered}   & \texttt{BIGINT}  & Cazuri recuperate (opțional) \\
 \texttt{susceptible} & \texttt{BIGINT}  & Populația susceptibilă estimată (opțional) \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 Câmpurile \texttt{susceptible} și \texttt{recovered} sunt opționale; dacă
 lipsesc, API-ul le estimează prin $S(0) = N - I(0)$ și $R(0) = 0$.
@@ -391,10 +426,11 @@ Granularitatea temporală recomandată este zilnică; datele săptămânale sunt
 acceptate, dar reduc precizia estimării parametrilor. La încărcarea unui set
 de date, API-ul verifică că toate câmpurile obligatorii sunt prezente și au
 tipul corect, că relația $I(t) + R(t) \leq N$ este respectată pentru fiecare
-înregistrare, că seria temporală este ordonată cronologic și nu conține goluri
-mai mari de 14 zile consecutive (condiție tratată ca avertisment, nu eroare
-critică), și că fiecare cod de regiune este nevid. Validarea formală față de
-un registru ISO nu este inclusă în implementarea curentă.
+înregistrare, că seria temporală este ordonată cronologic și că fiecare cod de
+regiune este nevid. Validarea formală față de un registru ISO și analiza
+golurilor calendaristice nu sunt incluse în implementarea curentă a API-ului;
+ele sunt tratate în etapa de preprocesare pentru dataseturile OWID incluse în
+repository.
 
 \subsection{Strategia de partiționare și replicare în YugabyteDB}
 \label{subsec:strategie_partitionare}
@@ -462,26 +498,26 @@ emedicine-api/
 |       `-- main.go       # Entry point: initializare, injectie dependinte
 +-- internal/
 |   +-- api/
-|   |   +-- handlers/     # Handler HTTP per resursa (datasets, sims, auth)
-|   |   +-- middleware/   # JWT validation, logging, CORS, rate-limit
+|   |   +-- handlers/     # Auth, users, studies, datasets, sims, admin
+|   |   +-- middleware/   # JWT si RBAC pe studii
 |   |   `-- router/       # Configurare rute (chi router)
 |   +-- db/
-|   |   +-- migrations/   # Fisiere SQL versionate (golang-migrate)
 |   |   `-- repository/   # Interfete si implementari repository pattern
 |   +-- runner/
-|   |   +-- dispatcher.go # Publicare job-uri in Redis
-|   |   `-- queue.go      # Definitia mesajului JSON al job-ului
-|   `-- models/           # Struct-uri de domeniu (User, Dataset, Run etc.)
+|   |   `-- dispatcher.go # Publicare job-uri in Redis
+|   `-- models/           # Struct-uri de domeniu (User, Study, Dataset, Run)
 \end{lstlisting}
 
-Arhitectura internă respectă pattern-ul în trei straturi. \textbf{Handler
-layer} parsează cererea HTTP, validează input-ul și serializează răspunsul
-JSON, fără a conține logică de business. \textbf{Service layer} orchestrează
-tranzacțiile, aplică regulile domeniului și publică job-uri în Redis.
-\textbf{Repository layer} abstractizează accesul la YugabyteDB prin interfețe
-Go, permițând testarea izolată a serviciilor fără a depinde de baza de date
-reală. Dependențele sunt injectate explicit prin constructori, conform
-idiomelor limbajului Go, fără un container IoC.
+Arhitectura internă folosește o separare pragmatică între handler-ele HTTP,
+middleware-uri și repository-uri. \textbf{Handler layer} parsează cererea,
+validează input-ul, apelează repository-urile și serializează răspunsul JSON.
+Regulile transversale sunt extrase în middleware-uri: validarea JWT introduce
+\texttt{user\_id} în context, iar middleware-ul RBAC introduce
+\texttt{study\_id} și rolul curent după verificarea membership-ului.
+\textbf{Repository layer} concentrează interogările SQL și operațiile
+tranzacționale peste \texttt{pgx}. Publicarea job-urilor în Redis este izolată
+în pachetul \texttt{runner}, printr-un dispatcher injectat explicit în
+handler-ul de simulări.
 
 \subsection{Mecanismul de autentificare JWT}
 \label{subsec:jwt}
@@ -501,44 +537,71 @@ Absența oricărei stări pe server este esențială pentru scalabilitatea
 orizontală: oricare replică a API-ului poate valida orice token, fără
 sincronizare între instanțe.
 
+\subsection{RBAC pe studii}
+\label{subsec:rbac_studii}
+
+După autentificare, rutele de lucru sunt evaluate în contextul unui parametru
+\texttt{\{studyId\}}. Middleware-ul \texttt{RequireStudyMembership} verifică
+dacă utilizatorul curent este membru al studiului și dacă rolul său este inclus
+în lista permisă pentru operația respectivă. Pentru citire este suficient orice
+rol valid; pentru încărcarea sau ștergerea dataseturilor sunt acceptate
+\texttt{admin} și \texttt{contributor}; pentru lansarea simulărilor sunt
+acceptate \texttt{admin} și \texttt{researcher}; pentru administrarea
+studiului este necesar rolul \texttt{admin}. Utilizatorii cu
+\texttt{is\_super\_admin=true} trec automat verificarea de membership și sunt
+tratați ca administratori în orice studiu, ceea ce permite operații de suport
+și audit global.
+
 \subsection{Diagrama endpointurilor REST}
 \label{subsec:endpoints}
 
 \cref{tab:endpoints} prezintă endpointurile REST expuse de API.
 
-\begin{longtable}{llp{5.5cm}l}
-\caption{Endpointurile REST ale API-ului backend.}
-\label{tab:endpoints} \\
+\begin{table*}[t]
+\centering
+\caption{Endpointurile REST principale ale API-ului backend.}
+\label{tab:endpoints}
+\scriptsize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabularx}{\textwidth}{llXl}
 \toprule
 \textbf{Metodă} & \textbf{Cale} & \textbf{Descriere} & \textbf{Auth} \\
 \midrule
-\endfirsthead
-\multicolumn{4}{c}{\tablename\ \thetable{} (continuare)} \\
-\toprule
-\textbf{Metodă} & \textbf{Cale} & \textbf{Descriere} & \textbf{Auth} \\
-\midrule
-\endhead
-\bottomrule
-\endlastfoot
 POST   & \texttt{/api/auth/register}            & Înregistrare utilizator nou              & Nu  \\
 POST   & \texttt{/api/auth/login}               & Autentificare, returnează JWT            & Nu  \\
+GET    & \texttt{/api/health}                   & Health check pentru API, DB și Redis     & Nu  \\
 \midrule
-GET    & \texttt{/api/datasets}                 & Lista seturilor de date ale utilizatorului & DA \\
-POST   & \texttt{/api/datasets}                 & Încărcare fișier CSV nou                 & DA  \\
-GET    & \texttt{/api/datasets/\{id\}}          & Detalii și statistici set de date        & DA  \\
-DELETE & \texttt{/api/datasets/\{id\}}          & Ștergere set de date                     & DA  \\
+GET    & \texttt{/api/me}                       & Profilul curent și membershipurile în studii & DA \\
+GET    & \texttt{/api/studies}                  & Lista studiilor vizibile utilizatorului curent & DA \\
+POST   & \texttt{/api/studies}                  & Creare studiu; creatorul devine \texttt{admin} & DA \\
+GET    & \texttt{/api/studies/\{studyId\}}      & Detalii studiu                           & DA \\
+PATCH  & \texttt{/api/studies/\{studyId\}}      & Actualizare metadata studiu              & Admin studiu \\
+DELETE & \texttt{/api/studies/\{studyId\}}      & Ștergere studiu și resurse asociate      & Admin studiu \\
 \midrule
-POST   & \texttt{/api/simulations}              & Inițiere simulare nouă                   & DA  \\
-GET    & \texttt{/api/simulations}              & Lista simulărilor utilizatorului         & DA  \\
-GET    & \texttt{/api/simulations/\{id\}}       & Status și metadate simulare              & DA  \\
-GET    & \texttt{/api/simulations/\{id\}/results} & Seria temporală compartimentală & DA  \\
-GET    & \texttt{/api/simulations/\{id\}/export} & Export CSV rezultate                   & DA  \\
+GET    & \texttt{/api/studies/\{studyId\}/members} & Lista membrilor studiului             & Membru \\
+POST   & \texttt{/api/studies/\{studyId\}/members} & Adăugare membru prin email și rol     & Admin studiu \\
+PATCH  & \texttt{/api/studies/\{studyId\}/members/\{userId\}} & Modificare rol membru      & Admin studiu \\
+DELETE & \texttt{/api/studies/\{studyId\}/members/\{userId\}} & Eliminare membru           & Admin studiu \\
 \midrule
-GET    & \texttt{/api/benchmarks}               & Benchmark-uri agregate per model și limbaj & DA  \\
+GET    & \texttt{/api/studies/\{studyId\}/datasets} & Lista dataseturilor din studiu       & Membru \\
+POST   & \texttt{/api/studies/\{studyId\}/datasets} & Încărcare CSV nou                    & Admin/Contributor \\
+GET    & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Detalii dataset               & Membru \\
+DELETE & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Ștergere dataset              & Admin/Contributor \\
 \midrule
-GET    & \texttt{/api/health}                   & Health check (liveness probe K8s)        & Nu  \\
+GET    & \texttt{/api/studies/\{studyId\}/simulations} & Lista simulărilor din studiu      & Membru \\
+POST   & \texttt{/api/studies/\{studyId\}/simulations} & Inițiere simulare nouă            & Admin/Researcher \\
+GET    & \texttt{/api/studies/\{studyId\}/simulations/\{id\}} & Status și metadate simulare & Membru \\
+GET    & \texttt{/api/studies/\{studyId\}/simulations/\{id\}/results} & Seria temporală       & Membru \\
+GET    & \texttt{/api/studies/\{studyId\}/simulations/\{id\}/export} & Export CSV rezultate  & Membru \\
+GET    & \texttt{/api/studies/\{studyId\}/benchmarks} & Benchmark-uri agregate per model și limbaj & Membru \\
+\midrule
+GET    & \texttt{/api/admin/stats}              & Statistici globale pentru consola admin  & Super-admin \\
+GET    & \texttt{/api/admin/users}              & Lista utilizatorilor                     & Super-admin \\
+PATCH  & \texttt{/api/admin/users/\{userId\}/super-admin} & Promovare/revocare super-admin & Super-admin \\
+GET    & \texttt{/api/admin/studies}            & Lista tuturor studiilor                  & Super-admin \\
 \bottomrule
-\end{longtable}
+\end{tabularx}
+\end{table*}
 
 Răspunsurile API urmează o convenție simplificată inspirată din
 \emph{JSON:API}: obiectul de nivel superior conține fie câmpul \texttt{data}
@@ -550,19 +613,22 @@ Răspunsurile API urmează o convenție simplificată inspirată din
 
 Comunicarea dintre API-ul Go și runner-e este asincronă, mediată de Redis
 printr-un model \emph{producer--consumer}. Când utilizatorul inițiază o
-simulare, API-ul publică un obiect JSON în lista Redis
-\texttt{epimodel:jobs:<language>} (ex.\ \texttt{epimodel:jobs:r}):
+simulare sau o predicție, API-ul publică un obiect JSON într-o listă Redis
+dedicată runner-ului. Pentru modelele compartimentale se folosește convenția
+\texttt{epimodel:jobs:<language>} (ex.\ \texttt{epimodel:jobs:r}), iar pentru
+LSTM se folosește coada separată \texttt{epimodel:jobs:lstm}:
 
 \begin{lstlisting}[language=bash, caption={Exemplu mesaj JSON publicat în coada Redis la inițierea unei simulări.}]
 {
   "simulation_id": "a3f9c2d1-...",
   "dataset_id":    "7b4e1a02-...",
-  "model_type":    "sidarth",
-  "parameters":    {"alpha": 0.57, "beta": 0.011, "gamma": 0.456},
+  "model_type":    "sidarthe",
+  "parameters":    {"alpha": 0.57, "beta": 0.011, "gamma": 0.456,
+                    "sigma": 0.017, "tau": 0.010},
   "population_n":  1000000,
   "t_max":         365,
   "initial":       {"s": 998999.0, "i": 1001.0, "d": 0.0,
-                    "a": 0.0, "r": 0.0, "t": 0.0, "h": 0.0},
+                    "a": 0.0, "r": 0.0, "t": 0.0, "h": 0.0, "e": 0.0},
   "db_dsn":        "postgres://emedicine:***@yb-tserver-service.yugabyte.svc.cluster.local:5433/emedicine"
 }
 \end{lstlisting}
@@ -575,10 +641,10 @@ La primirea unui job, runner-ul actualizează statusul simulării la
 înregistrează metricile de performanță în
 \texttt{benchmarks}, iar în final actualizează statusul la \texttt{completed}
 --- sau la \texttt{failed}, cu mesajul de eroare stocat, dacă a apărut o
-excepție. Existența cozilor separate per limbaj (\texttt{epimodel:jobs:r},
-\texttt{epimodel:jobs:julia}, \texttt{epimodel:jobs:python}) permite scalarea
-independentă a fiecărui runner în funcție de cerere, fără a modifica logica
-de rutare a API-ului.
+excepție. Existența cozilor separate per executor (\texttt{epimodel:jobs:r},
+\texttt{epimodel:jobs:julia}, \texttt{epimodel:jobs:python} și
+\texttt{epimodel:jobs:lstm}) permite scalarea independentă a fiecărui runner în
+funcție de cerere, fără a modifica logica principală a API-ului.
 
 % ------------------------------------------------------------
 \section{Arhitectura frontend Vue.js}
@@ -587,38 +653,44 @@ de rutare a API-ului.
 \subsection{Structura componentelor}
 \label{subsec:structura_vue}
 
-Frontend-ul este implementat ca o aplicație Vue.js~3 cu Composition API,
-folosind Vite ca bundler și TypeScript pentru siguranța tipurilor:
+Stratul frontend este împărțit în două aplicații Vue.js~3 cu Composition API,
+Vite și TypeScript. Aplicația \texttt{frontend} este interfața de lucru pentru
+studiile epidemiologice, iar \texttt{frontend-admin} este consola separată
+pentru super-admini. Cele două build-uri sunt independente, dar folosesc același
+API și același mecanism JWT.
 
-\begin{lstlisting}[language=bash, caption={Structura de directoare a proiectului Vue.js.}]
-emedicine-ui/
+\begin{lstlisting}[language=bash, caption={Structura simplificată a celor două aplicații Vue.js.}]
+frontend/
 `-- src/
     +-- pages/
-    |   +-- LoginPage.vue
-    |   +-- RegisterPage.vue
-    |   +-- DashboardPage.vue      # Sumar: nr. datasets, simulari recente
-    |   +-- DatasetsPage.vue       # Lista si upload datasets
-    |   +-- DatasetDetailPage.vue
+    |   +-- StudiesPage.vue
+    |   +-- CreateStudyPage.vue
+    |   +-- StudyManagementPage.vue
+    |   +-- DashboardPage.vue
+    |   +-- DatasetsPage.vue
     |   +-- NewSimulationPage.vue
     |   +-- SimulationResultPage.vue
-    |   +-- ComparePage.vue        # Comparare simulari inter-limbaj
+    |   +-- ComparePage.vue
     |   `-- BenchmarksPage.vue
-    +-- components/
-    |   +-- CompartmentChart.vue   # Grafic Chart.js pentru compartimente
-    |   +-- BenchmarkTable.vue
-    |   +-- ParameterForm.vue      # Formular model, parametri, t_max
-    |   +-- DatasetUpload.vue      # Drag-and-drop CSV
-    |   +-- SimulationStatus.vue   # Badge status cu polling
-    |   `-- NavBar.vue
     +-- stores/
     |   +-- auth.store.ts
+    |   +-- studies.store.ts
     |   +-- datasets.store.ts
     |   +-- simulations.store.ts
     |   `-- benchmarks.store.ts
-    +-- api/
-    |   `-- client.ts              # Axios instance cu JWT interceptor
-    `-- router/
-        `-- index.ts               # Vue Router cu navigation guards
+    `-- api/client.ts
+
+frontend-admin/
+`-- src/
+    +-- pages/
+    |   +-- LoginPage.vue
+    |   +-- DashboardPage.vue
+    |   +-- UsersPage.vue
+    |   `-- StudiesPage.vue
+    +-- stores/
+    |   +-- auth.store.ts
+    |   `-- admin.store.ts
+    `-- api/client.ts
 \end{lstlisting}
 
 \subsection{Fluxul de date și state management}
@@ -629,18 +701,29 @@ biblioteca oficială de state management pentru Vue.js~3. Fiecare store
 encapsulează starea, acțiunile (apeluri API asincrone) și getters (date
 derivate) pentru un domeniu specific.
 
-La autentificare, \texttt{authStore} primește JWT-ul de la API și îl
-stochează în \texttt{localStorage} pentru persistență între sesiuni. Un
-interceptor Axios adaugă automat header-ul \texttt{Authorization: Bearer} la
-fiecare cerere ulterioară, iar navigation guards Vue Router redirecționează
-utilizatorii neautentificați spre pagina de login.
+La autentificare, \texttt{authStore} primește JWT-ul de la API și îl stochează
+în \texttt{localStorage} pentru persistență între sesiuni. Aplicația principală
+folosește cheia \texttt{emedicine.token}, iar consola admin folosește
+\texttt{emedicine-admin.token}; astfel, sesiunile celor două interfețe rămân
+independente. Un interceptor Axios adaugă automat header-ul
+\texttt{Authorization: Bearer} la fiecare cerere ulterioară, iar navigation
+guards Vue Router redirecționează utilizatorii neautentificați spre pagina de
+login.
+
+În aplicația principală, \texttt{studiesStore} păstrează lista de membershipuri,
+studiul curent și rolul utilizatorului. Rutele care necesită date epidemiologice
+au meta-câmpul \texttt{requiresStudy}; dacă nu există un studiu selectat,
+utilizatorul este trimis către pagina de studii. Drepturile derivate
+\texttt{canWriteDatasets}, \texttt{canWriteSimulations} și
+\texttt{canManageStudy} controlează vizibilitatea acțiunilor în interfață și
+oglindesc regulile aplicate de backend.
 
 Fluxul de simulare începe din pagina \texttt{NewSimulationPage}, care apelează
-\texttt{simulationsStore.create()} cu parametrii formularului; store-ul
-primește înapoi \texttt{simulation\_id} și componenta
-\texttt{SimulationStatus} pornește un polling la interval de 2 secunde pe
-\texttt{GET /api/simulations/\{id\}}, oprindu-se când statusul devine
-\texttt{completed} sau \texttt{failed}. La finalizare,
+\texttt{simulationsStore.create()} cu parametrii formularului și cu
+\texttt{studyId}-ul curent inclus în URL-ul API. Store-ul primește înapoi
+\texttt{simulation\_id} și componenta \texttt{SimulationStatus} pornește un
+polling la interval de 2 secunde pe ruta scope-uită pe studiu, oprindu-se când
+statusul devine \texttt{completed} sau \texttt{failed}. La finalizare,
 \texttt{SimulationResultPage} încarcă seria temporală și o pasează componentei
 \texttt{CompartmentChart}, care randează graficul interactiv pe baza cheilor
 prezente în obiectul \texttt{compartments}.
@@ -649,6 +732,13 @@ Pagina \texttt{ComparePage} permite selectarea a 2--3 simulări finalizate.
 Pentru fiecare rulare selectată, store-ul încarcă metadatele și seria temporală
 prin cereri paralele, iar \texttt{CompartmentChart} le suprapune în același
 grafic, diferențiindu-le prin stil de linie (continuu, întrerupt, punctat).
+
+Consola \texttt{frontend-admin} folosește un store separat, \texttt{adminStore},
+care apelează exclusiv rutele \texttt{/api/admin/*}. La login, aplicația refuză
+utilizatorii care nu au \texttt{is\_super\_admin=true}, chiar dacă autentificarea
+API ar fi validă. Interfața admin prezintă statistici globale, lista
+utilizatorilor, promovarea sau revocarea drepturilor de super-admin și lista
+tuturor studiilor din sistem.
 
 % ------------------------------------------------------------
 \section{Infrastructura Kubernetes}
@@ -685,8 +775,9 @@ migrare manuală. \texttt{metrics-server} este instalat pentru a permite
 atât utilitarul \texttt{kubectl top}, cât și autoscalarea bazată pe
 metrici CPU/memorie (Horizontal Pod Autoscaler).
 
-\begin{figure}[htbp]
+\begin{figure*}[t]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
     pod/.style={
         draw=gray!60, rounded corners=2pt, thick,
@@ -757,7 +848,7 @@ metrici CPU/memorie (Horizontal Pod Autoscaler).
 \node[pod, fill=green!18]  at (7.1, -5.10) {api (replica 2)};
 \node[pod, fill=purple!18] at (7.1, -5.60) {runner-julia};
 \node[pod, fill=blue!15]   at (7.1, -6.10) {frontend (Nginx)};
-\node[pod, fill=cyan!18]   at (7.1, -6.70) {metrics-server};
+\node[pod, fill=blue!8]    at (7.1, -6.70) {frontend-admin};
 
 %% Worker 3
 \draw[thick, gray!60, rounded corners=5pt, fill=green!10]
@@ -766,8 +857,8 @@ metrici CPU/memorie (Horizontal Pod Autoscaler).
 \node[pod, fill=gray!18]   at (11.925, -4.10) {yb-master-2};
 \node[pod, fill=yellow!30] at (11.925, -4.60) {yb-tserver-2};
 \node[pod, fill=purple!18] at (11.925, -5.10) {runner-python};
-\node[pod, fill=gray!8, draw=gray!40, dashed]
-                           at (11.925, -5.60) {(rezervă HPA)};
+\node[pod, fill=cyan!18]   at (11.925, -5.60) {metrics-server};
+\node[pod, fill=purple!10] at (11.925, -6.10) {runner-lstm};
 
 %% ---- Ingress overlay (deasupra) ----
 \node[pod, fill=orange!25, minimum width=3.5cm] (ing) at (7.0, 1.6)
@@ -775,13 +866,14 @@ metrici CPU/memorie (Horizontal Pod Autoscaler).
 \draw[-{Stealth[length=5pt]}, thick, gray!60] (ing.south) -- (7.0, 1.0);
 
 \end{tikzpicture}
+}
 \caption{Topologia cluster-ului Kubernetes cu 3 noduri control plane
 HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform
 prin \texttt{podAntiAffinity}, garantând că pierderea unui worker
 afectează cel mult o replică \texttt{yb-master} și o replică
 \texttt{yb-tserver} --- în limita toleranței quorum-ului Raft.}
 \label{fig:k8s_topology}
-\end{figure}
+\end{figure*}
 
 Toate resursele aplicației sunt grupate în namespace-ul
 \texttt{epimodel}, ceea ce permite aplicarea politicilor de rețea
@@ -822,7 +914,8 @@ mici (\texttt{default\_memory\_limit\_to\_ram\_ratio: 0.6},
           masteri + 3$\times$10~GiB pentru tserveri = 45~GiB cumulat);
     \item două \texttt{Service}-uri headless (\texttt{yb-masters} și
           \texttt{yb-tservers}) pentru descoperirea peer-urilor prin DNS
-          intern stabil (\texttt{yb-master-0.yb-masters.epimodel.svc.cluster.local}),
+          intern stabil (de exemplu
+          \texttt{yb-master-0.yb-masters.\allowbreak epimodel.svc.cluster.local}),
           necesar protocolului Raft;
     \item un \texttt{Service} \texttt{ClusterIP} numit
           \texttt{yb-tserver-service} pe portul 5433 (YSQL), folosit de
@@ -832,8 +925,9 @@ mici (\texttt{default\_memory\_limit\_to\_ram\_ratio: 0.6},
 \subsection{Stratul aplicativ: imagini container și registru}
 \label{subsec:deploy_aplicatii}
 
-Cele cinci componente proprii ale sistemului --- API Go, frontend Vue.js,
-și cele trei runnere R / Python / Julia --- sunt împachetate ca imagini
+Cele șapte componente proprii ale sistemului --- API Go, frontend-ul principal,
+frontend-ul admin, cele trei runnere compartimentale R / Python / Julia și
+runner-ul LSTM --- sunt împachetate ca imagini
 Docker construite pentru arhitectura \texttt{linux/amd64} și publicate
 într-un registru de imagini compatibil OCI (GitHub Container Registry
 în cazul de față). Pod-urile cluster-ului fac \texttt{pull} autentificat
@@ -844,9 +938,9 @@ Imaginea API-ului este construită cu un \emph{multi-stage build}: primul
 stage compilează binarul Go static (\texttt{CGO\_ENABLED=0}), iar al doilea
 copiază doar binarul rezultat într-o imagine \texttt{distroless/static}
 (\texttt{nonroot}), obținând o imagine finală de aproximativ 18~MiB,
-fără shell și fără pachete de sistem inutile. Frontend-ul Vue este
-compilat în fișiere statice (\texttt{npm run build}) și servit printr-un
-container Nginx configurat ca SPA: toate rutele necunoscute sunt
+fără shell și fără pachete de sistem inutile. Cele două frontend-uri Vue sunt
+compilate în fișiere statice (\texttt{npm run build}) și servite prin
+containere Nginx configurate ca SPA: toate rutele necunoscute sunt
 redirecționate la \texttt{index.html}, permițând Vue~Router să gestioneze
 navigarea côté client. Runner-ele utilizează imagini de bază specifice
 fiecărui limbaj (Python 3.12 slim, R 4.4 base, Julia 1.11), cu dependențele
@@ -892,9 +986,12 @@ Ingress controller-ul \texttt{ingress-nginx} este instalat în namespace-ul
 \texttt{ingress-nginx} prin Helm chart-ul oficial, înregistrând un singur
 \texttt{IngressClass} (\texttt{nginx}) marcat ca \emph{default} pe cluster.
 Un singur obiect \texttt{Ingress} (\texttt{epimodel-ingress}) rutează
-cererile externe către cele două servicii vizibile public: prefixul
-\texttt{/api} către \texttt{Service} \texttt{api} (API Go pe portul 8080),
-iar restul către \texttt{Service} \texttt{frontend} (Nginx pe portul 80).
+cererile externe pentru două host-uri. Pe \texttt{sir-workbench.ro}, prefixul
+\texttt{/api} ajunge la \texttt{Service} \texttt{api}, iar restul traficului
+ajunge la \texttt{Service} \texttt{frontend}. Pe \texttt{admin.sir-workbench.ro},
+același prefix \texttt{/api} ajunge la API, iar restul traficului ajunge la
+\texttt{Service} \texttt{frontend-admin}. Această separare păstrează consola
+administrativă într-un build distinct, fără a duplica backend-ul.
 
 Modul de expunere a ingress-controller-ului depinde de capabilitățile
 provider-ului cloud. Pe un cluster cu \texttt{LoadBalancer Service}

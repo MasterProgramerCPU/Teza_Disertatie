@@ -1,0 +1,265 @@
+% ============================================================
+% CAPITOLUL 7 — COMPARAȚIE, ANALIZĂ NUMERICĂ ȘI CALIBRARE
+% ============================================================
+
+\chapter{Comparația Modelelor, Analiză Numerică și Calibrare}
+\label{ch:comparatie_calibrare}
+
+\section{Rolul comparației între modele}
+\label{sec:rol_comparatie_modele}
+
+Modelele compartimentale discutate în lucrare nu trebuie interpretate ca variante
+interschimbabile ale aceleiași ecuații. Fiecare model introduce o anumită
+ipoteză epidemiologică și elimină alte detalii pentru a păstra sistemul
+analizabil. Din acest motiv, comparația trebuie făcută pe două niveluri:
+compararea structurală a ipotezelor și compararea numerică a traiectoriilor
+obținute pe același set de date.
+
+Comparația structurală răspunde la întrebarea „ce fenomen poate reprezenta
+modelul?”. Comparația numerică răspunde la întrebarea „cât de bine reproduce
+modelul datele observate în condiții experimentale identice?”. Ambele sunt
+necesare. Un model simplu poate avea o eroare mică pe o fereastră scurtă, dar
+poate ascunde mecanisme importante; un model complex poate reprezenta mai fidel
+fenomenul, dar poate fi dificil de calibrat din date puține.
+
+\section{Comparație structurală}
+\label{sec:comparatie_structurala}
+
+Tabelul~\ref{tab:comparatie_modele} sintetizează diferențele principale dintre
+modelele suportate de aplicație. Criteriile alese sunt cele relevante pentru
+implementarea curentă: compartimentele, parametrii necesari, ipoteza centrală și
+tipul de date observabile cu care modelul poate fi comparat direct.
+
+\begin{table*}[t]
+\centering
+\caption{Comparație structurală între modelele utilizate în lucrare.}
+\label{tab:comparatie_modele}
+\begin{tabularx}{0.96\textwidth}{l l l X X}
+\toprule
+\textbf{Model} & \textbf{Compartimente} & \textbf{Parametri} & \textbf{Ipoteză principală} & \textbf{Observabil comparabil} \\
+\midrule
+SIS & $S,I$ & $\beta,\gamma$ & infecția nu produce imunitate durabilă & cazuri active aproximabile prin $I$ \\
+SIR & $S,I,R$ & $\beta,\gamma$ & recuperarea produce imunitate permanentă & active prin $I$, cumulate prin $I+R$ \\
+SEIR & $S,E,I,R$ & $\beta,\sigma,\gamma$ & există o fază latentă neinfecțioasă sau slab observabilă & active prin $I$, latența rămâne neobservată \\
+SIRS & $S,I,R$ & $\beta,\gamma,\xi$ & imunitatea se pierde în timp & active prin $I$, revenire din $R$ în $S$ \\
+SIDARTHE & $S,I,D,A,R,T,H,E$ & 16 rate & diagnosticul, simptomatologia și severitatea clinică modifică dinamica observată & active diagnosticate prin $D+R+T$, decese prin $E$ \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+SIS este potrivit pentru boli unde reinfectarea rapidă sau lipsa imunității este
+o ipoteză acceptabilă. SIR este util ca reper matematic, deoarece păstrează
+dinamica minimală a unei epidemii cu imunitate. SEIR introduce latența și devine
+mai potrivit atunci când există o perioadă de incubație importantă. SIRS relaxează
+ipoteza imunității permanente. SIDARTHE mută accentul de la agregarea biologică
+la observabilitatea clinică: infecțiile nedepistate, cazurile diagnosticate,
+formele simptomatice, formele severe, vindecările și decesele sunt tratate
+separat.
+
+\section{Operatorul de observație}
+\label{sec:operator_observatie}
+
+Datele reale nu conțin de obicei toate compartimentele modelului. Pentru a compara
+un model cu o serie observată este necesar un operator de observație
+$g_m(\mathbf{x}(t))$, dependent de modelul $m$, care transformă starea internă a
+modelului într-o mărime comparabilă cu datele.
+
+Pentru o serie de cazuri active, operatorul poate fi definit astfel:
+\begin{equation}
+g_{\text{SIR}}(\mathbf{x}) = I, \qquad
+g_{\text{SEIR}}(\mathbf{x}) = I, \qquad
+g_{\text{SIRS}}(\mathbf{x}) = I.
+\end{equation}
+Pentru SIDARTHE, dacă seria observată reprezintă cazuri diagnosticate active, o
+alegere mai realistă este
+\begin{equation}
+g_{\text{SIDARTHE}}(\mathbf{x}) = D + R + T,
+\end{equation}
+deoarece compartimentul $I$ reprezintă infectați nedepistați, iar $A$ reprezintă
+persoane simptomatice nedepistate. Dacă datasetul conține doar o aproximare
+generală a cazurilor active, aplicația poate folosi o proiecție mai simplă, dar
+interpretarea trebuie notată explicit.
+
+Pentru decese cumulative, operatorul SIDARTHE este direct:
+\begin{equation}
+g_{\text{decese}}(\mathbf{x}) = E.
+\end{equation}
+Această separare este un avantaj al modelului SIDARTHE față de modelele SIR,
+SEIR sau SIRS, în care decesele sunt incluse implicit în compartimentul
+\emph{removed}.
+
+\section{Metrici de eroare numerică}
+\label{sec:metrici_eroare_numerica}
+
+Fie $y_t$ seria observată la ziua $t$, iar $\hat{y}_{m,t}$ seria produsă de
+modelul $m$ după aplicarea operatorului de observație. Pentru o fereastră de
+evaluare cu $T$ puncte, eroarea medie absolută este
+\begin{equation}
+\operatorname{MAE}_m =
+\frac{1}{T}\sum_{t=1}^{T}\left|y_t-\hat{y}_{m,t}\right|.
+\end{equation}
+Eroarea medie pătratică radicală este
+\begin{equation}
+\operatorname{RMSE}_m =
+\sqrt{\frac{1}{T}\sum_{t=1}^{T}\left(y_t-\hat{y}_{m,t}\right)^2}.
+\end{equation}
+Pentru a compara regiuni cu populații diferite, este utilă normalizarea la
+populația totală $N$:
+\begin{equation}
+\operatorname{nRMSE}_m = \frac{\operatorname{RMSE}_m}{N}.
+\end{equation}
+
+În date epidemiologice, MAPE poate fi instabilă atunci când $y_t$ este aproape
+de zero. Din acest motiv, lucrarea preferă MAE, RMSE și nRMSE. Dacă se compară
+mai multe serii observabile, de exemplu cazuri active și decese, se folosește o
+funcție de pierdere ponderată:
+\begin{equation}
+\mathcal{L}_m(\theta) =
+\sum_{k \in \mathcal{K}} w_k
+\frac{1}{T}\sum_{t=1}^{T}
+\left(y_{k,t}-g_{m,k}(\mathbf{x}_{\theta}(t))\right)^2,
+\end{equation}
+unde $k$ indexează tipul de observație, iar $w_k$ controlează importanța fiecărei
+serii. Ponderile sunt necesare deoarece seriile pot avea scări diferite.
+
+\testtodo{Formulele de mai sus definesc modul de calcul al erorilor, dar nu
+reprezintă rezultate în sine. Pentru a obține rezultate numerice trebuie rulate
+toate modelele pe același dataset, trebuie aplicat operatorul de observație ales
+și trebuie raportate valorile MAE, RMSE și nRMSE pentru fiecare combinație
+model--limbaj--fereastră temporală.}
+
+\section{Protocol de analiză comparativă}
+\label{sec:protocol_comparativ}
+
+Pentru ca analiza comparativă să fie reproductibilă, toate modelele trebuie
+rulate în condiții identice. Protocolul propus are următorii pași:
+
+\begin{enumerate}
+    \item se alege același dataset, aceeași regiune și aceeași fereastră
+    temporală pentru toate modelele;
+    \item se aplică aceeași regulă de inițializare a compartimentelor, conform
+    Tabelului~\ref{tab:initializare_modele};
+    \item se calibrează fiecare model pe aceeași fereastră de antrenare;
+    \item se evaluează eroarea pe o fereastră separată de test;
+    \item se raportează MAE, RMSE, nRMSE și timpul de execuție;
+    \item se păstrează separat interpretarea epidemiologică și costul software.
+\end{enumerate}
+
+Separarea între antrenare și test este importantă. Un model cu mulți parametri,
+cum este SIDARTHE, poate potrivi mai bine fereastra de antrenare, dar aceasta nu
+garantează o predicție mai bună pe zile viitoare. Prin urmare, analiza
+comparativă trebuie să raporteze atât eroarea de calibrare, cât și eroarea de
+generalizare.
+
+\begin{table*}[t]
+\centering
+\caption{Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}
+\label{tab:teste_necesare_comparatie}
+\begin{tabularx}{0.96\textwidth}{lX X}
+\toprule
+\textbf{Secțiune} & \textbf{Test necesar} & \textbf{Rezultat de raportat} \\
+\midrule
+Operatorul de observație & alegerea proiecției potrivite pentru fiecare model și dataset & seria comparabilă cu datele reale: active, diagnosticate sau decese \\
+Metrici de eroare & rularea modelelor pe aceeași fereastră temporală & MAE, RMSE, nRMSE pe fiecare model și limbaj \\
+Protocol comparativ & împărțirea cronologică train/test și rulări identice pentru toate modelele & tabel agregat cu eroare pe train și test \\
+Calibrare parametri & optimizarea parametrilor în limite admisibile & parametrii calibrați, eroarea finală și numărul de evaluări ale solverului \\
+Identificabilitate & repetarea calibrării din puncte inițiale diferite & stabilitatea parametrilor și variația erorii între rulări \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\section{Calibrarea parametrilor}
+\label{sec:calibrare_parametri}
+
+Calibrarea parametrilor transformă modelul dintr-un instrument de simulare
+exploratorie într-un instrument ajustat la date observate. Pentru un model
+$m$ cu vector de parametri $\theta$, calibrarea poate fi formulată ca problemă
+de optimizare:
+\begin{equation}
+\hat{\theta}_m =
+\arg\min_{\theta \in \Omega_m} \mathcal{L}_m(\theta),
+\end{equation}
+unde $\Omega_m$ este domeniul admisibil al parametrilor. Constrângerile sunt
+esențiale: ratele de tranziție trebuie să fie nenegative, iar intervalele lor
+trebuie alese în funcție de scară temporală și de cunoștințe epidemiologice.
+
+Pentru modelele SIR/SIS/SEIR/SIRS, calibrarea poate fi făcută cu metode clasice
+de optimizare neliniară, de exemplu Nelder--Mead \cite{nelder1965simplex},
+L-BFGS-B sau căutare pe grilă pentru intervale mici. Pentru SIDARTHE, spațiul de
+parametri este mai mare, iar optimizarea devine mai fragilă. În acest caz sunt
+utile:
+\begin{itemize}
+    \item fixarea unor parametri din literatură sau din ipoteze clinice;
+    \item calibrarea pe grupuri de parametri, nu a tuturor ratelor simultan;
+    \item regularizarea față de valori de referință;
+    \item validarea pe o fereastră temporală nefolosită la optimizare.
+\end{itemize}
+
+\testtodo{Pentru ca această secțiune să conțină rezultate, trebuie implementată
+sau rulată o procedură de optimizare pentru fiecare model. Rezultatele minime de
+raportat sunt vectorul de parametri calibrați, valoarea funcției de pierdere,
+MAE/RMSE pe train și test, numărul de iterații și timpul total de calibrare.}
+
+\begin{algorithm}[t]
+\caption{Calibrarea unui model compartimental pe date observate}
+\label{alg:calibrare_model}
+\begin{lstlisting}[style=pseudocode]
+Input: model m, dataset Y, parametri initiali theta0,
+       limite Omega, fereastra train, operator g_m
+Output: parametri calibrati theta_hat, metrici de eroare
+
+theta <- theta0
+while criteriul de oprire nu este indeplinit do
+    ruleaza solverul ODE cu parametrii theta
+    proiecteaza starea modelului prin g_m
+    calculeaza functia de pierdere L_m(theta)
+    actualizeaza theta prin algoritmul de optimizare
+    proiecteaza theta inapoi in Omega daca este necesar
+end while
+calculeaza MAE, RMSE si nRMSE pe train si test
+return theta, metrici
+\end{lstlisting}
+\end{algorithm}
+
+\section{Identificabilitate și limitări ale calibrării}
+\label{sec:identificabilitate}
+
+O eroare mică nu implică automat parametri epidemiologic corecți. În modelele
+neliniare, mai multe combinații de parametri pot produce traiectorii asemănătoare
+pe aceeași fereastră de timp. Această problemă se numește neidentificabilitate
+practică și este accentuată atunci când datele observate sunt agregate.
+
+Pentru SIDARTHE, neidentificabilitatea este mai importantă decât pentru SIR.
+Dacă datasetul nu conține date despre testare, spitalizare, terapie intensivă și
+vindecări, parametri precum $\epsilon$, $\zeta$, $\mu$, $\nu$, $\sigma$ sau
+$\tau$ nu pot fi estimați robust doar din cazuri active. Într-o lucrare aplicată,
+acest lucru trebuie declarat explicit. Rolul calibrării nu este să ascundă
+incertitudinea, ci să arate ce ipoteze sunt necesare pentru a obține o potrivire
+numerică.
+
+\testtodo{Afirmațiile despre identificabilitate trebuie susținute prin calibrări
+repetate, pornind din valori inițiale diferite ale parametrilor. Dacă erori
+similare produc parametri foarte diferiți, rezultatul trebuie raportat ca
+instabilitate a calibrării, nu ca estimare epidemiologică robustă.}
+
+\section{Integrarea în sistemul software}
+\label{sec:integrare_calibrare_software}
+
+Arhitectura curentă este pregătită pentru calibrare deoarece separă trei
+elemente: datele observate, parametrii modelului și rezultatele simulării.
+Extinderea naturală constă într-un tip suplimentar de job, de exemplu
+\texttt{calibration}, care rulează mai multe simulări candidate și salvează
+parametrii rezultați într-o tabelă dedicată. Simularea finală ar putea fi apoi
+creată automat folosind $\hat{\theta}$.
+
+Această extensie trebuie totuși tratată diferit de o simulare obișnuită.
+Calibrarea poate necesita zeci sau sute de integrări numerice, deci timpul de
+execuție, costul CPU și consumul de memorie devin parte a rezultatului. Din acest
+motiv, evaluarea numerică și evaluarea software trebuie raportate împreună:
+modelul cu eroare mai mică poate fi mai costisitor, iar modelul mai rapid poate
+fi insuficient pentru datele disponibile.
+
+\testtodo{Pentru integrarea software a calibrării trebuie măsurate costurile
+generate de rulări multiple ale solverului: timp total, timp CPU, memorie, număr
+de job-uri, număr de simulări candidate și volum de rezultate scrise în baza de
+date.}

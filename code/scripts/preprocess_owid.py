@@ -1,13 +1,13 @@
 """Preprocess OWID COVID-19 data into per-country compartmental datasets.
 
-For each of 10 countries, this script:
+For each configured European country, this script:
   1. downloads (or reuses cached) the OWID full dataset,
   2. filters to the target country and date window
      (2020-01-22 -> 2023-12-31),
   3. derives observable compartments (infected, removed, susceptible)
      from raw OWID fields,
   4. validates the resulting series,
-  5. writes a CSV ready to upload via POST /api/datasets.
+  5. writes a CSV ready to upload via POST /api/studies/{studyId}/datasets.
 
 Derivation:
   * infected(t) = sum of new_cases over the last INFECTIOUS_WINDOW_DAYS
@@ -15,17 +15,17 @@ Derivation:
                   at time t.
   * recovered(t) = total_cases(t) - infected(t)
                   -- people no longer infectious (recovered + deceased,
-                  the "removed" compartment in SIR; mapped to H in SIDARTH).
+                  the "removed" compartment in SIR; mapped to H in SIDARTHE).
   * susceptible(t) = N - infected(t) - recovered(t)   -- by conservation.
 
 The 14-day infectious window matches the clinical estimate for COVID-19
 documented in the thesis (gamma = 1/14 ~ 0.0714 day^-1).
 
-The same CSV schema feeds both supported models: SIR uses
-(susceptible, infected, recovered) directly as (S0, I0, R0), while
-SIDARTH places active infections in compartment I and previously
-infected individuals in compartment H, with D, A, R, T starting at zero
-(see thesis chapter 5).
+The same CSV schema feeds all deterministic models supported by the app:
+SIR-family models derive their initial S/I/R-like compartments from
+(susceptible, infected, recovered), while SIDARTHE places active
+infections in I and previously infected individuals in H, with the clinical
+subcompartments starting at zero (see thesis chapter 5).
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-OWID_URL = "https://covid.ourworldindata.org/data/owid-covid-data.csv"
+OWID_URL = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
 START_DATE = pd.Timestamp("2020-01-22")
 END_DATE = pd.Timestamp("2023-12-31")
 INFECTIOUS_WINDOW_DAYS = 14
@@ -60,16 +60,46 @@ class Country:
 
 
 COUNTRIES: tuple[Country, ...] = (
-    Country("ROU", "Romania",       "romania"),
-    Country("ITA", "Italy",         "italy"),
-    Country("KOR", "South Korea",   "south_korea"),
-    Country("DEU", "Germany",       "germany"),
-    Country("GBR", "United Kingdom","united_kingdom"),
-    Country("USA", "United States", "united_states"),
-    Country("BRA", "Brazil",        "brazil"),
-    Country("SWE", "Sweden",        "sweden"),
-    Country("JPN", "Japan",         "japan"),
-    Country("IND", "India",         "india"),
+    # --- UE 27 ---
+    Country("AUT", "Austria",        "austria"),
+    Country("BEL", "Belgium",        "belgium"),
+    Country("BGR", "Bulgaria",       "bulgaria"),
+    Country("HRV", "Croatia",        "croatia"),
+    Country("CYP", "Cyprus",         "cyprus"),
+    Country("CZE", "Czechia",        "czechia"),
+    Country("DNK", "Denmark",        "denmark"),
+    Country("EST", "Estonia",        "estonia"),
+    Country("FIN", "Finland",        "finland"),
+    Country("FRA", "France",         "france"),
+    Country("DEU", "Germany",        "germany"),
+    Country("GRC", "Greece",         "greece"),
+    Country("HUN", "Hungary",        "hungary"),
+    Country("IRL", "Ireland",        "ireland"),
+    Country("ITA", "Italy",          "italy"),
+    Country("LVA", "Latvia",         "latvia"),
+    Country("LTU", "Lithuania",      "lithuania"),
+    Country("LUX", "Luxembourg",     "luxembourg"),
+    Country("MLT", "Malta",          "malta"),
+    Country("NLD", "Netherlands",    "netherlands"),
+    Country("POL", "Poland",         "poland"),
+    Country("PRT", "Portugal",       "portugal"),
+    Country("ROU", "Romania",        "romania"),
+    Country("SVK", "Slovakia",       "slovakia"),
+    Country("SVN", "Slovenia",       "slovenia"),
+    Country("ESP", "Spain",          "spain"),
+    Country("SWE", "Sweden",         "sweden"),
+    # --- Restul Europei (EFTA / Balcani / Est) ---
+    Country("ALB", "Albania",        "albania"),
+    Country("BIH", "Bosnia and Herzegovina", "bosnia_herzegovina"),
+    Country("CHE", "Switzerland",    "switzerland"),
+    Country("GBR", "United Kingdom", "united_kingdom"),
+    Country("ISL", "Iceland",        "iceland"),
+    Country("MDA", "Moldova",        "moldova"),
+    Country("MKD", "North Macedonia","north_macedonia"),
+    Country("MNE", "Montenegro",     "montenegro"),
+    Country("NOR", "Norway",         "norway"),
+    Country("SRB", "Serbia",         "serbia"),
+    Country("UKR", "Ukraine",        "ukraine"),
 )
 
 logger = logging.getLogger("preprocess_owid")

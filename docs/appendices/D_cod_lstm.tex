@@ -1,0 +1,9 @@
+\chapter{Cod Sursă --- Runner LSTM}
+\label{app:cod_lstm}
+
+Această anexă include runner-ul LSTM separat, responsabil pentru consumul cozii
+\texttt{epimodel:jobs:lstm}, antrenarea modelului recurent pe seria
+\texttt{infected} și persistarea seriilor \texttt{observed},
+\texttt{fitted} și \texttt{predicted}.
+
+\lstinputlisting[language=Python, caption={Runner-ul LSTM dedicat predicțiilor epidemiologice.}]{../code/runners/lstm/runner.py}
