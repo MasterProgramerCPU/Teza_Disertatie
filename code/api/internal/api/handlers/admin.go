@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"errors"
 	"log"
 	"net/http"
@@ -126,6 +125,3 @@ func (h *AdminHandler) Stats(w http.ResponseWriter, r *http.Request) {
 		"benchmarks":            benches,
 	})
 }
-
-// suppress unused-import lint for context when admin.go is the only consumer.
-var _ = context.Background

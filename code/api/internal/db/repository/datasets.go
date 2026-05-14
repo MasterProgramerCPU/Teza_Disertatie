@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/tudorgeana/emedicine-api/internal/models"
@@ -99,7 +100,7 @@ func (r *DatasetRepository) Get(ctx context.Context, studyID, id uuid.UUID) (*mo
 // in studiu (verificarea facuta in handler) poate sterge.
 func (r *DatasetRepository) Delete(ctx context.Context, studyID, id uuid.UUID, ownerID *uuid.UUID) error {
 	var (
-		tag any
+		tag pgconn.CommandTag
 		err error
 	)
 	if ownerID != nil {
@@ -110,7 +111,7 @@ func (r *DatasetRepository) Delete(ctx context.Context, studyID, id uuid.UUID, o
 	if err != nil {
 		return err
 	}
-	if t, ok := tag.(interface{ RowsAffected() int64 }); ok && t.RowsAffected() == 0 {
+	if tag.RowsAffected() == 0 {
 		return ErrNotFound
 	}
 	return nil

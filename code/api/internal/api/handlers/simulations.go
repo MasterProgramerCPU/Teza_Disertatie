@@ -129,9 +129,6 @@ func normalizedParameters(model models.ModelType, input map[string]float64) (map
 		if out["beta"] <= 0 {
 			return nil, errors.New("beta must be > 0 for " + string(model))
 		}
-	}
-	switch model {
-	case models.ModelSIS, models.ModelSIR, models.ModelSEIR, models.ModelSIRS:
 		if out["gamma"] <= 0 {
 			return nil, errors.New("gamma must be > 0 for " + string(model))
 		}

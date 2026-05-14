@@ -79,13 +79,6 @@ type EpidemiologicalRecord struct {
 
 type SimulationStatus string
 
-const (
-	StatusPending   SimulationStatus = "pending"
-	StatusRunning   SimulationStatus = "running"
-	StatusCompleted SimulationStatus = "completed"
-	StatusFailed    SimulationStatus = "failed"
-)
-
 type Language string
 
 const (
@@ -151,14 +144,6 @@ type SimulationResult struct {
 	SimulationID uuid.UUID          `json:"simulation_id"`
 	T            int                `json:"t"`
 	Compartments map[string]float64 `json:"compartments"`
-}
-
-type Benchmark struct {
-	ID           uuid.UUID `json:"id"`
-	SimulationID uuid.UUID `json:"simulation_id"`
-	WallTimeMs   int64     `json:"wall_time_ms"`
-	CPUTimeMs    int64     `json:"cpu_time_ms"`
-	PeakMemoryMB float32   `json:"peak_memory_mb"`
 }
 
 type BenchmarkAggregate struct {
