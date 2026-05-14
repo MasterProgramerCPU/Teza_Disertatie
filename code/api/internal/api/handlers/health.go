@@ -35,12 +35,14 @@ func (h *HealthHandler) Get(w http.ResponseWriter, r *http.Request) {
 	redisOK := redisErr == nil
 
 	status := http.StatusOK
+	overall := "ok"
 	if !dbOK || !redisOK {
 		status = http.StatusServiceUnavailable
+		overall = "degraded"
 	}
 
 	writeJSON(w, status, map[string]any{
-		"status":   "ok",
+		"status":   overall,
 		"database": boolStatus(dbOK),
 		"redis":    boolStatus(redisOK),
 	})
