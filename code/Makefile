@@ -1,4 +1,4 @@
-.PHONY: help up down logs logs-api logs-runners rebuild rebuild-api rebuild-python rebuild-lstm rebuild-r rebuild-julia rebuild-frontend migrate health tidy build clean data data-clean ui-dev ui-build ui-install
+.PHONY: help up down logs logs-api logs-runners rebuild rebuild-api rebuild-python rebuild-lstm rebuild-r rebuild-julia rebuild-frontend migrate health tidy build clean data data-mpox data-synthetic data-clean benchmark ui-dev ui-build ui-install
 
 COMPOSE := docker compose
 
@@ -20,8 +20,11 @@ help:
 	@echo "  tidy            - go mod tidy in ./api"
 	@echo "  build           - go build in ./api"
 	@echo "  clean           - down + remove yugabyte volume"
-	@echo "  data            - generate European country CSVs from OWID (scripts/preprocess_owid.py)"
+	@echo "  data            - generate COVID-19 country CSVs from OWID (scripts/preprocess_owid.py)"
+	@echo "  data-mpox       - generate mpox country CSVs from OWID (scripts/preprocess_mpox.py)"
+	@echo "  data-synthetic  - generate large synthetic stress datasets (scripts/generate_synthetic.py)"
 	@echo "  data-clean      - delete data/processed/ output CSVs"
+	@echo "  benchmark       - run a benchmark campaign (scripts/run_benchmark.py); pass ARGS=\"...\""
 	@echo "  rebuild-frontend- rebuild frontend image only"
 	@echo "  ui-install      - npm install in ./frontend"
 	@echo "  ui-dev          - npm run dev (vite dev server on :5173)"
@@ -78,8 +81,19 @@ clean: down
 data:
 	cd scripts && python3 preprocess_owid.py
 
+data-mpox:
+	cd scripts && python3 preprocess_mpox.py
+
+data-synthetic:
+	cd scripts && python3 generate_synthetic.py --profile multiwave && \
+		python3 generate_synthetic.py --profile sharp && \
+		python3 generate_synthetic.py --profile slow
+
 data-clean:
 	rm -f data/processed/*.csv
+
+benchmark:
+	cd scripts && python3 run_benchmark.py $(ARGS)
 
 rebuild-frontend:
 	$(COMPOSE) up -d --build frontend

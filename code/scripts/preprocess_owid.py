@@ -1,31 +1,24 @@
-"""Preprocess OWID COVID-19 data into per-country compartmental datasets.
+"""Preprocesare OWID COVID-19 -> seturi de date compartimentale per tara.
 
-For each configured European country, this script:
-  1. downloads (or reuses cached) the OWID full dataset,
-  2. filters to the target country and date window
-     (2020-01-22 -> 2023-12-31),
-  3. derives observable compartments (infected, removed, susceptible)
-     from raw OWID fields,
-  4. validates the resulting series,
-  5. writes a CSV ready to upload via POST /api/studies/{studyId}/datasets.
+Pentru fiecare tara configurata, scriptul:
+  1. descarca (sau reutilizeaza cache-ul) setul complet OWID COVID-19,
+  2. filtreaza la tara si la fereastra de timp (2020-01-22 -> 2023-12-31),
+  3. deriva compartimentele observabile (infected, removed, susceptible) prin
+     :mod:`epi_common`,
+  4. valideaza seria rezultata,
+  5. scrie un CSV gata de incarcat prin POST /api/studies/{studyId}/datasets.
 
-Derivation:
-  * infected(t) = sum of new_cases over the last INFECTIOUS_WINDOW_DAYS
-                  (14 days), approximating the count of active infections
-                  at time t.
-  * recovered(t) = total_cases(t) - infected(t)
-                  -- people no longer infectious (recovered + deceased,
-                  the "removed" compartment in SIR; mapped to H in SIDARTHE).
-  * susceptible(t) = N - infected(t) - recovered(t)   -- by conservation.
+Derivare (vezi :mod:`epi_common`):
+  * infected(t)    = suma new_cases pe ultimele INFECTIOUS_WINDOW_DAYS zile;
+  * recovered(t)   = total_cases(t) - infected(t)  (compartimentul "removed");
+  * susceptible(t) = N - infected(t) - recovered(t).
 
-The 14-day infectious window matches the clinical estimate for COVID-19
-documented in the thesis (gamma = 1/14 ~ 0.0714 day^-1).
+Fereastra infectioasa de 14 zile corespunde estimarii clinice pentru COVID-19
+folosita in lucrare (gamma = 1/14 ~ 0.0714 zi^-1).
 
-The same CSV schema feeds all deterministic models supported by the app:
-SIR-family models derive their initial S/I/R-like compartments from
-(susceptible, infected, recovered), while SIDARTHE places active
-infections in I and previously infected individuals in H, with the clinical
-subcompartments starting at zero (see thesis chapter 5).
+Lista de tari acopera deliberat scari de populatie si dinamici epidemice foarte
+diferite (Europa + America + Asia + Africa + Oceania), pentru ca benchmark-ul
+solverelor sa fie evaluat pe regimuri variate, nu doar pe un singur tipar.
 """
 
 from __future__ import annotations
@@ -34,22 +27,19 @@ import argparse
 import logging
 import sys
 from dataclasses import dataclass
-from pathlib import Path
 
-import numpy as np
 import pandas as pd
-import requests
+
+import epi_common as epi
 
 OWID_URL = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
 START_DATE = pd.Timestamp("2020-01-22")
 END_DATE = pd.Timestamp("2023-12-31")
 INFECTIOUS_WINDOW_DAYS = 14
-MAX_GAP_DAYS = 14
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-RAW_DIR = REPO_ROOT / "data" / "raw"
-PROCESSED_DIR = REPO_ROOT / "data" / "processed"
-RAW_FILE = RAW_DIR / "owid-covid-data.csv"
+RAW_FILE = epi.RAW_DIR / "owid-covid-data.csv"
+
+logger = logging.getLogger("preprocess_owid")
 
 
 @dataclass(frozen=True)
@@ -100,148 +90,77 @@ COUNTRIES: tuple[Country, ...] = (
     Country("NOR", "Norway",         "norway"),
     Country("SRB", "Serbia",         "serbia"),
     Country("UKR", "Ukraine",        "ukraine"),
+    # --- America ---
+    Country("USA", "United States",  "united_states"),
+    Country("CAN", "Canada",         "canada"),
+    Country("MEX", "Mexico",         "mexico"),
+    Country("BRA", "Brazil",         "brazil"),
+    Country("ARG", "Argentina",      "argentina"),
+    Country("CHL", "Chile",          "chile"),
+    Country("COL", "Colombia",       "colombia"),
+    Country("PER", "Peru",           "peru"),
+    # --- Asia ---
+    Country("CHN", "China",          "china"),
+    Country("IND", "India",          "india"),
+    Country("JPN", "Japan",          "japan"),
+    Country("KOR", "South Korea",    "south_korea"),
+    Country("IDN", "Indonesia",      "indonesia"),
+    Country("THA", "Thailand",       "thailand"),
+    Country("VNM", "Vietnam",        "vietnam"),
+    Country("RUS", "Russia",         "russia"),
+    Country("TUR", "Turkey",         "turkey"),
+    Country("IRN", "Iran",           "iran"),
+    Country("ISR", "Israel",         "israel"),
+    Country("SAU", "Saudi Arabia",   "saudi_arabia"),
+    # --- Africa ---
+    Country("ZAF", "South Africa",   "south_africa"),
+    Country("EGY", "Egypt",          "egypt"),
+    Country("NGA", "Nigeria",        "nigeria"),
+    Country("MAR", "Morocco",        "morocco"),
+    # --- Oceania ---
+    Country("AUS", "Australia",      "australia"),
+    Country("NZL", "New Zealand",    "new_zealand"),
 )
 
-logger = logging.getLogger("preprocess_owid")
 
-
-def download_if_missing(force: bool) -> Path:
-    RAW_DIR.mkdir(parents=True, exist_ok=True)
-    if RAW_FILE.exists() and not force:
-        logger.info("using cached %s (%.1f MB)", RAW_FILE, RAW_FILE.stat().st_size / 1e6)
-        return RAW_FILE
-
-    logger.info("downloading %s ...", OWID_URL)
-    with requests.get(OWID_URL, stream=True, timeout=120) as resp:
-        resp.raise_for_status()
-        tmp = RAW_FILE.with_suffix(".csv.part")
-        with tmp.open("wb") as fh:
-            for chunk in resp.iter_content(chunk_size=1 << 16):
-                if chunk:
-                    fh.write(chunk)
-        tmp.replace(RAW_FILE)
-
-    logger.info("downloaded %.1f MB to %s", RAW_FILE.stat().st_size / 1e6, RAW_FILE)
-    return RAW_FILE
-
-
-def load_country(raw_path: Path, iso3: str) -> pd.DataFrame:
-    cols = ["iso_code", "location", "date", "new_cases", "total_cases",
-            "total_deaths", "population"]
+def load_country(raw_path, iso3: str) -> pd.DataFrame:
+    """Incarca o tara din CSV-ul OWID si o aduce la schema comuna de intrare."""
+    cols = ["iso_code", "date", "new_cases", "total_cases", "population"]
     df = pd.read_csv(
         raw_path,
         usecols=cols,
         parse_dates=["date"],
-        dtype={"iso_code": "string", "location": "string"},
+        dtype={"iso_code": "string"},
     )
     df = df[df["iso_code"] == iso3].copy()
     if df.empty:
-        raise ValueError(f"no rows for iso_code={iso3}")
+        raise ValueError(f"nicio inregistrare pentru iso_code={iso3}")
     df = df[(df["date"] >= START_DATE) & (df["date"] <= END_DATE)]
-    df = df.sort_values("date").reset_index(drop=True)
-    return df
+    df = df.rename(columns={"iso_code": "region"})
+    return df.sort_values("date").reset_index(drop=True)
 
 
-def fill_calendar(df: pd.DataFrame) -> pd.DataFrame:
-    """Reindex to a continuous daily calendar; forward-fill cumulatives,
-    zero-fill new_cases for missing days."""
-    cal = pd.date_range(START_DATE, END_DATE, freq="D")
-    df = df.set_index("date").reindex(cal)
-    df.index.name = "date"
-
-    df["new_cases"] = df["new_cases"].fillna(0).clip(lower=0)
-    for c in ("total_cases", "total_deaths"):
-        df[c] = df[c].ffill().fillna(0)
-
-    pop_series = df["population"].dropna()
-    if pop_series.empty:
-        raise ValueError("population missing entirely")
-    df["population"] = pop_series.iloc[0]
-
-    df["iso_code"] = df["iso_code"].ffill().bfill()
-    df["location"] = df["location"].ffill().bfill()
-    return df.reset_index()
-
-
-def derive_compartments(df: pd.DataFrame) -> pd.DataFrame:
-    population = float(df["population"].iloc[0])
-
-    rolling_new = (
-        df["new_cases"]
-        .rolling(window=INFECTIOUS_WINDOW_DAYS, min_periods=1)
-        .sum()
-    )
-    infected = rolling_new.clip(lower=0)
-
-    total_cases = df["total_cases"].astype(float)
-    removed = (total_cases - infected).clip(lower=0)
-
-    susceptible = (population - infected - removed).clip(lower=0)
-
-    sum_compartments = susceptible + infected + removed
-    drift = (sum_compartments - population).abs().max()
-
-    out = pd.DataFrame({
-        "date": df["date"].dt.strftime("%Y-%m-%d"),
-        "region": df["iso_code"],
-        "infected": infected.round().astype("int64"),
-        "population": int(population),
-        "recovered": removed.round().astype("int64"),
-        "susceptible": susceptible.round().astype("int64"),
-    })
-
-    logger.debug("max conservation drift (raw): %.4f", drift)
-    return out
-
-
-def validate(df: pd.DataFrame, country: Country) -> None:
-    if df["infected"].lt(0).any():
-        raise ValueError(f"{country.iso3}: negative infected")
-    if df["recovered"].lt(0).any():
-        raise ValueError(f"{country.iso3}: negative recovered")
-    if df["susceptible"].lt(0).any():
-        raise ValueError(f"{country.iso3}: negative susceptible")
-    if (df["infected"] + df["recovered"] > df["population"]).any():
-        raise ValueError(f"{country.iso3}: I+R exceeds population")
-
-    dates = pd.to_datetime(df["date"])
-    if not dates.is_monotonic_increasing:
-        raise ValueError(f"{country.iso3}: dates not in chronological order")
-    gaps = dates.diff().dropna().dt.days
-    if (gaps > MAX_GAP_DAYS).any():
-        raise ValueError(
-            f"{country.iso3}: gap > {MAX_GAP_DAYS} days between consecutive rows"
-        )
-
-
-def process_country(raw_path: Path, country: Country) -> Path:
-    logger.info("[%s] loading ...", country.iso3)
+def process_country(raw_path, country: Country) -> None:
+    logger.info("[%s] procesez ...", country.iso3)
     raw = load_country(raw_path, country.iso3)
-    raw = fill_calendar(raw)
+    raw = epi.fill_calendar(raw, START_DATE, END_DATE)
+    out = epi.derive_compartments(raw, INFECTIOUS_WINDOW_DAYS)
+    epi.validate(out, country.iso3)
 
-    sir = derive_compartments(raw)
-    validate(sir, country)
-
-    PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
-    out_path = PROCESSED_DIR / f"{country.slug}.csv"
-    sir.to_csv(out_path, index=False)
+    out_path = epi.write_processed(out, country.slug)
     logger.info(
-        "[%s] wrote %d rows -> %s  (peak I = %d, N = %d)",
-        country.iso3,
-        len(sir),
-        out_path.relative_to(REPO_ROOT),
-        sir["infected"].max(),
-        sir["population"].iloc[0],
+        "[%s] %d randuri -> %s  (I maxim = %d, N = %d)",
+        country.iso3, len(out), out_path.relative_to(epi.REPO_ROOT),
+        out["infected"].max(), out["population"].iloc[0],
     )
-    return out_path
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Preprocess OWID COVID-19 data.")
+    parser = argparse.ArgumentParser(description="Preprocesare OWID COVID-19.")
     parser.add_argument("--force-download", action="store_true",
-                        help="re-download raw CSV even if cache exists")
+                        help="re-descarca CSV-ul brut chiar daca exista cache")
     parser.add_argument("--country", action="append", default=None,
-                        help="restrict to specific ISO3 codes (repeatable)")
+                        help="restrange la coduri ISO3 specifice (repetabil)")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args(argv)
 
@@ -255,25 +174,25 @@ def main(argv: list[str] | None = None) -> int:
         wanted = {c.upper() for c in args.country}
         targets = tuple(c for c in COUNTRIES if c.iso3 in wanted)
         if not targets:
-            logger.error("no matching countries in %s", wanted)
+            logger.error("niciun cod de tara potrivit in %s", wanted)
             return 2
 
-    raw_path = download_if_missing(args.force_download)
+    raw_path = epi.download_if_missing(OWID_URL, RAW_FILE, args.force_download)
 
     failures: list[str] = []
     for country in targets:
         try:
             process_country(raw_path, country)
         except Exception as exc:  # noqa: BLE001
-            logger.error("[%s] failed: %s", country.iso3, exc)
+            logger.error("[%s] esuat: %s", country.iso3, exc)
             failures.append(country.iso3)
 
     if failures:
-        logger.error("failed countries: %s", ", ".join(failures))
+        logger.error("tari esuate: %s", ", ".join(failures))
         return 1
 
-    logger.info("done. processed %d countries -> %s", len(targets),
-                PROCESSED_DIR.relative_to(REPO_ROOT))
+    logger.info("gata. %d tari procesate -> %s", len(targets),
+                epi.PROCESSED_DIR.relative_to(epi.REPO_ROOT))
     return 0
 
 
