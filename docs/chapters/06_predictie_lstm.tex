@@ -5,193 +5,395 @@
 \chapter{Predicție Epidemiologică folosind Rețele LSTM}
 \label{ch:lstm}
 
-\section{Rolul componentei LSTM}
+\section{Rolul predicției statistice în sistem}
 \label{sec:rol_lstm}
 
-Modelele compartimentale oferă interpretabilitate: fiecare compartiment are o
-semnificație epidemiologică, iar parametrii descriu rate de tranziție între stări.
-Această proprietate este esențială pentru o lucrare care urmărește modelele din
-familia SIR și extensia SIDARTHE. Totuși, seriile epidemiologice reale conțin
-tipare care nu sunt întotdeauna modelate explicit prin ecuații diferențiale:
-întârzieri de raportare, efecte de weekend, modificări administrative ale
-datelor, schimbări bruște de comportament sau intervenții care nu sunt codificate
-direct în parametri.
+Modelele compartimentale prezentate în capitolul~\ref{ch:implementare} oferă
+interpretabilitate: fiecare compartiment are o semnificație epidemiologică, iar
+parametrii descriu rate de tranziție între stări. Această proprietate este
+esențială pentru o lucrare centrată pe familia SIR și pe extensia SIDARTHE.
+Seriile epidemiologice reale conțin însă tipare pe care ecuațiile diferențiale
+nu le modelează explicit: întârzieri de raportare, efecte de weekend, ajustări
+administrative ale datelor și schimbări bruște de comportament. Aceste tipare
+apar ca zgomot structurat peste dinamica de transmitere.
 
-Din acest motiv, o componentă LSTM este utilă ca instrument auxiliar de predicție
-pe serii temporale. Ea nu înlocuiește modelele SIR/SIS/SEIR/SIRS/SIDARTHE, ci
-oferă o linie de comparație statistică și o posibilă corecție a reziduurilor
-rămase după rularea unui model compartimental calibrat.
-
-\section{Motivația alegerii LSTM}
-\label{sec:motivatie_lstm}
-
-LSTM (\emph{Long Short-Term Memory}) este o arhitectură recurentă proiectată
-pentru modelarea dependențelor temporale pe termen lung \cite{hochreiter1997lstm}.
-Într-o serie epidemiologică, valoarea observată într-o zi depinde de un istoric
-recent: numărul de cazuri din zilele anterioare, tendința de creștere sau scădere
-și regularitățile de raportare. O rețea recurentă poate învăța astfel de tipare
-direct din date, fără a impune explicit o structură de compartimente.
-
-Această flexibilitate este în același timp avantaj și risc. LSTM poate aproxima
-relații dificil de exprimat prin ecuații simple, dar poate învăța și artefacte
-ale datelor. De aceea, în această lucrare LSTM este tratat ca instrument
-predictiv experimental, nu ca model epidemiologic explicativ.
+Din acest motiv, sistemul include o componentă bazată pe o rețea LSTM
+(\emph{Long Short-Term Memory}), tratată ca instrument de predicție statistică
+pe serii temporale. Ea nu înlocuiește modelele SIR, SIS, SEIR, SIRS sau
+SIDARTHE, ci adaugă o linie de comparație complet empirică: în loc să presupună
+o structură de compartimente, învață direct dependența dintre valorile recente
+ale seriei și valoarea următoare. Capitolul descrie modelul implementat efectiv
+în runner-ul \texttt{runner-lstm}, nu o variantă idealizată. Implementarea
+curentă este \emph{univariată} --- folosește o singură serie, numărul de
+infectați activi --- și \emph{independentă} --- nu este cuplată cu un model
+compartimental. Extensiile naturale spre variante multivariate și hibride sunt
+discutate separat, în secțiunea~\ref{sec:extindere_lstm}, și sunt marcate
+explicit ca neimplementate.
 
 \section{Formularea problemei de predicție}
-\label{sec:formulare_predictie_lstm}
+\label{sec:formulare_lstm}
 
-Fie $y_t$ seria observată la ziua $t$, de exemplu cazuri active, cazuri noi sau
-decese. O rețea LSTM primește o fereastră de lungime $\ell$ și produce o
-predicție pentru un orizont $h$:
+Fie $y_0, y_1, \ldots, y_{n-1}$ seria observată, unde $y_t$ este numărul de
+infectați activi în ziua $t$, derivat din datele OWID conform
+preprocesării descrise în secțiunea~\ref{sec:seturi_date}. Predicția este
+formulată ca regresie pe ferestre glisante: dintr-o fereastră de lungime $\ell$
+(parametrul \texttt{lookback}), rețeaua estimează valoarea imediat următoare,
 \begin{equation}
-\hat{y}_{t+h} =
-f_{\phi}\left(y_{t-\ell+1}, y_{t-\ell+2}, \ldots, y_t\right),
+\label{eq:formulare_lstm}
+\hat{y}_{t} = f_{\theta}\!\left(y_{t-\ell}, y_{t-\ell+1}, \ldots, y_{t-1}\right),
 \end{equation}
-unde $\phi$ reprezintă parametrii rețelei. Pentru predicție multi-pas, ieșirea
-poate fi extinsă la un vector:
+unde $\theta$ reunește toți parametrii rețelei. Funcția $f_\theta$ produce o
+predicție pe un singur pas. Predicția pe orizont mai lung se obține
+\emph{autoregresiv}: ieșirea $\hat{y}_t$ este reintrodusă în fereastră, iar
+procedeul se repetă pentru fiecare zi din orizontul cerut $h$ (parametrul
+\texttt{forecast\_horizon}, egal cu \texttt{t\_max}).
+
+Această formulare are două consecințe importante. În primul rând, ordinea
+temporală trebuie păstrată strict: o împărțire aleatoare a exemplelor ar permite
+ca informație din viitor să ajungă în antrenare, producând o evaluare optimistă
+nerealistă. În al doilea rând, normalizarea seriei trebuie estimată numai pe
+porțiunea de antrenare, pentru a nu introduce, prin medie și abatere standard,
+informație din fereastra de test. Ambele cerințe sunt tratate explicit în
+secțiunile~\ref{sec:normalizare_lstm} și~\ref{sec:evaluare_lstm}.
+
+\section{Arhitectura celulei LSTM}
+\label{sec:celula_lstm}
+
+O rețea recurentă simplă suferă de atenuarea gradientului pe secvențe lungi,
+ceea ce o împiedică să învețe dependențe pe termen lung. Celula LSTM rezolvă
+această limitare introducând o stare internă $c_k$ protejată de trei porți
+multiplicative \cite{hochreiter1997lstm}. Implementarea din \texttt{runner-lstm}
+construiește celula manual, în NumPy, fără bibliotecă de învățare automată, astfel
+încât fiecare ecuație să fie vizibilă și verificabilă în cod.
+
+Se notează cu $H$ dimensiunea stării ascunse (parametrul \texttt{hidden\_size}).
+La fiecare pas $k$ din fereastră, $1 \le k \le \ell$, intrarea scalară $x_k$ este
+concatenată cu starea ascunsă anterioară $h_{k-1} \in \R^{H}$ într-un vector
 \begin{equation}
-\left(\hat{y}_{t+1}, \hat{y}_{t+2}, \ldots, \hat{y}_{t+h}\right)
-= f_{\phi}\left(y_{t-\ell+1:t}\right).
+z_k = \begin{bmatrix} h_{k-1} \\ x_k \end{bmatrix} \in \R^{H+1}.
 \end{equation}
+Din $z_k$ se calculează cele trei porți și candidatul de stare:
+\begin{align}
+f_k &= \sigma\!\left(W_f\, z_k + b_f\right), &&\text{poarta de uitare} \\
+i_k &= \sigma\!\left(W_i\, z_k + b_i\right), &&\text{poarta de intrare} \\
+o_k &= \sigma\!\left(W_o\, z_k + b_o\right), &&\text{poarta de ieșire} \\
+\tilde{c}_k &= \tanh\!\left(W_g\, z_k + b_g\right), &&\text{candidat de stare}
+\end{align}
+unde $\sigma$ este funcția sigmoidă, iar $W_f, W_i, W_o, W_g \in \R^{H\times(H+1)}$
+și $b_f, b_i, b_o, b_g \in \R^{H}$. Starea celulei și starea ascunsă se
+actualizează prin
+\begin{align}
+\label{eq:lstm_cell}
+c_k &= f_k \odot c_{k-1} + i_k \odot \tilde{c}_k, \\
+\label{eq:lstm_hidden}
+h_k &= o_k \odot \tanh(c_k),
+\end{align}
+unde $\odot$ este produsul Hadamard. Stările inițiale sunt nule,
+$h_0 = c_0 = \mathbf{0}$. Poarta de uitare $f_k$ controlează cât din starea
+anterioară se păstrează, poarta de intrare $i_k$ controlează cât din candidatul
+$\tilde{c}_k$ se adaugă, iar poarta de ieșire $o_k$ filtrează starea expusă ca
+$h_k$. Bias-ul $b_f$ este inițializat la o valoare pozitivă mică, ceea ce
+menține poarta de uitare aproape deschisă la începutul antrenării și ușurează
+propagarea gradientului.
 
-În contextul aplicației, intrarea poate fi univariată sau multivariată. Varianta
-univariată folosește o singură serie, de exemplu cazuri active. Varianta
-multivariată poate include:
-\begin{itemize}
-    \item cazuri noi zilnice;
-    \item cazuri active estimate;
-    \item decese zilnice sau cumulative;
-    \item populația regiunii;
-    \item ziua săptămânii, pentru efecte de raportare;
-    \item traiectorii produse de un model compartimental.
-\end{itemize}
-
-Datele trebuie împărțite cronologic. O împărțire aleatoare ar produce scurgeri de
-informație, deoarece exemple din viitor ar putea ajunge în antrenare. Normalizarea
-se calculează doar pe fereastra de antrenare și se aplică neschimbat pe validare
-și test.
-
-\section{Integrarea cu modelele compartimentale}
-\label{sec:integrare_lstm_compartimental}
-
-Există două moduri naturale de integrare a LSTM în sistemul propus. Primul este
-modelul LSTM independent, folosit ca linie de bază predictivă. În acest caz,
-rețeaua primește doar date observate și produce o predicție numerică. Rezultatul
-poate fi comparat cu predicția SIR, SEIR sau SIDARTHE calibrată pe aceeași
-fereastră.
-
-Al doilea mod este modelul hibrid compartimental--LSTM. Modelul compartimental
-produce o predicție interpretabilă $\hat{y}^{(c)}_t$, iar LSTM învață reziduul:
+După parcurgerea întregii ferestre, predicția pe un pas se obține printr-un strat
+liniar de ieșire aplicat ultimei stări ascunse:
 \begin{equation}
-r_t = y_t - \hat{y}^{(c)}_t.
+\label{eq:lstm_output}
+\hat{y} = W_y\, h_{\ell} + b_y, \qquad W_y \in \R^{1\times H},\; b_y \in \R.
 \end{equation}
-Predicția finală este:
+Tabelul~\ref{tab:lstm_componente} pune în corespondență fiecare element
+matematic cu reprezentarea sa în clasa \texttt{LSTMRegressor}. Listing-ul
+\ref{lst:lstm_forward} reproduce pasul înainte din implementare, în care se
+recunosc direct ecuațiile \eqref{eq:lstm_cell}--\eqref{eq:lstm_output}.
+
+\begin{table*}[t]
+\centering
+\caption{Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt{runner-lstm}.}
+\label{tab:lstm_componente}
+\begin{tabularx}{0.96\textwidth}{l l X}
+\toprule
+\textbf{Element} & \textbf{Notație} & \textbf{Reprezentare în cod} \\
+\midrule
+Porțile și candidatul de stare & $W_f, W_i, W_o, W_g$ & matrice \texttt{wf, wi, wo, wg} de formă $(H, H{+}1)$ \\
+Bias-urile porților & $b_f, b_i, b_o, b_g$ & vectori \texttt{bf, bi, bo, bg}; \texttt{bf} inițializat la $0{,}5$ \\
+Stratul de ieșire & $W_y, b_y$ & \texttt{wy} de formă $(1, H)$ și scalarul \texttt{by} \\
+Vectorul concatenat & $z_k$ & \texttt{z = vstack([h\_prev, x])} \\
+Starea celulei și starea ascunsă & $c_k, h_k$ & variabilele \texttt{c} și \texttt{h}, reportate între pași \\
+Memoria pasului înainte & --- & dicționarul \texttt{cache}, folosit la backpropagation \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\begin{lstlisting}[language=Python, caption={Pasul înainte al celulei LSTM în \texttt{runner-lstm}.}, label={lst:lstm_forward}]
+for value in seq:
+    x = np.array([[float(value)]])
+    z = np.vstack([h_prev, x])
+    f = _sigmoid(self.wf @ z + self.bf)
+    i = _sigmoid(self.wi @ z + self.bi)
+    o = _sigmoid(self.wo @ z + self.bo)
+    g = np.tanh(self.wg @ z + self.bg)
+    c = f * c_prev + i * g
+    h = o * np.tanh(c)
+y_hat = float((self.wy @ h + self.by)[0, 0])
+\end{lstlisting}
+
+\section{Normalizarea și construcția exemplelor}
+\label{sec:normalizare_lstm}
+
+Seriile epidemiologice au scări foarte diferite între regiuni, iar valorile
+absolute pot ajunge la zeci sau sute de mii de cazuri. Pentru ca funcțiile
+$\sigma$ și $\tanh$ să lucreze într-un domeniu util, seria este standardizată
+prin transformarea $z$-score:
 \begin{equation}
-\hat{y}^{(hibrid)}_{t+h} =
-\hat{y}^{(c)}_{t+h} + f_{\phi}(r_{t-\ell+1}, \ldots, r_t).
+\label{eq:normalizare}
+\tilde{y}_t = \frac{y_t - \mu}{\varsigma},
 \end{equation}
+unde media $\mu$ și abaterea standard $\varsigma$ se calculează \emph{exclusiv}
+pe porțiunea de antrenare a seriei. Dacă abaterea standard este sub un prag
+numeric, este înlocuită cu $1$, pentru a evita împărțirea la zero pe serii
+aproape constante. Predicțiile rețelei sunt readuse la scara originală prin
+transformarea inversă $\hat{y}_t = \tilde{y}_t\,\varsigma + \mu$, urmată de o
+trunchiere la valori nenegative, deoarece numărul de infectați nu poate fi
+negativ.
 
-Această variantă păstrează rolul central al modelului epidemiologic. LSTM nu
-încearcă să explice mecanismul de transmitere, ci corectează deviațiile
-statistice rămase după simularea compartimentală. Dacă reziduurile au un tipar
-stabil, modelul hibrid poate îmbunătăți predicția pe termen scurt.
+Din seria normalizată se construiesc exemple de antrenare prin ferestre
+glisante: pentru fiecare indice $t \ge \ell$ din porțiunea de antrenare,
+intrarea este vectorul $(\tilde{y}_{t-\ell}, \ldots, \tilde{y}_{t-1})$, iar
+ținta este $\tilde{y}_t$. Se obține astfel un set de perechi intrare--țintă pe
+care rețeaua le folosește la antrenare.
 
-\section{Fluxul de antrenare și evaluare}
-\label{sec:flux_lstm}
+\section{Antrenarea prin backpropagation through time}
+\label{sec:bptt_lstm}
+
+Antrenarea minimizează eroarea pătratică dintre predicție și țintă. Pentru un
+singur exemplu cu ținta $y$, funcția de pierdere este
+\begin{equation}
+\label{eq:loss_lstm}
+L = \left(\hat{y} - y\right)^2,
+\qquad
+\frac{\partial L}{\partial \hat{y}} = 2\left(\hat{y} - y\right).
+\end{equation}
+Deoarece predicția depinde de toți pașii din fereastră, gradientul trebuie
+propagat înapoi prin întreaga secvență recurentă. Acest procedeu este cunoscut
+ca \emph{backpropagation through time} (BPTT) \cite{werbos1990bptt}.
+
+Gradientul stratului de ieșire se obține direct din
+ecuația~\eqref{eq:lstm_output}:
+\begin{equation}
+\frac{\partial L}{\partial W_y} = 2(\hat{y}-y)\, h_{\ell}^{\top},
+\qquad
+\frac{\partial L}{\partial b_y} = 2(\hat{y}-y).
+\end{equation}
+De aici pornește recurența înapoi. Se notează cu $\delta h_k$ gradientul
+acumulat al stării ascunse la pasul $k$ și cu $\delta c_k$ gradientul stării
+celulei. La pasul final, $\delta h_{\ell} = W_y^{\top}\, 2(\hat{y}-y)$. Pentru
+$k = \ell, \ell-1, \ldots, 1$ se aplică, în ordine,
+\begin{align}
+\delta o_k &= \delta h_k \odot \tanh(c_k) \odot o_k \odot (1 - o_k), \\
+\delta c_k &= \delta h_k \odot o_k \odot \!\left(1 - \tanh^2(c_k)\right) + \delta c_k^{+}, \\
+\delta f_k &= \delta c_k \odot c_{k-1} \odot f_k \odot (1 - f_k), \\
+\delta i_k &= \delta c_k \odot \tilde{c}_k \odot i_k \odot (1 - i_k), \\
+\delta \tilde{c}_k &= \delta c_k \odot i_k \odot \!\left(1 - \tilde{c}_k^2\right),
+\end{align}
+unde $\delta c_k^{+}$ este contribuția propagată de la pasul $k+1$ și este nulă
+la pasul final. Termenii $\delta o_k$, $\delta f_k$, $\delta i_k$ și
+$\delta\tilde{c}_k$ includ deja derivata neliniarității corespunzătoare. Cu
+aceștia se acumulează gradienții ponderilor,
+\begin{equation}
+\frac{\partial L}{\partial W_{\bullet}} \mathrel{+}= \delta_{\bullet,k}\, z_k^{\top},
+\qquad
+\frac{\partial L}{\partial b_{\bullet}} \mathrel{+}= \delta_{\bullet,k},
+\end{equation}
+pentru $\bullet \in \{f, i, o, g\}$, iar gradientul se propagă mai departe către
+pasul anterior:
+\begin{align}
+\delta z_k &= W_f^{\top}\delta f_k + W_i^{\top}\delta i_k
+            + W_o^{\top}\delta o_k + W_g^{\top}\delta \tilde{c}_k, \\
+\delta h_{k-1} &= \left[\delta z_k\right]_{1:H},
+\qquad
+\delta c_{k-1}^{+} = \delta c_k \odot f_k.
+\end{align}
+Componenta $\left[\delta z_k\right]_{1:H}$ reprezintă primele $H$ elemente ale
+vectorului $\delta z_k$, adică partea care corespunde stării ascunse din
+concatenarea $z_k$; ultima componentă, asociată intrării $x_k$, nu este
+propagată deoarece intrarea este un dat al problemei.
+
+Înainte de actualizare, fiecare gradient este limitat element cu element la
+intervalul $[-5, 5]$. Această tăiere previne exploziile de gradient, frecvente
+la rețelele recurente antrenate pe secvențe cu variații mari. Actualizarea
+parametrilor folosește coborârea pe gradient stochastic, cu rata de învățare
+$\eta$ (parametrul \texttt{learning\_rate}):
+\begin{equation}
+\theta \leftarrow \theta - \eta\, \nabla_{\theta} L.
+\end{equation}
+Antrenarea parcurge setul de exemple de un număr fixat de ori (parametrul
+\texttt{epochs}); în fiecare epocă, exemplele sunt prezentate într-o ordine
+permutată aleator, astfel încât actualizările succesive să nu fie corelate cu
+ordinea calendaristică.
+
+\section{Împărțirea cronologică și evaluarea}
+\label{sec:evaluare_lstm}
+
+Pentru ca rezultatele să măsoare capacitatea de generalizare, seria este
+împărțită cronologic: ultima fracțiune din puncte (în implementare, $20\%$)
+formează fereastra de test, iar restul formează porțiunea de antrenare.
+Împărțirea respectă o constrângere de mărime --- porțiunea de antrenare trebuie
+să conțină cel puțin un exemplu complet de lungime $\ell$ --- altfel rularea
+eșuează cu un mesaj explicit. Normalizarea \eqref{eq:normalizare} și exemplele
+de antrenare se construiesc numai din porțiunea de antrenare.
+
+După antrenare, rețeaua produce predicții pe un pas pentru întreaga serie. În
+interiorul porțiunii de antrenare acestea sunt predicții \emph{in-sample}; pe
+fereastra de test sunt predicții \emph{out-of-sample}, deoarece țintele
+respective nu au fost văzute la antrenare. Pe fereastra de test se calculează
+metricile de eroare definite în
+secțiunea~\ref{sec:metrici_eroare_numerica}: eroarea medie absolută
+$\operatorname{MAE}$, eroarea medie pătratică radicală $\operatorname{RMSE}$ și
+varianta normalizată la populația regiunii
+$\operatorname{nRMSE} = \operatorname{RMSE}/N$. Folosirea acelorași definiții ca
+în analiza comparativă din capitolul~\ref{ch:comparatie_calibrare} permite
+așezarea predicției LSTM pe aceeași scară cu modelele compartimentale.
+Listing-ul~\ref{lst:lstm_split} arată orchestrarea acestor pași în funcția
+\texttt{train\_model}.
+
+\begin{lstlisting}[language=Python, caption={Împărțirea cronologică, normalizarea pe antrenare și evaluarea pe test.}, label={lst:lstm_split}]
+n = len(series)
+train_end = split_index(n, lookback)
+# normalizarea se calibreaza doar pe antrenare
+mean, std = fit_scaler(series[:train_end])
+normalized = (series - mean) / std
+samples = make_samples(normalized[:train_end], lookback)
+# ... antrenare pe epoci ...
+mae, rmse, nrmse = evaluate(series, fitted, train_end, population)
+\end{lstlisting}
+
+În final, rețeaua produce o prognoză autoregresivă pe orizontul cerut, pornind
+de la ultima fereastră observată: fiecare predicție este reintrodusă în
+fereastră pentru pasul următor. Algoritmul~\ref{alg:lstm} sintetizează întregul
+flux, de la seria brută la metrici și prognoză.
 
 \begin{algorithm}[t]
-\caption{Evaluarea unei componente LSTM pentru serii epidemiologice}
-\label{alg:evaluare_lstm}
+\caption{Antrenarea și evaluarea componentei LSTM}
+\label{alg:lstm}
 \begin{lstlisting}[style=pseudocode]
-Input: dataset temporal Y, lungime fereastra l,
-       orizont h, model compartimental optional m
-Output: predictii LSTM, metrici MAE/RMSE/nRMSE
+Input: seria infectatilor Y, lungime fereastra l,
+       dimensiune stare ascunsa H, rata invatare eta,
+       numar epoci E, orizont prognoza h, populatie N
+Output: predictii fitted, prognoza forecast,
+        metrici MAE, RMSE, nRMSE
 
-ordoneaza datele cronologic
-imparte datele in train, validare si test
-calculeaza normalizarea doar pe train
-construieste exemple din ferestre de lungime l
-daca exista model compartimental m:
-    ruleaza modelul m si calculeaza reziduuri
-    foloseste reziduurile ca tinta pentru LSTM
-altfel:
-    foloseste seria observata ca tinta
-antreneaza LSTM pentru numarul configurat de epoci
-calculeaza predictii pe fereastra de test
-raporteaza MAE, RMSE si nRMSE
+imparte Y cronologic: train = primele puncte,
+       test = ultima fractiune
+calculeaza media si abaterea standard pe train
+normalizeaza intreaga serie cu acesti parametri
+construieste exemple din ferestre de lungime l pe train
+initializeaza reteaua LSTM
+for fiecare epoca din 1..E do
+    for fiecare exemplu, in ordine permutata do
+        ruleaza pasul inainte si calculeaza pierderea
+        propaga gradientul prin timp (BPTT)
+        limiteaza gradientii si actualizeaza parametrii
+    end for
+end for
+fitted <- predictii o-zi-inainte pe toata seria
+MAE, RMSE, nRMSE <- eroare pe fereastra de test
+forecast <- prognoza autoregresiva pe h pasi
+return fitted, forecast, MAE, RMSE, nRMSE
 \end{lstlisting}
 \end{algorithm}
 
-Evaluarea trebuie făcută pe o fereastră de test care nu a fost folosită la
-antrenare sau la alegerea hiperparametrilor. Pentru comparație corectă, aceeași
-fereastră de test trebuie folosită pentru modelul compartimental calibrat,
-pentru LSTM independent și pentru modelul hibrid.
-
-\section{Metrici și linii de bază}
-\label{sec:metrici_lstm}
-
-Componenta LSTM folosește aceleași metrici ca analiza comparativă a modelelor:
-MAE, RMSE și nRMSE. Pentru a evita concluzii exagerate, rezultatele trebuie
-comparate cu linii de bază simple:
-\begin{itemize}
-    \item persistență: $\hat{y}_{t+1}=y_t$;
-    \item medie mobilă pe ultimele $k$ zile;
-    \item model compartimental calibrat;
-    \item LSTM independent;
-    \item model hibrid compartimental--LSTM.
-\end{itemize}
-
-O componentă LSTM este justificată doar dacă îmbunătățește fereastra de test față
-de aceste repere. O eroare mică pe fereastra de antrenare nu este suficientă,
-deoarece seriile epidemiologice sunt scurte și zgomotoase, iar riscul de
-supraînvățare este ridicat.
-
-\section{Locul în arhitectura aplicației}
+\section{Integrarea în arhitectura aplicației}
 \label{sec:arhitectura_lstm}
 
-Integrarea practică a LSTM se face printr-un runner separat, nu prin extinderea
-runner-ului Python folosit pentru modelele compartimentale. Separarea este
-importantă deoarece predicția LSTM are alt profil de calcul, alți parametri,
-altă logică de citire a datelor și altă semantică a rezultatelor. Runner-ul
-\texttt{runner-lstm} consumă coada Redis \texttt{epimodel:jobs:lstm}, în timp ce
-runner-ele R, Julia și Python rămân dedicate simulărilor ODE.
+Componenta LSTM este integrată printr-un runner separat, \texttt{runner-lstm}, nu
+prin extinderea runner-ului Python folosit pentru modelele compartimentale.
+Separarea este justificată: predicția LSTM are alt profil de calcul, alți
+parametri, altă logică de citire a datelor și altă semantică a rezultatelor.
+Modelele compartimentale rezolvă un sistem de ecuații diferențiale, în timp ce
+LSTM antrenează o rețea; amestecarea celor două în același executor ar fi
+îngreunat și codul, și interpretarea rezultatelor.
 
-Fluxul rămâne compatibil cu arhitectura curentă:
+Fluxul rămâne compatibil cu arhitectura descrisă în
+capitolul~\ref{ch:implementare}:
 \begin{itemize}
-    \item API-ul creează un job de predicție;
-    \item API-ul rutează explicit modelul \texttt{lstm} către coada
-    \texttt{epimodel:jobs:lstm};
-    \item Redis decuplează cererea de execuția efectivă;
-    \item runner-ul LSTM citește seria \texttt{infected} din dataset;
-    \item modelul LSTM este antrenat pe o fereastră glisantă de lungime
-    \texttt{lookback};
-    \item predicțiile și metricile sunt persistate în baza de date;
-    \item frontend-ul afișează seriile \texttt{observed}, \texttt{fitted} și
-    \texttt{predicted}.
+    \item API-ul primește o cerere de predicție cu \texttt{model\_type = lstm}
+    și rutează jobul către coada Redis dedicată \texttt{epimodel:jobs:lstm};
+    \item \texttt{runner-lstm} consumă jobul, citește seria \texttt{infected}
+    din setul de date și marchează rularea ca \texttt{running};
+    \item rețeaua este antrenată conform algoritmului~\ref{alg:lstm}, pe
+    porțiunea de antrenare;
+    \item predicțiile și prognoza sunt persistate în \texttt{simulation\_results}
+    ca obiecte JSONB, folosind cheile \texttt{observed}, \texttt{fitted} și
+    \texttt{predicted}, iar metricile de calcul (timp, CPU, memorie) sunt scrise
+    în \texttt{benchmarks};
+    \item interfața web afișează cele trei serii suprapuse, distingând vizual
+    porțiunea observată de prognoză.
 \end{itemize}
+Parametrii rețelei --- \texttt{lookback}, \texttt{hidden\_size}, \texttt{epochs}
+și \texttt{learning\_rate} --- sunt transmiși prin același câmp \texttt{parameters}
+ca pentru modelele compartimentale, ceea ce păstrează contractul comun de
+simulare. Codul complet al runner-ului este inclus în
+Anexa~\ref{app:cod_lstm}.
 
-Această separare păstrează clară distincția dintre simulare epidemiologică și
-predicție statistică. Modelul compartimental rămâne responsabil pentru
-interpretarea mecanismului, iar LSTM este folosit pentru prognoză pe termen
-scurt și pentru analiza reziduurilor.
+Această separare păstrează clară distincția dintre simularea epidemiologică și
+predicția statistică. Modelul compartimental rămâne responsabil pentru
+interpretarea mecanismului de transmitere, iar LSTM este folosit pentru prognoză
+pe termen scurt și ca reper empiric.
 
-\section{Limitări}
+\section{Linii de bază și limitări}
 \label{sec:limitari_lstm}
 
-LSTM necesită mai multe date decât modelele compartimentale simple. Pentru regiuni
-cu serii scurte sau raportări instabile, rețeaua poate învăța artefacte
-administrative în locul dinamicii epidemiologice. De asemenea, rezultatul LSTM
-este mai puțin interpretabil: o predicție bună numeric nu explică prin ce
-tranziții epidemiologice se produce evoluția.
+O rețea LSTM trebuie comparată cu repere simple, altfel o eroare mică poate fi
+interpretată greșit drept performanță. Reperele relevante pentru o serie
+epidemiologică sunt predicția prin persistență, $\hat{y}_{t}=y_{t-1}$, media
+mobilă pe ultimele $k$ zile și modelul compartimental calibrat pe aceeași
+fereastră. O componentă LSTM este justificată doar dacă reduce eroarea pe
+fereastra de test față de aceste repere, evaluată cu protocolul comparativ din
+capitolul~\ref{ch:comparatie_calibrare}.
 
-Din acest motiv, LSTM trebuie prezentat ca extensie complementară. El poate ajuta
-la prognoză și la detectarea reziduurilor sistematice, dar nu înlocuiește
-analiza modelelor SIR/SIS/SEIR/SIRS/SIDARTHE și nici calibrarea parametrilor
-epidemiologici.
+Limitările sunt intrinsece abordării. LSTM necesită mai multe date decât
+modelele compartimentale simple, iar pentru regiuni cu serii scurte sau
+raportări instabile rețeaua poate învăța artefacte administrative în locul
+dinamicii epidemiologice. Riscul de supraînvățare este ridicat tocmai pentru că
+seriile sunt scurte și zgomotoase; de aceea evaluarea se face strict pe fereastra
+de test, niciodată pe cea de antrenare. În plus, rezultatul este puțin
+interpretabil: o predicție bună numeric nu explică prin ce tranziții
+epidemiologice se produce evoluția. Din aceste motive, LSTM este prezentat ca
+extensie complementară, nu ca înlocuitor al analizei modelelor
+SIR/SIS/SEIR/SIRS/SIDARTHE și nici al calibrării parametrilor epidemiologici.
 
-\testtodo{Implementarea rulează prin \texttt{runner-lstm}, dar pentru rezultatul
-final al lucrării trebuie executată o campanie experimentală pe un dataset
-concret și comparată cu persistență, medie mobilă și un model compartimental
-calibrat. Rezultatele minime de raportat sunt MAE, RMSE, nRMSE, lungimea
-ferestrei de intrare, orizontul de predicție, numărul de epoci și timpul de
-antrenare.}
+\section{Direcții de extindere}
+\label{sec:extindere_lstm}
+
+Implementarea curentă este deliberat minimală: univariată și independentă de
+modelele compartimentale. Două extensii sunt naturale, dar \emph{nu} sunt
+implementate în sistemul descris de această lucrare.
+
+Prima este intrarea \emph{multivariată}. În locul unei singure serii, rețeaua ar
+putea primi mai multe canale: cazuri noi zilnice, decese, populația regiunii sau
+ziua săptămânii, pentru a capta efectele de raportare. Acest lucru ar cere
+extinderea dimensiunii intrării $x_k$ de la un scalar la un vector și ajustarea
+corespunzătoare a lățimii matricelor de poartă.
+
+A doua este modelul \emph{hibrid compartimental--LSTM}. Modelul compartimental
+produce o predicție interpretabilă $\hat{y}^{(c)}_t$, iar LSTM ar putea învăța
+reziduul $r_t = y_t - \hat{y}^{(c)}_t$ în loc de seria brută. Predicția finală ar
+fi
+\begin{equation}
+\label{eq:hibrid_lstm}
+\hat{y}^{(\mathrm{hibrid})}_{t} =
+\hat{y}^{(c)}_{t} + f_{\theta}\!\left(r_{t-\ell}, \ldots, r_{t-1}\right).
+\end{equation}
+Această variantă ar păstra rolul central al modelului epidemiologic, lăsând
+rețeaua să corecteze doar deviațiile statistice rămase după simularea
+compartimentală. Dacă reziduurile au un tipar stabil, modelul hibrid ar putea
+îmbunătăți predicția pe termen scurt fără a pierde interpretabilitatea.
+
+\testtodo{Capitolul descrie modelul LSTM implementat și protocolul de evaluare,
+dar nu conține rezultate numerice. Pentru rezultatul final al lucrării trebuie
+rulată o campanie experimentală pe seturi de date concrete și comparată cu
+persistența, media mobilă și un model compartimental calibrat. Pentru fiecare
+regiune trebuie raportate MAE, RMSE și nRMSE pe fereastra de test, împreună cu
+lungimea ferestrei de intrare, dimensiunea stării ascunse, numărul de epoci,
+rata de învățare și timpul de antrenare.}

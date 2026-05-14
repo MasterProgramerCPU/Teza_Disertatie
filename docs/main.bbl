@@ -138,6 +138,11 @@ Sepp Hochreiter and J{\"u}rgen Schmidhuber.
 \newblock Long short-term memory.
 \newblock {\em Neural Computation}, 9(8):1735--1780, 1997.
 
+\bibitem{werbos1990bptt}
+Paul~J. Werbos.
+\newblock Backpropagation through time: What it does and how to do it.
+\newblock {\em Proceedings of the IEEE}, 78(10):1550--1560, 1990.
+
 \bibitem{nelder1965simplex}
 J.~A. Nelder and R.~Mead.
 \newblock A simplex method for function minimization.
