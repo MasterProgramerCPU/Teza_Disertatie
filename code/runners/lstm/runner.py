@@ -26,6 +26,7 @@ from psycopg.types.json import Json
 QUEUE = "epimodel:jobs:lstm"
 BRPOP_TIMEOUT_SEC = 5
 ERROR_BACKOFF_SEC = 2
+TEST_FRACTION = 0.2  # ultima parte a seriei, tinuta deoparte pentru evaluarea generalizarii
 
 _running = True
 
@@ -51,6 +52,16 @@ def _sigmoid(x: np.ndarray) -> np.ndarray:
 class SampleSet:
     x: np.ndarray
     y: np.ndarray
+
+
+@dataclass
+class TrainOutcome:
+    fitted: list[float | None]  # predictii o-zi-inainte, lungime egala cu seria
+    forecast: list[float]       # prognoza autoregresiva dincolo de ultima zi observata
+    train_end: int              # primul indice al ferestrei de test
+    mae: float
+    rmse: float
+    nrmse: float
 
 
 class LSTMRegressor:
@@ -199,39 +210,83 @@ def make_samples(values: np.ndarray, lookback: int) -> SampleSet:
     return SampleSet(x=np.array(x_rows, dtype=float), y=np.array(y_rows, dtype=float))
 
 
-def normalize(values: np.ndarray) -> tuple[np.ndarray, float, float]:
+def fit_scaler(values: np.ndarray) -> tuple[float, float]:
+    """Media si abaterea standard ale normalizarii, calibrate doar pe antrenare."""
     mean = float(np.mean(values))
     std = float(np.std(values))
     if std < 1e-9:
         std = 1.0
-    return (values - mean) / std, mean, std
+    return mean, std
 
 
 def denormalize(value: float, mean: float, std: float) -> float:
     return max(0.0, float(value * std + mean))
 
 
-def train_model(series: np.ndarray, params: dict[str, float]) -> tuple[list[float | None], list[float]]:
+def split_index(n: int, lookback: int) -> int:
+    """Primul indice al ferestrei de test, dupa o impartire cronologica.
+
+    Fereastra de test este ultima parte a seriei (``TEST_FRACTION``), dar
+    portiunea de antrenare trebuie sa pastreze cel putin un esantion complet
+    de lungime ``lookback``.
+    """
+    test_size = min(round(TEST_FRACTION * n), n - lookback - 1)
+    if test_size < 1:
+        raise RuntimeError("dataset prea scurt pentru o impartire train/test")
+    return n - test_size
+
+
+def evaluate(
+    series: np.ndarray, fitted: list[float | None], train_end: int, population: float
+) -> tuple[float, float, float]:
+    """MAE, RMSE si nRMSE pe fereastra de test (definitii din capitolul 7)."""
+    errors: list[float] = []
+    for idx in range(train_end, len(series)):
+        pred = fitted[idx]
+        if pred is not None:
+            errors.append(pred - float(series[idx]))
+    if not errors:
+        return 0.0, 0.0, 0.0
+    arr = np.array(errors, dtype=float)
+    mae = float(np.mean(np.abs(arr)))
+    rmse = float(np.sqrt(np.mean(arr**2)))
+    nrmse = rmse / population if population > 0 else 0.0
+    return mae, rmse, nrmse
+
+
+def train_model(series: np.ndarray, params: dict[str, float], population: float) -> TrainOutcome:
     lookback = int(params["lookback"])
     hidden_size = int(params["hidden_size"])
     epochs = int(params["epochs"])
     learning_rate = float(params["learning_rate"])
+    horizon = int(params["forecast_horizon"])
 
-    normalized, mean, std = normalize(series)
-    samples = make_samples(normalized, lookback)
+    n = len(series)
+    train_end = split_index(n, lookback)
+
+    # Normalizarea se calibreaza exclusiv pe portiunea de antrenare, pentru a nu
+    # permite scurgeri de informatie din fereastra de test.
+    mean, std = fit_scaler(series[:train_end])
+    normalized = (series - mean) / std
+
+    samples = make_samples(normalized[:train_end], lookback)
     model = LSTMRegressor(hidden_size=hidden_size, learning_rate=learning_rate)
     rng = np.random.default_rng(123)
-
     for _ in range(epochs):
         for idx in rng.permutation(len(samples.x)):
             model.train_one(samples.x[idx], float(samples.y[idx]))
 
-    fitted: list[float | None] = [None] * len(series)
-    for idx in range(lookback, len(normalized)):
+    # Predictii o-zi-inainte pe toata seria: in portiunea de antrenare sunt
+    # in-sample, iar pe fereastra de test sunt out-of-sample, deoarece modelul
+    # nu a vazut acele tinte.
+    fitted: list[float | None] = [None] * n
+    for idx in range(lookback, n):
         pred_norm = model.predict(normalized[idx - lookback:idx])
         fitted[idx] = denormalize(pred_norm, mean, std)
 
-    horizon = int(params["forecast_horizon"])
+    mae, rmse, nrmse = evaluate(series, fitted, train_end, population)
+
+    # Prognoza autoregresiva dincolo de ultima zi observata.
     window = list(normalized[-lookback:])
     forecast: list[float] = []
     for _ in range(horizon):
@@ -239,7 +294,10 @@ def train_model(series: np.ndarray, params: dict[str, float]) -> tuple[list[floa
         forecast.append(denormalize(pred_norm, mean, std))
         window = [*window[1:], pred_norm]
 
-    return fitted, forecast
+    return TrainOutcome(
+        fitted=fitted, forecast=forecast, train_end=train_end,
+        mae=mae, rmse=rmse, nrmse=nrmse,
+    )
 
 
 def run_lstm(conn: psycopg.Connection, job: dict[str, Any]) -> None:
@@ -247,6 +305,7 @@ def run_lstm(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     dataset_id = job["dataset_id"]
     params = {str(k): float(v) for k, v in job["parameters"].items()}
     params["forecast_horizon"] = float(int(job["t_max"]))
+    population = float(job["population_n"])
 
     with conn.transaction():
         conn.execute(
@@ -259,9 +318,9 @@ def run_lstm(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     cpu_start = time.process_time()
 
     series = fetch_infected_series(conn, dataset_id)
-    if len(series) <= int(params["lookback"]):
-        raise RuntimeError("dataset length must be greater than lookback")
-    fitted, forecast = train_model(series, params)
+    if len(series) <= int(params["lookback"]) + 1:
+        raise RuntimeError("dataset length must exceed lookback + 1 for a train/test split")
+    outcome = train_model(series, params, population)
 
     wall_ms = int((time.perf_counter() - wall_start) * 1000)
     cpu_ms = int((time.process_time() - cpu_start) * 1000)
@@ -270,11 +329,12 @@ def run_lstm(conn: psycopg.Connection, job: dict[str, Any]) -> None:
     rows = []
     for idx, observed in enumerate(series):
         values = {"observed": max(0.0, float(observed))}
-        if fitted[idx] is not None:
-            values["fitted"] = float(fitted[idx])
+        fit = outcome.fitted[idx]
+        if fit is not None:
+            values["fitted"] = float(fit)
         rows.append((sim_id, idx, Json(values)))
 
-    for step, predicted in enumerate(forecast):
+    for step, predicted in enumerate(outcome.forecast):
         rows.append((sim_id, len(series) + step, Json({"predicted": float(predicted)})))
 
     with conn.transaction():
@@ -293,7 +353,9 @@ def run_lstm(conn: psycopg.Connection, job: dict[str, Any]) -> None:
             )
 
     print(
-        f"lstm sim {sim_id} done: wall={wall_ms}ms cpu={cpu_ms}ms mem={peak_mb:.1f}MB rows={len(rows)}",
+        f"lstm sim {sim_id} done: wall={wall_ms}ms cpu={cpu_ms}ms mem={peak_mb:.1f}MB "
+        f"rows={len(rows)} train_end={outcome.train_end}/{len(series)} "
+        f"MAE={outcome.mae:.2f} RMSE={outcome.rmse:.2f} nRMSE={outcome.nrmse:.3e}",
         flush=True,
     )
 
