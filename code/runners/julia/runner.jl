@@ -11,10 +11,8 @@ using DifferentialEquations
 using JSON3
 using LibPQ
 using Redis
-using Dates
 
 const QUEUE = "epimodel:jobs:julia"
-const LANGUAGE = "julia"
 const BRPOP_TIMEOUT_SEC = 5
 const ERROR_BACKOFF_SEC = 2
 

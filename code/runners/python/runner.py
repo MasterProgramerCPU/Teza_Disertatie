@@ -25,7 +25,6 @@ from psycopg.types.json import Json
 from scipy.integrate import solve_ivp
 
 QUEUE = "epimodel:jobs:python"
-LANGUAGE = "python"
 BRPOP_TIMEOUT_SEC = 5
 ERROR_BACKOFF_SEC = 2
 

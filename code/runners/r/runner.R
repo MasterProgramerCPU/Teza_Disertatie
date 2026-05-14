@@ -14,17 +14,11 @@ suppressPackageStartupMessages({
 })
 
 QUEUE <- "epimodel:jobs:r"
-LANGUAGE <- "r"
 BRPOP_TIMEOUT_SEC <- 5L
 ERROR_BACKOFF_SEC <- 2L
 
-# graceful shutdown flag
+# Flag de oprire; R are signal handling limitat, ne bazam pe SIGTERM de la docker stop.
 .running <- TRUE
-handle_signal <- function() {
-  message("signal received, shutting down")
-  .running <<- FALSE
-}
-# best effort: R has limited signal handling; rely on docker stop SIGTERM = exit
 
 sir_rhs <- function(t, state, parms) {
   invisible(t)
