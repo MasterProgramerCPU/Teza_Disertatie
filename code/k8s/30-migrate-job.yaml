@@ -42,7 +42,7 @@ spec:
             - -c
             - |
               until pg_isready -d "$DATABASE_URL"; do
-                echo "waiting for YSQL on $DATABASE_URL ..."
+                echo "waiting for YSQL ..."
                 sleep 3
               done
               echo "YSQL is ready"
