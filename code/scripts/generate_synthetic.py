@@ -50,6 +50,7 @@ class Profile:
     xi: float          # rata de pierdere a imunitatii (1 / durata imunitatii)
     amp: float         # amplitudinea fortarii sezoniere (0..1)
     period: float      # perioada sezoniera, in zile
+    region: str        # cod de regiune (max 10 caractere, vezi schema BD)
 
     @property
     def r0(self) -> float:
@@ -58,11 +59,11 @@ class Profile:
 
 PROFILES: dict[str, Profile] = {
     # valuri anuale recurente, R0 moderat -- regimul implicit
-    "multiwave": Profile(beta0=0.18, gamma=0.10, xi=1 / 180, amp=0.45, period=365.0),
+    "multiwave": Profile(beta0=0.18, gamma=0.10, xi=1 / 180, amp=0.45, period=365.0, region="SYN-MW"),
     # valuri ascutite si dese: R0 mare, infectie scurta, imunitate scurta
-    "sharp":     Profile(beta0=0.55, gamma=0.20, xi=1 / 120, amp=0.55, period=240.0),
+    "sharp":     Profile(beta0=0.55, gamma=0.20, xi=1 / 120, amp=0.55, period=240.0, region="SYN-SH"),
     # valuri lente si largi: R0 aproape de prag, infectie lunga
-    "slow":      Profile(beta0=0.075, gamma=0.05, xi=1 / 365, amp=0.30, period=730.0),
+    "slow":      Profile(beta0=0.075, gamma=0.05, xi=1 / 365, amp=0.30, period=730.0, region="SYN-SL"),
 }
 
 
@@ -141,7 +142,7 @@ def main(argv: list[str] | None = None) -> int:
                         help="sigma zgomotului lognormal de raportare pe infectati "
                              "(0 = serie curata, implicit)")
     parser.add_argument("--region", default=None,
-                        help="codul regiunii (implicit: SYN-<profile>)")
+                        help="codul regiunii, max 10 caractere (implicit: cel al profilului)")
     parser.add_argument("--slug", default=None,
                         help="numele fisierului de iesire (implicit: synthetic_<profile>)")
     parser.add_argument("--seed", type=int, default=42)
@@ -161,7 +162,10 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     profile = PROFILES[args.profile]
-    region = args.region or f"SYN-{args.profile.upper()}"
+    region = args.region or profile.region
+    if len(region) > 10:
+        logger.error("codul regiunii '%s' depaseste 10 caractere (limita schemei BD)", region)
+        return 2
     slug = args.slug or f"synthetic_{args.profile}"
     rng = np.random.default_rng(args.seed)
 
