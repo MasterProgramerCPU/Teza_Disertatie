@@ -237,6 +237,13 @@ de către runner între începutul integrării ODE și finalul scrierii rezultat
 \input{tables/bench_speedup_vs_python}
 \input{tables/bench_memory}
 
+Vizual, scalarea wall-time-ului în funcție de $t_{\max}$ (pentru modelul cel
+mai complex, SIDARTHE) este prezentată în
+Figura~\ref{fig:scaling_wall_time}; cele trei limbaje produc trei regimuri
+calitativ diferite, identificabile dintr-o privire pe o scară log-log.
+
+\input{figures/scaling_wall_time}
+
 Trei observații dominante reies din date.
 
 \textbf{(i) Julia este cel mai rapid solver, dar are un cost de pornire JIT
@@ -321,10 +328,24 @@ nu este realistă. Se verifică în schimb abaterea maximă normalizată:
 Dacă această abatere rămâne sub un prag ales, implementările sunt considerate
 compatibile funcțional pentru scopul aplicației.
 
-\testtodo{Verificarea de regresie numerică trebuie rulată pentru același set de
-parametri în R, Julia și Python. Rezultatul de raportat este abaterea maximă
-normalizată între limbaje și verificarea conservării populației pentru fiecare
-model.}
+Verificarea a fost rulată concret pe setul de date sintetic
+\texttt{multiwave} (populație $N = 50 \cdot 10^6$), pentru care condițiile
+inițiale produc dinamică ne-trivială (spre deosebire de Romania OWID, unde
+prima zi din serie are $I=0$). Rezultatele sunt sintetizate în
+Tabelul~\ref{tab:cross_language_regression}.
+
+\input{tables/cross_language_regression}
+
+Două observații se desprind. (i) Implementările Julia și Python produc
+traiectorii practic identice ($\sim$$10^{-8} \cdot N$, la limita preciziei
+flotante), pentru că ambele folosesc solvere Runge--Kutta adaptive cu
+toleranțe similare ($\texttt{Tsit5}$ și respectiv $\texttt{RK45}$). (ii)
+Implementarea R, care folosește RK4 cu pas fix $h = 1$~zi, deviază de la
+celelalte două cu $\sim$$10^{-4} \cdot N$ ($\sim$$2\,200$ cazuri pentru SIR,
+$\sim$$6\,600$ pentru SIDARTHE). Pentru o populație de $50$ de milioane,
+această abatere reprezintă $0{,}013\%$ din populație și este
+sub-vizuală pe o reprezentare grafică tipică --- compatibilă funcțional cu
+scopul aplicației, dar deliberat mai puțin precisă decât metodele adaptive.
 
 \section{Evaluarea API-ului și a bazei de date}
 \label{sec:evaluare_api_db}

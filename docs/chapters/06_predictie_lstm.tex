@@ -303,6 +303,19 @@ return fitted, forecast, MAE, RMSE, nRMSE
 \end{lstlisting}
 \end{algorithm}
 
+Aplicarea concretă a procedurii pe seria Romania OWID (4 ani, 22 ianuarie 2020
+-- 31 decembrie 2023) este ilustrată în Figura~\ref{fig:lstm_trajectory}.
+Predicțiile o-zi-înainte urmăresc rezonabil seria observată atât pe fereastra
+de antrenare cât și pe cea de test, dar prognoza autoregresivă dincolo de
+ultima zi observată se aplatizează rapid către zero --- o limitare cunoscută
+a LSTM-urilor compacte univariate, care nu au mecanisme explicite pentru
+tendințele și sezonalitățile pe termen lung. Acest comportament confirmă
+poziționarea LSTM-ului în această lucrare ca instrument de prognoză pe
+termen scurt și ca posibil corector de reziduuri, nu ca model autonom de
+extrapolare epidemiologică pe orizonturi mari.
+
+\input{figures/lstm_trajectory}
+
 \section{Integrarea în arhitectura aplicației}
 \label{sec:arhitectura_lstm}
 

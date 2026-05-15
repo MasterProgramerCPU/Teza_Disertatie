@@ -1,0 +1,52 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\textwidth,
+    height=6cm,
+    xlabel={Zi (de la $22$ ianuarie 2020)},
+    ylabel={Cazuri active},
+    xmin=0, xmax=1530,
+    ymin=0,
+    legend style={at={(0.02, 0.98)}, anchor=north west, font=\footnotesize, fill=white, draw=gray!50},
+    legend cell align={left},
+    grid=both, grid style={line width=.1pt, draw=gray!20},
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+]
+% antrenare/test boundary la train_end = 80% din 1440 = 1152
+\draw[dashed, gray!70, thick]
+    (axis cs:1152, 0) -- (axis cs:1152, 70000)
+    node[above, font=\scriptsize, gray!90, rotate=90, anchor=south east]
+    {antrenare $|$ test};
+% sfarsitul seriei observate la t=1440, inceput forecast
+\draw[dashed, gray!50, thick]
+    (axis cs:1440, 0) -- (axis cs:1440, 70000)
+    node[above, font=\scriptsize, gray!70, rotate=90, anchor=south east]
+    {observat $|$ prognoza};
+
+\addplot[mark=none, color=black, line width=0.5pt]
+    table[col sep=comma, x=t, y=observed] {data/lstm_trajectory_romania.csv};
+\addlegendentry{Observat (Romania)}
+
+\addplot[mark=none, color=blue!80!black, line width=0.7pt]
+    table[col sep=comma, x=t, y=fitted] {data/lstm_trajectory_romania.csv};
+\addlegendentry{Predictii o-zi-inainte (LSTM)}
+
+\addplot[mark=none, color=red!80!black, line width=0.7pt, dashed]
+    table[col sep=comma, x=t, y=predicted] {data/lstm_trajectory_romania.csv};
+\addlegendentry{Prognoza autoregresiva (LSTM)}
+
+\end{axis}
+\end{tikzpicture}
+\caption{Iesirile runner-ului LSTM dedicat pe seria de cazuri active din
+Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele
+$80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte
+($\hat{y}_t = f_\theta(y_{t-14:t-1})$) urmaresc seria observata atat pe
+fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva
+care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid
+catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme
+explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie
+exogena (intervalul de raportare, calendarul scolar) ar putea ameliora.}
+\label{fig:lstm_trajectory}
+\end{figure*}

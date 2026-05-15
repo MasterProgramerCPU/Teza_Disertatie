@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Verificare numerica de regresie cross-limbaj: abaterea maxima absoluta intre traiectoriile compartimentale produse in R, Julia si Python pentru aceiasi parametri si aceleasi conditii initiale, pe setul sintetic \texttt{multiwave} (populatia $N=50 \cdot 10^6$, $t_{\max}=365$ pasi zilnici). Modelele folosesc solvere diferite (R cu RK4 pas fix $h=1$, Python cu RK45 adaptiv, Julia cu Tsit5), deci abaterile reflecta tolerantele numerice cumulate, nu erori de implementare.}
+\label{tab:cross_language_regression}
+\begin{tabularx}{\columnwidth}{l l r r}
+\toprule
+\textbf{Model} & \textbf{Pereche} & \textbf{Max $|\Delta|$} & \textbf{Normalizat ($/N$)} \\
+\midrule
+\texttt{sir} & \texttt{julia} vs \texttt{python} & 0.5 & $1{,}01 \cdot 10^{-8}$ \\
+ & \texttt{julia} vs \texttt{r} & 2185.8 & $4{,}37 \cdot 10^{-5}$ \\
+ & \texttt{python} vs \texttt{r} & 2186.2 & $4{,}37 \cdot 10^{-5}$ \\
+\midrule
+\texttt{sidarthe} & \texttt{julia} vs \texttt{python} & 0.2 & $3{,}72 \cdot 10^{-9}$ \\
+ & \texttt{julia} vs \texttt{r} & 6570.9 & $1{,}31 \cdot 10^{-4}$ \\
+ & \texttt{python} vs \texttt{r} & 6571.1 & $1{,}31 \cdot 10^{-4}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
