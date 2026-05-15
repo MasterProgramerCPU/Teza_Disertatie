@@ -15,6 +15,7 @@ const auth = useAuthStore();
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/users">Utilizatori</router-link>
         <router-link to="/studies">Studii</router-link>
+        <router-link to="/activity">Activitate</router-link>
       </div>
       <div class="user">
         <a href="http://sir-workbench.ro" class="back" title="Înapoi la aplicația principală">↩ Aplicație</a>

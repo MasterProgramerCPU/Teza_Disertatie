@@ -22,6 +22,18 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/StudiesPage.vue"),
     meta: { requiresAuth: true },
   },
+  {
+    path: "/studies/:id",
+    name: "study-detail",
+    component: () => import("@/pages/StudyDetailPage.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/activity",
+    name: "activity",
+    component: () => import("@/pages/ActivityPage.vue"),
+    meta: { requiresAuth: true },
+  },
   { path: "/:pathMatch(.*)*", redirect: "/dashboard" },
 ];
 
