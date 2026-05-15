@@ -57,11 +57,10 @@ exemplu, \texttt{queue\_wait\_ms} se poate calcula ca diferență între momentu
 în care rularea a fost creată și momentul în care runner-ul o marchează
 \texttt{running}.
 
-\testtodo{Pentru completarea acestei secțiuni cu rezultate trebuie colectate
-valorile efective din tabela \texttt{benchmarks} și, unde este cazul, trebuie
-adăugate timestampuri suplimentare pentru \texttt{queue\_wait\_ms} și latențele
-API. Fără aceste rulări, tabelul de metrici descrie instrumentarea disponibilă,
-nu rezultatele măsurate.}
+Primele trei metrici sunt obținute pentru toate rulările din campania descrisă
+în secțiunea~\ref{subsec:rezultate_masurate}. Metricile derivate
+(\texttt{queue\_wait\_ms}, latențe API) ar necesita o instrumentare suplimentară
+și nu fac parte din rezultatele actuale.
 
 \section{Matricea experimentală}
 \label{sec:matrice_experimentala}
@@ -155,10 +154,15 @@ rulare poate include cost de compilare JIT. Pentru Python și R, costurile mari
 apar de obicei la pornirea containerului și la importul bibliotecilor, nu la
 fiecare job.
 
-\testtodo{Această secțiune devine una de rezultate doar după executarea
-protocolului pe o configurație hardware documentată. În textul final trebuie
-introduse configurația mașinii sau clusterului, versiunea imaginilor Docker,
-numărul de repetări și agregările rezultate.}
+Campania de bază a fost executată pe clusterul \texttt{kube-4kdhb}
+(3 worker-i $\times$ 4~vCPU / 8~GiB pe OpenStack), folosind imaginile
+\texttt{ghcr.io/masterprogramercpu/emedicine-*:latest} construite din branch-ul
+principal. Rezultatele sunt prezentate în
+secțiunea~\ref{subsec:rezultate_masurate}; reproducerea pe alte configurații
+hardware (de exemplu o mașină locală sau un nod cu GPU) este planificată ca
+script separat, în afara aplicației, și permite plasarea acelorași combinații
+\emph{model$\,\times\,$limbaj$\,\times\,t_{\max}$} pe scări de hardware
+diferite.
 
 \section{Scalabilitate și complexitatea modelului}
 \label{sec:scalabilitate_date}
@@ -217,10 +221,86 @@ Această valoare trebuie interpretată per model și per orizont temporal. Un li
 poate fi mai rapid pentru SIDARTHE pe 365 de zile și mai lent pentru SIR pe 30 de
 zile dacă overheadul runtime-ului domină calculul numeric.
 
-\testtodo{Indicatorii agregați trebuie calculați din rulări reale, nu estimați
-teoretic. Pentru fiecare model trebuie raportate cel puțin mediana, IQR și
-raportul de viteză față de un limbaj de referință, folosind același set de date
-și aceleași condiții inițiale.}
+\subsection{Rezultate măsurate}
+\label{subsec:rezultate_masurate}
+
+A fost executată o campanie completă prin scriptul
+\texttt{run\_benchmark.py}, conform protocolului din
+secțiunea~\ref{subsec:protocoale}: cinci modele compartimentale, trei limbaje,
+patru orizonturi temporale ($t_{\max} \in \{90, 365, 2\,000, 10\,000\}$),
+3 repetări per combinație, pe setul de date Romania OWID. Toate cele 180 de
+rulări s-au finalizat fără erori. Datele sunt extrase direct din tabela
+\texttt{benchmarks} a aplicației deployate, valorile reflectând timpul măsurat
+de către runner între începutul integrării ODE și finalul scrierii rezultatelor.
+
+\input{tables/bench_wall_time}
+\input{tables/bench_speedup_vs_python}
+\input{tables/bench_memory}
+
+Trei observații dominante reies din date.
+
+\textbf{(i) Julia este cel mai rapid solver, dar are un cost de pornire JIT
+semnificativ.} La $t_{\max}=10\,000$, mediana wall-time-ului Julia este de
+$5$--$6$~ms pentru orice model, inclusiv SIDARTHE cu opt compartimente.
+Python rămâne în intervalul $5$--$9$~ms, iar R urcă de la $665$ la $1\,327$~ms,
+de două până la trei ordine de mărime peste celelalte. Pentru orizonturi mici
+($t_{\max}=90$), prima rulare Julia plătește însă costul compilării
+\emph{just-in-time}, vizibil în diferența dintre repetarea 1 și repetările 2--3
+(Tabelul~\ref{tab:bench_julia_coldstart}): $\sim$$900$--$1\,500$~ms doar
+pentru încărcarea și compilarea funcțiilor RHS și a solverului
+\texttt{Tsit5}.
+
+\input{tables/bench_julia_coldstart}
+
+\textbf{(ii) Python (SciPy \texttt{solve\_ivp}) este cel mai stabil ca
+performanță.} Wall-time-ul rămâne aproape constant în jurul a $4$--$9$~ms
+indiferent de model sau orizont, fără cold-start vizibil; aceasta îl face
+limbajul implicit recomandabil pentru utilizare interactivă, unde
+predictibilitatea contează la fel de mult ca viteza brută.
+
+\textbf{(iii) Costul mare al runner-ului R la orizonturi mari este dominat de
+inserările individuale în baza de date, nu de \texttt{deSolve}.} Cele
+$10\,001$ inserții rând-cu-rând prin \texttt{dbExecute()} reprezintă
+componenta principală a celor $\sim$$1$ secundă măsurată la
+$\texttt{sidarthe}/\texttt{r}/t_{\max}=10\,000$; integrarea numerică
+propriu-zisă cu \texttt{deSolve::ode} este sub-secundară. Această observație
+este un punct concret de îmbunătățire ulterioară (de exemplu prin
+\texttt{COPY FROM} sau prin tranzacții batch), nu o limitare intrinsecă a
+ecosistemului R.
+
+În ce privește memoria reziduală peak (Tabelul~\ref{tab:bench_memory}), Julia
+plătește un overhead constant de $\sim$$940$~MB pentru runtime-ul SciML, în
+timp ce Python rămâne sub $100$~MB iar R sub $135$~MB. Acest cost este
+independent de complexitatea modelului și de orizont, deci nu se amortizează
+la rulări scurte; pentru job-uri foarte multe și mici, Python și R sunt
+opțiunile mai economicoase.
+
+\subsection{Costul componentei LSTM}
+\label{subsec:bench_lstm}
+
+Runner-ul LSTM are un profil de cost diferit calitativ de runnerele
+compartimentale. Costul ODE depinde de orizontul de integrare $t_{\max}$
+(număr de pași și de puncte salvate), în timp ce costul LSTM este dominat de
+\emph{antrenare} --- numărul de epoci $\times$ numărul de eșantioane glisante
+--- iar $t_{\max}$ controlează doar orizontul prognozei autoregresive
+(neglijabil în comparație).
+
+Tabelul~\ref{tab:bench_lstm} arată rezultatele pe setul Romania OWID
+(1\,440 zile, $80\%$ antrenare $/$ $20\%$ test cronologic) cu parametrii
+impliciti din API. Mediana wall-time-ului este $\sim$$290$~s, aproape identică
+între $t_{\max}=30$ și $t_{\max}=90$, ceea ce confirmă empiric că forecast-ul
+nu contribuie semnificativ. Utilizarea CPU este peste $98\%$ din wall-time
+(LSTM hand-rolled în NumPy fără paralelism), iar memoria peak este de doar
+$\sim$$56$~MB, mai mică decât a runnerelor ODE în Python --- nu se construiesc
+matrice de stare comparabile ca dimensiune.
+
+\input{tables/bench_lstm}
+
+Pentru contextul tezei, această valoare absolută este mai puțin importantă
+decât observația de scalare: pe seriile sintetice de $20\,000$ de zile,
+antrenarea ar crește la $\sim$$70$ minute cu aceiași parametri, ceea ce
+plasează LSTM ca operație asincronă lungă --- exact rolul pentru care
+\texttt{runner-lstm} este izolat într-o coadă Redis dedicată.
 
 \section{Acuratețe numerică și verificări de regresie}
 \label{sec:acuratete}
@@ -282,14 +362,27 @@ parametri și cu timp de calibrare ridicat, poate fi mai puțin potrivit pentru
 analize rapide. În sens invers, un model simplu și rapid poate fi foarte util
 pentru explorare, dar insuficient pentru întrebări clinice.
 
-În forma curentă, infrastructura de măsurare este prezentă, iar fiecare rulare
-produce metrici persistente. Capitolul definește cadrul de evaluare completă și
-modul în care rezultatele trebuie agregate. Pentru concluzii cantitative finale
-sunt necesare campanii controlate pe configurații hardware documentate; fără
-aceste date, afirmații precum „limbajul X este cel mai rapid” ar fi premature.
+Combinând rezultatele măsurate, recomandarea practică derivată din această
+campanie este următoarea. Pentru rulări numeroase și scurte (de exemplu
+explorarea sensibilității parametrilor), \textbf{Python} este alegerea
+implicită cea mai bună --- timpii sunt sub $10$~ms și predictibili pentru toate
+modelele și orizonturile testate, fără cost de pornire. Pentru rulări puține
+și foarte lungi (de exemplu integrare pe orizonturi $t_{\max} \gg 10\,000$
+sau pentru calibrare cu mii de iterații în care Julia se compilează o singură
+dată), \textbf{Julia} oferă un solver cu un ordin de mărime mai rapid, cu
+condiția ca cele $\sim$$1$~secundă de pornire să fie amortizate. \textbf{R}
+rămâne potrivit pentru explorare interactivă în pipeline-uri statistice
+familiare cercetătorilor din epidemiologie, dar runner-ul curent are o limitare
+operațională (inserțiile rând-cu-rând în baza de date) care domină wall-time-ul
+la orizonturi mari și care poate fi corectată independent de schimbarea
+limbajului.
 
-\testtodo{Înainte de forma finală a lucrării, această secțiune trebuie
-completată cu un tabel de rezultate agregate și cu o interpretare bazată pe
-valori măsurate. Fără aceste date, concluzia corectă rămâne că sistemul are
-infrastructură de benchmark, nu că un model sau un limbaj este demonstrabil
-superior.}
+Pentru predicție cu LSTM, costul este dominat de antrenare și nu se compară
+direct cu solverele ODE. Este important ca interfața utilizatorului să trateze
+LSTM ca operație asincronă explicită (lansare, polling, finalizare după
+minute), așa cum este deja proiectată în aplicație.
+
+Toate aceste afirmații sunt valide pentru profilul hardware al clusterului
+\texttt{kube-4kdhb}. Reproducerea pe alte configurații (mașini locale, noduri
+mai puternice, eventual GPU pentru LSTM) este lăsată ca extensie a campaniei,
+prin scripturi rulate în afara aplicației.

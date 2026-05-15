@@ -1,0 +1,33 @@
+\begin{table*}[t]
+\centering
+\caption{Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max}$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt{kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala.}
+\label{tab:bench_wall_time}
+\small
+\begin{tabularx}{\textwidth}{l l rrrr}
+\toprule
+\textbf{Model} & \textbf{Limbaj} & \multicolumn{4}{c}{\textbf{Wall-time median (ms)}} \\
+\cmidrule(l){3-6}
+ & & $t_{\max}=90$ & $t_{\max}=365$ & $t_{\max}=2000$ & $t_{\max}=10000$ \\
+\midrule
+\texttt{sis} & \texttt{r} & 12.0 & 41.0 & 149.0 & 738.0 \\
+\texttt{sis} & \texttt{julia} & 0.0 & 0.0 & 1.0 & 5.0 \\
+\texttt{sis} & \texttt{python} & 4.0 & 5.0 & 4.0 & 6.0 \\
+\midrule
+\texttt{sir} & \texttt{r} & 12.0 & 35.0 & 146.0 & 807.0 \\
+\texttt{sir} & \texttt{julia} & 0.0 & 1.0 & 1.0 & 5.0 \\
+\texttt{sir} & \texttt{python} & 4.0 & 4.0 & 5.0 & 5.0 \\
+\midrule
+\texttt{seir} & \texttt{r} & 19.0 & 35.0 & 161.0 & 673.0 \\
+\texttt{seir} & \texttt{julia} & 1.0 & 0.0 & 1.0 & 5.0 \\
+\texttt{seir} & \texttt{python} & 4.0 & 3.0 & 5.0 & 9.0 \\
+\midrule
+\texttt{sirs} & \texttt{r} & 10.0 & 40.0 & 154.0 & 665.0 \\
+\texttt{sirs} & \texttt{julia} & 0.0 & 1.0 & 1.0 & 5.0 \\
+\texttt{sirs} & \texttt{python} & 5.0 & 4.0 & 5.0 & 5.0 \\
+\midrule
+\texttt{sidarthe} & \texttt{r} & 16.0 & 62.0 & 274.0 & 1327.0 \\
+\texttt{sidarthe} & \texttt{julia} & 2.0 & 1.0 & 2.0 & 6.0 \\
+\texttt{sidarthe} & \texttt{python} & 5.0 & 5.0 & 5.0 & 8.0 \\
+\bottomrule
+\end{tabularx}
+\end{table*}

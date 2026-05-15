@@ -15,8 +15,13 @@
 \contentsline {table}{\numberline {7.2}{\ignorespaces Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}}{33}{table.caption.33}%
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {8.1}{\ignorespaces Metricile colectate sau derivabile pentru evaluarea software.}}{36}{table.caption.37}%
-\contentsline {table}{\numberline {8.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{38}{table.caption.39}%
-\contentsline {table}{\numberline {8.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{39}{table.caption.40}%
+\contentsline {table}{\numberline {8.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{39}{table.caption.38}%
+\contentsline {table}{\numberline {8.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{40}{table.caption.39}%
+\contentsline {table}{\numberline {8.4}{\ignorespaces Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max }$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt {kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala.}}{40}{table.caption.40}%
+\contentsline {table}{\numberline {8.5}{\ignorespaces Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil.}}{40}{table.caption.41}%
+\contentsline {table}{\numberline {8.6}{\ignorespaces Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max }$.}}{41}{table.caption.42}%
+\contentsline {table}{\numberline {8.7}{\ignorespaces Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max }=90$.}}{41}{table.caption.43}%
+\contentsline {table}{\numberline {8.8}{\ignorespaces Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt {lookback=14}, \texttt {hidden\_size=12}, \texttt {epochs=150}, \texttt {learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max }$ are cost neglijabil fata de antrenare.}}{41}{table.caption.44}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
@@ -25,5 +30,5 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {F.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{73}{table.caption.47}%
+\contentsline {table}{\numberline {F.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{75}{table.caption.48}%
 \addvspace {10\p@ }

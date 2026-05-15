@@ -129,28 +129,30 @@
 \contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{36}{section.8.5}%
 \contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{36}{section.8.6}%
 \contentsline {section}{\numberline {8.7}Indicatori agregați}{36}{section.8.7}%
+\contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{37}{subsection.8.7.1}%
+\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{37}{subsection.8.7.2}%
 \contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{37}{section.8.8}%
-\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{37}{section.8.9}%
-\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{37}{section.8.10}%
-\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{40}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Rolul aplicației}{40}{section.9.1}%
-\contentsline {section}{\numberline {9.2}Backend Go}{40}{section.9.2}%
-\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{40}{section.9.3}%
-\contentsline {section}{\numberline {9.4}Execuția simulărilor}{40}{section.9.4}%
-\contentsline {section}{\numberline {9.5}Frontend Vue.js}{41}{section.9.5}%
-\contentsline {section}{\numberline {9.6}Consola super-admin}{41}{section.9.6}%
-\contentsline {section}{\numberline {9.7}Validare funcțională}{41}{section.9.7}%
-\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{42}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Sinteza lucrării}{42}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{42}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{42}{section.10.3}%
-\contentsline {section}{\numberline {10.4}Limitări}{43}{section.10.4}%
-\contentsline {section}{\numberline {10.5}Direcții viitoare}{43}{section.10.5}%
-\contentsline {chapter}{Bibliografie}{44}{section.10.5}%
-\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{46}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{51}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{56}{appendix.C}%
-\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{61}{appendix.D}%
-\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{69}{appendix.E}%
-\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{73}{appendix.F}%
-\contentsline {chapter}{\numberline {G}Documentația API REST}{88}{appendix.G}%
+\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{38}{section.8.9}%
+\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{38}{section.8.10}%
+\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{42}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Rolul aplicației}{42}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Backend Go}{42}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{42}{section.9.3}%
+\contentsline {section}{\numberline {9.4}Execuția simulărilor}{42}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Frontend Vue.js}{43}{section.9.5}%
+\contentsline {section}{\numberline {9.6}Consola super-admin}{43}{section.9.6}%
+\contentsline {section}{\numberline {9.7}Validare funcțională}{43}{section.9.7}%
+\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{44}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Sinteza lucrării}{44}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{44}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{44}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Limitări}{45}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Direcții viitoare}{45}{section.10.5}%
+\contentsline {chapter}{Bibliografie}{46}{section.10.5}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{48}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{53}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{58}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{63}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{71}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{75}{appendix.F}%
+\contentsline {chapter}{\numberline {G}Documentația API REST}{90}{appendix.G}%

@@ -1,0 +1,13 @@
+\begin{table}[t]
+\centering
+\caption{Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt{lookback=14}, \texttt{hidden\_size=12}, \texttt{epochs=150}, \texttt{learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max}$ are cost neglijabil fata de antrenare.}
+\label{tab:bench_lstm}
+\begin{tabularx}{\columnwidth}{r r r r r}
+\toprule
+$t_{\max}$ & \textbf{n} & \textbf{Wall median (s)} & \textbf{CPU median (s)} & \textbf{Memorie (MB)} \\
+\midrule
+30 & 2 & 296.8 & 295.3 & 55.6 \\
+90 & 2 & 286.2 & 285.0 & 56.3 \\
+\bottomrule
+\end{tabularx}
+\end{table}

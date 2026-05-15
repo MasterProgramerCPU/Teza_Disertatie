@@ -1,0 +1,28 @@
+\begin{table*}[t]
+\centering
+\caption{Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil.}
+\label{tab:bench_speedup_vs_python}
+\small
+\begin{tabularx}{\textwidth}{l l rrrr}
+\toprule
+\textbf{Model} & \textbf{Limbaj} & \multicolumn{4}{c}{\textbf{Speedup vs Python}} \\
+\cmidrule(l){3-6}
+ & & $t_{\max}=90$ & $t_{\max}=365$ & $t_{\max}=2000$ & $t_{\max}=10000$ \\
+\midrule
+\texttt{sis} & \texttt{r} & 0.33 & 0.12 & 0.03 & 0.01 \\
+\texttt{sis} & \texttt{julia} & $>8$ & $>10$ & 4.00 & 1.20 \\
+\midrule
+\texttt{sir} & \texttt{r} & 0.33 & 0.11 & 0.03 & 0.01 \\
+\texttt{sir} & \texttt{julia} & $>8$ & 4.00 & 5.00 & 1.00 \\
+\midrule
+\texttt{seir} & \texttt{r} & 0.21 & 0.09 & 0.03 & 0.01 \\
+\texttt{seir} & \texttt{julia} & 4.00 & $>6$ & 5.00 & 1.80 \\
+\midrule
+\texttt{sirs} & \texttt{r} & 0.50 & 0.10 & 0.03 & 0.01 \\
+\texttt{sirs} & \texttt{julia} & $>10$ & 4.00 & 5.00 & 1.00 \\
+\midrule
+\texttt{sidarthe} & \texttt{r} & 0.31 & 0.08 & 0.02 & 0.01 \\
+\texttt{sidarthe} & \texttt{julia} & 2.50 & 5.00 & 2.50 & 1.33 \\
+\bottomrule
+\end{tabularx}
+\end{table*}
