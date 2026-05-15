@@ -189,7 +189,7 @@ aceleiași metode în toate cele trei limbaje.
 
 Avantajul abordării curente este că reflectă utilizarea naturală a fiecărui
 ecosistem: R prin \texttt{deSolve}, Python prin SciPy, Julia prin SciML.
-Rezultatele benchmarkului trebuie deci citite ca o comparație între ecosisteme de
+Rezultatele benchmark-ului trebuie deci citite ca o comparație între ecosisteme de
 calcul științific integrate într-un sistem software, nu doar între limbaje de
 programare.
 
@@ -219,8 +219,8 @@ zile dacă overheadul runtime-ului domină calculul numeric.
 
 \testtodo{Indicatorii agregați trebuie calculați din rulări reale, nu estimați
 teoretic. Pentru fiecare model trebuie raportate cel puțin mediana, IQR și
-raportul de viteză față de un limbaj de referință, folosind același dataset și
-aceleași condiții inițiale.}
+raportul de viteză față de un limbaj de referință, folosind același set de date
+și aceleași condiții inițiale.}
 
 \section{Acuratețe numerică și verificări de regresie}
 \label{sec:acuratete}
@@ -255,7 +255,7 @@ rând epidemiologic, inserarea în \texttt{simulation\_runs} și publicarea în
 Redis. Pentru vizualizarea rezultatului, latența include citirea rândurilor din
 \texttt{simulation\_results}, deserializarea JSONB și construirea răspunsului.
 
-Din acest motiv, benchmarkul numeric trebuie completat cu teste de API:
+Din acest motiv, benchmark-ul numeric trebuie completat cu teste de API:
 \begin{itemize}
     \item latența endpointului de creare simulare;
     \item latența endpointului de status;

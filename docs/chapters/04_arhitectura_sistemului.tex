@@ -152,7 +152,7 @@ durată de valabilitate configurabilă. Autorizarea nu este doar globală, ci ș
 contextuală: resursele sunt grupate în studii, iar accesul depinde de rolul
 utilizatorului în studiul curent. Pe lângă aceste roluri există flag-ul
 \texttt{is\_super\_admin}, folosit pentru consola administrativă și pentru
-vizibilitate cross-study.
+vizibilitate la nivelul tuturor studiilor.
 
 \textbf{Gestionarea studiilor epidemiologice} permite crearea unui context de
 lucru cu nume, cod de boală și descriere. Creatorul devine automat
@@ -199,10 +199,11 @@ Utilizatorii marcați \texttt{is\_super\_admin=true} pot accesa consola
 utilizatorilor cu promovarea sau revocarea drepturilor de super-admin, lista
 tuturor studiilor și pagina de detaliu pentru orice studiu, cu membrii,
 seturile de date, simulările (cu badge de status) și benchmark-urile agregate.
-Dashboard-ul include distribuțiile agregate cross-studiu (simulări pe status,
-model și limbaj; dataseturi și studii pe boală; top studii după volum), iar o
-pagină dedicată afișează feed-ul de activitate recentă (simulări și încărcări
-de seturi de date, cross-tenant). Toate paginile administrative sunt strict de
+Dashboard-ul include distribuțiile agregate între studii (simulări pe
+status, model și limbaj; seturi de date și studii pe boală; top studii după
+volum), iar o pagină dedicată afișează feed-ul de activitate recentă
+(simulări și încărcări de seturi de date, indiferent de studiu).
+Toate paginile administrative sunt strict de
 citire; mutațiile rămân în fluxul aplicației principale, controlate prin RBAC pe
 studiu.
 
@@ -250,7 +251,7 @@ suportă Kubernetes 1.28+.
 
 Baza de date a sistemului este structurată în jurul conceptului de studiu.
 Schema include tabele pentru identitate, membership, resurse epidemiologice,
-simulări și benchmarkuri, iar relațiile principale sunt ilustrate în
+simulări și benchmark-uri, iar relațiile principale sunt ilustrate în
 \cref{fig:erd}. În forma curentă, tabelele aplicative principale sunt:
 \texttt{users}, \texttt{studies}, \texttt{study\_members},
 \texttt{datasets}, \texttt{epidemiological\_records},
@@ -390,9 +391,9 @@ utilizatorii de studii prin unul dintre rolurile \texttt{admin},
 brute ale seriei temporale; câmpurile \texttt{susceptible},
 \texttt{infected} și \texttt{recovered} conțin valorile observate sau valorile
 inițiale folosite la calibrarea parametrilor, iar \texttt{region\_code} urmează
-standardul ISO~3166-1 alpha-3 în dataseturile preprocesate din OWID.
+standardul ISO~3166-1 alpha-3 în seturile de date preprocesate din OWID.
 Tabelul \texttt{simulation\_runs} reprezintă job-ul de simulare și include
-studiul, datasetul, tipul modelului (\texttt{sidarthe}, \texttt{sir},
+studiul, setul de date, tipul modelului (\texttt{sidarthe}, \texttt{sir},
 \texttt{sis}, \texttt{seir} sau \texttt{sirs}),
 parametrii în format JSONB, populația, orizontul temporal, limbajul ales,
 statusul execuției (\texttt{pending}, \texttt{running}, \texttt{completed},
@@ -437,7 +438,7 @@ tipul corect, că relația $I(t) + R(t) \leq N$ este respectată pentru fiecare
 înregistrare, că seria temporală este ordonată cronologic și că fiecare cod de
 regiune este nevid. Validarea formală față de un registru ISO și analiza
 golurilor calendaristice nu sunt incluse în implementarea curentă a API-ului;
-ele sunt tratate în etapa de preprocesare pentru dataseturile OWID incluse în
+ele sunt tratate în etapa de preprocesare pentru seturile de date OWID incluse în
 repository.
 
 \subsection{Strategia de partiționare și replicare în YugabyteDB}
@@ -593,8 +594,8 @@ DELETE & \texttt{/api/studies/\{studyId\}/members/\{userId\}} & Eliminare membru
 \midrule
 GET    & \texttt{/api/studies/\{studyId\}/datasets} & Lista dataseturilor din studiu       & Membru \\
 POST   & \texttt{/api/studies/\{studyId\}/datasets} & Încărcare CSV nou                    & Admin/Contributor \\
-GET    & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Detalii dataset               & Membru \\
-DELETE & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Ștergere dataset              & Admin/Contributor \\
+GET    & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Detalii set de date           & Membru \\
+DELETE & \texttt{/api/studies/\{studyId\}/datasets/\{id\}} & Ștergere set de date          & Admin/Contributor \\
 \midrule
 GET    & \texttt{/api/studies/\{studyId\}/simulations} & Lista simulărilor din studiu      & Membru \\
 POST   & \texttt{/api/studies/\{studyId\}/simulations} & Inițiere simulare nouă            & Admin/Researcher \\
@@ -607,7 +608,7 @@ GET    & \texttt{/api/admin/stats}              & Statistici globale pentru cons
 GET    & \texttt{/api/admin/users}              & Lista utilizatorilor                     & Super-admin \\
 PATCH  & \texttt{/api/admin/users/\{userId\}/super-admin} & Promovare/revocare super-admin & Super-admin \\
 GET    & \texttt{/api/admin/studies}            & Lista tuturor studiilor                  & Super-admin \\
-GET    & \texttt{/api/admin/breakdown}          & Distribuții agregate cross-studiu (status, model, limbaj, boală, top studii) & Super-admin \\
+GET    & \texttt{/api/admin/breakdown}          & Distribuții agregate între studii (status, model, limbaj, boală, top studii) & Super-admin \\
 GET    & \texttt{/api/admin/recent-simulations} & Ultimele $N$ simulări cu studiu și user  & Super-admin \\
 GET    & \texttt{/api/admin/recent-datasets}    & Ultimele $N$ seturi de date încărcate    & Super-admin \\
 \bottomrule
@@ -751,7 +752,7 @@ care apelează exclusiv rutele \texttt{/api/admin/*}. La login, aplicația refuz
 utilizatorii care nu au \texttt{is\_super\_admin=true}, chiar dacă autentificarea
 API ar fi validă. Pe lângă statisticile globale și lista utilizatorilor cu
 promovarea/revocarea drepturilor de super-admin, store-ul mai expune trei
-fluxuri de citire cross-tenant: distribuțiile agregate pentru dashboard
+fluxuri de citire între studii: distribuțiile agregate pentru dashboard
 (\texttt{breakdown}), simulările recente (\texttt{recentSimulations}) și
 seturile de date recente (\texttt{recentDatasets}). Pagina de detaliu pentru un
 studiu (\texttt{StudyDetailPage}) reutilizează direct endpointurile
@@ -960,7 +961,7 @@ fără shell și fără pachete de sistem inutile. Cele două frontend-uri Vue s
 compilate în fișiere statice (\texttt{npm run build}) și servite prin
 containere Nginx configurate ca SPA: toate rutele necunoscute sunt
 redirecționate la \texttt{index.html}, permițând Vue~Router să gestioneze
-navigarea côté client. Runner-ele utilizează imagini de bază specifice
+navigarea pe partea de client. Runner-ele utilizează imagini de bază specifice
 fiecărui limbaj (Python 3.12 slim, R 4.4 base, Julia 1.11), cu dependențele
 instalate la build time pentru a evita orice descărcare la pornire.
 

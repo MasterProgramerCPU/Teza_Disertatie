@@ -76,7 +76,7 @@ alegere mai realistă este
 g_{\text{SIDARTHE}}(\mathbf{x}) = D + R + T,
 \end{equation}
 deoarece compartimentul $I$ reprezintă infectați nedepistați, iar $A$ reprezintă
-persoane simptomatice nedepistate. Dacă datasetul conține doar o aproximare
+persoane simptomatice nedepistate. Dacă setul de date conține doar o aproximare
 generală a cazurilor active, aplicația poate folosi o proiecție mai simplă, dar
 interpretarea trebuie notată explicit.
 
@@ -124,7 +124,7 @@ serii. Ponderile sunt necesare deoarece seriile pot avea scări diferite.
 
 \testtodo{Formulele de mai sus definesc modul de calcul al erorilor, dar nu
 reprezintă rezultate în sine. Pentru a obține rezultate numerice trebuie rulate
-toate modelele pe același dataset, trebuie aplicat operatorul de observație ales
+toate modelele pe același set de date, trebuie aplicat operatorul de observație ales
 și trebuie raportate valorile MAE, RMSE și nRMSE pentru fiecare combinație
 model--limbaj--fereastră temporală.}
 
@@ -135,7 +135,7 @@ Pentru ca analiza comparativă să fie reproductibilă, toate modelele trebuie
 rulate în condiții identice. Protocolul propus are următorii pași:
 
 \begin{enumerate}
-    \item se alege același dataset, aceeași regiune și aceeași fereastră
+    \item se alege același set de date, aceeași regiune și aceeași fereastră
     temporală pentru toate modelele;
     \item se aplică aceeași regulă de inițializare a compartimentelor, conform
     Tabelului~\ref{tab:initializare_modele};
@@ -159,7 +159,7 @@ generalizare.
 \toprule
 \textbf{Secțiune} & \textbf{Test necesar} & \textbf{Rezultat de raportat} \\
 \midrule
-Operatorul de observație & alegerea proiecției potrivite pentru fiecare model și dataset & seria comparabilă cu datele reale: active, diagnosticate sau decese \\
+Operatorul de observație & alegerea proiecției potrivite pentru fiecare model și set de date & seria comparabilă cu datele reale: active, diagnosticate sau decese \\
 Metrici de eroare & rularea modelelor pe aceeași fereastră temporală & MAE, RMSE, nRMSE pe fiecare model și limbaj \\
 Protocol comparativ & împărțirea cronologică train/test și rulări identice pentru toate modelele & tabel agregat cu eroare pe train și test \\
 Calibrare parametri & optimizarea parametrilor în limite admisibile & parametrii calibrați, eroarea finală și numărul de evaluări ale solverului \\
@@ -230,7 +230,7 @@ pe aceeași fereastră de timp. Această problemă se numește neidentificabilit
 practică și este accentuată atunci când datele observate sunt agregate.
 
 Pentru SIDARTHE, neidentificabilitatea este mai importantă decât pentru SIR.
-Dacă datasetul nu conține date despre testare, spitalizare, terapie intensivă și
+Dacă setul de date nu conține date despre testare, spitalizare, terapie intensivă și
 vindecări, parametri precum $\epsilon$, $\zeta$, $\mu$, $\nu$, $\sigma$ sau
 $\tau$ nu pot fi estimați robust doar din cazuri active. Într-o lucrare aplicată,
 acest lucru trebuie declarat explicit. Rolul calibrării nu este să ascundă

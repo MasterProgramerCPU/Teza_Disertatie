@@ -73,9 +73,9 @@ Persistarea datasetului se face într-o tranzacție. Mai întâi este creat rân
 \texttt{datasets}, apoi înregistrările epidemiologice sunt inserate prin
 \texttt{CopyFrom}. Această alegere reduce costul încărcării CSV-urilor față de
 inserarea rând-cu-rând și păstrează atomicitatea: dacă una dintre înregistrări nu
-poate fi scrisă, datasetul nu rămâne într-o stare parțială. La ștergere,
-\texttt{admin}-ul poate elimina orice dataset din studiu, în timp ce
-\texttt{contributor}-ul poate elimina doar dataseturile încărcate de el.
+poate fi scrisă, setul de date nu rămâne într-o stare parțială. La ștergere,
+\texttt{admin}-ul poate elimina orice set de date din studiu, în timp ce
+\texttt{contributor}-ul poate elimina doar seturile de date încărcate de el.
 
 \section{Execuția simulărilor}
 \label{sec:executie_simulari_web}
@@ -91,7 +91,7 @@ corespunzătoare limbajului.
 
 Runner-ele sunt responsabile pentru tranzițiile ulterioare. Ele marchează rularea
 ca \texttt{running}, execută solver-ul pentru \texttt{model\_type}, inserează
-rezultatele și benchmarkul, apoi marchează rularea ca \texttt{completed}. Dacă
+rezultatele și benchmark-ul, apoi marchează rularea ca \texttt{completed}. Dacă
 apare o eroare, statusul devine \texttt{failed}, iar mesajul este salvat în baza de
 date. Interfața web nu trebuie să țină o conexiune deschisă pe durata calculului;
 pagina de rezultat interoghează periodic endpointul de status până la finalizare.
@@ -104,14 +104,14 @@ Rutarea este gestionată cu Vue Router, iar starea aplicației cu Pinia. Clientu
 HTTP este o instanță Axios configurată cu prefixul \texttt{/api}; un interceptor
 adaugă automat headerul \texttt{Authorization} atunci când există token în
 \texttt{localStorage}. Store-ul \texttt{studies.store.ts} păstrează studiul
-curent și rolul curent, iar store-urile pentru dataseturi, simulări și
-benchmarkuri construiesc URL-urile în funcție de acest \texttt{studyId}.
+curent și rolul curent, iar store-urile pentru seturi de date, simulări și
+benchmark-uri construiesc URL-urile în funcție de acest \texttt{studyId}.
 
 Paginile sunt organizate după fluxurile principale ale aplicației:
 \texttt{StudiesPage} selectează contextul de lucru,
 \texttt{CreateStudyPage} creează un studiu nou,
 \texttt{StudyManagementPage} gestionează membrii și rolurile,
-\texttt{DashboardPage} sumarizează dataseturile și simulările recente,
+\texttt{DashboardPage} sumarizează seturile de date și simulările recente,
 \texttt{DatasetsPage} gestionează încărcarea CSV-urilor,
 \texttt{NewSimulationPage} colectează modelul și parametrii,
 \texttt{SimulationResultPage} afișează statusul și rezultatele,
@@ -142,7 +142,7 @@ studiilor și seturilor de date rămân în aplicația principală, controlate p
 RBAC pe studiu.
 
 \textbf{Dashboard.} Pagina inițială afișează cele opt contoare globale
-(\texttt{/api/admin/stats}) și șase distribuții agregate cross-studiu obținute
+(\texttt{/api/admin/stats}) și șase distribuții agregate între studii, obținute
 din \texttt{/api/admin/breakdown}: simulări pe status, model și limbaj;
 seturi de date și studii pe boală; top zece studii după volumul cumulat de
 înregistrări. Distribuțiile sunt randate ca bare orizontale proporționale, iar
@@ -156,18 +156,18 @@ flag-ul \texttt{is\_super\_admin} prin \texttt{PATCH
 text și permite navigarea către pagina de detaliu prin click pe rând.
 
 \textbf{Detaliu studiu.} \texttt{StudyDetailPage} reutilizează endpointurile
-\texttt{/api/studies/\{studyId\}/*} (membri, dataseturi, simulări, benchmarks
-agregate), de care super-adminul beneficiază datorită bypass-ului din
-middleware-ul RBAC. Paginile prezintă, în ordine, un antet cu metadatele
-studiului și patru contoare (membri, seturi de date cu volum cumulat, simulări,
-combinații model$\,\times\,$limbaj cu rulări complete), urmate de tabelele
-detaliate. Simulările au badge de status colorat, iar tabelul de benchmarks
-arată wall-time median, percentila 95, CPU median și memorie mediană pentru
-fiecare combinație model--limbaj.
+\texttt{/api/studies/\{studyId\}/*} (membri, seturi de date, simulări,
+benchmark-uri agregate), de care super-adminul beneficiază datorită
+bypass-ului din middleware-ul RBAC. Pagina prezintă, în ordine, un antet cu
+metadatele studiului și patru contoare (membri, seturi de date cu volum
+cumulat, simulări, combinații model$\,\times\,$limbaj cu rulări complete),
+urmate de tabelele detaliate. Simulările au badge de status colorat, iar
+tabelul de benchmark-uri arată wall-time median, percentila 95, CPU median și
+memorie mediană pentru fiecare combinație model--limbaj.
 
 \textbf{Activitate.} Pagina \texttt{/activity} consumă \texttt{/api/admin/recent-simulations}
 și \texttt{/api/admin/recent-datasets} pentru a afișa cele mai recente $N$
-intrări (configurabil între 20 și 200), cross-tenant, cu link-uri către studiul
+intrări (configurabil între 20 și 200), indiferent de studiu, cu link-uri către studiul
 corespunzător. Acest feed este util pentru audit operațional, pentru
 identificarea rapidă a simulărilor blocate în starea \texttt{running} și pentru
 verificarea încărcărilor de seturi de date proaspete.
@@ -177,7 +177,7 @@ verificarea încărcărilor de seturi de date proaspete.
 
 Validarea funcțională a aplicației poate fi făcută prin fluxuri end-to-end care
 urmează operațiile reale ale utilizatorului: înregistrare, autentificare, creare
-sau selectare studiu, adăugare membru, încărcare dataset, pornire simulare
+sau selectare studiu, adăugare membru, încărcare set de date, pornire simulare
 SIDARTHE, așteptare finalizare, afișare grafic și export CSV. Aceeași suită ar
 trebui să verifice și rulările SIR/SIS/SEIR/SIRS, deoarece acestea asigură
 compatibilitatea cu familia de modele discutată în capitolul teoretic și cu
