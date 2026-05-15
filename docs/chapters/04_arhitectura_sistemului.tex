@@ -195,8 +195,16 @@ interfața de comparare.
 
 \textbf{Administrarea globală} este separată de interfața principală.
 Utilizatorii marcați \texttt{is\_super\_admin=true} pot accesa consola
-\texttt{admin.sir-workbench.ro}, unde văd statistici globale, lista utilizatorilor,
-promovarea sau revocarea drepturilor de super-admin și lista tuturor studiilor.
+\texttt{admin.sir-workbench.ro}, unde văd statistici globale, lista
+utilizatorilor cu promovarea sau revocarea drepturilor de super-admin, lista
+tuturor studiilor și pagina de detaliu pentru orice studiu, cu membrii,
+seturile de date, simulările (cu badge de status) și benchmark-urile agregate.
+Dashboard-ul include distribuțiile agregate cross-studiu (simulări pe status,
+model și limbaj; dataseturi și studii pe boală; top studii după volum), iar o
+pagină dedicată afișează feed-ul de activitate recentă (simulări și încărcări
+de seturi de date, cross-tenant). Toate paginile administrative sunt strict de
+citire; mutațiile rămân în fluxul aplicației principale, controlate prin RBAC pe
+studiu.
 
 \subsection{Cerințe non-funcționale}
 \label{subsec:cerinte_nonfunctionale}
@@ -599,6 +607,9 @@ GET    & \texttt{/api/admin/stats}              & Statistici globale pentru cons
 GET    & \texttt{/api/admin/users}              & Lista utilizatorilor                     & Super-admin \\
 PATCH  & \texttt{/api/admin/users/\{userId\}/super-admin} & Promovare/revocare super-admin & Super-admin \\
 GET    & \texttt{/api/admin/studies}            & Lista tuturor studiilor                  & Super-admin \\
+GET    & \texttt{/api/admin/breakdown}          & Distribuții agregate cross-studiu (status, model, limbaj, boală, top studii) & Super-admin \\
+GET    & \texttt{/api/admin/recent-simulations} & Ultimele $N$ simulări cu studiu și user  & Super-admin \\
+GET    & \texttt{/api/admin/recent-datasets}    & Ultimele $N$ seturi de date încărcate    & Super-admin \\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -686,7 +697,9 @@ frontend-admin/
     |   +-- LoginPage.vue
     |   +-- DashboardPage.vue
     |   +-- UsersPage.vue
-    |   `-- StudiesPage.vue
+    |   +-- StudiesPage.vue
+    |   +-- StudyDetailPage.vue
+    |   `-- ActivityPage.vue
     +-- stores/
     |   +-- auth.store.ts
     |   `-- admin.store.ts
@@ -736,9 +749,14 @@ grafic, diferențiindu-le prin stil de linie (continuu, întrerupt, punctat).
 Consola \texttt{frontend-admin} folosește un store separat, \texttt{adminStore},
 care apelează exclusiv rutele \texttt{/api/admin/*}. La login, aplicația refuză
 utilizatorii care nu au \texttt{is\_super\_admin=true}, chiar dacă autentificarea
-API ar fi validă. Interfața admin prezintă statistici globale, lista
-utilizatorilor, promovarea sau revocarea drepturilor de super-admin și lista
-tuturor studiilor din sistem.
+API ar fi validă. Pe lângă statisticile globale și lista utilizatorilor cu
+promovarea/revocarea drepturilor de super-admin, store-ul mai expune trei
+fluxuri de citire cross-tenant: distribuțiile agregate pentru dashboard
+(\texttt{breakdown}), simulările recente (\texttt{recentSimulations}) și
+seturile de date recente (\texttt{recentDatasets}). Pagina de detaliu pentru un
+studiu (\texttt{StudyDetailPage}) reutilizează direct endpointurile
+\texttt{/api/studies/\{studyId\}/*}, deoarece super-adminul trece automat prin
+middleware-ul RBAC, fără a fi necesare endpointuri admin dedicate.
 
 % ------------------------------------------------------------
 \section{Infrastructura Kubernetes}

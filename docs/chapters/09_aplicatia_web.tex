@@ -122,23 +122,55 @@ construiește dinamic seriile în funcție de cheile disponibile în
 \texttt{compartments}. Astfel, același grafic poate afișa modele cu două,
 trei, patru sau opt compartimente fără modificări suplimentare.
 
+Decizia de a folosi polling la două secunde pentru actualizarea statusului unei
+simulări este simplă, dar adecvată pentru durata așteptată a job-urilor. O
+soluție bazată pe WebSocket sau Server-Sent Events ar reduce numărul de cereri,
+însă ar introduce stare suplimentară în backend. Pentru un API stateless și
+pentru job-uri care durează de la câteva secunde la câteva minute, polling-ul
+păstrează implementarea previzibilă.
+
 \section{Consola super-admin}
 \label{sec:frontend_admin}
 
 Consola administrativă este un build Vue separat, cu propriul router și propriul
 token în \texttt{localStorage}. La autentificare, aplicația verifică răspunsul
 \texttt{/api/auth/login}; dacă utilizatorul nu este super-admin, tokenul nu este
-păstrat și login-ul este refuzat. Store-ul \texttt{admin.store.ts} consumă
-endpointurile \texttt{/api/admin/stats}, \texttt{/api/admin/users} și
-\texttt{/api/admin/studies}. Această separare reduce riscul ca acțiunile globale
-de administrare să fie amestecate cu fluxurile obișnuite de lucru ale unui
-studiu.
+păstrat și login-ul este refuzat. Această separare reduce riscul ca acțiunile
+globale de administrare să fie amestecate cu fluxurile obișnuite de lucru ale
+unui studiu. Toate paginile sunt deliberat \emph{de citire}: mutațiile asupra
+studiilor și seturilor de date rămân în aplicația principală, controlate prin
+RBAC pe studiu.
 
-Decizia de a folosi polling la două secunde este simplă, dar adecvată pentru
-durata așteptată a simulărilor. O soluție bazată pe WebSocket sau Server-Sent
-Events ar reduce numărul de cereri, însă ar introduce stare suplimentară în
-backend. Pentru un API stateless și pentru job-uri care durează de la câteva
-secunde la câteva minute, polling-ul păstrează implementarea previzibilă.
+\textbf{Dashboard.} Pagina inițială afișează cele opt contoare globale
+(\texttt{/api/admin/stats}) și șase distribuții agregate cross-studiu obținute
+din \texttt{/api/admin/breakdown}: simulări pe status, model și limbaj;
+seturi de date și studii pe boală; top zece studii după volumul cumulat de
+înregistrări. Distribuțiile sunt randate ca bare orizontale proporționale, iar
+top-ul de studii are link-uri direct către pagina de detaliu.
+
+\textbf{Utilizatori și studii.} Pagina de utilizatori
+(\texttt{/api/admin/users}) listează toate conturile cu un buton care comută
+flag-ul \texttt{is\_super\_admin} prin \texttt{PATCH
+/api/admin/users/\{userId\}/super-admin}. Pagina de studii
+(\texttt{/api/admin/studies}) listează toate studiile cu un câmp de filtrare
+text și permite navigarea către pagina de detaliu prin click pe rând.
+
+\textbf{Detaliu studiu.} \texttt{StudyDetailPage} reutilizează endpointurile
+\texttt{/api/studies/\{studyId\}/*} (membri, dataseturi, simulări, benchmarks
+agregate), de care super-adminul beneficiază datorită bypass-ului din
+middleware-ul RBAC. Paginile prezintă, în ordine, un antet cu metadatele
+studiului și patru contoare (membri, seturi de date cu volum cumulat, simulări,
+combinații model$\,\times\,$limbaj cu rulări complete), urmate de tabelele
+detaliate. Simulările au badge de status colorat, iar tabelul de benchmarks
+arată wall-time median, percentila 95, CPU median și memorie mediană pentru
+fiecare combinație model--limbaj.
+
+\textbf{Activitate.} Pagina \texttt{/activity} consumă \texttt{/api/admin/recent-simulations}
+și \texttt{/api/admin/recent-datasets} pentru a afișa cele mai recente $N$
+intrări (configurabil între 20 și 200), cross-tenant, cu link-uri către studiul
+corespunzător. Acest feed este util pentru audit operațional, pentru
+identificarea rapidă a simulărilor blocate în starea \texttt{running} și pentru
+verificarea încărcărilor de seturi de date proaspete.
 
 \section{Validare funcțională}
 \label{sec:testare_functionala}

@@ -60,6 +60,43 @@ SIDARTHE & $S_0$, $I_0$, $D_0=A_0=R_0=T_0=0$, $H_0$, $E_0=0$ & model clinic cu d
 \end{tabularx}
 \end{table*}
 
+Pentru ca benchmarkurile să fie evaluate pe regimuri dinamice variate, sistemul
+suportă trei familii de seturi de date care produc toate aceeași schemă CSV
+(\texttt{date, region, infected, population, recovered, susceptible}).
+
+\textbf{OWID COVID-19 extins.} Lista de țări procesate prin
+\texttt{preprocess\_owid.py} a fost extinsă de la nucleul european la 64 de țări
+de pe toate continentele (Europa, America, Asia, Africa, Oceania), pentru a
+acoperi scări de populație de la $\sim$5~M (Noua Zeelandă) la $\sim$1.4~B
+(China, India) și tipare epidemice diferite (suprimare timpurie, valuri masive
+necontrolate, ieșire abruptă din zero-COVID).
+
+\textbf{OWID mpox.} O a doua boală reală este integrată prin
+\texttt{preprocess\_mpox.py}, care consumă setul oficial OWID mpox
+\cite{owid_covid}. Spre deosebire de COVID, fișierul brut nu raportează
+populația direct; aceasta este dedusă ca mediană a raportului
+$\text{total\_cases}/\text{total\_cases\_per\_million}$ peste rândurile cu
+raportare nenulă. Fereastra infecțioasă folosită este de 28 de zile (perioada
+infecțioasă a mpox este semnificativ mai lungă decât la COVID), iar țările sunt
+selectate automat după un prag minim de cazuri totale, rezultând 27 de țări care
+acoperă atât focarul european/american din 2022, cât și focarul din Africa
+Centrală din 2024.
+
+\textbf{Generator sintetic de stres.} Pentru a împinge limitele sistemului ---
+în special antrenarea LSTM pe serii lungi și volumul de inserări în baza de
+date --- scriptul \texttt{generate\_synthetic.py} simulează înainte un model
+SIRS cu forțare sezonieră:
+\begin{equation}
+\beta(t) = \beta_0 \left(1 + a \sin\!\left(2\pi t / T\right)\right),
+\end{equation}
+producând valuri recurente pe orizonturi configurabile (implicit 20\,000 de
+zile, $\sim$55 de ani simulați). Generatorul oferă trei profile predefinite
+(\texttt{multiwave}, \texttt{sharp}, \texttt{slow}) cu valori distincte pentru
+$\Rzero$ de bază, durata infecțioasă și amplitudinea sezonieră, iar conservarea
+$S+I+R=N$ este impusă exact după rotunjire. Logica comună de derivare,
+validare și scriere CSV este extrasă în modulul \texttt{epi\_common.py}, partajat
+între cele trei surse.
+
 \section{Contractul comun de simulare}
 \label{sec:contract_simulare}
 

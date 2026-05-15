@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  14 MAY 2026 11:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  15 MAY 2026 11:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1499,9 +1499,7 @@ Underfull \hbox (badness 4713) in paragraph at lines 794--794
 
 
 
-[10
-
-]
+[10]
 \bbl@ensure@romanian {Capitolul} 3.
 
 
@@ -1560,30 +1558,30 @@ Underfull \hbox (badness 1852) in paragraph at lines 142--142
 
 
 [16]
-Underfull \hbox (badness 1394) in paragraph at lines 243--253
+Underfull \hbox (badness 1394) in paragraph at lines 251--261
 \T1/cmr/m/n/10 (+20) sunt: \T1/cmtt/m/n/10 users\T1/cmr/m/n/10 (+20) , \T1/cmtt
 /m/n/10 studies\T1/cmr/m/n/10 (+20) , \T1/cmtt/m/n/10 study_members\T1/cmr/m/n/
 10 (+20) , \T1/cmtt/m/n/10 datasets\T1/cmr/m/n/10 (+20) ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 243--253
+Underfull \hbox (badness 10000) in paragraph at lines 251--261
 \T1/cmtt/m/n/10 epidemiological_records\T1/cmr/m/n/10 (+20) , \T1/cmtt/m/n/10 s
 imulation_runs\T1/cmr/m/n/10 (+20) ,
  []
 
 
-Underfull \hbox (badness 6332) in paragraph at lines 243--253
+Underfull \hbox (badness 6332) in paragraph at lines 251--261
 \T1/cmtt/m/n/10 simulation_results []\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 ben
 chmarks\T1/cmr/m/n/10 (+20) . Re-sur-sele
  []
 
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <7> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 363.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 371.
 
 
 
-Underfull \hbox (badness 1360) in paragraph at lines 444--453
+Underfull \hbox (badness 1360) in paragraph at lines 452--461
 []\T1/cmr/m/n/10 (+20) Tabelul \T1/cmtt/m/n/10 epidemiological_records \T1/cmr/
 m/n/10 (+20) este pro-iec-tat
  []
@@ -1593,23 +1591,25 @@ m/n/10 (+20) este pro-iec-tat
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
-Overfull \hbox (1.51257pt too wide) in paragraph at lines 466--467
-[][][][] 
- []
-
-
-Overfull \hbox (1.51257pt too wide) in paragraph at lines 467--468
-[][][][] 
- []
-
-
-Overfull \hbox (1.51257pt too wide) in paragraph at lines 468--469
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 474--475
 [][][][] 
  []
 
 
 
 [17]
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 475--476
+[][][][] 
+ []
+
+
+Overfull \hbox (1.51257pt too wide) in paragraph at lines 476--477
+[][][][] 
+ []
+
+
+
+
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
@@ -1618,11 +1618,9 @@ File: lstlang1.sty 2024/09/23 1.10c listings language file
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
-
-
 
 [18]
-Underfull \hbox (badness 2478) in paragraph at lines 525--539
+Underfull \hbox (badness 2478) in paragraph at lines 533--547
 \T1/cmr/m/n/10 (+20) Autentificarea se ba-zeaz  pe JSON Web To-kens
  []
 
@@ -1631,7 +1629,7 @@ Underfull \hbox (badness 2478) in paragraph at lines 525--539
 
 
 [19]
-Underfull \hbox (badness 2875) in paragraph at lines 636--648
+Underfull \hbox (badness 2875) in paragraph at lines 647--659
 \T1/cmr/m/n/10 (+20) exe-c-u-tor (\T1/cmtt/m/n/10 epimodel:jobs:r\T1/cmr/m/n/10
  (+20) , \T1/cmtt/m/n/10 epimodel:jobs:julia\T1/cmr/m/n/10 (+20) ,
  []
@@ -1641,145 +1639,145 @@ Underfull \hbox (badness 2875) in paragraph at lines 636--648
 
 
 [20]
-Underfull \hbox (badness 3209) in paragraph at lines 704--712
+Underfull \hbox (badness 3209) in paragraph at lines 717--725
 \T1/cmr/m/n/10 (+20) la API []i îl sto-cheaz  în \T1/cmtt/m/n/10 localStorage \
 T1/cmr/m/n/10 (+20) pen-tru
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 721--730
+Underfull \hbox (badness 10000) in paragraph at lines 734--743
 []\T1/cmr/m/n/10 (+20) Fluxul de si-mu-lare în-cepe din pa-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 721--730
+Underfull \hbox (badness 10000) in paragraph at lines 734--743
 \T1/cmr/m/n/10 (+20) gina \T1/cmtt/m/n/10 NewSimulationPage\T1/cmr/m/n/10 (+20)
  , care ape-leaz 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 721--730
+Underfull \hbox (badness 10000) in paragraph at lines 734--743
 \T1/cmtt/m/n/10 simulationsStore.create() \T1/cmr/m/n/10 (+20) cu pa-ra-me-trii
  for-
  []
 
 
-Underfull \hbox (badness 1874) in paragraph at lines 736--742
+
+
+Underfull \hbox (badness 1874) in paragraph at lines 749--760
 \T1/cmr/m/n/10 (+20) La lo-gin, aplica[]ia re-fuz  uti-li-za-to-rii care nu au
  []
 
 
 
-
-
 [21]
-Underfull \hbox (badness 1117) in paragraph at lines 902--909
+Underfull \hbox (badness 1117) in paragraph at lines 920--927
 []\T1/cmr/m/n/10 (+20) Fi[]ierul \T1/cmtt/m/n/10 10-yugabyte-values.yaml \T1/cm
 r/m/n/10 (+20) de-clar  fac-tor
  []
 
 
-Underfull \hbox (badness 1845) in paragraph at lines 902--909
+Underfull \hbox (badness 1845) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) de re-pli-care 3 pen-tru am-bele com-po-nente, si-zing
  []
 
 
-Underfull \hbox (badness 1655) in paragraph at lines 902--909
+Underfull \hbox (badness 1655) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) adap-tat wor-ke-ri-lor (1 GiB requ-est / 1.5 GiB li-
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 902--909
+Underfull \hbox (badness 1859) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) mit pen-tru \T1/cmtt/m/n/10 yb-master\T1/cmr/m/n/10 (+20) 
 ; 2 GiB requ-est / 3 GiB
  []
 
 
-Underfull \hbox (badness 2591) in paragraph at lines 902--909
+Underfull \hbox (badness 2591) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) li-mit pen-tru \T1/cmtt/m/n/10 yb-tserver\T1/cmr/m/n/10 (+
 20) ), un sin-gur vo-lum per-
  []
 
 
-Underfull \hbox (badness 1888) in paragraph at lines 902--909
+Underfull \hbox (badness 1888) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) sis-tent per re-plic  (5 GiB mas-ter, 10 GiB tser-
  []
 
 
-Underfull \hbox (badness 5622) in paragraph at lines 902--909
+Underfull \hbox (badness 5622) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) ver), []i gflag-uri spe-ci-fice pen-tru clus-tere mici
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 902--909
+Underfull \hbox (badness 10000) in paragraph at lines 920--927
 \T1/cmr/m/n/10 (+20) (\T1/cmtt/m/n/10 default_memory_limit_to_ram_ratio: 0.6\T1
 /cmr/m/n/10 (+20) ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 902--909
+Underfull \hbox (badness 10000) in paragraph at lines 920--927
 \T1/cmtt/m/n/10 ysql_num_shards_per_tserver: 2\T1/cmr/m/n/10 (+20) ). Chart-ul
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--920
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 []\T1/cmr/m/n/10 (+20) dou  \T1/cmtt/m/n/10 Service\T1/cmr/m/n/10 (+20) -uri he
 a-d-less (\T1/cmtt/m/n/10 yb-masters
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--920
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 []\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 yb-tservers\T1/cmr/m/n/10 (+20) ) pen-
 tru des-co-pe-ri-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--920
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 \T1/cmr/m/n/10 (+20) rea peer-urilor prin DNS in-tern sta-bil
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--920
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 \T1/cmr/m/n/10 (+20) (de exem-plu \T1/cmtt/m/n/10 yb-master-0.yb-masters.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--920
+Underfull \hbox (badness 10000) in paragraph at lines 933--938
 \T1/cmtt/m/n/10 epimodel.svc.cluster.local\T1/cmr/m/n/10 (+20) ), ne-ce-sar pro
 -
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 920--923
+Underfull \hbox (badness 10000) in paragraph at lines 938--941
 []\T1/cmr/m/n/10 (+20) un \T1/cmtt/m/n/10 Service ClusterIP \T1/cmr/m/n/10 (+20
 ) nu-mit
  []
 
 
-Underfull \hbox (badness 2460) in paragraph at lines 920--923
+Underfull \hbox (badness 2460) in paragraph at lines 938--941
 \T1/cmtt/m/n/10 yb-tserver-service \T1/cmr/m/n/10 (+20) pe por-tul 5433 (YSQL),
 
  []
 
 
-Underfull \hbox (badness 3525) in paragraph at lines 920--923
+Underfull \hbox (badness 3525) in paragraph at lines 938--941
 \T1/cmr/m/n/10 (+20) fo-lo-sit de API-ul Go []i de ru-n-nere pen-tru
  []
 
 
 
-
-Underfull \hbox (badness 1286) in paragraph at lines 937--948
+[22{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
+-super/cm-super-ts1.enc}]
+Underfull \hbox (badness 1286) in paragraph at lines 955--966
 \T1/cmr/m/it/10 (+20) bu-ild\T1/cmr/m/n/10 (+20) : pri-mul stage com-pi-leaz  b
 i-na-rul Go sta-tic
  []
 
 
 
-[22{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/cm
--super/cm-super-ts1.enc}]) (./chapters/05_implementare_modele.tex
-
-
+) (./chapters/05_implementare_modele.tex
 
 [23]
 \bbl@ensure@romanian {Capitolul} 5.
@@ -1796,14 +1794,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--8
 
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--114
-[]\T1/cmr/m/n/10 (+20) Coada Re-dis a fost re-de-nu-mit  din
+Underfull \hbox (badness 1540) in paragraph at lines 63--66
+\T1/cmr/m/n/10 (+20) gi-muri di-na-mice va-ri-ate, sis-te-mul su-port  trei fa-
+
  []
 
 
-Underfull \hbox (badness 3590) in paragraph at lines 96--114
-\T1/cmtt/m/n/10 epimodel:jobs:julia \T1/cmr/m/n/10 (+20) sau \T1/cmtt/m/n/10 ep
-imodel:jobs:python\T1/cmr/m/n/10 (+20) );
+Underfull \hbox (badness 1038) in paragraph at lines 63--66
+\T1/cmr/m/n/10 (+20) mi-lii de se-turi de date care pro-duc toate aceea[]i
+ []
+
+
+Underfull \hbox (badness 1371) in paragraph at lines 74--84
+\T1/cmr/m/n/10 (+20) tul ofi-cial OWID mpox [[]]. Spre de-o-se-bire de
+ []
+
+
+Underfull \hbox (badness 1769) in paragraph at lines 74--84
+\T1/cmr/m/n/10 (+20) CO-VID, fi[]ierul brut nu ra-por-teaz  popula[]ia di-
  []
 
 
@@ -1811,27 +1819,38 @@ imodel:jobs:python\T1/cmr/m/n/10 (+20) );
 [24
 
 ]
+Underfull \hbox (badness 10000) in paragraph at lines 133--151
+[]\T1/cmr/m/n/10 (+20) Coada Re-dis a fost re-de-nu-mit  din
+ []
+
+
+Underfull \hbox (badness 3590) in paragraph at lines 133--151
+\T1/cmtt/m/n/10 epimodel:jobs:julia \T1/cmr/m/n/10 (+20) sau \T1/cmtt/m/n/10 ep
+imodel:jobs:python\T1/cmr/m/n/10 (+20) );
+ []
+
+
 
 
 
 [25]
-Underfull \hbox (badness 1383) in paragraph at lines 188--198
+Underfull \hbox (badness 1383) in paragraph at lines 225--235
 \T1/cmr/m/n/10 (+20) uti-li-za-to-rul, stu-diul, dataset-ul, mo-de-lul, lim-ba-
 jul,
  []
 
+
+
 ) (./chapters/06_predictie_lstm.tex
-Underfull \hbox (badness 1077) in paragraph at lines 223--4
+Underfull \hbox (badness 1077) in paragraph at lines 260--4
 \T1/cmr/m/n/10 (+20) pul wall-clock, tim-pul CPU []i vâr-ful de me-mo-rie
  []
 
 
-Underfull \hbox (badness 4819) in paragraph at lines 223--4
+Underfull \hbox (badness 4819) in paragraph at lines 260--4
 \T1/cmtt/m/n/10 time.process_time() []\T1/cmr/m/n/10 (+20) i \T1/cmtt/m/n/10 re
 source.getrusage\T1/cmr/m/n/10 (+20) ; R
  []
-
-
 
 
 
@@ -1952,38 +1971,329 @@ Underfull \hbox (badness 1990) in paragraph at lines 186--191
 
 
 
-Underfull \hbox (badness 1024) in paragraph at lines 87--87
-[]|\T1/cmr/m/n/10 (+20) prima ru-lare
+Package tabularx Warning: X Columns too narrow (table too wide)
+(tabularx)                 on input line 87.
+
+
+Overfull \hbox (40.49052pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/bx/n/10 (-20) Observa[]ii| 
+ []
+
+
+Overfull \hbox (10.68628pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (-20) dou 
+ []
+
+
+Overfull \hbox (10.68628pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) pân 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
-\T1/cmr/m/n/10 (+20) se-pa-rat  de
+\T1/cmr/m/n/10 (+20) la
+ []
+
+
+Overfull \hbox (3.88461pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) opt
+ []
+
+
+Overfull \hbox (9.0167pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) com-
+ []
+
+
+Overfull \hbox (5.77805pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) par-
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
-[]|\T1/cmr/m/n/10 (+20) acela[]i pas
+\T1/cmr/m/n/10 (+20) ti-
+ []
+
+
+Overfull \hbox (15.85168pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) mente| 
+ []
+
+
+Overfull \hbox (15.068pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (-20) prima
+ []
+
+
+Overfull \hbox (0.87924pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ru-
+ []
+
+
+Overfull \hbox (5.8147pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) lare
+ []
+
+
+Overfull \hbox (10.56242pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) Julia
+ []
+
+
+Overfull \hbox (3.6008pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) tre-
+ []
+
+
+Overfull \hbox (7.96472pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) buie
+ []
+
+
+Overfull \hbox (1.94064pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) pa-
+ []
+
+
+Overfull \hbox (7.44763pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) rat 
+ []
+
+
+Overfull \hbox (0.87924pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ru-
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
-\T1/cmr/m/n/10 (+20) toate mo-de-
+\T1/cmr/m/n/10 (+20) l -
+ []
+
+
+Overfull \hbox (3.63745pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) rile
+ []
+
+
+Overfull \hbox (11.7749pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) calde| 
+ []
+
+
+Overfull \hbox (24.37572pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (-20) singurul
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
-[]|\T1/cmr/m/n/10 (+20) raportare
+\T1/cmr/m/n/10 (+20) le-
+ []
+
+
+Overfull \hbox (2.6277pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ver
+ []
+
+
+Overfull \hbox (5.8147pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) real
+ []
+
+
+Overfull \hbox (7.11716pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) pen-
+ []
+
+
+Overfull \hbox (3.09314pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) tru
+ []
+
+
+Overfull \hbox (0.87924pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ru-
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 87--87
-[]|\T1/cmr/m/n/10 (+20) m soar 
+\T1/cmr/m/n/10 (+20) l -
  []
 
 
-Underfull \hbox (badness 6001) in paragraph at lines 142--148
-\T1/cmr/m/n/10 (+20) În mo-de-lele com-par-ti-men-tale agre-gate, m -ri-mea
+Overfull \hbox (3.63745pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) rile
+ []
+
+
+Overfull \hbox (13.1068pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ODE;
+ []
+
+
+Overfull \hbox (5.20651pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) lun-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (+20) gi-
+ []
+
+
+Overfull \hbox (7.42041pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) mea
+ []
+
+
+Overfull \hbox (0.85202pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) tu-
+ []
+
+
+Overfull \hbox (0.88867pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) lui
+ []
+
+
+Overfull \hbox (8.50903pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) date
+ []
+
+
+Overfull \hbox (0.61096pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) nu
+ []
+
+
+Overfull \hbox (8.20023pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) afec-
+ []
+
+
+Overfull \hbox (12.31921pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) teaz 
+ []
+
+
+Overfull \hbox (2.48495pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) du-
+ []
+
+
+Overfull \hbox (7.44763pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) rata
+ []
+
+
+Overfull \hbox (3.0837pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) sol-
+ []
+
+
+Overfull \hbox (0.58653pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ve-
+ []
+
+
+Overfull \hbox (0.87924pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) ru-
+ []
+
+
+Overfull \hbox (0.88867pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) lui| 
+ []
+
+
+Overfull \hbox (30.09656pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (-20) raportare
+ []
+
+
+Overfull \hbox (7.44763pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) prin
+ []
+
+
+Overfull \hbox (4.11789pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) me-
+ []
+
+
+Overfull \hbox (13.40784pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) dian 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]\T1/cmr/m/n/10 (+20) i
+ []
+
+
+Overfull \hbox (8.37296pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) IQR| 
+ []
+
+
+Overfull \hbox (25.46434pt too wide) in paragraph at lines 87--87
+[]|\T1/cmr/m/n/10 (-20) m soar 
+ []
+
+
+Overfull \hbox (15.82835pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) coad ,
+ []
+
+
+Overfull \hbox (4.4267pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) DB
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]\T1/cmr/m/n/10 (+20) i
+ []
+
+
+Overfull \hbox (9.33772pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) sche-
+ []
+
+
+Overfull \hbox (16.6737pt too wide) in paragraph at lines 87--87
+\T1/cmr/m/n/10 (-20) duling| 
+ []
+
+
+Overfull \hbox (50.14503pt too wide) in alignment at lines 87--87
+[][][][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 51.59349pt on input line 88.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--118
+\T1/cmr/m/n/10 (+20) tul \T1/cmtt/m/n/10 scripts/run_benchmark.py\T1/cmr/m/n/10
+ (+20) , care prime[]te
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--118
+\T1/cmr/m/n/10 (+20) (\T1/cmtt/m/n/10 POST /api/studies/{id}/simulations\T1/cmr
+/m/n/10 (+20) ), a[]teapt 
+ []
+
+
+Underfull \hbox (badness 2035) in paragraph at lines 105--118
+\T1/cmr/m/n/10 (+20) pân  la sta-tu-sul \T1/cmtt/m/n/10 completed\T1/cmr/m/n/10
+ (+20) ), care in-clude coada
+ []
+
+
+Underfull \hbox (badness 1721) in paragraph at lines 105--118
+\T1/cmr/m/n/10 (+20) per cam-pa-nie, iar me-tri-cile in-terne ale sol-ve-ru-lui
+
  []
 
 
@@ -1991,20 +2301,19 @@ Underfull \hbox (badness 6001) in paragraph at lines 142--148
 [35
 
 ]
+Underfull \hbox (badness 6001) in paragraph at lines 166--172
+\T1/cmr/m/n/10 (+20) În mo-de-lele com-par-ti-men-tale agre-gate, m -ri-mea
+ []
+
+
 
 
 
 [36]
 
+) (./chapters/09_aplicatia_web.tex
 
-
-[37]) (./chapters/09_aplicatia_web.tex
-
-
-
-[38
-
-]
+[37] [38] [39]
 \bbl@ensure@romanian {Capitolul} 9.
 
 Underfull \hbox (badness 10000) in paragraph at lines 30--34
@@ -2032,7 +2341,7 @@ Underfull \hbox (badness 2035) in paragraph at lines 53--57
 
 
 
-[39
+[40
 
 ]
 Underfull \hbox (badness 4416) in paragraph at lines 110--124
@@ -2040,50 +2349,46 @@ Underfull \hbox (badness 4416) in paragraph at lines 110--124
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 128--136
-\T1/cmr/m/n/10 (+20) Consola ad-mi-nis-tra-tiv  este un bu-ild Vue se-
+
+
+Underfull \hbox (badness 2790) in paragraph at lines 151--157
+[]\T1/cmr/bx/n/10 (+20) Utilizatori []i stu-dii. \T1/cmr/m/n/10 (+20) Pa-gina d
+e uti-li-za-tori
  []
 
 
-Underfull \hbox (badness 4819) in paragraph at lines 128--136
-\T1/cmr/m/n/10 (+20) pa-rat, cu pro-priul ro-u-ter []i pro-priul to-ken în
+Underfull \hbox (badness 10000) in paragraph at lines 168--174
+[]\T1/cmr/bx/n/10 (+20) Activitate. \T1/cmr/m/n/10 (+20) Pa-gina \T1/cmtt/m/n/1
+0 /activity \T1/cmr/m/n/10 (+20) con-
  []
 
 
-Underfull \hbox (badness 1087) in paragraph at lines 128--136
-\T1/cmtt/m/n/10 localStorage\T1/cmr/m/n/10 (+20) . La au-ten-ti-fi-care, aplica
-[]ia ve-ri-fic 
+Underfull \hbox (badness 10000) in paragraph at lines 168--174
+\T1/cmr/m/n/10 (+20) sum  \T1/cmtt/m/n/10 /api/admin/recent-simulations []\T1/c
+mr/m/n/10 (+20) i
  []
 
 
-Underfull \hbox (badness 3386) in paragraph at lines 128--136
-\T1/cmr/m/n/10 (+20) r s-pun-sul \T1/cmtt/m/n/10 /api/auth/login\T1/cmr/m/n/10 
-(+20) ; dac  uti-li-za-to-rul nu
+Underfull \hbox (badness 3826) in paragraph at lines 168--174
+\T1/cmtt/m/n/10 /api/admin/recent-datasets \T1/cmr/m/n/10 (+20) pen-tru a afi[]
+a cele
  []
-
-
-Underfull \hbox (badness 1062) in paragraph at lines 128--136
-\T1/cmr/m/n/10 (+20) po-in-tu-rile \T1/cmtt/m/n/10 /api/admin/stats\T1/cmr/m/n/
-10 (+20) , \T1/cmtt/m/n/10 /api/admin/users []\T1/cmr/m/n/10 (+20) i
- []
-
-
 
 ) (./chapters/10_concluzii.tex
 
-[40]
+[41]
 \bbl@ensure@romanian {Capitolul} 10.
 
 
 
 
-[41
+[42
 
 ]
 
 )
 
-[42] (./main.bbl
+[43] (./main.bbl
 Underfull \hbox (badness 1226) in paragraph at lines 27--32
 \T1/cmr/m/n/10 (+20) Pa-tri-zio Co-la-neri, Ales-san-dro Di Fi-li-ppo, An-
  []
@@ -2097,14 +2402,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 104--107
 
 
 
-[43
+[44
 
 
 ])
 
 
 
-[44
+[45
 
 ] (./appendices/A_cod_r.tex
 \bbl@ensure@romanian {Anexa} A.
@@ -2122,54 +2427,52 @@ tlang3.sty
 File: lstlang3.sty 2024/09/23 1.10c listings language file
 ) (../code/runners/r/runner.R
 
-[45
+[46
 
 
 ]
-
-[46]
 
 [47]
 
-[48])) (./appendices/B_cod_julia.tex
+[48]
 
-[49]
+[49])) (./appendices/B_cod_julia.tex
+
+[50]
 \bbl@ensure@romanian {Anexa} B.
 (../code/runners/julia/runner.jl
 
-[50
+[51
 
 ]
-
-[51]
 
 [52]
 
-[53])) (./appendices/C_cod_python.tex
+[53]
 
-[54]
+[54])) (./appendices/C_cod_python.tex
+
+[55]
 \bbl@ensure@romanian {Anexa} C.
 (../code/runners/python/runner.py
 
-[55
+[56
 
 ]
-
-[56]
 
 [57]
 
-[58])) (./appendices/D_cod_lstm.tex
+[58]
 
-[59]
+[59])) (./appendices/D_cod_lstm.tex
+
+[60]
 \bbl@ensure@romanian {Anexa} D.
 (../code/runners/lstm/runner.py
 
-[60
+[61
 
 ]
-
-[61]
 
 [62]
 
@@ -2179,30 +2482,32 @@ File: lstlang3.sty 2024/09/23 1.10c listings language file
 
 [65]
 
-[66])) (./appendices/E_schema_bd.tex
+[66]
 
-[67]
+[67])) (./appendices/E_schema_bd.tex
+
+[68]
 \bbl@ensure@romanian {Anexa} E.
 (../code/db/migrations/000001_create_users.up.sql)
 (../code/db/migrations/000002_create_datasets.up.sql)
 (../code/db/migrations/000003_create_epidemiological_records.up.sql)
 
-[68
+[69
 
 ] (../code/db/migrations/000004_create_simulation_runs.up.sql)
 (../code/db/migrations/000005_create_simulation_results.up.sql)
 (../code/db/migrations/000006_create_benchmarks.up.sql)
 (../code/db/migrations/000007_create_studies.up.sql
 
-[69]) (../code/db/migrations/000008_create_study_members.up.sql)
+[70]) (../code/db/migrations/000008_create_study_members.up.sql)
 (../code/db/migrations/000009_add_super_admin.up.sql)
 (../code/db/migrations/000010_add_study_id_to_resources.up.sql)
 (../code/db/migrations/000011_expand_model_type_constraint.up.sql
 
-[70]) (../code/db/migrations/000012_add_lstm_model.up.sql))
+[71]) (../code/db/migrations/000012_add_lstm_model.up.sql))
 (./appendices/F_kubernetes.tex
 
-[71]
+[72]
 \bbl@ensure@romanian {Anexa} F.
 
 Underfull \hbox (badness 10000) in paragraph at lines 27--28
@@ -2244,54 +2549,54 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
 
 
-[72
+[73
 
 ] (../code/k8s/00-namespace.yaml) (../code/k8s/10-yugabyte-values.yaml
 
-[73]
+[74]
 
-[74]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
+[75]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
 
 
-[75]
+[76]
 
-[76]) (../code/k8s/30-migrate-job.yaml
+[77]) (../code/k8s/30-migrate-job.yaml
 
-[77]) (../code/k8s/40-api.yaml
+[78]) (../code/k8s/40-api.yaml
 
-[78]
+[79]
 
-[79]) (../code/k8s/52-runner-julia.yaml
+[80]) (../code/k8s/52-runner-julia.yaml
 
-[80]) (../code/k8s/53-runner-lstm.yaml)
+[81]) (../code/k8s/53-runner-lstm.yaml)
 
-[81] (../code/k8s/61-frontend-admin.yaml
+[82] (../code/k8s/61-frontend-admin.yaml
 
-[82]) (../code/k8s/70-ingress.yaml
+[83]) (../code/k8s/70-ingress.yaml
 
-[83]) (../code/docker-compose.yml
+[84]) (../code/docker-compose.yml
 
-[84]
+[85]
 
-[85])) (./appendices/G_api_rest.tex
+[86])) (./appendices/G_api_rest.tex
 
-[86]
+[87]
 \bbl@ensure@romanian {Anexa} G.
 (../code/api/internal/api/router/router.go
 
-[87
+[88
 
 ]
 
-[88]) (../code/api/internal/api/middleware/rbac.go
+[89]) (../code/api/internal/api/middleware/rbac.go
 
-[89]
+[90]
 
-[90]) (../code/api/internal/api/handlers/response.go
+[91]) (../code/api/internal/api/handlers/response.go
 
-[91]))
+[92]))
 
-[92] (./main.aux)
+[93] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -2300,11 +2605,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 5DA2E33487AAF654A78C50F51E456BDC;29584.
  ) 
 Here is how much of TeX's memory you used:
- 50148 strings out of 473190
- 1075133 string characters out of 5704334
- 2490244 words of memory out of 5000000
- 68892 multiletter control sequences out of 15000+600000
- 623161 words of font info for 414 fonts, out of 8000000 for 9000
+ 50162 strings out of 473190
+ 1075347 string characters out of 5704334
+ 2491388 words of memory out of 5000000
+ 68897 multiletter control sequences out of 15000+600000
+ 623224 words of font info for 415 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,97p,1001b,3405s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
@@ -2360,10 +2665,10 @@ w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti10
 blic/cm-super/sftt0800.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
 -dist/fonts/type1/public/cm-super/sftt0900.pfb></opt/homebrew/Cellar/texlive/20
 250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (101 pages, 1419815 bytes).
+Output written on main.pdf (102 pages, 1430846 bytes).
 PDF statistics:
- 5049 PDF objects out of 5155 (max. 8388607)
- 4812 compressed objects within 49 object streams
- 3141 named destinations out of 3580 (max. 500000)
+ 5061 PDF objects out of 5155 (max. 8388607)
+ 4823 compressed objects within 49 object streams
+ 3148 named destinations out of 3580 (max. 500000)
  102509 words of extra memory for PDF output out of 106986 (max. 10000000)
 
