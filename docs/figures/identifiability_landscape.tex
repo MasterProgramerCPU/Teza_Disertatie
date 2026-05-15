@@ -1,0 +1,58 @@
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=\columnwidth,
+    height=7.5cm,
+    xlabel={$\beta$ (zi$^{-1}$)},
+    ylabel={$\gamma$ (zi$^{-1}$)},
+    xmin=0.05, xmax=0.6,
+    ymin=0.05, ymax=0.40,
+    colormap/viridis,
+    colorbar,
+    colorbar style={
+        title={$\log_{10}\mathrm{MSE}$},
+        title style={font=\footnotesize},
+        ticklabel style={font=\footnotesize},
+    },
+    point meta min=6.9,
+    point meta max=10,
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+]
+% peisajul de pierdere
+\addplot[
+    scatter, only marks, mark=square*, mark size=2.7pt,
+    scatter src=explicit,
+] table[col sep=comma, x=beta, y=gamma, meta=log_mse]
+    {data/identifiability_grid_sir.csv};
+
+% optimul liber
+\addplot[mark=*, mark size=4pt, color=red, mark options={fill=white, line width=1pt}]
+    coordinates {(0.3677, 0.3346)};
+\node[font=\scriptsize, anchor=south, color=red, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+    at (axis cs:0.3677, 0.3346) {liber};
+
+% optimul constrans (gamma=1/14)
+\addplot[mark=*, mark size=4pt, color=red!70!black, mark options={fill=white, line width=1pt}]
+    coordinates {(0.1039, 0.0714)};
+\node[font=\scriptsize, anchor=south, color=red!70!black, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+    at (axis cs:0.1039, 0.0714) {constrans};
+
+% linia gamma=1/14
+\draw[dashed, red!50, thick] (axis cs:0.05, 0.0714) -- (axis cs:0.6, 0.0714);
+\node[font=\scriptsize, anchor=west, color=red!70!black]
+    at (axis cs:0.55, 0.0714) {$\gamma = 1/14$};
+
+\end{axis}
+\end{tikzpicture}
+\caption{Peisajul de pierdere $\log_{10}\mathrm{MSE}(\beta, \gamma)$ pentru
+modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia
+libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$;
+linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de
+pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe
+combinatii $(\beta, \gamma)$ produc o potrivire similara cu datele observate
+din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru
+SIR cu o singura serie observata.}
+\label{fig:identifiability_landscape}
+\end{figure}

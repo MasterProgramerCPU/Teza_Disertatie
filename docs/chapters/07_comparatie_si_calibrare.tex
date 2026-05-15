@@ -195,10 +195,51 @@ utile:
     \item validarea pe o fereastră temporală nefolosită la optimizare.
 \end{itemize}
 
-\testtodo{Pentru ca această secțiune să conțină rezultate, trebuie implementată
-sau rulată o procedură de optimizare pentru fiecare model. Rezultatele minime de
-raportat sunt vectorul de parametri calibrați, valoarea funcției de pierdere,
-MAE/RMSE pe train și test, numărul de iterații și timpul total de calibrare.}
+\subsection{Aplicare pe Romania, valul 1 din 2020}
+\label{subsec:calibrare_romania}
+
+Procedura este aplicată concret modelului SIR pe seria de cazuri active din
+Romania (sursa OWID, vezi capitolul~\ref{ch:implementare}), pe valul epidemic
+de primăvară-vară 2020. Implementarea este în
+\texttt{scripts/calibrate.py} și folosește
+\texttt{scipy.optimize.minimize} cu metoda Nelder--Mead, restartată din opt
+puncte inițiale aleatoare pentru a reduce sensibilitatea la condiția
+inițială. Fereastra este împărțită cronologic: $15$~martie -- $15$~august 2020
+($154$ zile) pentru antrenare, $16$~august -- $15$~septembrie 2020 ($31$ zile)
+pentru test. Funcția de pierdere este eroarea pătratică medie pe seria de
+cazuri active, iar operatorul de observație este $g_{\text{SIR}}(\mathbf{x})=I$.
+
+Calibrarea este executată în două variante:
+\begin{itemize}
+    \item \emph{liber}: optimizare simultană a $(\beta, \gamma)$ în
+    $\Omega = (0, 5] \times (0, 5]$;
+    \item \emph{constrans}: $\gamma$ fixat la $1/14$ zi$^{-1}$, valoarea de
+    referință din literatura clinică pentru COVID-19 (durata medie a perioadei
+    infecțioase $\sim 14$ zile), iar optimizarea se face doar pe $\beta$.
+\end{itemize}
+Comparația este prezentată în Tabelul~\ref{tab:calibration_results} și
+Figura~\ref{fig:calibration_sir_fit}.
+
+\input{tables/calibration_results}
+\input{figures/calibration_sir_fit}
+
+Rezultatele evidențiază două aspecte caracteristice acestei clase de probleme.
+În primul rând, eroarea pe antrenare este aproape identică între cele două
+scenarii (MAE $\approx 1\,600$ cazuri pentru ambele), deși parametrii estimați
+diferă substanțial: $\hat\gamma_{\text{liber}} = 0{,}335$ corespunde unei
+durate infecțioase medii de $3$ zile, valoare care nu se susține clinic
+pentru COVID-19. Constrângerea $\gamma = 1/14$ produce un $\hat\beta$ de
+$\sim 3{,}5$ ori mai mic și un $\hat{\mathcal{R}}_0$ de $1{,}45$, mai apropiat
+de intervalul de literatură $2$--$3$ pentru tulpina originală, dar tot sub
+această limită din cauza datelor agregate ale unei singure regiuni intr-o
+singură fereastră.
+
+În al doilea rând, eroarea pe fereastra de test creste de aproximativ un
+ordin de mărime fata de antrenare ($13\,031$ cazuri pentru fitul liber,
+$16\,727$ pentru cel constrans). Modelul SIR cu coeficienti constanti nu poate
+extrapola al doilea val epidemic, care apare în septembrie-octombrie 2020 cu
+$\beta$ efectiv mai mare decât în vară. Aceasta este o limitare structurală a
+SIR clasic, nu o problemă de calibrare.
 
 \begin{algorithm}[t]
 \caption{Calibrarea unui model compartimental pe date observate}
@@ -237,10 +278,28 @@ acest lucru trebuie declarat explicit. Rolul calibrării nu este să ascundă
 incertitudinea, ci să arate ce ipoteze sunt necesare pentru a obține o potrivire
 numerică.
 
-\testtodo{Afirmațiile despre identificabilitate trebuie susținute prin calibrări
-repetate, pornind din valori inițiale diferite ale parametrilor. Dacă erori
-similare produc parametri foarte diferiți, rezultatul trebuie raportat ca
-instabilitate a calibrării, nu ca estimare epidemiologică robustă.}
+\subsection{Vizualizarea identifiabilitatii practice pentru SIR}
+\label{subsec:identif_landscape}
+
+Pentru a face explicit acest fenomen, peisajul de pierdere
+$\mathrm{MSE}(\beta, \gamma)$ a fost calculat pe o grilă $56 \times 36$ în
+domeniul $\beta \in [0{,}05, 0{,}60]$, $\gamma \in [0{,}05, 0{,}40]$, pentru
+fereastra de antrenare de mai sus
+(Figura~\ref{fig:identifiability_landscape}). Reprezentarea în logaritm
+relevă o vale alungită, aproape liniară în planul $(\beta, \gamma)$:
+combinatii cu raport $\beta/\gamma$ aproximativ constant produc traiectorii
+similare pe fereastra observată. În consecință, calibrarea liberă nu
+distinge intre $(0{,}368, 0{,}335)$ și $(0{,}104, 0{,}0714)$ pe baza datelor
+din valul 1 — informația lipsește în date, nu în algoritm.
+
+\input{figures/identifiability_landscape}
+
+Această observație justifică restrictionarea $\gamma$ din literatura clinică
+ca o practică recomandabilă, nu ca o limitare arbitrară. Mai mult, rezolvarea
+unei astfel de identifiabilitati slabe pentru SIDARTHE necesită informatii
+suplimentare în date — testare, spitalizare, terapie intensivă, decese — care
+permit fixarea sau constrangerea unor parametri prin operatori de observație
+multipli, nu doar serie singulară de cazuri active.
 
 \section{Integrarea în sistemul software}
 \label{sec:integrare_calibrare_software}

@@ -10,6 +10,8 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria observata; cele doua scenarii produc fituri vizual aproape identice pe fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs $16\,727$ pentru cel constrans). Parametrii estimati difera substantial, ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate aproape la fel de bine de combinatii $(\beta , \gamma )$ foarte diferite.}}{34}{figure.caption.35}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Peisajul de pierdere $\log _{10}\mathrm {MSE}(\beta , \gamma )$ pentru modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$; linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe combinatii $(\beta , \gamma )$ produc o potrivire similara cu datele observate din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru SIR cu o singura serie observata.}}{35}{figure.caption.36}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }

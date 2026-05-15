@@ -1,0 +1,60 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.95\textwidth,
+    height=6.5cm,
+    xlabel={Zi (de la $15$~martie 2020)},
+    ylabel={Cazuri active observate},
+    xmin=0, xmax=185,
+    ymin=0,
+    legend style={at={(0.02, 0.98)}, anchor=north west, font=\footnotesize, fill=white, draw=gray!50},
+    grid=both, grid style={line width=.1pt, draw=gray!20},
+    minor tick num=1,
+    tick label style={font=\footnotesize},
+    label style={font=\small},
+    legend cell align={left},
+]
+% bara verticala separare antrenare / test
+\draw[dashed, gray!70, thick] (axis cs:154, 0) -- (axis cs:154, 22000)
+    node[above, font=\scriptsize, gray!90] {antrenare $|$ test};
+
+% observat (linie continua)
+\addplot[mark=none, thick, black]
+    table[col sep=comma, x=day, y=observed]
+    {data/calibration_sir_romania.csv};
+\addlegendentry{Observat (Romania OWID)}
+
+% fit liber pe antrenare + forecast pe test
+\addplot[mark=none, thick, blue]
+    table[col sep=comma, x=day, y=fit_free]
+    {data/calibration_sir_romania.csv};
+\addlegendentry{Fit liber, $\hat\beta=0{,}368$, $\hat\gamma=0{,}335$}
+
+\addplot[mark=none, thick, dashed, blue!80]
+    table[col sep=comma, x=day, y=pred_free]
+    {data/calibration_sir_romania.csv};
+\addlegendentry{Prognoza liber}
+
+% fit constrans
+\addplot[mark=none, thick, red]
+    table[col sep=comma, x=day, y=fit_fixed]
+    {data/calibration_sir_romania.csv};
+\addlegendentry{Fit constrans, $\hat\beta=0{,}104$, $\gamma=1/14$}
+
+\addplot[mark=none, thick, dashed, red!80]
+    table[col sep=comma, x=day, y=pred_fixed]
+    {data/calibration_sir_romania.csv};
+\addlegendentry{Prognoza constrans}
+
+\end{axis}
+\end{tikzpicture}
+\caption{Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria
+observata; cele doua scenarii produc fituri vizual aproape identice pe
+fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar
+prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs
+$16\,727$ pentru cel constrans). Parametrii estimati difera substantial,
+ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate
+aproape la fel de bine de combinatii $(\beta, \gamma)$ foarte diferite.}
+\label{fig:calibration_sir_fit}
+\end{figure*}
