@@ -1,9 +1,10 @@
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=\columnwidth,
-    height=7.5cm,
+    % axisul ocupa ~75% din columnwidth ca sa lase loc pentru colorbar + label
+    width=0.78\columnwidth,
+    height=6cm,
     xlabel={$\beta$ (zi$^{-1}$)},
     ylabel={$\gamma$ (zi$^{-1}$)},
     xmin=0.05, xmax=0.6,
@@ -11,9 +12,10 @@
     colormap/viridis,
     colorbar,
     colorbar style={
+        width=0.18cm,
         title={$\log_{10}\mathrm{MSE}$},
-        title style={font=\footnotesize},
-        ticklabel style={font=\footnotesize},
+        title style={font=\scriptsize},
+        ticklabel style={font=\scriptsize},
     },
     point meta min=6.9,
     point meta max=10,
@@ -41,8 +43,9 @@
 
 % linia gamma=1/14
 \draw[dashed, red!50, thick] (axis cs:0.05, 0.0714) -- (axis cs:0.6, 0.0714);
-\node[font=\scriptsize, anchor=west, color=red!70!black]
-    at (axis cs:0.55, 0.0714) {$\gamma = 1/14$};
+\node[font=\scriptsize, anchor=south east, color=red!70!black,
+      fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
+    at (axis cs:0.58, 0.0714) {$\gamma = 1/14$};
 
 \end{axis}
 \end{tikzpicture}
