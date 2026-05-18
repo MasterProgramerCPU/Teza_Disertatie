@@ -1,0 +1,77 @@
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={
+        group size=2 by 2,
+        horizontal sep=1.6cm,
+        vertical sep=1.6cm,
+        ylabels at=edge left,
+    },
+    width=0.46\textwidth,
+    height=4.8cm,
+    xlabel={Zi (de la $15$ martie 2020)},
+    ylabel={Cazuri active},
+    xmin=0, xmax=185,
+    ymin=0,
+    grid=both, grid style={line width=.1pt, draw=gray!20},
+    tick label style={font=\scriptsize},
+    label style={font=\scriptsize},
+    title style={font=\small\bfseries, yshift=-1.5ex},
+    legend style={font=\tiny, fill=white, draw=gray!50, at={(0.02, 0.98)}, anchor=north west},
+    legend cell align={left},
+    every axis plot/.append style={line width=0.6pt},
+]
+% --- Romania ---
+\nextgroupplot[title={Romania ($N=19{,}7$ mil., $\hat{\mathcal{R}}_0=1{,}45$)}, ymax=22000]
+\draw[dashed, gray!70] (axis cs:154, 0) -- (axis cs:154, 22000);
+\addplot[black] table[col sep=comma, x=day, y=obs_romania]
+    {data/calibration_multiregion.csv}; \addlegendentry{observat}
+\addplot[red!80!black] table[col sep=comma, x=day, y=fit_romania]
+    {data/calibration_multiregion.csv}; \addlegendentry{fit (train)}
+\addplot[red!70!black, dashed] table[col sep=comma, x=day, y=pred_romania]
+    {data/calibration_multiregion.csv}; \addlegendentry{prognoza (test)}
+
+% --- Italia ---
+\nextgroupplot[title={Italia ($N=59{,}0$ mil., $\hat{\mathcal{R}}_0=0{,}94$)}, ymax=120000]
+\draw[dashed, gray!70] (axis cs:154, 0) -- (axis cs:154, 120000);
+\addplot[black] table[col sep=comma, x=day, y=obs_italy]
+    {data/calibration_multiregion.csv};
+\addplot[red!80!black] table[col sep=comma, x=day, y=fit_italy]
+    {data/calibration_multiregion.csv};
+\addplot[red!70!black, dashed] table[col sep=comma, x=day, y=pred_italy]
+    {data/calibration_multiregion.csv};
+
+% --- Germania ---
+\nextgroupplot[title={Germania ($N=83{,}4$ mil., $\hat{\mathcal{R}}_0=1{,}05$)}, ymax=30000]
+\draw[dashed, gray!70] (axis cs:154, 0) -- (axis cs:154, 30000);
+\addplot[black] table[col sep=comma, x=day, y=obs_germany]
+    {data/calibration_multiregion.csv};
+\addplot[red!80!black] table[col sep=comma, x=day, y=fit_germany]
+    {data/calibration_multiregion.csv};
+\addplot[red!70!black, dashed] table[col sep=comma, x=day, y=pred_germany]
+    {data/calibration_multiregion.csv};
+
+% --- Spania ---
+\nextgroupplot[title={Spania ($N=47{,}6$ mil., $\hat{\mathcal{R}}_0=1{,}06$)}, ymax=160000]
+\draw[dashed, gray!70] (axis cs:154, 0) -- (axis cs:154, 160000);
+\addplot[black] table[col sep=comma, x=day, y=obs_spain]
+    {data/calibration_multiregion.csv};
+\addplot[red!80!black] table[col sep=comma, x=day, y=fit_spain]
+    {data/calibration_multiregion.csv};
+\addplot[red!70!black, dashed] table[col sep=comma, x=day, y=pred_spain]
+    {data/calibration_multiregion.csv};
+
+\end{groupplot}
+\end{tikzpicture}
+\caption{Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19,
+in patru tari europene cu scari de populatie diferite (atenție la scarile $y$
+distincte). Linia neagra este seria observata, linia rosie continua este fitul
+pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie
+intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza
+granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele
+patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe
+sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu
+coeficienti constanti.}
+\label{fig:calibration_multiregion}
+\end{figure*}

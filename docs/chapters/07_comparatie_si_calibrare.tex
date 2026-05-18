@@ -301,6 +301,37 @@ suplimentare în date — testare, spitalizare, terapie intensivă, decese — c
 permit fixarea sau constrangerea unor parametri prin operatori de observație
 multipli, nu doar serie singulară de cazuri active.
 
+\subsection{Generalizare pe mai multe regiuni}
+\label{subsec:calibrare_multiregion}
+
+Pentru a verifica daca framework-ul de calibrare functioneaza cross-regiune
+si pentru a contextualiza valorile estimate pentru Romania, aceeasi procedura
+constransa (cu $\gamma = 1/14$) a fost aplicata pe patru tari europene cu
+scari de populatie si timing-uri ale valului 1 distincte:
+Romania, Italia, Germania si Spania. Rezultatele sunt prezentate in
+Tabelul~\ref{tab:calibration_multiregion} si Figura~\ref{fig:calibration_multiregion}.
+Implementarea este in \texttt{scripts/calibrate\_multiregion.py}.
+
+\input{tables/calibration_multiregion}
+\input{figures/calibration_multiregion}
+
+Trei observatii merita subliniate. (i) $\hat{\mathcal{R}}_0$ estimat variaza
+intre $0{,}94$ (Italia) si $1{,}45$ (Romania), reflectand atat timing-ul
+diferit al inceperii valului in fiecare tara — Italia este deja in faza de
+declin la inceputul ferestrei, Romania abia incepe — cat si intensitatea
+masurilor non-farmaceutice deja in vigoare. Toate cele patru valori sunt sub
+intervalul de literatura $2$--$3$ pentru tulpina originala, ceea ce este
+consistent cu calibrarea pe o fereastra in care interventiile au actionat
+deja asupra ratei de transmitere efective.
+(ii) Procedura functioneaza uniform: aceeasi optimizare Nelder-Mead converge
+pentru toate cele patru tari, fara ajustari per caz.
+(iii) Spania exhiba cea mai mare eroare pe test ($\sim$$77\,000$ cazuri MAE),
+direct atribuibila inceperii valului doi la finalul ferestrei de test —
+limitare structurala a SIR cu coeficienti constanti, nu deficienta de
+calibrare. Modelele cu rate variabile in timp (sau modelele compartimentale
+care includ vaccinare sau imunitate care se pierde) ar fi cerute pentru a
+extrapola peste un schimb de regim epidemic.
+
 \section{Integrarea în sistemul software}
 \label{sec:integrare_calibrare_software}
 
