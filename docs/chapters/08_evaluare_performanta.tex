@@ -32,7 +32,7 @@ costisitor dacă este rulat de multe ori în cadrul calibrării.
 \section{Metrici colectate}
 \label{subsec:metrici}
 
-\begin{table*}[t]
+\begin{table*}[!htbp]
 \centering
 \caption{Metricile colectate sau derivabile pentru evaluarea software.}
 \label{tab:metrici_benchmark}
@@ -51,16 +51,14 @@ costisitor dacă este rulat de multe ori în cadrul calibrării.
 \end{tabularx}
 \end{table*}
 
-Primele trei metrici sunt deja scrise în tabela \texttt{benchmarks}. Celelalte
-pot fi derivate din timestampurile existente sau adăugate ca extensii. De
-exemplu, \texttt{queue\_wait\_ms} se poate calcula ca diferență între momentul
-în care rularea a fost creată și momentul în care runner-ul o marchează
-\texttt{running}.
-
-Primele trei metrici sunt obținute pentru toate rulările din campania descrisă
-în secțiunea~\ref{subsec:rezultate_masurate}. Metricile derivate
-(\texttt{queue\_wait\_ms}, latențe API) ar necesita o instrumentare suplimentară
-și nu fac parte din rezultatele actuale.
+Primele trei metrici (\texttt{wall\_time\_ms}, \texttt{cpu\_time\_ms},
+\texttt{peak\_memory\_mb}) sunt scrise de fiecare runner în tabela
+\texttt{benchmarks} și sunt disponibile pentru toate rulările din campania
+descrisă în secțiunea~\ref{subsec:rezultate_masurate}. Metricile derivate
+(\texttt{queue\_wait\_ms}, latențe API, dimensiunea răspunsului JSON) ar
+necesita o instrumentare suplimentară și nu fac parte din rezultatele
+actuale; ele apar în Tabelul~\ref{tab:metrici_benchmark} pentru completitudine
+a cadrului de evaluare.
 
 \section{Matricea experimentală}
 \label{sec:matrice_experimentala}
@@ -69,11 +67,11 @@ O evaluare completă trebuie să acopere toate combinațiile relevante dintre mo
 limbaj și orizont temporal. Matricea minimă recomandată este prezentată în
 Tabelul~\ref{tab:matrice_benchmark}.
 
-\begin{table*}[t]
+\begin{table*}[!htbp]
 \centering
 \caption{Matrice minimă pentru campania de benchmark.}
 \label{tab:matrice_benchmark}
-\begin{tabularx}{0.95\textwidth}{l l l X}
+\begin{tabularx}{0.95\textwidth}{l l X X}
 \toprule
 \textbf{Dimensiune} & \textbf{Valori} & \textbf{Scop} & \textbf{Observații} \\
 \midrule
@@ -115,7 +113,7 @@ solverului (\texttt{wall\_time\_ms}, \texttt{cpu\_time\_ms},
 \texttt{peak\_memory\_mb}) rămân disponibile în tabela \texttt{benchmarks},
 agregabile prin \texttt{GET /api/studies/\{id\}/benchmarks}.
 
-\begin{table*}[t]
+\begin{table*}[!htbp]
 \centering
 \caption{Teste necesare pentru obținerea rezultatelor de evaluare software.}
 \label{tab:teste_necesare_software}

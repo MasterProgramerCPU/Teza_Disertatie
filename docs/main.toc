@@ -128,15 +128,15 @@
 \contentsline {section}{\numberline {8.1}Scopul evaluării}{38}{section.8.1}%
 \contentsline {section}{\numberline {8.2}Metrici colectate}{38}{section.8.2}%
 \contentsline {section}{\numberline {8.3}Matricea experimentală}{38}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Protocol de rulare}{39}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{39}{section.8.5}%
-\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{39}{section.8.6}%
-\contentsline {section}{\numberline {8.7}Indicatori agregați}{39}{section.8.7}%
+\contentsline {section}{\numberline {8.4}Protocol de rulare}{40}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{40}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{40}{section.8.6}%
+\contentsline {section}{\numberline {8.7}Indicatori agregați}{40}{section.8.7}%
 \contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{40}{subsection.8.7.1}%
-\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{40}{subsection.8.7.2}%
-\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{41}{section.8.8}%
-\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{41}{section.8.9}%
-\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{41}{section.8.10}%
+\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{42}{subsection.8.7.2}%
+\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{43}{section.8.8}%
+\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{43}{section.8.9}%
+\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{43}{section.8.10}%
 \contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{45}{chapter.9}%
 \contentsline {section}{\numberline {9.1}Rolul aplicației}{45}{section.9.1}%
 \contentsline {section}{\numberline {9.2}Backend Go}{45}{section.9.2}%
