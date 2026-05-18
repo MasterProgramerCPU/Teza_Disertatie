@@ -25,12 +25,16 @@ cercetătorilor de operațiile globale ale super-adminilor. Contribuția practic
 sistemului constă în această legătură între model, execuție, izolare
 organizațională și observabilitatea rezultatelor.
 
-Lucrarea a fost extinsă cu un cadru de comparație numerică și calibrare. Această
-extensie clarifică modul în care rezultatele modelelor pot fi raportate la date
-observate prin operatori de observație, metrici de eroare și validare pe ferestre
-temporale separate. În plus, a fost introdusă o direcție predictivă bazată pe
-LSTM, tratată ca extensie statistică pentru prognoză pe termen scurt și pentru
-analiza reziduurilor rămase după simularea compartimentală.
+Lucrarea a fost extinsă cu un cadru de comparație numerică și calibrare.
+Această extensie nu este doar metodologică: a fost executată concret o
+campanie de benchmark prin aplicație (180 rulări ODE plus 4 rulări LSTM, fără
+eșecuri), iar calibrarea SIR cu $\gamma = 1/14$ a fost aplicată pe Romania
+și pe trei țări europene suplimentare (Italia, Germania, Spania), rezultatele
+fiind raportate ca tabele și figuri în capitolele~\ref{ch:comparatie_calibrare}
+și~\ref{ch:evaluare}. În plus, a fost introdusă o direcție predictivă bazată
+pe LSTM, tratată ca extensie statistică pentru prognoză pe termen scurt și
+pentru analiza reziduurilor rămase după simularea compartimentală, cu rezultate
+operaționale pe seria Romania OWID.
 
 \section{Concluzii privind modelele}
 \label{sec:concluzii_modele}
@@ -83,65 +87,88 @@ nici interfața REST.
 \label{sec:limitari}
 
 Prima limitare este calibrarea parametrilor SIDARTHE. Datele OWID folosite în
-lucrare nu oferă direct distribuția pe compartimentele $D$, $A$, $R$, $T$ și $E$.
-Inițializarea folosită de sistem este reproductibilă, dar nu înlocuiește o
-estimare epidemiologică dedicată. Pentru rezultate interpretate clinic, modelul
-trebuie calibrat pe date despre testare, spitalizare, terapie intensivă și
-vindecări.
+lucrare nu oferă direct distribuția pe compartimentele $D$, $A$, $R$, $T$ și
+$E$. Inițializarea folosită de sistem este reproductibilă, dar nu înlocuiește
+o estimare epidemiologică dedicată. Calibrarea SIR a fost realizată concret pe
+patru țări europene cu rezultate interpretabile; pentru SIDARTHE, însă, este
+necesară integrarea unor serii suplimentare (testare, spitalizare, terapie
+intensivă, vindecări) și a unor operatori de observație multipli, care să
+constrânga subgrupuri de parametri separat.
 
-Calibrarea introdusă în lucrare este formulată metodologic, dar nu este încă un
-flux complet automatizat în aplicație. Extinderea practică ar necesita un tip
-nou de job, stocarea parametrilor calibrați și raportarea separată a erorii de
-antrenare și de test.
+Calibrarea este realizată în lucrare ca script offline, în afara aplicației
+(\texttt{scripts/calibrate.py} și \texttt{scripts/calibrate\_multiregion.py}).
+Promovarea acesteia la un tip de job în Redis, alături de
+\texttt{simulation\_runs}, ar permite expunerea în interfața web și stocarea
+istoricului parametrilor estimați --- o extensie de sistem, nu o re-derivare
+metodologică.
 
-A doua limitare privește evaluarea empirică. Infrastructura de benchmark este
-implementată, dar concluziile cantitative necesită rulări repetate pe configurații
-hardware documentate. Fără aceste campanii complete, analiza performanței rămâne un
-cadru de măsurare și nu o demonstrație statistică a superiorității unui limbaj.
+A doua limitare privește acoperirea evaluării empirice. Campania de benchmark
+prin aplicație a fost executată pe un singur profil hardware (clusterul
+\texttt{kube-4kdhb}, 3 worker-i $\times$ 4 vCPU / 8 GiB pe OpenStack);
+reproducerea aceleiași matrici pe alte configurații (mașini locale, noduri
+mai puternice, eventual cu accelerare GPU pentru LSTM) este planificată ca
+script separat, în afara aplicației, după cum este menționat în
+secțiunea~\ref{subsec:protocoale}. De asemenea, evaluarea concurenței (mai
+multe job-uri lansate simultan pe coadă) și măsurarea latențelor specifice
+ale API-ului sunt încă tratate metodologic, fără rezultate empirice.
 
-Componenta LSTM este implementată operațional printr-un runner dedicat, dar nu
-este încă validată experimental ca rezultat predictiv final. Ea necesită serii
-temporale suficiente, separare strict cronologică între antrenare și test și
-comparație cu linii de bază simple, precum persistența sau media mobilă.
+Componenta LSTM este implementată operațional și are rezultate cantitative
+(cost de antrenare măsurat și serie observed/fitted/predicted pe Romania).
+Validarea predictivă completă --- comparația sistematică cu liniile de bază
+(persistență, medie mobilă) și cu modelul compartimental calibrat, pe mai
+multe regiuni --- este următorul pas natural; LSTM-ul actual este o
+componentă univariată hand-rolled, iar versiunile hibride (LSTM peste
+reziduurile unui model SIR calibrat) sunt formulate în
+capitolul~\ref{ch:lstm} doar ca direcție.
 
-O altă limitare este nivelul de maturitate al aplicației web. Fluxurile principale
-sunt acoperite, inclusiv studiile, rolurile și consola super-admin, însă lipsesc
-încă teste automate end-to-end, mecanisme de retry mai sofisticate pentru job-uri,
-politici de rate limiting și audit al operațiilor utilizatorilor. Aceste elemente
-ar fi necesare înainte de folosirea sistemului într-un context operațional.
+O altă limitare este nivelul de maturitate al aplicației web. Fluxurile
+principale sunt acoperite, inclusiv studiile, rolurile și consola
+super-admin, însă lipsesc încă teste automate end-to-end, mecanisme de retry
+mai sofisticate pentru job-uri, politici de rate limiting și audit al
+operațiilor utilizatorilor. Aceste elemente ar fi necesare înainte de
+folosirea sistemului într-un context operațional.
 
 \section{Direcții viitoare}
 \label{sec:directii_viitoare}
 
 Direcția imediată este calibrarea modelului SIDARTHE pe date mai bogate decât
 seria de cazuri active, în special date despre testare, spitalizare, terapie
-intensivă, vindecări și decese. În plus, modelele SIR/SIS/SEIR/SIRS pot fi
-folosite pentru scenarii de bază și pentru testarea
-sensibilității la ipoteze epidemiologice mai simple.
+intensivă, vindecări și decese. Această extindere preia infrastructura
+demonstrată deja pentru SIR (calibrare cross-regiune cu $\gamma$ fixat din
+literatură) și o extinde la operatori de observație multipli, necesari pentru
+distingerea grupurilor de parametri ale SIDARTHE.
 
-O direcție tehnică imediată este implementarea calibrării ca job asincron în
-același mecanism Redis folosit pentru simulări. Rezultatul ar trebui să includă
-parametrii estimați, erorile MAE/RMSE pe train și test, numărul de evaluări ale
-solverului și timpul total de optimizare.
+O direcție tehnică imediată este promovarea calibrării din script offline într-un
+tip de job asincron în mecanismul Redis al aplicației, alături de
+\texttt{simulation\_runs}. Rezultatul ar trebui să includă parametrii estimați,
+erorile MAE/RMSE pe train și test, numărul de evaluări ale solverului și timpul
+total de optimizare --- toate stocate într-o tabelă dedicată și expuse prin API.
 
-Pentru componenta ML, următorul pas realist este evaluarea runner-ului LSTM
-dedicat împotriva unei linii de bază de persistență și a modelului
-compartimental calibrat. Rezultatul ar trebui raportat prin MAE, RMSE, nRMSE,
-timp de antrenare și stabilitate pe fereastra de test.
+Pentru componenta ML, următorul pas realist este compararea sistematică a
+runner-ului LSTM cu liniile de bază (persistență, medie mobilă) și cu
+modelul compartimental calibrat, pe toate cele 38 de țări europene din setul
+de date OWID. Rezultatul ar trebui agregat ca tabel cu MAE, RMSE, nRMSE și
+timp de antrenare per regiune, iar varianta hibridă LSTM-peste-reziduuri ar
+putea fi prima implementată concret.
 
-La nivel de sistem, următorul pas este completarea campaniilor de benchmark și
-adăugarea unei suite automate de teste. Pentru backend, aceasta înseamnă teste
-unitare și de integrare cu o bază de date izolată; pentru frontend, teste care
-verifică fluxurile reale din browser. În zona de infrastructură, ar fi utilă
-introducerea unor mecanisme explicite de retry și dead-letter queue pentru job-urile
-care eșuează repetat, precum și activarea autoscalării orizontale (HPA) a
-runner-elor pe metrici personalizate (de exemplu lungimea cozii Redis) și a
-politicilor de rețea (NetworkPolicy) pentru izolare zero-trust intra-cluster.
-Terminarea TLS automată prin \texttt{cert-manager} și un stack de
-observabilitate (Prometheus + Grafana) ar completa profilul operațional al
-deployment-ului Kubernetes.
+La nivel de evaluare, următorul pas este extinderea campaniei de benchmark pe
+configurații hardware diferite (mașini locale, noduri mai puternice, eventual
+cu GPU pentru LSTM). Tot la nivel de sistem, lipsește o suită automată de
+teste: teste unitare și de integrare în backend cu o bază de date izolată și
+teste end-to-end pentru frontend care să verifice fluxurile reale din browser.
 
-Pe termen mai lung, sistemul poate fi extins cu vizualizări geografice, surse de
-date actualizate periodic și module de alertare. Aceste extensii trebuie construite
-pe aceeași disciplină metodologică: ipotezele modelului, calitatea datelor și
-metricile software trebuie să rămână vizibile.
+În zona de infrastructură, ar fi utilă introducerea unor mecanisme explicite
+de retry și dead-letter queue pentru job-urile care eșuează repetat, precum și
+activarea autoscalării orizontale (HPA) a runner-elor pe metrici personalizate
+(de exemplu lungimea cozii Redis) și a politicilor de rețea (NetworkPolicy)
+pentru izolare zero-trust intra-cluster. Terminarea TLS automată prin
+\texttt{cert-manager} și un stack de observabilitate (Prometheus + Grafana) ar
+completa profilul operațional al deployment-ului Kubernetes.
+
+Pe termen mai lung, sistemul poate fi extins cu vizualizări geografice, surse
+de date actualizate periodic și module de alertare. Aceste extensii trebuie
+construite pe aceeași disciplină metodologică care a ghidat lucrarea de față:
+ipotezele modelului, calitatea datelor și metricile software trebuie să rămână
+vizibile, iar afirmațiile cantitative trebuie susținute prin rulări concrete și
+reproductibile, așa cum sunt cele din capitolele~\ref{ch:comparatie_calibrare}
+și~\ref{ch:evaluare}.

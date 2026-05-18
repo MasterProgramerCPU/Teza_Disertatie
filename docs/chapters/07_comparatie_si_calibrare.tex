@@ -122,11 +122,13 @@ funcție de pierdere ponderată:
 unde $k$ indexează tipul de observație, iar $w_k$ controlează importanța fiecărei
 serii. Ponderile sunt necesare deoarece seriile pot avea scări diferite.
 
-\testtodo{Formulele de mai sus definesc modul de calcul al erorilor, dar nu
-reprezintă rezultate în sine. Pentru a obține rezultate numerice trebuie rulate
-toate modelele pe același set de date, trebuie aplicat operatorul de observație ales
-și trebuie raportate valorile MAE, RMSE și nRMSE pentru fiecare combinație
-model--limbaj--fereastră temporală.}
+Aplicarea concretă a acestor metrici pe rezultate de calibrare pe Romania
+și pe alte trei țări europene este prezentată în
+subsecțiunile~\ref{subsec:calibrare_romania} și~\ref{subsec:calibrare_multiregion}.
+Tabelul~\ref{tab:calibration_multiregion} raportează MAE pe ferestrele de
+antrenare și test pentru cele patru regiuni, iar extinderea aceleiași proceduri
+la o matrice completă model--limbaj--fereastră este o continuare directă a
+campaniei de benchmark din capitolul~\ref{ch:evaluare}.
 
 \section{Protocol de analiză comparativă}
 \label{sec:protocol_comparativ}

@@ -403,10 +403,9 @@ rețeaua să corecteze doar deviațiile statistice rămase după simularea
 compartimentală. Dacă reziduurile au un tipar stabil, modelul hibrid ar putea
 îmbunătăți predicția pe termen scurt fără a pierde interpretabilitatea.
 
-\testtodo{Capitolul descrie modelul LSTM implementat și protocolul de evaluare,
-dar nu conține rezultate numerice. Pentru rezultatul final al lucrării trebuie
-rulată o campanie experimentală pe seturi de date concrete și comparată cu
-persistența, media mobilă și un model compartimental calibrat. Pentru fiecare
-regiune trebuie raportate MAE, RMSE și nRMSE pe fereastra de test, împreună cu
-lungimea ferestrei de intrare, dimensiunea stării ascunse, numărul de epoci,
-rata de învățare și timpul de antrenare.}
+Capitolul prezintă rezultate operaționale pe Romania (Figura~\ref{fig:lstm_trajectory})
+și cost de execuție concret în Tabelul~\ref{tab:bench_lstm} din
+capitolul~\ref{ch:evaluare}. Validarea predictivă completă --- comparația
+sistematică cu liniile de bază (persistență, medie mobilă) și cu modelul
+compartimental calibrat, pe mai multe regiuni și cu varierea hiperparametrilor
+$(\ell, H, \eta, E)$ --- rămâne ca extensie naturală a campaniei de benchmark.
