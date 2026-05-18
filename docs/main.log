@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  18 MAY 2026 13:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  18 MAY 2026 13:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -7770,21 +7770,41 @@ a cele
 [47
 
 ]
-Underfull \hbox (badness 5260) in paragraph at lines 98--104
+
+
+Underfull \hbox (badness 2050) in paragraph at lines 144--156
+[]\T1/cmr/bx/n/10 (+20) Hardware-ul con-teaza, dar nu in-lo-cu-ieste
+ []
+
+
+Underfull \hbox (badness 2970) in paragraph at lines 144--156
+\T1/cmr/bx/n/10 (+20) ana-liza per-stack. \T1/cmr/m/n/10 (+20) Compara[]ia cros
+s-hardware
+ []
+
+
+Underfull \hbox (badness 3199) in paragraph at lines 157--169
+[]\T1/cmr/bx/n/10 (+20) LSTM este o com-po-nenta ca-li-ta-tiv di-fe-
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 182--188
 []\T1/cmr/m/n/10 (+20) Calibrarea este re-a-li-zat  în lu-crare ca script
  []
 
 
-Underfull \hbox (badness 2261) in paragraph at lines 98--104
+Underfull \hbox (badness 2261) in paragraph at lines 182--188
 \T1/cmr/m/n/10 (+20) offline, în afara aplica[]iei (\T1/cmtt/m/n/10 scripts/cal
 ibrate.py
  []
 
 
 
+[48]
+
 )
 
-[48] (./main.bbl
+[49] (./main.bbl
 Underfull \hbox (badness 1226) in paragraph at lines 27--32
 \T1/cmr/m/n/10 (+20) Pa-tri-zio Co-la-neri, Ales-san-dro Di Fi-li-ppo, An-
  []
@@ -7798,14 +7818,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 104--107
 
 
 
-[49
+[50
 
 
 ])
 
 
 
-[50
+[51
 
 ] (./appendices/A_cod_r.tex
 \bbl@ensure@romanian {Anexa} A.
@@ -7823,54 +7843,52 @@ tlang3.sty
 File: lstlang3.sty 2024/09/23 1.10c listings language file
 ) (../code/runners/r/runner.R
 
-[51
+[52
 
 
 ]
-
-[52]
 
 [53]
 
-[54])) (./appendices/B_cod_julia.tex
+[54]
 
-[55]
+[55])) (./appendices/B_cod_julia.tex
+
+[56]
 \bbl@ensure@romanian {Anexa} B.
 (../code/runners/julia/runner.jl
 
-[56
+[57
 
 ]
-
-[57]
 
 [58]
 
-[59])) (./appendices/C_cod_python.tex
+[59]
 
-[60]
+[60])) (./appendices/C_cod_python.tex
+
+[61]
 \bbl@ensure@romanian {Anexa} C.
 (../code/runners/python/runner.py
 
-[61
+[62
 
 ]
-
-[62]
 
 [63]
 
-[64])) (./appendices/D_cod_lstm.tex
+[64]
 
-[65]
+[65])) (./appendices/D_cod_lstm.tex
+
+[66]
 \bbl@ensure@romanian {Anexa} D.
 (../code/runners/lstm/runner.py
 
-[66
+[67
 
 ]
-
-[67]
 
 [68]
 
@@ -7880,30 +7898,32 @@ File: lstlang3.sty 2024/09/23 1.10c listings language file
 
 [71]
 
-[72])) (./appendices/E_schema_bd.tex
+[72]
 
-[73]
+[73])) (./appendices/E_schema_bd.tex
+
+[74]
 \bbl@ensure@romanian {Anexa} E.
 (../code/db/migrations/000001_create_users.up.sql)
 (../code/db/migrations/000002_create_datasets.up.sql)
 (../code/db/migrations/000003_create_epidemiological_records.up.sql)
 
-[74
+[75
 
 ] (../code/db/migrations/000004_create_simulation_runs.up.sql)
 (../code/db/migrations/000005_create_simulation_results.up.sql)
 (../code/db/migrations/000006_create_benchmarks.up.sql)
 (../code/db/migrations/000007_create_studies.up.sql
 
-[75]) (../code/db/migrations/000008_create_study_members.up.sql)
+[76]) (../code/db/migrations/000008_create_study_members.up.sql)
 (../code/db/migrations/000009_add_super_admin.up.sql)
 (../code/db/migrations/000010_add_study_id_to_resources.up.sql)
 (../code/db/migrations/000011_expand_model_type_constraint.up.sql
 
-[76]) (../code/db/migrations/000012_add_lstm_model.up.sql))
+[77]) (../code/db/migrations/000012_add_lstm_model.up.sql))
 (./appendices/F_kubernetes.tex
 
-[77]
+[78]
 \bbl@ensure@romanian {Anexa} F.
 
 Underfull \hbox (badness 10000) in paragraph at lines 27--28
@@ -7945,67 +7965,67 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
 
 
-[78
+[79
 
 ] (../code/k8s/00-namespace.yaml) (../code/k8s/10-yugabyte-values.yaml
 
-[79]
+[80]
 
-[80]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
+[81]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
 
 
-[81]
+[82]
 
-[82]) (../code/k8s/30-migrate-job.yaml
+[83]) (../code/k8s/30-migrate-job.yaml
 
-[83]) (../code/k8s/40-api.yaml
+[84]) (../code/k8s/40-api.yaml
 
-[84]
+[85]
 
-[85]) (../code/k8s/52-runner-julia.yaml
+[86]) (../code/k8s/52-runner-julia.yaml
 
-[86]) (../code/k8s/53-runner-lstm.yaml)
+[87]) (../code/k8s/53-runner-lstm.yaml)
 
-[87] (../code/k8s/61-frontend-admin.yaml
+[88] (../code/k8s/61-frontend-admin.yaml
 
-[88]) (../code/k8s/70-ingress.yaml
+[89]) (../code/k8s/70-ingress.yaml
 
-[89]) (../code/docker-compose.yml
+[90]) (../code/docker-compose.yml
 
-[90]
+[91]
 
-[91])) (./appendices/G_api_rest.tex
+[92])) (./appendices/G_api_rest.tex
 
-[92]
+[93]
 \bbl@ensure@romanian {Anexa} G.
 (../code/api/internal/api/router/router.go
 
-[93
+[94
 
 ]
 
-[94]) (../code/api/internal/api/middleware/rbac.go
+[95]) (../code/api/internal/api/middleware/rbac.go
 
-[95]
+[96]
 
-[96]) (../code/api/internal/api/handlers/response.go
+[97]) (../code/api/internal/api/handlers/response.go
 
-[97]))
+[98]))
 
-[98] (./main.aux)
+[99] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7CB7636AA2A5863568F3085AC55F5E2A;30974.
+(rerunfilecheck)             Checksum: C45A27F2FF3F8240711BE51BA7483A1F;31150.
  ) 
 Here is how much of TeX's memory you used:
- 51182 strings out of 473190
- 1106582 string characters out of 5704334
- 3280054 words of memory out of 5000000
- 69839 multiletter control sequences out of 15000+600000
- 623609 words of font info for 416 fonts, out of 8000000 for 9000
+ 51191 strings out of 473190
+ 1106710 string characters out of 5704334
+ 3280150 words of memory out of 5000000
+ 69842 multiletter control sequences out of 15000+600000
+ 623711 words of font info for 418 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,97p,1001b,3405s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
@@ -8070,10 +8090,10 @@ w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt08
 00.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pu
 blic/cm-super/sftt0900.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
 -dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (108 pages, 1604448 bytes).
+Output written on main.pdf (109 pages, 1611839 bytes).
 PDF statistics:
- 5254 PDF objects out of 6186 (max. 8388607)
- 4994 compressed objects within 50 object streams
- 3165 named destinations out of 3580 (max. 500000)
- 103075 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 5274 PDF objects out of 6186 (max. 8388607)
+ 5012 compressed objects within 51 object streams
+ 3167 named destinations out of 3580 (max. 500000)
+ 103083 words of extra memory for PDF output out of 106986 (max. 10000000)
 

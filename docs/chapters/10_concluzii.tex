@@ -83,6 +83,90 @@ extensiei \texttt{pgcrypto} la momentul instalării, datorită bazei PostgreSQL~
 a YugabyteDB. Aceste ajustări sunt locale și nu afectează nici codul aplicativ,
 nici interfața REST.
 
+\section{Concluzii experimentale}
+\label{sec:concluzii_experimentale}
+
+Cele patru zone empirice ale lucrării --- calibrarea pe date reale, campania
+de benchmark prin aplicație, verificarea de regresie cross-limbaj și
+măsurătorile cross-hardware --- produc rezultate care nu trebuie citite în
+izolare, ci ca un set coerent de constrângeri pentru luarea deciziilor de
+modelare și de implementare. Această secțiune sintetizează firul empiric
+înainte de discuția limitărilor și a direcțiilor viitoare.
+
+\textbf{Calibrarea sustine alegerea constrangerilor din literatura.}
+Comparația dintre SIR liber și SIR constrans (cu $\gamma = 1/14$) pe valul 1
+COVID-19 în Romania
+(subsecțiunea~\ref{subsec:calibrare_romania}) arată că erorile pe fereastra
+de antrenare sunt aproape identice ($\sim$$1\,600$ cazuri MAE pentru ambele
+scenarii), dar parametrii estimați diferă substanțial ($\hat\gamma$ liber
+$= 0{,}335$, adică $3$ zile de infecțiozitate, contra valorii clinice de
+$14$ zile). Peisajul de pierdere
+(subsecțiunea~\ref{subsec:identif_landscape}) confirmă vizual cauza: valea
+de pierdere mică este alungită în $(\beta, \gamma)$, deci datele nu disting
+între aceste combinații. Extinderea la patru țări
+(subsecțiunea~\ref{subsec:calibrare_multiregion}) arată că procedura
+constransa este robustă cross-regiune --- $\hat{\mathcal{R}}_0$ rămâne între
+$0{,}94$ (Italia) și $1{,}45$ (Romania), valori sub intervalul de literatură
+$2$--$3$ pentru tulpina originală, ceea ce este consistent cu intervențiile
+non-farmaceutice deja active în fereastră. În toate cazurile, divergența pe
+fereastra de test este atribuibilă unei schimbări de regim epidemic (val 2),
+nu unei deficiențe a calibrării: este o limitare structurală a SIR cu
+coeficienți constanți.
+
+\textbf{Benchmark-ul reveleaza trei regimuri de cost calitativ diferite.}
+Pe clusterul \texttt{kube-4kdhb} (capitolul~\ref{ch:evaluare}), Julia este
+solver-ul cel mai rapid în regim amortizat ($5$--$6$~ms la
+$t_{\max}=10\,000$, indiferent de model), dar plătește un cost de pornire
+JIT de $\sim$$900$--$1\,500$~ms pe prima rulare. Python (SciPy) este cel mai
+stabil ca performanță ($4$--$9$~ms peste tot, fără cold-start), iar R
+(\texttt{deSolve}) este de două până la trei ordine de mărime mai lent la
+orizonturi mari --- nu din cauza solver-ului în sine, ci a buclei de
+inserări rând-cu-rând în baza de date. Această distincție este importantă
+pentru două decizii practice: pentru calibrare, care face zeci sau sute de
+evaluări succesive ale solver-ului, Julia este alegerea naturală deoarece
+costul JIT se amortizează; pentru interfața interactivă a aplicației, unde
+predictibilitatea contează mai mult decât viteza brută, Python rămâne
+default-ul rezonabil.
+
+\textbf{Implementarile sunt compatibile numeric, dar nu identice.}
+Verificarea cross-limbaj (secțiunea~\ref{sec:acuratete}) arată că Julia și
+Python produc traiectorii identice la nivelul preciziei flotante
+($\sim$$10^{-8} \cdot N$), deoarece ambele folosesc solvere Runge--Kutta
+adaptive cu toleranțe similare ($\texttt{Tsit5}$ și respectiv
+$\texttt{RK45}$). Implementarea R, care folosește RK4 cu pas fix
+$h = 1$~zi, deviază de la celelalte două cu $\sim$$10^{-4} \cdot N$
+($0{,}013\%$ din populație) --- diferență deliberată din alegerea
+solver-ului, nu eroare de implementare. Acest rezultat dă o limită
+cantitativă a interschimbabilității runnerelor: pentru analize cu cerințe
+de precizie sub $10^{-3} \cdot N$, R este acceptabil; pentru reproducerea
+exactă a unei traiectorii Julia, Python este interschimbabilul direct.
+
+\textbf{Hardware-ul conteaza, dar nu inlocuieste analiza per-stack.}
+Comparația cross-hardware (subsecțiunea~\ref{subsec:hardware_variability})
+arată că același cod Python rulează de $4$ până la $6$ ori mai rapid pe
+Apple~M1~Pro arm64 nativ decât pe un worker amd64 din cluster, pe
+workload-uri solver-heavy. Pentru workload-uri solver-light (initial
+trivial), raportul crește la $10\times$ sau mai mult, dar acolo diferența
+nu mai reflectă hardware-ul brut, ci costul fix al persistării în baza de
+date distribuită. Concluzia operațională este că etapele de explorare
+rapidă (calibrări experimentale, sensitivity sweeps, prototipare LSTM cu
+hiperparametri variați) sunt sensibil mai eficiente local, în timp ce
+clusterul aduce concurența, izolarea pe studii și persistența necesare
+pentru o utilizare colaborativă reală.
+
+\textbf{LSTM este o componenta calitativ diferita de solverele ODE.}
+Cele patru rulări LSTM (subsecțiunea~\ref{subsec:bench_lstm}) au costat
+$\sim$$290$~secunde fiecare pe seria Romania OWID ($1\,440$ zile,
+$80\% / 20\%$ split), de aproximativ \emph{cinci ordine de mărime} peste
+solverele ODE pe același cluster. Acest decalaj confirmă decizia
+arhitecturală de a izola \texttt{runner-lstm} într-o coadă Redis dedicată,
+separată de runnerele compartimentale; figura observat/fitted/predicted
+pentru Romania (Figura~\ref{fig:lstm_trajectory}) confirmă că predicțiile
+o-zi-înainte urmăresc rezonabil seria, dar prognoza autoregresivă se
+aplatizează rapid --- LSTM-ul actual este un instrument de prognoză pe
+termen scurt și de detectare a reziduurilor, nu un model autonom de
+extrapolare epidemiologică pe orizonturi mari.
+
 \section{Limitări}
 \label{sec:limitari}
 
