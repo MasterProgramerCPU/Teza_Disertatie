@@ -1,0 +1,17 @@
+\begin{table*}[!htbp]
+\centering
+\caption{Comparatia timpilor de executie pentru solverul Python (\texttt{scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt{kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt{multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph{speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid.}
+\label{tab:hardware_comparison}
+\begin{tabularx}{\textwidth}{l r r r r r r}
+\toprule
+\textbf{Model} & \textbf{$t_{\max}$} & \textbf{$n_{\mathrm{cluster}}$} & \textbf{Cluster wall (ms)} & \textbf{$n_{\mathrm{M1}}$} & \textbf{M1 wall (ms)} & \textbf{Speedup M1} \\
+\midrule
+\texttt{sidarthe} & 365 & 1 & 86.0 & 3 & 16.44 & 5.2$\times$ \\
+ & 2000 & 3 & 127.0 & 3 & 31.46 & 4.0$\times$ \\
+ & 10000 & 3 & 345.0 & 3 & 90.48 & 3.8$\times$ \\
+\texttt{sir} & 365 & 1 & 73.0 & 3 & 12.25 & 6.0$\times$ \\
+ & 2000 & 3 & 96.0 & 3 & 16.07 & 6.0$\times$ \\
+ & 10000 & 3 & 100.0 & 3 & 22.98 & 4.4$\times$ \\
+\bottomrule
+\end{tabularx}
+\end{table*}

@@ -700,6 +700,11 @@ INPUT ./tables/bench_lstm.tex
 INPUT ./tables/bench_lstm.tex
 INPUT ./tables/bench_lstm.tex
 INPUT tables/bench_lstm.tex
+INPUT ./tables/hardware_comparison.tex
+INPUT ./tables/hardware_comparison.tex
+INPUT ./tables/hardware_comparison.tex
+INPUT ./tables/hardware_comparison.tex
+INPUT tables/hardware_comparison.tex
 INPUT ./tables/cross_language_regression.tex
 INPUT ./tables/cross_language_regression.tex
 INPUT ./tables/cross_language_regression.tex

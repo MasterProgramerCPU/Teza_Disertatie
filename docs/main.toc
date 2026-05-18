@@ -1,8 +1,8 @@
 \babel@toc {romanian}{}\relax 
 \contentsline {chapter}{Rezumat}{i}{chapter*.1}%
 \contentsline {chapter}{\bbl@ensure@romanian {List\u a de figuri}}{vi}{chapter*.3}%
-\contentsline {chapter}{\bbl@ensure@romanian {List\u a de tabele}}{vii}{chapter*.4}%
-\contentsline {chapter}{Lista algoritmilor}{viii}{chapter*.5}%
+\contentsline {chapter}{\bbl@ensure@romanian {List\u a de tabele}}{viii}{chapter*.4}%
+\contentsline {chapter}{Lista algoritmilor}{ix}{chapter*.5}%
 \contentsline {chapter}{\numberline {1}Introducere}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Context și motivație}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Obiectivele lucrării}{1}{section.1.2}%
@@ -134,9 +134,10 @@
 \contentsline {section}{\numberline {8.7}Indicatori agregați}{40}{section.8.7}%
 \contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{40}{subsection.8.7.1}%
 \contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{42}{subsection.8.7.2}%
+\contentsline {subsection}{\numberline {8.7.3}Variabilitatea cross-hardware}{43}{subsection.8.7.3}%
 \contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{43}{section.8.8}%
-\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{43}{section.8.9}%
-\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{43}{section.8.10}%
+\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{44}{section.8.9}%
+\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{44}{section.8.10}%
 \contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{45}{chapter.9}%
 \contentsline {section}{\numberline {9.1}Rolul aplicației}{45}{section.9.1}%
 \contentsline {section}{\numberline {9.2}Backend Go}{45}{section.9.2}%

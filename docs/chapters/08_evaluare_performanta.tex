@@ -307,6 +307,61 @@ antrenarea ar crește la $\sim$$70$ minute cu aceiași parametri, ceea ce
 plasează LSTM ca operație asincronă lungă --- exact rolul pentru care
 \texttt{runner-lstm} este izolat într-o coadă Redis dedicată.
 
+\subsection{Variabilitatea cross-hardware}
+\label{subsec:hardware_variability}
+
+Toate rezultatele de mai sus provin de pe un singur profil hardware
+(clusterul \texttt{kube-4kdhb}). Pentru a separa contribuția hardware-ului
+de cea a stack-ului software, aceeași logică de solver a fost rulată ca
+script standalone (\texttt{scripts/bench\_local\_solver.py}) pe o mașină
+locală complet diferită --- Apple~M1~Pro arm64, nativ, fără container și
+fără persistare în baza de date --- folosind exact aceleași tolerante numerice
+($\texttt{RK45}$, $\mathrm{rtol}=10^{-8}$, $\mathrm{atol}=10^{-10}$), aceiași
+parametri și aceleași condiții inițiale ca rulările prin aplicație. Așa cum
+este indicat explicit în secțiunea~\ref{subsec:protocoale}, această
+masurare se face în afara aplicației pentru a evita amestecarea variațiilor
+de hardware cu deciziile de ortografie ale containerului și ale bazei de
+date distribuite.
+
+Tabelul~\ref{tab:hardware_comparison} compară median wall-time pentru SIR și
+SIDARTHE la trei orizonturi temporale, pe workload-ul sintetic non-trivial
+(setul \texttt{synthetic\_multiwave}, $I_0 = 100$ pentru a forța solverul să
+parcurgă efectiv pași de integrare). Datele de cluster sunt re-rulate în
+mod identic prin API (între $1$ și $3$ repetări per combinație, în funcție
+de campania anterioară), iar datele M1 provin din scriptul local
+(3 repetări per combinație, cu o rulare de încălzire ignorată).
+
+\input{tables/hardware_comparison}
+
+Două observații se desprind. (i) Pentru același cod Python și aceeași
+încărcare numerică, M1 Pro nativ este de $\sim$$4\times$--$6\times$ mai
+rapid decât worker-ul amd64 al clusterului. Acest raport include diferența
+de microarhitectură (Apple Silicon vs. CPU x86 virtualizat în KVM),
+diferența de mediu (nativ vs. container) și costul redus al stratului de
+persistare (M1 nu scrie rezultatele într-o bază de date distribuită cu
+factor de replicare 3). Raportul este relativ stabil între modele și
+orizonturi, ceea ce sugerează că marea parte a diferenței vine din execuția
+solver-ului propriu-zis, nu din overhead-uri fixe.
+
+(ii) Pentru workload-ul trivial (setul Romania OWID cu $I_0 = 0$, ca în
+campania prin aplicație), M1 nativ rulează în $0{,}4$--$0{,}8$~ms per
+solver, iar cluster-ul în $3$--$9$~ms (din
+Tabelul~\ref{tab:bench_wall_time}); diferența este mai mare ($10\times$
+sau mai mult) tocmai pentru că, atunci când solver-ul nu are dinamică reală,
+\emph{toată} cheltuiala wall-time pe cluster vine din scrierea celor
+$t_{\max}+1$ rânduri în \texttt{simulation\_results}, cost care nu există
+în scriptul local.
+
+Concluzia metodologică este că un raport \emph{absolut} între cele două
+hardware-uri depinde semnificativ de natura workload-ului (solver-light vs.
+solver-heavy) și de stack-ul software inclus în măsurare. Recomandarea de
+limbaj din secțiunea~\ref{sec:analiza_sintetica} rămâne valabilă pe
+clusterul testat; pentru o decizie cantitativă pe un alt profil
+hardware --- în special cu accelerare GPU pentru LSTM sau cu solvere
+implementate în Fortran/C++ legate static --- aceeași campanie trebuie
+re-rulată local, iar scriptul \texttt{bench\_local\_solver.py} este punctul
+de pornire pentru această replicare.
+
 \section{Acuratețe numerică și verificări de regresie}
 \label{sec:acuratete}
 
