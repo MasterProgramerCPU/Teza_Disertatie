@@ -16,6 +16,65 @@ W.~O. Kermack and A.~G. McKendrick.
 \newblock {\em Proceedings of the Royal Society of London. Series A},
   115(772):700--721, 1927.
 
+\bibitem{soetaert2010desolve}
+Karline Soetaert, Thomas Petzoldt, and R.~Woodrow Setzer.
+\newblock Solving differential equations in {R}: Package {deSolve}.
+\newblock {\em Journal of Statistical Software}, 33(9):1--25, 2010.
+
+\bibitem{rackauckas2017diffeq}
+Christopher Rackauckas and Qing Nie.
+\newblock {DifferentialEquations.jl} -- a performant and feature-rich ecosystem
+  for solving differential equations in {Julia}.
+\newblock {\em Journal of Open Research Software}, 5(1):15, 2017.
+
+\bibitem{virtanen2020scipy}
+Pauli Virtanen et~al.
+\newblock {SciPy} 1.0: Fundamental algorithms for scientific computing in
+  {Python}.
+\newblock {\em Nature Methods}, 17:261--272, 2020.
+
+\bibitem{jenness2018epimodel}
+Samuel~M. Jenness, Steven~M. Goodreau, and Martina Morris.
+\newblock {EpiModel}: An {R} package for mathematical modeling of infectious
+  disease over networks.
+\newblock {\em Journal of Statistical Software}, 84(8):1--47, 2018.
+
+\bibitem{kerr2021covasim}
+Cliff~C. Kerr, Robyn~M. Stuart, Dina Mistry, Romesh~G. Abeysuriya, Katherine
+  Rosenfeld, Gregory~R. Hart, Rafael~C. N{\'u}{\~n}ez, Jamie~A. Cohen,
+  Prashanth Selvaraj, Brittany Hagedorn, and Daniel~J. Klein.
+\newblock Covasim: An agent-based model of {COVID}-19 dynamics and
+  interventions.
+\newblock {\em PLOS Computational Biology}, 17(7):e1009149, 2021.
+
+\bibitem{ferguson2020impact}
+Neil~M. Ferguson, Daniel Laydon, Gemma Nedjati-Gilani, et~al.
+\newblock Report 9: Impact of non-pharmaceutical interventions ({NPIs}) to
+  reduce {COVID}-19 mortality and healthcare demand.
+\newblock Technical report, Imperial College London, 2020.
+
+\bibitem{carpenter2017stan}
+Bob Carpenter, Andrew Gelman, Matthew~D. Hoffman, Daniel Lee, Ben Goodrich,
+  Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li, and Allen
+  Riddell.
+\newblock Stan: A probabilistic programming language.
+\newblock {\em Journal of Statistical Software}, 76(1):1--32, 2017.
+
+\bibitem{devalpine2017nimble}
+Perry de~Valpine, Daniel Turek, Christopher~J. Paciorek, Clifford
+  Anderson-Bergman, Duncan~Temple Lang, and Rastislav Bodik.
+\newblock Programming with models: Writing statistical algorithms for general
+  model structures with {NIMBLE}.
+\newblock {\em Journal of Computational and Graphical Statistics},
+  26(2):403--413, 2017.
+
+\bibitem{cramer2022forecasthub}
+Estee~Y. Cramer, Evan~L. Ray, Velma~K. Lopez, et~al.
+\newblock Evaluation of individual and ensemble probabilistic forecasts of
+  {COVID}-19 mortality in the {United States}.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  119(15):e2113561119, 2022.
+
 \bibitem{diekmann1990}
 Odo Diekmann, Johan A.~P. Heesterbeek, and Johan A.~J. Metz.
 \newblock On the definition and the computation of the basic reproduction ratio
@@ -53,32 +112,15 @@ John~R. Dormand and Peter~J. Prince.
 \newblock {\em {R}: A Language and Environment for Statistical Computing}.
 \newblock R Foundation for Statistical Computing, Vienna, Austria, 2024.
 
-\bibitem{soetaert2010desolve}
-Karline Soetaert, Thomas Petzoldt, and R.~Woodrow Setzer.
-\newblock Solving differential equations in {R}: Package {deSolve}.
-\newblock {\em Journal of Statistical Software}, 33(9):1--25, 2010.
-
 \bibitem{bezanson2017julia}
 Jeff Bezanson, Alan Edelman, Stefan Karpinski, and Viral~B. Shah.
 \newblock Julia: A fresh approach to numerical computing.
 \newblock {\em SIAM Review}, 59(1):65--98, 2017.
 
-\bibitem{rackauckas2017diffeq}
-Christopher Rackauckas and Qing Nie.
-\newblock {DifferentialEquations.jl} -- a performant and feature-rich ecosystem
-  for solving differential equations in {Julia}.
-\newblock {\em Journal of Open Research Software}, 5(1):15, 2017.
-
 \bibitem{vanrossum2009python}
 Guido Van~Rossum and Fred~L. Drake.
 \newblock {\em Python 3 Reference Manual}.
 \newblock CreateSpace, Scotts Valley, CA, 2009.
-
-\bibitem{virtanen2020scipy}
-Pauli Virtanen et~al.
-\newblock {SciPy} 1.0: Fundamental algorithms for scientific computing in
-  {Python}.
-\newblock {\em Nature Methods}, 17:261--272, 2020.
 
 \bibitem{yugabyte2024}
 {Yugabyte, Inc.}

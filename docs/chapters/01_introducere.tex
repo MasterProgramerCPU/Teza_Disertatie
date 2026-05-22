@@ -41,6 +41,54 @@ vizualizare în interfață web. Modelele SIR, SIS, SEIR și SIRS rămân utile 
 repere mai simple, prin care se poate observa ce se pierde sau ce se câștigă
 atunci când modelul introduce compartimente suplimentare.
 
+\section{Lucrări și instrumente conexe}
+\label{sec:lucrari_inrudite}
+
+Modelarea computațională a epidemiilor se sprijină pe un ecosistem matur de
+biblioteci de rezolvare a ecuațiilor diferențiale. Lucrarea de față folosește
+direct trei dintre ele, fiecare reprezentativă pentru limbajul său:
+\texttt{deSolve} în R \cite{soetaert2010desolve},
+\texttt{DifferentialEquations.jl} în Julia \cite{rackauckas2017diffeq} și
+\texttt{scipy.integrate} în Python \cite{virtanen2020scipy}. Aceste biblioteci
+sunt cărămizi de bază, optimizate și bine testate, dar rămân componente de
+calcul: ele rezolvă un sistem ODE dat, fără a impune o structură de date
+epidemiologice, o disciplină de colectare a metricilor sau un cadru de
+comparație între limbaje. În această lucrare ele sunt tratate exact ca atare ---
+componente interschimbabile, evaluate sistematic în aceleași condiții.
+
+La un nivel mai înalt există instrumente dedicate modelării epidemiologice, dar
+fiecare se specializează pe un ecosistem sau pe o paradigmă. EpiModel oferă în R
+un cadru pentru modele compartimentale și pe rețele de contact
+\cite{jenness2018epimodel}; Covasim implementează în Python un model
+agent-based detaliat pentru COVID-19 \cite{kerr2021covasim}; iar microsimularea
+de tip CovidSim folosită în raportul Imperial College a influențat deciziile de
+politică sanitară din 2020 \cite{ferguson2020impact}. Aceste instrumente sunt
+puternice în domeniul lor, însă rămân legate de un singur limbaj și nu urmăresc
+o comparație cantitativă cross-limbaj a costului numeric, nici integrarea
+într-un sistem web colaborativ.
+
+Pentru estimarea parametrilor, abordarea standard în literatura recentă este
+calibrarea bayesiană, cu instrumente precum Stan \cite{carpenter2017stan} sau
+NIMBLE \cite{devalpine2017nimble}, care oferă cuantificarea incertitudinii prin
+metode de tip MCMC/HMC. Lucrarea de față folosește o calibrare deterministă prin
+metoda Nelder--Mead, suficientă pentru obiectivul comparativ urmărit; abordarea
+bayesiană este menționată ca direcție viitoare, nu ca element exclus din motive
+metodologice.
+
+În fine, dincolo de modelare există platforme de agregare și diseminare a
+prognozelor, precum COVID-19 Forecast Hub \cite{cramer2022forecasthub}, care
+combină predicții din mai multe modele independente în prognoze de ansamblu.
+Acestea rezolvă o problemă complementară --- coordonarea și evaluarea
+prognozelor la scară --- și nu un toolkit de modelare reutilizabil.
+
+Raportat la aceste direcții, contribuția lucrării se află la intersecția lor:
+un benchmarking comparativ al aceluiași model implementat în R, Julia și Python,
+combinat cu o platformă web integrată, cu control al accesului bazat pe roluri la
+nivel de studiu și cu o evaluare empirică sistematică a costului software. Această
+combinație o deosebește atât de bibliotecile mono-limbaj de rezolvare a ODE-urilor,
+cât și de platformele epidemiologice specializate care nu oferă această integrare
+de sistem.
+
 \section{Obiectivele lucrării}
 \label{sec:obiective}
 
