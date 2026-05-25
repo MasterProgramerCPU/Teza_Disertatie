@@ -165,7 +165,13 @@ pentru Romania (Figura~\ref{fig:lstm_trajectory}) confirmă că predicțiile
 o-zi-înainte urmăresc rezonabil seria, dar prognoza autoregresivă se
 aplatizează rapid --- LSTM-ul actual este un instrument de prognoză pe
 termen scurt și de detectare a reziduurilor, nu un model autonom de
-extrapolare epidemiologică pe orizonturi mari.
+extrapolare epidemiologică pe orizonturi mari. Validarea față de repere triviale
+(Tabelul~\ref{tab:lstm_baselines}) întărește această concluzie cu cifre: pe
+fereastra de test din seria României, persistența rămâne superioară LSTM-ului la
+orizontul de o zi, deoarece $85\%$ din zile sunt plate (raportare săptamânală).
+Acest rezultat onest delimitează clar rolul componentei: valoare adăugată
+plauzibilă doar în regimul hibrid de corecție a reziduurilor sau cu intrări
+multivariate, nu ca predictor univariat de sine stătător.
 
 \section{Limitări}
 \label{sec:limitari}
@@ -228,12 +234,14 @@ tip de job asincron în mecanismul Redis al aplicației, alături de
 erorile MAE/RMSE pe train și test, numărul de evaluări ale solverului și timpul
 total de optimizare --- toate stocate într-o tabelă dedicată și expuse prin API.
 
-Pentru componenta ML, următorul pas realist este compararea sistematică a
-runner-ului LSTM cu liniile de bază (persistență, medie mobilă) și cu
-modelul compartimental calibrat, pe toate cele 38 de țări europene din setul
-de date OWID. Rezultatul ar trebui agregat ca tabel cu MAE, RMSE, nRMSE și
-timp de antrenare per regiune, iar varianta hibridă LSTM-peste-reziduuri ar
-putea fi prima implementată concret.
+Pentru componenta ML, comparația cu liniile de bază a fost deja realizată pe
+seria României (Tabelul~\ref{tab:lstm_baselines}) și a arătat că persistența
+domină la orizontul de o zi. Următorul pas realist este repetarea acestei
+comparații pe toate cele 38 de țări europene din setul de date OWID, cu modelul
+compartimental calibrat ca reper suplimentar, agregând MAE, RMSE, nRMSE și timpul
+de antrenare per regiune. Având în vedere rezultatul de pe România, prioritatea ar
+trebui să fie varianta hibridă LSTM-peste-reziduuri --- singurul regim în care
+rețeaua ar putea depăși un reper trivial.
 
 La nivel de evaluare, următorul pas este extinderea campaniei de benchmark pe
 configurații hardware diferite (mașini locale, noduri mai puternice, eventual

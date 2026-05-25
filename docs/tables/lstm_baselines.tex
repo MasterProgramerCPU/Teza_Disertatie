@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering
+\caption{Validarea LSTM fata de predictori naivi, eroare o-zi-inainte pe fereastra de test (ultimele $20\%$ din seria Romania, $288$ zile). Toate metodele folosesc doar valori observate trecute. \emph{Skill} este reducerea relativa a MAE fata de persistenta (valori negative = mai slab decat persistenta). Pe aceasta serie, $85\%$ din zilele de test sunt identice cu ziua precedenta (raportare saptamanala), ceea ce face persistenta extrem de greu de batut.}
+\label{tab:lstm_baselines}
+\small
+\begin{tabularx}{\columnwidth}{X r r r}
+\toprule
+\textbf{Metodă} & \textbf{MAE} & \textbf{RMSE} & \textbf{Skill} \\
+\midrule
+LSTM (o-zi-înainte) & 755 & 1114 & -200\% \\
+Persistență & 251 & 963 & --- \\
+Drift (ultima diferență) & 501 & 1362 & -99\% \\
+Medie mobilă (7 zile) & 1002 & 1628 & -298\% \\
+\bottomrule
+\end{tabularx}
+\end{table}

@@ -360,10 +360,36 @@ pe termen scurt și ca reper empiric.
 O rețea LSTM trebuie comparată cu repere simple, altfel o eroare mică poate fi
 interpretată greșit drept performanță. Reperele relevante pentru o serie
 epidemiologică sunt predicția prin persistență, $\hat{y}_{t}=y_{t-1}$, media
-mobilă pe ultimele $k$ zile și modelul compartimental calibrat pe aceeași
-fereastră. O componentă LSTM este justificată doar dacă reduce eroarea pe
-fereastra de test față de aceste repere, evaluată cu protocolul comparativ din
+mobilă pe ultimele $k$ zile și extrapolarea prin ultima diferență (drift). O
+componentă LSTM este justificată doar dacă reduce eroarea pe fereastra de test
+față de aceste repere, evaluată cu protocolul comparativ din
 capitolul~\ref{ch:comparatie_calibrare}.
+
+Această comparație a fost realizată direct, cu eroare o-zi-înainte pe fereastra de
+test din seria României (ultimele $20\%$ din puncte), prin scriptul
+\texttt{scripts/lstm\_baselines.py}. Toate metodele folosesc strict valori
+observate trecute. Rezultatele, în Tabelul~\ref{tab:lstm_baselines}, sunt
+clarificatoare: LSTM-ul compact \emph{nu} bate persistența --- dimpotrivă, are o
+eroare MAE de aproximativ trei ori mai mare ($755$ față de $251$ de cazuri), iar
+toate cele trei repere triviale au erori sub cea a rețelei pe MAE.
+
+\input{tables/lstm_baselines}
+
+Explicația nu este un defect de antrenare, ci o proprietate a datelor:
+$85\%$ din zilele ferestrei de test sunt identice cu ziua precedentă, deoarece
+seria OWID are o cadență de raportare săptamânală (actualizări la interval mediu
+de $7{,}0$ zile, cu valori constante între ele). Pe o astfel de serie,
+persistența are eroare \emph{exact zero} în $85\%$ din zile, iar un model care
+prezice o traiectorie zilnică netedă este penalizat tocmai pe zilele plate. Acest
+rezultat este consistent cu literatura de prognoză a seriilor temporale, în care
+persistența este un reper notoriu de greu de bătut pentru serii netede sau cu
+raportare agregată. Interpretarea corectă nu este că LSTM-ul ``nu funcționează''
+---~predicțiile o-zi-înainte urmăresc vizual seria, conform
+Figurii~\ref{fig:lstm_trajectory}~--- ci că pe acest tip de date, la acest
+orizont, valoarea adăugată față de un reper trivial este negativă. Aceasta
+justifică tratarea LSTM-ului ca extensie complementară (corecție de reziduuri,
+intrare multivariată), nu ca înlocuitor, și motivează direcțiile din
+secțiunea~\ref{sec:extindere_lstm}.
 
 Limitările sunt intrinsece abordării. LSTM necesită mai multe date decât
 modelele compartimentale simple, iar pentru regiuni cu serii scurte sau
@@ -403,9 +429,14 @@ rețeaua să corecteze doar deviațiile statistice rămase după simularea
 compartimentală. Dacă reziduurile au un tipar stabil, modelul hibrid ar putea
 îmbunătăți predicția pe termen scurt fără a pierde interpretabilitatea.
 
-Capitolul prezintă rezultate operaționale pe Romania (Figura~\ref{fig:lstm_trajectory})
-și cost de execuție concret în Tabelul~\ref{tab:bench_lstm} din
-capitolul~\ref{ch:evaluare}. Validarea predictivă completă --- comparația
-sistematică cu liniile de bază (persistență, medie mobilă) și cu modelul
-compartimental calibrat, pe mai multe regiuni și cu varierea hiperparametrilor
-$(\ell, H, \eta, E)$ --- rămâne ca extensie naturală a campaniei de benchmark.
+Capitolul prezintă rezultate operaționale pe Romania (Figura~\ref{fig:lstm_trajectory}),
+cost de execuție concret în Tabelul~\ref{tab:bench_lstm} din
+capitolul~\ref{ch:evaluare} și o validare predictivă față de linii de bază în
+Tabelul~\ref{tab:lstm_baselines}. Această validare, realizată pe seria României,
+arată că reperul de persistență rămâne superior la orizontul de o zi. Extinderea
+naturală constă în repetarea comparației pe mai multe regiuni, cu modelul
+compartimental calibrat ca reper suplimentar și cu varierea hiperparametrilor
+$(\ell, H, \eta, E)$, precum și în evaluarea variantei hibride din
+ecuația~\eqref{eq:hibrid_lstm}, în care rețeaua corectează reziduuri în loc să
+prezică seria brută --- singurul regim în care, plauzibil, ar putea depăși un
+reper trivial.

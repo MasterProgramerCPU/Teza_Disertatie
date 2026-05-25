@@ -112,7 +112,7 @@
 \contentsline {section}{\numberline {6.6}Împărțirea cronologică și evaluarea}{30}{section.6.6}%
 \contentsline {section}{\numberline {6.7}Integrarea în arhitectura aplicației}{30}{section.6.7}%
 \contentsline {section}{\numberline {6.8}Linii de bază și limitări}{31}{section.6.8}%
-\contentsline {section}{\numberline {6.9}Direcții de extindere}{31}{section.6.9}%
+\contentsline {section}{\numberline {6.9}Direcții de extindere}{32}{section.6.9}%
 \contentsline {chapter}{\numberline {7}Comparația Modelelor, Analiză Numerică și Calibrare}{33}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Rolul comparației între modele}{33}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Comparație structurală}{33}{section.7.2}%

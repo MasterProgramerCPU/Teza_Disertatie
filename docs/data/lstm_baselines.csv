@@ -1,0 +1,5 @@
+method,n,mae,rmse,skill_vs_persistence_pct
+LSTM (o-zi-înainte),288,754.6,1114.39,-200.2
+Persistență,288,251.37,963.19,0.0
+Drift (ultima diferență),288,501.42,1361.97,-99.5
+Medie mobilă (7 zile),288,1001.53,1627.8,-298.4

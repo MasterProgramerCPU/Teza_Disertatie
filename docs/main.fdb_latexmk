@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1779691419.00318 "main.aux" "main.bbl" "main" 1779691428.30102 0
+["bibtex main"] 1779694312.18922 "main.aux" "main.bbl" "main" 1779694364.66677 0
   "./bibliography.bib" 1779440050.18795 15395 2256d3db050e01395b7ccfd03db8ca8f ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/bibtex/bst/base/unsrt.bst" 1741388039 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "main.aux" 1779691427.45187 92475 2fa692482547933089fb5ade6199c46a "pdflatex"
+  "main.aux" 1779694363.8107 93631 e764d740a6cafc9c2172bc567a803e75 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1779691419.0776 "main.tex" "main.pdf" "main" 1779691428.30138 0
+["pdflatex"] 1779694355.27301 "main.tex" "main.pdf" "main" 1779694364.66708 0
   "../code/api/internal/api/handlers/response.go" 1778480941.50347 833 ce1f32e45640bfb80038a375e87e341f ""
   "../code/api/internal/api/middleware/rbac.go" 1778588509.96336 3896 32086d6647fc58dcc09232ebbe75b9f7 ""
   "../code/api/internal/api/router/router.go" 1778829770.5369 4071 3234803df214ea9934d6e843856aac77 ""
@@ -397,11 +397,11 @@
   "chapters/03_tehnologii.tex" 1778836635.35736 17145 b1e856baf00d34e1cfb6f7ac955199ff ""
   "chapters/04_arhitectura_sistemului.tex" 1778836636.67377 51262 65ee644205fcaf26d6931d30dc3560d9 ""
   "chapters/05_implementare_modele.tex" 1778836515.22673 14178 f08c81c9bb12e570651f0621683f81d3 ""
-  "chapters/06_predictie_lstm.tex" 1779094141.78862 21687 9aeb621b8d0a67b008ecf57618623f2f ""
+  "chapters/06_predictie_lstm.tex" 1779694297.62143 23730 eb5afc7e0bcbc6f900d1c2e85f317fdd ""
   "chapters/07_comparatie_si_calibrare.tex" 1779691401.30535 20461 29c4dbf46983dc43b51b52d1349f785e ""
   "chapters/08_evaluare_performanta.tex" 1779691377.16294 27654 c5d61a32661f323cb7a5da69e9330746 ""
   "chapters/09_aplicatia_web.tex" 1778836521.77998 11035 4504bde1e2dab6ea704ad5e158e226d2 ""
-  "chapters/10_concluzii.tex" 1779099458.06955 15772 9db452de8f986ac0517a895c46cb27c0 ""
+  "chapters/10_concluzii.tex" 1779694347.37838 16471 af13bbcaf6b1d606b9cf5e467cc35906 ""
   "data/calibration_multiregion.csv" 1779092719.49079 19263 7995290b87c51501da377cec2d4a7a3d ""
   "data/calibration_sir_romania.csv" 1778848428.14017 10825 23511cd4074bdc9ecd62d953131a9cdb ""
   "data/identifiability_grid_sir.csv" 1778848439.36219 121893 1a829478d2f099e50c71297d8d73ae08 ""
@@ -412,14 +412,14 @@
   "figures/identifiability_landscape.tex" 1779095169.44898 2390 333c1e9551c5ffae256b95c89e6ab4ac ""
   "figures/lstm_trajectory.tex" 1778849223.53751 2232 5b06bac6e235c37c053c6c44617556d3 ""
   "figures/scaling_wall_time.tex" 1778849166.11571 1731 15c43ad173288af80c0743665565bc0e ""
-  "main.aux" 1779691427.45187 92475 2fa692482547933089fb5ade6199c46a "pdflatex"
-  "main.bbl" 1779691419.07292 7358 9130b846db082c483944fad46de893fa "bibtex main"
-  "main.loa" 1779691427.46168 501 387501c29eac054c64d45ffbc966d842 "pdflatex"
-  "main.lof" 1779691427.46162 5097 1bc12115cf5af86e43b2e2af49bdff01 "pdflatex"
-  "main.lot" 1779691427.46165 7321 2e48b4fae95d2179b4a954f65452efd3 "pdflatex"
-  "main.out" 1779691427.46118 31586 42fe6a3bafa51cbbe64ee35c76154798 "pdflatex"
+  "main.aux" 1779694363.8107 93631 e764d740a6cafc9c2172bc567a803e75 "pdflatex"
+  "main.bbl" 1779694312.26221 7358 9130b846db082c483944fad46de893fa "bibtex main"
+  "main.loa" 1779694363.83053 501 387501c29eac054c64d45ffbc966d842 "pdflatex"
+  "main.lof" 1779694363.83046 5097 0762bf37c750e6c4e7d485ac8e109b9e "pdflatex"
+  "main.lot" 1779694363.83051 7850 810f6597269b58b5b8828f39353c958a "pdflatex"
+  "main.out" 1779694363.82983 31586 42fe6a3bafa51cbbe64ee35c76154798 "pdflatex"
   "main.tex" 1779094722.57634 10398 55587d20823cf60003f597afebb6fb7f ""
-  "main.toc" 1779691427.46157 15318 2c8aed74f76b214897f45fcba259401d "pdflatex"
+  "main.toc" 1779694363.8304 15318 ffdecaba36b6752ecfbb41f2c0283848 "pdflatex"
   "tables/api_latency.tex" 1779691279.94951 1120 4e49c25c8ca5e6cf86e362cd6a8ce5d5 ""
   "tables/api_latency_scaling.tex" 1779691279.94967 747 c84ae8f771616d88d56274ce7f6b7815 ""
   "tables/bench_julia_coldstart.tex" 1779094737.11789 588 65b8883b94bddc91f1edfaf50a0ef26c ""
@@ -432,6 +432,7 @@
   "tables/calibration_results.tex" 1779094805.99378 1158 9c49805cd7d85bb18c978dea7da54fb3 ""
   "tables/cross_language_regression.tex" 1779094737.12609 1199 fd4f03ffa87c48a07b6b03180ecead6e ""
   "tables/hardware_comparison.tex" 1779099209.02476 1196 40099c68195ff923d421ddf03394bd47 ""
+  "tables/lstm_baselines.tex" 1779694257.84047 871 7e50d3f822f1d5f68cd695fba33eb553 ""
   (generated)
   "main.aux"
   "main.loa"
