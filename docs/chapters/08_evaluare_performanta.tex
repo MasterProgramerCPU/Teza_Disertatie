@@ -409,22 +409,56 @@ rând epidemiologic, inserarea în \texttt{simulation\_runs} și publicarea în
 Redis. Pentru vizualizarea rezultatului, latența include citirea rândurilor din
 \texttt{simulation\_results}, deserializarea JSONB și construirea răspunsului.
 
-Din acest motiv, benchmark-ul numeric trebuie completat cu teste de API:
-\begin{itemize}
-    \item latența endpointului de creare simulare;
-    \item latența endpointului de status;
-    \item latența endpointului de rezultat pentru 30, 90, 180 și 365 puncte;
-    \item dimensiunea răspunsului JSON pentru fiecare model;
-    \item timpul de export CSV.
-\end{itemize}
+Din acest motiv, benchmark-ul numeric a fost completat cu o campanie de teste de
+API, realizată printr-un script reproductibil (\texttt{scripts/bench\_api.py}).
+Pentru fiecare model s-au măsurat cele patru operații expuse de API și percepute
+direct de utilizator: \emph{create} (crearea unei simulări), \emph{status}
+(interogarea stării), \emph{results} (citirea traiectoriei complete în format
+JSON) și \emph{export} (exportul CSV al aceleiași traiectorii). Latențele
+\emph{create} au fost colectate din $12$ repetări, iar cele de citire din $30$ de
+repetări per combinație; măsurătorile au fost făcute prin \texttt{port-forward}
+către serviciul \texttt{api} din clusterul \texttt{kube-4kdhb}, deci includ tot
+lanțul HTTP $\rightarrow$ API $\rightarrow$ YugabyteDB $\rightarrow$ HTTP, plus
+variabilitatea de rețea introdusă de tunel.
 
-Aceste teste arată dacă limita sistemului este solverul, baza de date sau
-transportul datelor către frontend.
+\input{tables/api_latency}
 
-\testtodo{Pentru această secțiune trebuie măsurate endpointurile reale ale
-API-ului, ideal printr-un script reproductibil. Rezultatele trebuie să includă
-latența mediană, percentila 95, dimensiunea răspunsului și timpul de export CSV
-pentru fiecare model.}
+Tabelul~\ref{tab:api_latency} prezintă rezultatele la orizontul de un an
+($365$ puncte). Se desprind câteva observații. (i) Latențele mediane sunt
+omogene între modele și se situează în intervalul $24$--$71$~ms pentru toate
+endpointurile; modelul nu influențează semnificativ latența, deoarece costul
+este dominat de drumul dus-întors prin baza de date, nu de structura
+compartimentală. (ii) Endpointul \emph{create} răspunde asincron --- el doar
+validează inputul, citește primul rând epidemiologic, inserează în
+\texttt{simulation\_runs} și publică în coada Redis, înainte ca solverul să
+ruleze --- deci latența sa nu reflectă costul de integrare numerică, ci pe cel de
+inițiere a unui job. (iii) Dimensiunea răspunsului JSON depinde de model:
+SIDARTHE, cu opt compartimente, produce $\sim$$49$~KB față de $\sim$$36$~KB
+pentru SIS cu două compartimente, la același orizont. (iv) Percentila 95 este de
+$2{,}5$--$3$ ori mai mare decât mediana ($124$--$156$~ms), reflectând cozile de
+latență tipice unei măsurători prin tunel; pe un acces direct în cluster acestea
+ar fi mai mici, dar raportarea lor este corectă pentru profilul de testare.
+
+\input{tables/api_latency_scaling}
+
+Tabelul~\ref{tab:api_latency_scaling} izolează efectul orizontului pentru modelul
+cel mai greu (SIDARTHE), variind numărul de puncte de la $30$ la $365$.
+Dimensiunea răspunsului JSON crește aproape liniar cu numărul de puncte (de la
+$\sim$$4$~KB la $\sim$$49$~KB), în timp ce latența mediană \emph{results} crește
+mult mai lent (de la $\sim$$30$ la $\sim$$47$~ms): la aceste dimensiuni,
+costul fix al interogării domină costul de serializare. Exportul CSV produce
+constant răspunsuri de $5$--$10$ ori mai mici decât JSON-ul echivalent (text plat,
+fără chei repetate per rând), confirmând că formatul de transport contează pentru
+volumul transferat, chiar dacă latența rămâne comparabilă.
+
+Concluzia practică este că, pentru orizonturile uzuale ($\le 365$ puncte) și
+modelele studiate, limita sistemului nu este nici solverul (sub $10$~ms pe
+cluster, conform Tabelului~\ref{tab:bench_wall_time}), nici transportul JSON, ci
+costul fix al drumului prin baza de date, de ordinul a câtorva zeci de
+milisecunde per cerere. Aceasta este o latență confortabilă pentru o interfață
+interactivă și indică faptul că optimizările viitoare ar trebui să vizeze
+reducerea numărului de cereri (de exemplu prin agregarea rezultatelor mai multor
+rulări într-un singur răspuns), nu accelerarea unei singure cereri.
 
 \section{Interpretarea rezultatelor}
 \label{sec:analiza_sintetica}

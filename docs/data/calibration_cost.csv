@@ -1,0 +1,9 @@
+metric,value
+candidates,1377
+inprocess_wall_s,17.238
+inprocess_cpu_s,17.225
+peak_mem_mb,0.65
+job_latency_ms,1047.1
+rows_per_job,155
+naive_proj_wall_s,1441.8
+naive_db_rows,213435

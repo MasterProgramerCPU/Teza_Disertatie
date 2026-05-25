@@ -351,7 +351,36 @@ motiv, evaluarea numerică și evaluarea software trebuie raportate împreună:
 modelul cu eroare mai mică poate fi mai costisitor, iar modelul mai rapid poate
 fi insuficient pentru datele disponibile.
 
-\testtodo{Pentru integrarea software a calibrării trebuie măsurate costurile
-generate de rulări multiple ale solverului: timp total, timp CPU, memorie, număr
-de job-uri, număr de simulări candidate și volum de rezultate scrise în baza de
-date.}
+\subsection{Costul software al calibrării}
+\label{subsec:cost_calibrare}
+
+Pentru a cuantifica acest cost s-a măsurat direct calibrarea SIR pe România
+(scenariile liber și constrâns împreună, cu restarturi multiple Nelder--Mead),
+prin scriptul \texttt{scripts/bench\_calibration\_cost.py}. Calibrarea a necesitat
+$1\,377$ de simulări candidate --- adică $1\,377$ de evaluări ale funcției
+obiectiv, fiecare o integrare numerică completă pe fereastra de $154$ de zile ---
+realizate \emph{in-process} în $17{,}2$~secunde, cu un consum de memorie de vârf
+sub $1$~MB. Acesta este numărul real de integrări, nu o estimare.
+
+Întrebarea de proiectare este cum se traduce acest cost într-un job al aplicației.
+Tabelul~\ref{tab:calibration_cost} compară două arhitecturi. În varianta
+\emph{naivă}, fiecare simulare candidată ar fi dispecerizată ca job separat prin
+aplicație (Redis $\rightarrow$ runner $\rightarrow$ scriere în YugabyteDB).
+Folosind latența end-to-end măsurată a unui job SIR real la acest orizont
+($\sim$$1\,047$~ms/job, mediană pe $8$ rulări), cele $1\,377$ de candidate ar
+costa $\sim$$1\,442$ de secunde (aproape $24$ de minute) și ar scrie peste
+$210\,000$ de rânduri în baza de date --- de circa $84$ de ori mai scump decât
+calibrarea in-process, fără niciun câștig de acuratețe.
+
+\input{tables/calibration_cost}
+
+În varianta \emph{recomandată}, calibrarea rulează in-process într-un singur job
+de tip \texttt{calibration}, iar în baza de date se scrie doar simularea finală
+obținută cu $\hat{\theta}$ (un singur set de rezultate). Costul de calcul rămâne
+cel măsurat ($17{,}2$~s), dar overhead-ul de coadă și de persistare --- care în
+varianta naivă ar fi plătit de $1\,377$ de ori --- este amortizat o singură dată.
+Concluzia de proiectare este clară: calibrarea nu trebuie modelată ca $N$ simulări
+independente, ci ca un singur job care încapsulează bucla de optimizare și
+persistă numai rezultatul final. Această observație justifică tratarea calibrării
+ca tip de job distinct, cu propriile metrici de cost raportate alături de eroarea
+numerică, exact cum recomandă secțiunea anterioară.
