@@ -40,6 +40,12 @@ func NewSimulationsHandler(
 	}
 }
 
+// maxTMax limiteaza orizontul de integrare acceptat. Fara un plafon superior, un
+// t_max arbitrar de mare ar genera integrari foarte lungi si scrieri masive in
+// baza de date, deci o cale de epuizare a resurselor (DoS). Valoarea acopera
+// orizonturile folosite in campania de benchmark (pana la 50000) cu marja.
+const maxTMax = 100000
+
 type createSimulationReq struct {
 	DatasetID   uuid.UUID          `json:"dataset_id"`
 	ModelType   string             `json:"model_type"`
@@ -243,6 +249,10 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	if req.TMax <= 0 {
 		writeError(w, http.StatusBadRequest, "t_max must be > 0")
+		return
+	}
+	if req.TMax > maxTMax {
+		writeError(w, http.StatusBadRequest, "t_max exceeds maximum of "+strconv.Itoa(maxTMax))
 		return
 	}
 	modelType := models.ModelType(req.ModelType)

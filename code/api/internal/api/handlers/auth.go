@@ -18,14 +18,20 @@ type AuthHandler struct {
 	jwtSecret  []byte
 	jwtExpiry  time.Duration
 	bcryptCost int
+	dummyHash  []byte
 }
 
 func NewAuthHandler(users *repository.UserRepository, jwtSecret string, jwtExpiry time.Duration, bcryptCost int) *AuthHandler {
+	// Hash fals precalculat cu acelasi cost, folosit la login pentru a egaliza
+	// timpul de raspuns cand emailul nu exista (vezi Login), prevenind enumerarea
+	// utilizatorilor printr-un timing oracle.
+	dummy, _ := bcrypt.GenerateFromPassword([]byte("invalid-placeholder-password"), bcryptCost)
 	return &AuthHandler{
 		users:      users,
 		jwtSecret:  []byte(jwtSecret),
 		jwtExpiry:  jwtExpiry,
 		bcryptCost: bcryptCost,
+		dummyHash:  dummy,
 	}
 }
 
@@ -94,6 +100,9 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.users.GetByEmail(r.Context(), creds.Email)
 	if errors.Is(err, repository.ErrNotFound) {
+		// Comparam cu hash-ul fals pentru a consuma acelasi timp ca un login
+		// valid; altfel diferenta de latenta ar dezvalui ce emailuri exista.
+		_ = bcrypt.CompareHashAndPassword(h.dummyHash, []byte(creds.Password))
 		writeError(w, http.StatusUnauthorized, "invalid credentials")
 		return
 	}

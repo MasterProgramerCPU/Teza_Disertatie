@@ -147,19 +147,22 @@
 \contentsline {section}{\numberline {9.4}Execuția simulărilor}{47}{section.9.4}%
 \contentsline {section}{\numberline {9.5}Frontend Vue.js}{48}{section.9.5}%
 \contentsline {section}{\numberline {9.6}Consola super-admin}{48}{section.9.6}%
-\contentsline {section}{\numberline {9.7}Validare funcțională}{48}{section.9.7}%
-\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{49}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Sinteza lucrării}{49}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{49}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{49}{section.10.3}%
-\contentsline {section}{\numberline {10.4}Concluzii experimentale}{50}{section.10.4}%
-\contentsline {section}{\numberline {10.5}Limitări}{50}{section.10.5}%
-\contentsline {section}{\numberline {10.6}Direcții viitoare}{51}{section.10.6}%
-\contentsline {chapter}{Bibliografie}{52}{section.10.6}%
-\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{54}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{59}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{64}{appendix.C}%
-\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{69}{appendix.D}%
-\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{77}{appendix.E}%
-\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{81}{appendix.F}%
-\contentsline {chapter}{\numberline {G}Documentația API REST}{96}{appendix.G}%
+\contentsline {section}{\numberline {9.7}Considerații de securitate}{48}{section.9.7}%
+\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{48}{subsection.9.7.1}%
+\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{49}{subsection.9.7.2}%
+\contentsline {section}{\numberline {9.8}Validare funcțională}{49}{section.9.8}%
+\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{50}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Sinteza lucrării}{50}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{50}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{50}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Concluzii experimentale}{51}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Limitări}{51}{section.10.5}%
+\contentsline {section}{\numberline {10.6}Direcții viitoare}{52}{section.10.6}%
+\contentsline {chapter}{Bibliografie}{53}{section.10.6}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{55}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{60}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{65}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{70}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{78}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{82}{appendix.F}%
+\contentsline {chapter}{\numberline {G}Documentația API REST}{97}{appendix.G}%

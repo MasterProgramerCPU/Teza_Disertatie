@@ -172,6 +172,81 @@ corespunzător. Acest feed este util pentru audit operațional, pentru
 identificarea rapidă a simulărilor blocate în starea \texttt{running} și pentru
 verificarea încărcărilor de seturi de date proaspete.
 
+\section{Considerații de securitate}
+\label{sec:securitate}
+
+Fiind un sistem care gestionează date de cercetare grupate pe studii, cu acces
+diferențiat pe roluri, securitatea este o cerință funcțională, nu un adaos
+ulterior. Această secțiune documentează mecanismele implementate efectiv și
+limitările cunoscute, pe baza unei treceri în revistă a codului backend.
+
+\subsection{Mecanisme implementate}
+\label{subsec:sec_mecanisme}
+
+\textbf{Autentificare.} Identitatea este stabilită prin token JWT semnat cu
+HMAC-SHA256. Middleware-ul de validare verifică explicit că metoda de semnare a
+token-ului este HMAC înainte de a accepta cheia, respingând astfel atacul de
+confuzie de algoritm (un token forjat cu \texttt{alg=none} sau cu o cheie publică
+RSA reinterpretată ca secret HMAC). Expirarea (\texttt{exp}) este verificată la
+fiecare cerere, iar secretul JWT este obligatoriu la pornirea serviciului: în
+absența lui aplicația refuză să pornească, ceea ce elimină riscul unui secret
+implicit slab.
+
+\textbf{Parole.} Parolele nu sunt niciodată stocate în clar, ci ca hash bcrypt cu
+factor de cost 12. La autentificare se folosește o comparație în timp constant,
+iar mesajul de eroare este identic pentru email inexistent și parolă greșită
+(\emph{invalid credentials}), pentru a nu dezvălui ce conturi există.
+
+\textbf{Autorizare (RBAC contextual).} Accesul este organizat pe studii, cu patru
+roluri: \texttt{admin}, \texttt{researcher}, \texttt{contributor}, \texttt{viewer},
+plus flag-ul global \texttt{is\_super\_admin}. Regulile sunt aplicate ca lanț de
+middleware-uri pe rute: citirea este permisă oricărui membru, încărcarea de seturi
+de date cere rol \texttt{admin} sau \texttt{contributor}, crearea de simulări cere
+\texttt{admin} sau \texttt{researcher}, iar administrarea studiului (membri,
+ștergere) este rezervată rolului \texttt{admin}. Endpointurile de platformă
+(\texttt{/api/admin/*}) sunt protejate separat prin verificarea super-adminului.
+
+\textbf{Izolarea resurselor între studii.} Resursele imbricate sunt interogate
+întotdeauna în contextul studiului din URL: o cerere de tipul
+\texttt{/studies/\{A\}/simulations/\{id\}} verifică nu doar că utilizatorul este
+membru al studiului \texttt{A}, ci și că simularea \texttt{id} aparține studiului
+\texttt{A}. Astfel, un membru al unui studiu nu poate citi simulări sau seturi de
+date dintr-un alt studiu prin substituirea identificatorului (atac de tip IDOR).
+
+\textbf{Integritatea interogărilor și a intrărilor.} Toate interogările către
+YugabyteDB folosesc parametri legați (\texttt{\$1, \$2, \dots}), nu concatenare de
+șiruri, eliminând injecția SQL. Parametrii simulărilor sunt validați pe server:
+tipul modelului și limbajul sunt verificate față de liste albe, ratele negative
+sunt respinse, iar hiperparametrii LSTM sunt restrânși la intervale întregi
+valide. Încărcările de fișiere sunt plafonate la 32~MB prin
+\texttt{MaxBytesReader}, prevenind epuizarea memoriei la parsarea CSV.
+
+\subsection{Limitări cunoscute și remedieri}
+\label{subsec:sec_limitari}
+
+Trecerea în revistă a identificat și două probleme punctuale, remediate în cursul
+acestei lucrări. Prima: endpointul de creare a simulărilor accepta orice
+$t_{\max}>0$, fără plafon superior, ceea ce permitea unei cereri legitime să
+declanșeze o integrare arbitrar de lungă și scrieri masive în baza de date --- o
+cale de epuizare a resurselor. S-a introdus un plafon explicit
+($t_{\max}\le 100\,000$), care acoperă cu marjă orizonturile folosite în campania
+de benchmark. A doua: la autentificare, un email inexistent returna răspunsul
+înainte de verificarea bcrypt, astfel încât diferența de latență putea fi folosită
+pentru a enumera conturile valide (timing oracle). S-a adăugat o comparație bcrypt
+cu un hash fals pe ramura ``email inexistent'', egalizând timpul de răspuns.
+
+Rămân limitări tratate ca direcții ulterioare. Nu există încă limitare a ratei
+cererilor pe endpointul de autentificare, ceea ce lasă deschisă posibilitatea
+atacurilor de tip brute-force sau credential stuffing; soluția naturală este un
+middleware de rate limiting per IP. Token-urile JWT sunt fără stare, deci nu pot fi
+revocate înainte de expirare (24~h); pentru un control mai fin ar fi necesară o
+listă de revocare sau token-uri de reîmprospătare cu durată scurtă. În fine,
+politica CORS este permisivă (\texttt{AllowedOrigins: *}), ceea ce este acceptabil
+în configurația curentă --- autentificarea se face prin antet \texttt{Authorization}
+cu token Bearer, nu prin cookie, iar \texttt{AllowCredentials} este dezactivat,
+deci nu există suprafață de atac CSRF --- dar ar trebui restrânsă la originile
+cunoscute într-un deployment public.
+
 \section{Validare funcțională}
 \label{sec:testare_functionala}
 
