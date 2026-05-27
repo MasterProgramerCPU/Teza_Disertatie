@@ -1,6 +1,6 @@
 export type Language = "r" | "julia" | "python";
 
-export type ModelType = "sis" | "sir" | "seir" | "sirs" | "sidarthe" | "lstm";
+export type ModelType = "sis" | "sir" | "seir" | "sirs" | "sidarthe" | "lstm" | "script";
 
 export type SimulationStatus = "pending" | "running" | "completed" | "failed";
 
@@ -97,8 +97,28 @@ export interface BenchmarkAggregate {
 export interface CreateSimulationPayload {
   dataset_id: string;
   model_type: ModelType;
-  language: Language;
+  language?: Language;
   parameters: Record<string, number>;
   population_n?: number;
   t_max: number;
+  script_content?: string;
+}
+
+export interface ScriptDraft {
+  id: string;
+  user_id: string;
+  study_id: string;
+  name: string;
+  description: string;
+  script_content: string;
+  parameters_json: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ScriptDraftPayload {
+  name: string;
+  description?: string;
+  script_content: string;
+  parameters_json?: Record<string, unknown>;
 }

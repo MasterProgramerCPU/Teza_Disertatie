@@ -7,12 +7,14 @@ export const MODEL_LABELS: Record<ModelType, string> = {
   seir: "SEIR",
   sirs: "SIRS",
   lstm: "LSTM",
+  script: "Script (cod custom)",
 };
 
-export const MODEL_OPTIONS = Object.entries(MODEL_LABELS).map(([value, label]) => ({
-  value: value as ModelType,
-  label,
-}));
+// 'script' este tratat in pagina dedicata de editor; il excludem din dropdown-ul
+// formularului obisnuit de simulare.
+export const MODEL_OPTIONS = (Object.entries(MODEL_LABELS) as [ModelType, string][])
+  .filter(([value]) => value !== "script")
+  .map(([value, label]) => ({ value, label }));
 
 export const COMPARTMENT_LABELS: Record<string, string> = {
   s: "S",
@@ -80,6 +82,7 @@ export const MODEL_PARAMETERS: Record<ModelType, Record<string, number>> = {
     epochs: 150,
     learning_rate: 0.01,
   },
+  script: {},
 };
 
 export const MODEL_PARAMETER_ORDER: Record<ModelType, string[]> = {
@@ -89,6 +92,7 @@ export const MODEL_PARAMETER_ORDER: Record<ModelType, string[]> = {
   seir: ["beta", "sigma", "gamma"],
   sirs: ["beta", "gamma", "xi"],
   lstm: ["lookback", "hidden_size", "epochs", "learning_rate"],
+  script: [],
 };
 
 export function defaultParameters(modelType: ModelType): Record<string, number> {

@@ -45,6 +45,7 @@ function onChangeStudy(e: Event) {
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/datasets">Seturi de date</router-link>
         <router-link to="/simulations/new" v-if="studies.canWriteSimulations">Simulare nouă</router-link>
+        <router-link to="/script-editor" v-if="studies.canWriteSimulations">Editor cod</router-link>
         <router-link to="/compare">Comparare</router-link>
         <router-link to="/benchmarks">Benchmarks</router-link>
       </div>

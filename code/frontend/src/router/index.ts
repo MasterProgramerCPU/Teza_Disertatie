@@ -69,6 +69,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/pages/BenchmarksPage.vue"),
     meta: { requiresAuth: true, requiresStudy: true },
   },
+  {
+    path: "/script-editor",
+    name: "script-editor",
+    component: () => import("@/pages/ScriptEditorPage.vue"),
+    meta: { requiresAuth: true, requiresStudy: true },
+  },
   { path: "/:pathMatch(.*)*", redirect: "/dashboard" },
 ];
 

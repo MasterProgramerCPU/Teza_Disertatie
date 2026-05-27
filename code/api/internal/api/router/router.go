@@ -95,7 +95,7 @@ func New(deps Deps) http.Handler {
 						r.Get("/script-drafts", deps.ScriptDrafts.List)
 						r.Get("/script-drafts/{id}", deps.ScriptDrafts.Get)
 						r.Post("/script-drafts", deps.ScriptDrafts.Create)
-						r.Put("/script-drafts/{id}", deps.ScriptDrafts.Update)
+						r.Patch("/script-drafts/{id}", deps.ScriptDrafts.Update)
 						r.Delete("/script-drafts/{id}", deps.ScriptDrafts.Delete)
 					})
 
