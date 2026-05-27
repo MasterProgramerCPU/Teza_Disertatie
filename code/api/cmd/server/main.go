@@ -61,6 +61,7 @@ func main() {
 	sims := repository.NewSimulationRepository(pool)
 	results := repository.NewResultsRepository(pool)
 	benches := repository.NewBenchmarkRepository(pool)
+	runners := repository.NewRunnerRepository(pool)
 
 	dispatcher := runner.NewDispatcher(rdb)
 	jwt := authmw.NewJWTMiddleware(cfg.JWTSecret)
@@ -75,6 +76,7 @@ func main() {
 		Simulations: handlers.NewSimulationsHandler(sims, datasets, results, benches, dispatcher),
 		Benchmarks:  handlers.NewBenchmarksHandler(benches),
 		Admin:       handlers.NewAdminHandler(users, studies, pool),
+		Runners:     handlers.NewRunnersHandler(runners),
 		JWT:         jwt,
 		RBAC:        rbac,
 	}

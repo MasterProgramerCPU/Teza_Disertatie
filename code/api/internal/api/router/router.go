@@ -22,6 +22,7 @@ type Deps struct {
 	Simulations *handlers.SimulationsHandler
 	Benchmarks  *handlers.BenchmarksHandler
 	Admin       *handlers.AdminHandler
+	Runners     *handlers.RunnersHandler
 	JWT         *authmw.JWTMiddleware
 	RBAC        *authmw.RBAC
 }
@@ -83,6 +84,20 @@ func New(deps Deps) http.Handler {
 
 						// Benchmarks — citire pentru toti membrii
 						r.Get("/benchmarks", deps.Benchmarks.Aggregate)
+
+						// Runners (plug-in-uri) — citire pentru toti membrii
+						r.Get("/runners", deps.Runners.List)
+						r.Get("/runners/{id}", deps.Runners.Get)
+					})
+
+					// Runners — creare/stergere: doar super-admin.
+					// Lant: RequireStudyMembership (super-admin trece + seteaza
+					// study context) -> RequireSuperAdmin (filtreaza membrii normali).
+					r.Group(func(r chi.Router) {
+						r.Use(deps.RBAC.RequireStudyMembership())
+						r.Use(deps.RBAC.RequireSuperAdmin)
+						r.Post("/runners", deps.Runners.Create)
+						r.Delete("/runners/{id}", deps.Runners.Delete)
 					})
 
 					// Datasets — scriere: admin sau contributor

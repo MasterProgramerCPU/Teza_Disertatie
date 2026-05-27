@@ -146,6 +146,43 @@ type SimulationResult struct {
 	Compartments map[string]float64 `json:"compartments"`
 }
 
+// RunnerStatus reprezinta starea ciclului de viata al unui runner plug-in.
+// pending  -> tocmai inregistrat, asteapta build-ul.
+// building -> imaginea container se construieste.
+// ready    -> deployment-ul ruleaza si runner-ul accepta job-uri.
+// failed   -> build sau deploy esuat; status_message contine detalii.
+// stopped  -> oprit explicit de super-admin (scale-to-zero, dar inregistrarea ramane).
+type RunnerStatus string
+
+const (
+	RunnerStatusPending  RunnerStatus = "pending"
+	RunnerStatusBuilding RunnerStatus = "building"
+	RunnerStatusReady    RunnerStatus = "ready"
+	RunnerStatusFailed   RunnerStatus = "failed"
+	RunnerStatusStopped  RunnerStatus = "stopped"
+)
+
+// Runner descrie un runner de algoritm definit de utilizator (plug-in),
+// scope-uit la un singur studiu. Scriptul (entry.py) este pastrat ca text in DB
+// si rulat de un container generat din el (vezi capitolul de arhitectura,
+// sectiunea de sistem de plug-in-uri).
+type Runner struct {
+	ID              uuid.UUID      `json:"id"`
+	StudyID         uuid.UUID      `json:"study_id"`
+	UploadedBy      uuid.UUID      `json:"uploaded_by"`
+	Name            string         `json:"name"`
+	Description     string         `json:"description"`
+	ScriptContent   string         `json:"script_content,omitempty"`
+	ParameterSchema map[string]any `json:"parameter_schema"`
+	Status          RunnerStatus   `json:"status"`
+	StatusMessage   string         `json:"status_message,omitempty"`
+	ImageTag        string         `json:"image_tag,omitempty"`
+	QueueName       string         `json:"queue_name"`
+	DeploymentName  string         `json:"deployment_name,omitempty"`
+	CreatedAt       time.Time      `json:"created_at"`
+	ReadyAt         *time.Time     `json:"ready_at,omitempty"`
+}
+
 type BenchmarkAggregate struct {
 	ModelType      ModelType `json:"model_type"`
 	Language       Language  `json:"language"`
