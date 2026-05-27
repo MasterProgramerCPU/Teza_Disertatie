@@ -63,6 +63,7 @@ func main() {
 	results := repository.NewResultsRepository(pool)
 	benches := repository.NewBenchmarkRepository(pool)
 	runners := repository.NewRunnerRepository(pool)
+	scriptDrafts := repository.NewScriptDraftRepository(pool)
 
 	dispatcher := runner.NewDispatcher(rdb)
 	jwt := authmw.NewJWTMiddleware(cfg.JWTSecret)
@@ -87,17 +88,18 @@ func main() {
 	}
 
 	deps := router.Deps{
-		Health:      handlers.NewHealthHandler(pool, rdb),
-		Auth:        handlers.NewAuthHandler(users, cfg.JWTSecret, cfg.JWTExpiry, cfg.BcryptCost),
-		Users:       handlers.NewUsersHandler(users, studies),
-		Studies:     handlers.NewStudiesHandler(studies, members, users),
-		Datasets:    handlers.NewDatasetsHandler(datasets, cfg.MaxUploadBytes),
-		Simulations: handlers.NewSimulationsHandler(sims, datasets, results, benches, dispatcher),
-		Benchmarks:  handlers.NewBenchmarksHandler(benches),
-		Admin:       handlers.NewAdminHandler(users, studies, pool),
-		Runners:     handlers.NewRunnersHandler(runners, k8sMgr),
-		JWT:         jwt,
-		RBAC:        rbac,
+		Health:       handlers.NewHealthHandler(pool, rdb),
+		Auth:         handlers.NewAuthHandler(users, cfg.JWTSecret, cfg.JWTExpiry, cfg.BcryptCost),
+		Users:        handlers.NewUsersHandler(users, studies),
+		Studies:      handlers.NewStudiesHandler(studies, members, users),
+		Datasets:     handlers.NewDatasetsHandler(datasets, cfg.MaxUploadBytes),
+		Simulations:  handlers.NewSimulationsHandler(sims, datasets, results, benches, dispatcher),
+		Benchmarks:   handlers.NewBenchmarksHandler(benches),
+		Admin:        handlers.NewAdminHandler(users, studies, pool),
+		Runners:      handlers.NewRunnersHandler(runners, k8sMgr),
+		ScriptDrafts: handlers.NewScriptDraftsHandler(scriptDrafts),
+		JWT:          jwt,
+		RBAC:         rbac,
 	}
 
 	srv := &http.Server{

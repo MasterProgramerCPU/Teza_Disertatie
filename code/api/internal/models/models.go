@@ -190,6 +190,22 @@ type Runner struct {
 	ReadyAt         *time.Time     `json:"ready_at,omitempty"`
 }
 
+// ScriptDraft este un fragment de cod salvat de un cercetator intr-un studiu,
+// folosit din editorul UI. Drafts sunt strict private utilizatorului (vezi
+// repo: filtrare WHERE user_id = current); doar superadminul ar putea (in
+// principiu) sa vada drafts ale altora, dar API-ul nu expune asta.
+type ScriptDraft struct {
+	ID             uuid.UUID      `json:"id"`
+	UserID         uuid.UUID      `json:"user_id"`
+	StudyID        uuid.UUID      `json:"study_id"`
+	Name           string         `json:"name"`
+	Description    string         `json:"description"`
+	ScriptContent  string         `json:"script_content"`
+	ParametersJSON map[string]any `json:"parameters_json"`
+	CreatedAt      time.Time      `json:"created_at"`
+	UpdatedAt      time.Time      `json:"updated_at"`
+}
+
 type BenchmarkAggregate struct {
 	ModelType      ModelType `json:"model_type"`
 	Language       Language  `json:"language"`

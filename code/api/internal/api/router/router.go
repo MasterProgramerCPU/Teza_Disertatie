@@ -14,17 +14,18 @@ import (
 )
 
 type Deps struct {
-	Health      *handlers.HealthHandler
-	Auth        *handlers.AuthHandler
-	Users       *handlers.UsersHandler
-	Studies     *handlers.StudiesHandler
-	Datasets    *handlers.DatasetsHandler
-	Simulations *handlers.SimulationsHandler
-	Benchmarks  *handlers.BenchmarksHandler
-	Admin       *handlers.AdminHandler
-	Runners     *handlers.RunnersHandler
-	JWT         *authmw.JWTMiddleware
-	RBAC        *authmw.RBAC
+	Health       *handlers.HealthHandler
+	Auth         *handlers.AuthHandler
+	Users        *handlers.UsersHandler
+	Studies      *handlers.StudiesHandler
+	Datasets     *handlers.DatasetsHandler
+	Simulations  *handlers.SimulationsHandler
+	Benchmarks   *handlers.BenchmarksHandler
+	Admin        *handlers.AdminHandler
+	Runners      *handlers.RunnersHandler
+	ScriptDrafts *handlers.ScriptDraftsHandler
+	JWT          *authmw.JWTMiddleware
+	RBAC         *authmw.RBAC
 }
 
 func New(deps Deps) http.Handler {
@@ -88,6 +89,14 @@ func New(deps Deps) http.Handler {
 						// Runners (plug-in-uri) — citire pentru toti membrii
 						r.Get("/runners", deps.Runners.List)
 						r.Get("/runners/{id}", deps.Runners.Get)
+
+						// Script drafts — fiecare membru isi vede doar draft-urile
+						// proprii (filtrare la nivel de repo dupa user_id).
+						r.Get("/script-drafts", deps.ScriptDrafts.List)
+						r.Get("/script-drafts/{id}", deps.ScriptDrafts.Get)
+						r.Post("/script-drafts", deps.ScriptDrafts.Create)
+						r.Put("/script-drafts/{id}", deps.ScriptDrafts.Update)
+						r.Delete("/script-drafts/{id}", deps.ScriptDrafts.Delete)
 					})
 
 					// Runners — creare/stergere: doar super-admin.
