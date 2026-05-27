@@ -149,13 +149,13 @@ execuția asincronă, vizualizarea traiectoriilor și compararea rulărilor.
 
 O contribuție arhitecturală suplimentară este \textbf{sistemul de plug-in-uri
 pentru algoritmi} (capitolul~\ref{ch:arhitectura},
-secțiunea~\ref{sec:plugin_runners}): un super-admin poate încărca un script
-Python într-un studiu, iar acesta este transformat automat într-un runner
-container separat în cluster, vizibil exclusiv în studiul în care a fost
-introdus. Această extensie deschide aplicația de la cinci modele compartimentale
-plus LSTM la \emph{orice} algoritm care respectă un contract minimal
-(\texttt{main(records, parameters, context)}), fără modificări la API sau la
-schema bazei de date.
+secțiunea~\ref{sec:plugin_runners}): un super-admin poate înregistra într-un
+studiu fie un script Python (rulat de un container generic), fie o referință
+către o imagine container construită extern (în orice limbaj), iar API-ul
+provisionează automat un Deployment Kubernetes dedicat. Această extensie deschide
+aplicația de la cinci modele compartimentale plus LSTM la \emph{orice} algoritm
+care respectă un contract minimal de I/O, fără modificări la API sau la schema
+bazei de date.
 
 \section{Structura lucrării}
 \label{sec:structura}

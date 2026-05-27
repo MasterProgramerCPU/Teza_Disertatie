@@ -24,29 +24,41 @@ func NewRunnerRepository(pool *pgxpool.Pool) *RunnerRepository {
 }
 
 const runnerSelectCols = `id, study_id, uploaded_by, name, description,
-		script_content, parameter_schema, status, status_message,
+		COALESCE(script_content, ''), image,
+		parameter_schema, status, status_message,
 		image_tag, queue_name, deployment_name, created_at, ready_at`
 
+// Create insereaza un runner nou. Exact unul dintre scriptContent si image
+// trebuie sa fie nevid (CHECK-ul DB il aplica si la nivel de schema).
+// Pentru mod script: scriptContent != "", image == "".
+// Pentru mod image:  scriptContent == "", image != "" (referinta imagine).
 func (r *RunnerRepository) Create(ctx context.Context, studyID, userID uuid.UUID,
-	name, description, scriptContent string, parameterSchema map[string]any,
-	queueName string) (*models.Runner, error) {
+	name, description, scriptContent, image string,
+	parameterSchema map[string]any, queueName string) (*models.Runner, error) {
 
 	schemaJSON, err := json.Marshal(parameterSchema)
 	if err != nil {
 		return nil, err
 	}
 
+	// In script-mode trecem NULL pe image (sau '' merge si el datorita CHECK);
+	// in image-mode trecem NULL pe script_content pentru claritate semantica.
+	var scriptArg any = scriptContent
+	if scriptContent == "" {
+		scriptArg = nil
+	}
+
 	var out models.Runner
 	var schemaRaw []byte
 	err = r.pool.QueryRow(ctx, `
 		INSERT INTO runners (study_id, uploaded_by, name, description,
-		                     script_content, parameter_schema, queue_name)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		                     script_content, image, parameter_schema, queue_name)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING `+runnerSelectCols,
-		studyID, userID, name, description, scriptContent, schemaJSON, queueName,
+		studyID, userID, name, description, scriptArg, image, schemaJSON, queueName,
 	).Scan(
 		&out.ID, &out.StudyID, &out.UploadedBy, &out.Name, &out.Description,
-		&out.ScriptContent, &schemaRaw, &out.Status, &out.StatusMessage,
+		&out.ScriptContent, &out.Image, &schemaRaw, &out.Status, &out.StatusMessage,
 		&out.ImageTag, &out.QueueName, &out.DeploymentName, &out.CreatedAt, &out.ReadyAt,
 	)
 	if err != nil {
@@ -132,7 +144,7 @@ func scanRunner(s scanner) (*models.Runner, error) {
 	var schemaRaw []byte
 	err := s.Scan(
 		&rn.ID, &rn.StudyID, &rn.UploadedBy, &rn.Name, &rn.Description,
-		&rn.ScriptContent, &schemaRaw, &rn.Status, &rn.StatusMessage,
+		&rn.ScriptContent, &rn.Image, &schemaRaw, &rn.Status, &rn.StatusMessage,
 		&rn.ImageTag, &rn.QueueName, &rn.DeploymentName, &rn.CreatedAt, &rn.ReadyAt,
 	)
 	if err != nil {

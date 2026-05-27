@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1779867034.37682 "main.aux" "main.bbl" "main" 1779867044.22755 0
+["bibtex main"] 1779868062.42649 "main.aux" "main.bbl" "main" 1779868072.14649 0
   "./bibliography.bib" 1779440050.18795 15395 2256d3db050e01395b7ccfd03db8ca8f ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/bibtex/bst/base/unsrt.bst" 1741388039 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "main.aux" 1779867043.33188 100028 384f8190ae0392260606a1d554465721 "pdflatex"
+  "main.aux" 1779868071.28069 100416 ed527274e7c3b25e8f156243e9886dea "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1779867034.45699 "main.tex" "main.pdf" "main" 1779867044.22787 0
+["pdflatex"] 1779868062.50482 "main.tex" "main.pdf" "main" 1779868072.14678 0
   "../code/api/internal/api/handlers/response.go" 1778480941.50347 833 ce1f32e45640bfb80038a375e87e341f ""
   "../code/api/internal/api/middleware/rbac.go" 1778588509.96336 3896 32086d6647fc58dcc09232ebbe75b9f7 ""
   "../code/api/internal/api/router/router.go" 1779864503.91833 4687 3adc57d81c1f4c002a226c05cd1fce40 ""
@@ -400,10 +400,10 @@
   "appendices/F_kubernetes.tex" 1778675819.31043 9164 34c09845b210cc429beef8c6e6327c1a ""
   "appendices/G_api_rest.tex" 1778655085.49348 929 3bfd548efa7d25eb705900ea18939983 ""
   "chapters/00_rezumat.tex" 1779094196.69776 3276 8bf9a82443a5e1a06a13e27dbf0bf2a8 ""
-  "chapters/01_introducere.tex" 1779867017.80735 12608 244c834900414dceb6a4e67d76e5032f ""
+  "chapters/01_introducere.tex" 1779868044.11143 12621 d8ed8d42d1ffb24540c0fe04b142379c ""
   "chapters/02_epidemiologie_si_modelare.tex" 1778836222.00122 40939 4c0522038b74079c240ee1f54f0fc6c4 ""
   "chapters/03_tehnologii.tex" 1778836635.35736 17145 b1e856baf00d34e1cfb6f7ac955199ff ""
-  "chapters/04_arhitectura_sistemului.tex" 1779866990.68995 61413 da597cd97c47eae85e8b15539fed8333 ""
+  "chapters/04_arhitectura_sistemului.tex" 1779868029.14832 65442 2c0774002355889959d8c3cc2aa24921 ""
   "chapters/05_implementare_modele.tex" 1779862701.91324 16903 b792990ba00b5f825ed4146cfa4c723f ""
   "chapters/06_predictie_lstm.tex" 1779694297.62143 23730 eb5afc7e0bcbc6f900d1c2e85f317fdd ""
   "chapters/07_comparatie_si_calibrare.tex" 1779691401.30535 20461 29c4dbf46983dc43b51b52d1349f785e ""
@@ -420,14 +420,14 @@
   "figures/identifiability_landscape.tex" 1779095169.44898 2390 333c1e9551c5ffae256b95c89e6ab4ac ""
   "figures/lstm_trajectory.tex" 1778849223.53751 2232 5b06bac6e235c37c053c6c44617556d3 ""
   "figures/scaling_wall_time.tex" 1778849166.11571 1731 15c43ad173288af80c0743665565bc0e ""
-  "main.aux" 1779867043.33188 100028 384f8190ae0392260606a1d554465721 "pdflatex"
-  "main.bbl" 1779867034.45212 7358 9130b846db082c483944fad46de893fa "bibtex main"
-  "main.loa" 1779867043.34292 501 89b8ce0565960af7beb4f0be6534c596 "pdflatex"
-  "main.lof" 1779867043.34278 5769 66531708da2db716343fefb321de88bb "pdflatex"
-  "main.lot" 1779867043.34283 8655 7d7268349c939a181a49685123b3e80b "pdflatex"
-  "main.out" 1779867043.34216 33270 a6c551d14c6cfcd11988e2acddb0d6cf "pdflatex"
+  "main.aux" 1779868071.28069 100416 ed527274e7c3b25e8f156243e9886dea "pdflatex"
+  "main.bbl" 1779868062.50012 7358 9130b846db082c483944fad46de893fa "bibtex main"
+  "main.loa" 1779868071.29082 501 ffb33efc9bfdbf539a94f587c3611fc0 "pdflatex"
+  "main.lof" 1779868071.29075 5769 11d40e7939574b76262abe40adc5c948 "pdflatex"
+  "main.lot" 1779868071.29078 8655 efe5fc27f952b2debfbd82098d7b4814 "pdflatex"
+  "main.out" 1779868071.29025 33644 2de93fe510e2ca087eceaad0e1c5a608 "pdflatex"
   "main.tex" 1779702886.88904 11380 14deda28e72dacebb4c76ecaf14d8573 ""
-  "main.toc" 1779867043.34271 16097 d2e377b047dac15aeccffe8331c328bb "pdflatex"
+  "main.toc" 1779868071.2907 16226 7aee04b06983fb9c33f754a3246db78a "pdflatex"
   "tables/api_latency.tex" 1779691279.94951 1120 4e49c25c8ca5e6cf86e362cd6a8ce5d5 ""
   "tables/api_latency_scaling.tex" 1779691279.94967 747 c84ae8f771616d88d56274ce7f6b7815 ""
   "tables/bench_julia_coldstart.tex" 1779094737.11789 588 65b8883b94bddc91f1edfaf50a0ef26c ""

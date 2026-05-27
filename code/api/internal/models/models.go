@@ -163,9 +163,12 @@ const (
 )
 
 // Runner descrie un runner de algoritm definit de utilizator (plug-in),
-// scope-uit la un singur studiu. Scriptul (entry.py) este pastrat ca text in DB
-// si rulat de un container generat din el (vezi capitolul de arhitectura,
-// sectiunea de sistem de plug-in-uri).
+// scope-uit la un singur studiu. Are doua moduri mutual exclusive:
+//   - script-mode: ScriptContent este nevid, iar containerul foloseste
+//     imaginea runner-custom care incarca scriptul la pornire.
+//   - image-mode: Image este nevid (referinta de imagine din registry), iar
+//     containerul foloseste exact acea imagine, considerata “runner protocol”
+//     compliant (consuma joburi din RUNNER_QUEUE, scrie rezultate in DB).
 type Runner struct {
 	ID              uuid.UUID      `json:"id"`
 	StudyID         uuid.UUID      `json:"study_id"`
@@ -173,6 +176,7 @@ type Runner struct {
 	Name            string         `json:"name"`
 	Description     string         `json:"description"`
 	ScriptContent   string         `json:"script_content,omitempty"`
+	Image           string         `json:"image,omitempty"`
 	ParameterSchema map[string]any `json:"parameter_schema"`
 	Status          RunnerStatus   `json:"status"`
 	StatusMessage   string         `json:"status_message,omitempty"`
@@ -182,6 +186,9 @@ type Runner struct {
 	CreatedAt       time.Time      `json:"created_at"`
 	ReadyAt         *time.Time     `json:"ready_at,omitempty"`
 }
+
+// IsImageMode returneaza true daca runner-ul foloseste o imagine externa (Mod B).
+func (r *Runner) IsImageMode() bool { return r.Image != "" }
 
 type BenchmarkAggregate struct {
 	ModelType      ModelType `json:"model_type"`

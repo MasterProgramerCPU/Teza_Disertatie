@@ -1103,19 +1103,28 @@ compartimentale (SIR/SIS/SEIR/SIRS/SIDARTHE) și componenta LSTM, dar lista
 algoritmilor relevanți pentru analiza unei serii epidemiologice este
 deschisă: un cercetător poate dori să compare cu o regresie statistică, cu
 un model AR/ARIMA, cu o variantă bayesiană sau cu un model agent-based
-implementat ca script. Pentru a evita modificarea API-ului, a schemei de
-bază de date și a deployment-urilor Kubernetes la fiecare astfel de
+implementat în orice limbaj. Pentru a evita modificarea API-ului, a schemei
+de bază de date și a deployment-urilor Kubernetes la fiecare astfel de
 adăugare, sistemul include un mecanism de \emph{plug-in-uri}: un super-admin
-poate încărca un script Python într-un studiu, iar acesta este transformat
-automat într-un runner separat în cluster, vizibil exclusiv în studiul în
+poate înregistra un runner nou într-un studiu, iar acesta este transformat
+automat într-un container separat în cluster, vizibil exclusiv în studiul în
 care a fost introdus.
 
-\subsection{Contractul scriptului utilizator}
+Pentru a acoperi atât scenariul simplu (un script Python ad-hoc) cât și pe cel
+general (orice limbaj sau stack de biblioteci), sistemul oferă două moduri
+mutual exclusive de înregistrare, distinse la upload prin câmpurile cererii:
+modul \emph{script}, în care super-adminul încarcă un fișier \texttt{entry.py}
+rulat de un container generic, și modul \emph{image}, în care super-adminul dă
+o referință către o imagine container construită extern. Cele două moduri sunt
+impuse la nivel de schemă printr-un \texttt{CHECK} care permite exact una dintre
+coloanele \texttt{script\_content} și \texttt{image} să fie non-vidă.
+
+\subsection{Modul script: contractul scriptului utilizator}
 \label{subsec:plugin_contract}
 
-Forma standard pe care trebuie să o respecte un script încărcat este
-deliberat minimalistă: un singur fișier \texttt{entry.py} care expune o
-funcție \texttt{main} cu o semnătură fixă.
+În modul script, forma standard pe care trebuie să o respecte un fișier
+încărcat este deliberat minimalistă: un singur \texttt{entry.py} care expune
+o funcție \texttt{main} cu o semnătură fixă.
 
 \begin{lstlisting}[language=Python, caption={Contractul oricărui runner plug-in.}]
 def main(records: list[dict],
@@ -1145,12 +1154,58 @@ runner-ele built-in --- de aceea graficul existent care vizualizează
 traiectorii compartimentale poate afișa rezultatele oricărui plug-in fără
 modificări de cod.
 
+\subsection{Modul image: contract pentru imagini externe}
+\label{subsec:plugin_image_mode}
+
+Modul script funcționează doar pentru algoritmi exprimabili într-o singură
+funcție Python folosind stack-ul preinstalat (\texttt{numpy}, \texttt{scipy},
+\texttt{pandas}, \texttt{scikit-learn}). Pentru algoritmi care cer alt limbaj
+(R, Julia, Go), librării native sau dependențe netriviale, sistemul oferă
+modul \emph{image}: în loc de un script, super-adminul dă o referință către
+o imagine container deja construită și împinsă într-un registry accesibil
+clusterului (de exemplu \texttt{ghcr.io/cercetator/algoritm-x:1.0}).
+La înregistrare, API-ul creează un Deployment K8s care folosește direct acea
+imagine; nu există build în cluster și nu se interpretează cod la nivelul
+API-ului. Cercetătorul își construiește imaginea cu pipeline-ul propriu (CI
+extern, \texttt{docker build} local, etc.), iar singura cerință este să respecte
+\emph{runner protocol}-ul descris mai jos.
+
+Contractul este derivat din comportamentul wrapper-ului \texttt{runner-custom}
+și este intenționat compact, ca să poată fi implementat în orice limbaj:
+\begin{enumerate}
+    \item Imaginea citește la pornire variabilele de mediu \texttt{RUNNER\_QUEUE}
+          (coada Redis de ascultat), \texttt{DATABASE\_URL} (conexiunea la
+          YugabyteDB) și \texttt{REDIS\_URL}.
+    \item Pentru fiecare mesaj scos cu \texttt{BRPOP} din \texttt{RUNNER\_QUEUE},
+          se așteaptă un JSON cu cheile
+          \texttt{simulation\_id}, \texttt{dataset\_id}, \texttt{parameters},
+          \texttt{population\_n} și \texttt{t\_max}.
+    \item Imaginea citește înregistrările dataset-ului din tabela
+          \texttt{epidemiological\_records} (\texttt{WHERE dataset\_id = \$1}),
+          execută algoritmul și scrie rezultatele în
+          \texttt{simulation\_results} (câte un rând per pas temporal, cu
+          \texttt{compartments} ca JSONB) și metricile în \texttt{benchmarks}.
+    \item În final, marchează \texttt{simulation\_runs.status = 'completed'}
+          (sau \texttt{'failed'} cu \texttt{error\_message}).
+\end{enumerate}
+
+Imaginea \texttt{runner-custom} furnizată cu sistemul respectă exact acest
+protocol și poate servi atât ca implementare de referință, cât și ca bază
+pentru imagini derivate (\texttt{FROM ghcr.io/.../emedicine-runner-custom}).
+Validarea referinței la upload este o verificare de sanitate
+(\texttt{\textasciicircum[a-zA-Z0-9][a-zA-Z0-9.\_/:@-]\{1,254\}\$}); Kubernetes
+respinge la momentul \texttt{pull} referințele care nu pot fi rezolvate de
+nodurile cluster-ului.
+
 \subsection{Provisioning Kubernetes}
 \label{subsec:plugin_provisioning}
 
-Implementarea folosește o singură imagine container, \texttt{runner-custom}
-(\texttt{python:3.12-slim} cu \texttt{numpy}, \texttt{scipy}, \texttt{pandas}
-și \texttt{scikit-learn} preinstalate), care conține un \emph{wrapper}
+Imaginea folosită este \emph{configurabilă per runner}: dacă rândul din
+\texttt{runners} are coloana \texttt{image} non-vidă (mod image), Deployment-ul
+folosește exact acea imagine; altfel folosește imaginea generică
+\texttt{runner-custom} (mod script). Imaginea generică este construită din
+\texttt{python:3.12-slim} cu \texttt{numpy}, \texttt{scipy}, \texttt{pandas}
+și \texttt{scikit-learn} preinstalate, și conține un \emph{wrapper}
 standard. Wrapper-ul nu cunoaște apriori scriptul utilizatorului: la pornire
 citește variabila de mediu \texttt{RUNNER\_ID}, deschide o conexiune la
 YugabyteDB, obține din tabela \texttt{runners} numele cozii și conținutul
@@ -1202,12 +1257,21 @@ explicit \texttt{requests} (\texttt{100m} CPU, \texttt{128Mi} memorie) și
 \texttt{limits} (\texttt{500m} CPU, \texttt{512Mi} memorie), prevenind ca un
 script greșit scris să afecteze celelalte runner-e sau API-ul.
 
+Pentru modul image apare o suprafață suplimentară de încredere: imaginea
+provine dintr-un registry arbitrar și super-adminul își asumă conținutul ei,
+exact cum își asumă conținutul scripturilor încărcate. Nu există încă un
+mecanism de \emph{allowlist} de registre permise; o îmbunătățire naturală
+ar fi restricționarea la registre cunoscute (de exemplu doar
+\texttt{ghcr.io/organizatia/...}) și verificarea opțională a semnăturilor
+imaginilor prin \texttt{cosign}.
+
 Limitări cunoscute: nu există încă un mecanism formal de sandboxing
 suplimentar (de exemplu \texttt{gVisor} sau \texttt{Kata Containers}) pentru
-a izola și mai puternic scripturile față de nodul Kubernetes; scriptul are
+a izola și mai puternic runner-ele față de nodul Kubernetes; containerul are
 acces la rețeaua cluster-ului (inclusiv DB-ul, prin DSN-ul moștenit), ceea
 ce este intenționat pentru a putea citi dataset-ul, dar înseamnă că nu este
 o sandboxă universală. În scenariul vizat de această lucrare --- platformă
-internă pentru cercetători cunoscuți, super-admin curatând încărcările ---
+internă pentru cercetători cunoscuți, super-admin curatând înregistrările
+---
 modelul este adecvat; pentru deployment public ar fi necesare politici de
 rețea (\texttt{NetworkPolicy}) restrictive și posibil un sandbox runtime.

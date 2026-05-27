@@ -1,8 +1,9 @@
 // Package k8s contine un manager subtire peste client-go pentru provisioning-ul
 // runner-elor plug-in. Singura responsabilitate este sa creeze si sa stearga
-// Deployment-uri care folosesc imaginea de baza runner-custom; toata logica de
-// dispecerizare a job-urilor ramane in API + Redis, ca pentru runner-ele
-// built-in.
+// Deployment-uri pentru runner-e: in modul script imaginea este cea generica
+// runner-custom (cfg.Image), iar in modul image se foloseste imaginea data
+// explicit de super-admin. Toata logica de dispecerizare a job-urilor ramane
+// in API + Redis, ca pentru runner-ele built-in.
 package k8s
 
 import (
@@ -60,15 +61,22 @@ func DeploymentName(runnerID uuid.UUID) string {
 }
 
 // CreateRunnerDeployment provisioneaza un Deployment cu 1 replica pentru
-// runner-ul cu id-ul si numele dat. Imaginea folosita este cea generica
-// (cfg.Image), iar wrapper-ul din imagine isi descopera scriptul si coada din
-// DB pe baza variabilei RUNNER_ID. Returneaza numele Deployment-ului creat sau
-// sir gol daca manager-ul nu e activ.
-func (m *Manager) CreateRunnerDeployment(ctx context.Context, runnerID uuid.UUID, runnerName string) (string, error) {
+// runner-ul cu id-ul si numele dat. Daca imageOverride e gol, foloseste
+// imaginea generica runner-custom (cfg.Image) si wrapper-ul ei incarca scriptul
+// pe baza RUNNER_ID; daca imageOverride e dat, foloseste exact acea imagine
+// (presupusa “runner protocol”-compliant: consuma joburi din RUNNER_QUEUE,
+// scrie rezultate in DB). Returneaza numele Deployment-ului creat sau sir gol
+// daca manager-ul nu e activ.
+func (m *Manager) CreateRunnerDeployment(ctx context.Context, runnerID uuid.UUID,
+	runnerName, queueName, imageOverride string) (string, error) {
 	if !m.cfg.Enabled {
 		return "", nil
 	}
 	name := DeploymentName(runnerID)
+	image := m.cfg.Image
+	if imageOverride != "" {
+		image = imageOverride
+	}
 	replicas := int32(1)
 	dep := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -104,10 +112,11 @@ func (m *Manager) CreateRunnerDeployment(ctx context.Context, runnerID uuid.UUID
 					Containers: []corev1.Container{
 						{
 							Name:            "runner",
-							Image:           m.cfg.Image,
+							Image:           image,
 							ImagePullPolicy: corev1.PullAlways,
 							Env: []corev1.EnvVar{
 								{Name: "RUNNER_ID", Value: runnerID.String()},
+								{Name: "RUNNER_QUEUE", Value: queueName},
 								{
 									Name: "DATABASE_URL",
 									ValueFrom: &corev1.EnvVarSource{

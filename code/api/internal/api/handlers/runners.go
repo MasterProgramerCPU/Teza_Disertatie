@@ -27,6 +27,12 @@ const maxScriptBytes = 1 << 20 // 1 MB
 // folosite ulterior in numele cozii Redis si al deployment-ului Kubernetes.
 var validRunnerName = regexp.MustCompile(`^[a-z][a-z0-9-]{1,62}[a-z0-9]$`)
 
+// validImageRef face o verificare de sanitate pe referinta de imagine; nu
+// reimplementam parser-ul OCI complet, doar respingem inputuri evident gresite
+// (spatii, caractere de control, lungime). K8s va respinge si el referintele
+// realmente invalide la momentul pull-ului.
+var validImageRef = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9._/:@-]{1,254}$`)
+
 type RunnersHandler struct {
 	runners *repository.RunnerRepository
 	k8s     *k8s.Manager
@@ -40,6 +46,7 @@ type createRunnerReq struct {
 	Name            string         `json:"name"`
 	Description     string         `json:"description"`
 	ScriptContent   string         `json:"script_content"`
+	Image           string         `json:"image"`
 	ParameterSchema map[string]any `json:"parameter_schema"`
 }
 
@@ -60,30 +67,42 @@ func (h *RunnersHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	req.Name = strings.TrimSpace(strings.ToLower(req.Name))
+	req.Image = strings.TrimSpace(req.Image)
 	if !validRunnerName.MatchString(req.Name) {
 		writeError(w, http.StatusBadRequest,
 			"name must match ^[a-z][a-z0-9-]{1,62}[a-z0-9]$ (DNS-safe label)")
 		return
 	}
-	if strings.TrimSpace(req.ScriptContent) == "" {
-		writeError(w, http.StatusBadRequest, "script_content required")
+
+	// XOR pe sursa: exact una dintre cele doua trebuie data. CHECK-ul DB ar
+	// prinde si el cazul, dar validarea aici da un mesaj clar.
+	hasScript := strings.TrimSpace(req.ScriptContent) != ""
+	hasImage := req.Image != ""
+	if hasScript == hasImage {
+		writeError(w, http.StatusBadRequest,
+			"exactly one of script_content or image must be provided")
 		return
 	}
-	if len(req.ScriptContent) > maxScriptBytes {
+	if hasScript && len(req.ScriptContent) > maxScriptBytes {
 		writeError(w, http.StatusBadRequest, "script exceeds maximum size of 1 MB")
+		return
+	}
+	if hasImage && !validImageRef.MatchString(req.Image) {
+		writeError(w, http.StatusBadRequest,
+			"image must be a valid container image reference")
 		return
 	}
 	if req.ParameterSchema == nil {
 		req.ParameterSchema = map[string]any{}
 	}
 
-	// Numele cozii Redis si al deployment-ului K8s deriva din runner-id, pentru
-	// a fi unice global in cluster si independente de numele uman ales de user.
-	// Le populam dupa Create (avem ID-ul), prin UpdateStatus.
+	// Numele cozii Redis deriva din numele runner-ului, garantat DNS-safe prin
+	// validarea de mai sus. Pasat ca env var RUNNER_QUEUE la container.
 	queueName := "epimodel:jobs:custom-" + req.Name
 
 	out, err := h.runners.Create(r.Context(), sid, uid,
-		req.Name, req.Description, req.ScriptContent, req.ParameterSchema, queueName)
+		req.Name, req.Description, req.ScriptContent, req.Image,
+		req.ParameterSchema, queueName)
 	if errors.Is(err, repository.ErrDuplicate) {
 		writeError(w, http.StatusConflict, "runner with this name already exists in study")
 		return
@@ -103,7 +122,7 @@ func (h *RunnersHandler) Create(w http.ResponseWriter, r *http.Request) {
 			models.RunnerStatusBuilding, "", "", out.DeploymentName); err != nil {
 			log.Printf("runner %s: could not pre-set building status: %v", out.ID, err)
 		}
-		go h.provisionDeployment(out.ID, out.Name)
+		go h.provisionDeployment(out.ID, out.Name, out.QueueName, out.Image)
 	} else {
 		// In modul dev fara cluster, marcam direct ready: scriptul ramane
 		// inregistrat dar nu se executa decat daca un runner-custom e pornit manual.
@@ -115,20 +134,29 @@ func (h *RunnersHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // provisionDeployment creeaza Deployment-ul K8s in fundal. Daca esueaza,
-// muta runner-ul in starea `failed` cu mesajul de eroare.
-func (h *RunnersHandler) provisionDeployment(id uuid.UUID, name string) {
+// muta runner-ul in starea `failed` cu mesajul de eroare. Daca imageOverride
+// e nevid (mod image), Deployment-ul foloseste acea imagine; altfel foloseste
+// imaginea runner-custom implicita din config.
+func (h *RunnersHandler) provisionDeployment(id uuid.UUID, name, queueName, imageOverride string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	depName, err := h.k8s.CreateRunnerDeployment(ctx, id, name)
+	depName, err := h.k8s.CreateRunnerDeployment(ctx, id, name, queueName, imageOverride)
 	if err != nil {
 		log.Printf("runner %s provisioning failed: %v", id, err)
 		_ = h.runners.UpdateStatus(ctx, id, models.RunnerStatusFailed, err.Error(), "", "")
 		return
 	}
-	// Lasam wrapper-ul din pod sa mute statusul la `ready` dupa ce reuseste
-	// sa se conecteze; aici doar inregistram numele Deployment-ului.
-	if err := h.runners.UpdateStatus(ctx, id, models.RunnerStatusBuilding,
-		"deployment created", "", depName); err != nil {
+	// In script-mode, lasam wrapper-ul din pod sa mute statusul la `ready` dupa
+	// ce reuseste sa se conecteze; in image-mode, user image-ul nu este obligat
+	// sa gestioneze statusul runner-ului, deci il marcam noi imediat ce
+	// Deployment-ul a fost creat cu succes.
+	targetStatus := models.RunnerStatusBuilding
+	message := "deployment created"
+	if imageOverride != "" {
+		targetStatus = models.RunnerStatusReady
+		message = "deployment created (image mode)"
+	}
+	if err := h.runners.UpdateStatus(ctx, id, targetStatus, message, "", depName); err != nil {
 		log.Printf("runner %s: could not record deployment name: %v", id, err)
 	}
 }

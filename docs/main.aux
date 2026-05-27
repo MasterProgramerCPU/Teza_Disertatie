@@ -398,335 +398,338 @@
 \@writefile{toc}{\contentsline {section}{\numberline {4.7}Sistem de plug-in-uri pentru algoritmi}{25}{section.4.7}\protected@file@percent }
 \newlabel{sec:plugin_runners}{{4.7}{25}{Sistem de plug-in-uri pentru algoritmi}{section.4.7}{}}
 \newlabel{sec:plugin_runners@cref}{{[section][7][4]4.7}{[1][25][]25}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.1}Contractul scriptului utilizator}{25}{subsection.4.7.1}\protected@file@percent }
-\newlabel{subsec:plugin_contract}{{4.7.1}{25}{Contractul scriptului utilizator}{subsection.4.7.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.1}Modul script: contractul scriptului utilizator}{25}{subsection.4.7.1}\protected@file@percent }
+\newlabel{subsec:plugin_contract}{{4.7.1}{25}{Modul script: contractul scriptului utilizator}{subsection.4.7.1}{}}
 \newlabel{subsec:plugin_contract@cref}{{[subsection][1][4,7]4.7.1}{[1][25][]25}{}{}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {4.6}{\ignorespaces Contractul oricărui runner plug-in.}}{25}{lstlisting.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.2}Provisioning Kubernetes}{26}{subsection.4.7.2}\protected@file@percent }
-\newlabel{subsec:plugin_provisioning}{{4.7.2}{26}{Provisioning Kubernetes}{subsection.4.7.2}{}}
-\newlabel{subsec:plugin_provisioning@cref}{{[subsection][2][4,7]4.7.2}{[1][25][]26}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.2}Modul image: contract pentru imagini externe}{26}{subsection.4.7.2}\protected@file@percent }
+\newlabel{subsec:plugin_image_mode}{{4.7.2}{26}{Modul image: contract pentru imagini externe}{subsection.4.7.2}{}}
+\newlabel{subsec:plugin_image_mode@cref}{{[subsection][2][4,7]4.7.2}{[1][26][]26}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.3}Provisioning Kubernetes}{26}{subsection.4.7.3}\protected@file@percent }
+\newlabel{subsec:plugin_provisioning}{{4.7.3}{26}{Provisioning Kubernetes}{subsection.4.7.3}{}}
+\newlabel{subsec:plugin_provisioning@cref}{{[subsection][3][4,7]4.7.3}{[1][26][]26}{}{}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Ciclul de viață al unui runner plug-in, de la upload până la oprire. Stările sunt persistate in coloana \texttt  {status} a tabelei \texttt  {runners}; tranzițiile sunt declanșate de API (creare/ștergere) și de wrapper-ul din pod (marcarea \texttt  {ready}).}}{26}{table.caption.29}\protected@file@percent }
 \newlabel{tab:plugin_lifecycle}{{4.3}{26}{Ciclul de viață al unui runner plug-in, de la upload până la oprire. Stările sunt persistate in coloana \texttt {status} a tabelei \texttt {runners}; tranzițiile sunt declanșate de API (creare/ștergere) și de wrapper-ul din pod (marcarea \texttt {ready})}{table.caption.29}{}}
 \newlabel{tab:plugin_lifecycle@cref}{{[table][3][4]4.3}{[1][26][]26}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.3}Securitate și limitări}{26}{subsection.4.7.3}\protected@file@percent }
-\newlabel{subsec:plugin_securitate}{{4.7.3}{26}{Securitate și limitări}{subsection.4.7.3}{}}
-\newlabel{subsec:plugin_securitate@cref}{{[subsection][3][4,7]4.7.3}{[1][26][]26}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.4}Securitate și limitări}{27}{subsection.4.7.4}\protected@file@percent }
+\newlabel{subsec:plugin_securitate}{{4.7.4}{27}{Securitate și limitări}{subsection.4.7.4}{}}
+\newlabel{subsec:plugin_securitate@cref}{{[subsection][4][4,7]4.7.4}{[1][27][]27}{}{}{}}
 \citation{owid_covid}
 \citation{owid_covid}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Implementarea modelelor compartimentale}{27}{chapter.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Implementarea modelelor compartimentale}{28}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:implementare}{{5}{27}{Implementarea modelelor compartimentale}{chapter.5}{}}
-\newlabel{ch:implementare@cref}{{[chapter][5][]5}{[1][27][]27}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{27}{section.5.1}\protected@file@percent }
-\newlabel{sec:seturi_date}{{5.1}{27}{Datele de intrare și inițializarea compartimentelor}{section.5.1}{}}
-\newlabel{sec:seturi_date@cref}{{[section][1][5]5.1}{[1][27][]27}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{28}{table.caption.30}\protected@file@percent }
-\newlabel{tab:initializare_modele}{{5.1}{28}{Maparea datelor observabile în condiții inițiale pentru modelele suportate}{table.caption.30}{}}
-\newlabel{tab:initializare_modele@cref}{{[table][1][5]5.1}{[1][27][]28}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{28}{section.5.2}\protected@file@percent }
-\newlabel{sec:contract_simulare}{{5.2}{28}{Contractul comun de simulare}{section.5.2}{}}
-\newlabel{sec:contract_simulare@cref}{{[section][2][5]5.2}{[1][27][]28}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.1}{\ignorespaces Structura job-ului publicat în Redis pentru o simulare SIDARTHE.}}{28}{lstlisting.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTHE}{28}{section.5.3}\protected@file@percent }
-\newlabel{sec:implementare_sidarthe}{{5.3}{28}{Implementarea modelului SIDARTHE}{section.5.3}{}}
-\newlabel{sec:implementare_sidarthe@cref}{{[section][3][5]5.3}{[1][28][]28}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.2}{\ignorespaces Funcția RHS SIDARTHE în runner-ul Python.}}{28}{lstlisting.5.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.3}{\ignorespaces Ieșirea din compartimentul sever în SIDARTHE.}}{29}{lstlisting.5.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.4}{\ignorespaces Funcția RHS SIDARTHE în runner-ul R (\texttt  {deSolve}).}}{29}{lstlisting.5.4}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.5}{\ignorespaces Funcția RHS SIDARTHE în runner-ul Julia (\texttt  {DifferentialEquations.jl}, convenție in-place).}}{29}{lstlisting.5.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Comparație side-by-side a celor trei runner-e compartimentale, ca instanțe ale aceluiași contract de simulare. Diferențele țin de ecosistemul numeric (biblioteca solver dominantă, convenția de control al pasului), nu de modelul matematic implementat. Numărul de linii include parsarea mesajului, dispecerizarea pe model, scrierea în baza de date și colectarea metricilor.}}{29}{table.caption.31}\protected@file@percent }
-\newlabel{tab:implementari_runners}{{5.2}{29}{Comparație side-by-side a celor trei runner-e compartimentale, ca instanțe ale aceluiași contract de simulare. Diferențele țin de ecosistemul numeric (biblioteca solver dominantă, convenția de control al pasului), nu de modelul matematic implementat. Numărul de linii include parsarea mesajului, dispecerizarea pe model, scrierea în baza de date și colectarea metricilor}{table.caption.31}{}}
-\newlabel{tab:implementari_runners@cref}{{[table][2][5]5.2}{[1][29][]29}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}Variantele SIR, SIS, SEIR și SIRS}{30}{section.5.4}\protected@file@percent }
-\newlabel{sec:sir_secundar}{{5.4}{30}{Variantele SIR, SIS, SEIR și SIRS}{section.5.4}{}}
-\newlabel{sec:sir_secundar@cref}{{[section][4][5]5.4}{[1][30][]30}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{30}{section.5.5}\protected@file@percent }
-\newlabel{sec:persistenta_rezultate}{{5.5}{30}{Persistența rezultatelor și exportul}{section.5.5}{}}
-\newlabel{sec:persistenta_rezultate@cref}{{[section][5][5]5.5}{[1][30][]30}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.6}{\ignorespaces Schema generică pentru rezultatele simulărilor.}}{30}{lstlisting.5.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.6}Metrici de performanță}{30}{section.5.6}\protected@file@percent }
-\newlabel{sec:metrici_implementare}{{5.6}{30}{Metrici de performanță}{section.5.6}{}}
-\newlabel{sec:metrici_implementare@cref}{{[section][6][5]5.6}{[1][30][]30}{}{}{}}
+\newlabel{ch:implementare}{{5}{28}{Implementarea modelelor compartimentale}{chapter.5}{}}
+\newlabel{ch:implementare@cref}{{[chapter][5][]5}{[1][28][]28}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{28}{section.5.1}\protected@file@percent }
+\newlabel{sec:seturi_date}{{5.1}{28}{Datele de intrare și inițializarea compartimentelor}{section.5.1}{}}
+\newlabel{sec:seturi_date@cref}{{[section][1][5]5.1}{[1][28][]28}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{29}{table.caption.30}\protected@file@percent }
+\newlabel{tab:initializare_modele}{{5.1}{29}{Maparea datelor observabile în condiții inițiale pentru modelele suportate}{table.caption.30}{}}
+\newlabel{tab:initializare_modele@cref}{{[table][1][5]5.1}{[1][28][]29}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{29}{section.5.2}\protected@file@percent }
+\newlabel{sec:contract_simulare}{{5.2}{29}{Contractul comun de simulare}{section.5.2}{}}
+\newlabel{sec:contract_simulare@cref}{{[section][2][5]5.2}{[1][28][]29}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.1}{\ignorespaces Structura job-ului publicat în Redis pentru o simulare SIDARTHE.}}{29}{lstlisting.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTHE}{29}{section.5.3}\protected@file@percent }
+\newlabel{sec:implementare_sidarthe}{{5.3}{29}{Implementarea modelului SIDARTHE}{section.5.3}{}}
+\newlabel{sec:implementare_sidarthe@cref}{{[section][3][5]5.3}{[1][29][]29}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.2}{\ignorespaces Funcția RHS SIDARTHE în runner-ul Python.}}{29}{lstlisting.5.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.3}{\ignorespaces Ieșirea din compartimentul sever în SIDARTHE.}}{30}{lstlisting.5.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.4}{\ignorespaces Funcția RHS SIDARTHE în runner-ul R (\texttt  {deSolve}).}}{30}{lstlisting.5.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.5}{\ignorespaces Funcția RHS SIDARTHE în runner-ul Julia (\texttt  {DifferentialEquations.jl}, convenție in-place).}}{30}{lstlisting.5.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Comparație side-by-side a celor trei runner-e compartimentale, ca instanțe ale aceluiași contract de simulare. Diferențele țin de ecosistemul numeric (biblioteca solver dominantă, convenția de control al pasului), nu de modelul matematic implementat. Numărul de linii include parsarea mesajului, dispecerizarea pe model, scrierea în baza de date și colectarea metricilor.}}{30}{table.caption.31}\protected@file@percent }
+\newlabel{tab:implementari_runners}{{5.2}{30}{Comparație side-by-side a celor trei runner-e compartimentale, ca instanțe ale aceluiași contract de simulare. Diferențele țin de ecosistemul numeric (biblioteca solver dominantă, convenția de control al pasului), nu de modelul matematic implementat. Numărul de linii include parsarea mesajului, dispecerizarea pe model, scrierea în baza de date și colectarea metricilor}{table.caption.31}{}}
+\newlabel{tab:implementari_runners@cref}{{[table][2][5]5.2}{[1][30][]30}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Variantele SIR, SIS, SEIR și SIRS}{31}{section.5.4}\protected@file@percent }
+\newlabel{sec:sir_secundar}{{5.4}{31}{Variantele SIR, SIS, SEIR și SIRS}{section.5.4}{}}
+\newlabel{sec:sir_secundar@cref}{{[section][4][5]5.4}{[1][31][]31}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{31}{section.5.5}\protected@file@percent }
+\newlabel{sec:persistenta_rezultate}{{5.5}{31}{Persistența rezultatelor și exportul}{section.5.5}{}}
+\newlabel{sec:persistenta_rezultate@cref}{{[section][5][5]5.5}{[1][31][]31}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5.6}{\ignorespaces Schema generică pentru rezultatele simulărilor.}}{31}{lstlisting.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Metrici de performanță}{31}{section.5.6}\protected@file@percent }
+\newlabel{sec:metrici_implementare}{{5.6}{31}{Metrici de performanță}{section.5.6}{}}
+\newlabel{sec:metrici_implementare@cref}{{[section][6][5]5.6}{[1][31][]31}{}{}{}}
 \citation{hochreiter1997lstm}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Predicție Epidemiologică folosind Rețele LSTM}{31}{chapter.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Predicție Epidemiologică folosind Rețele LSTM}{32}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:lstm}{{6}{31}{Predicție Epidemiologică folosind Rețele LSTM}{chapter.6}{}}
-\newlabel{ch:lstm@cref}{{[chapter][6][]6}{[1][31][]31}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Rolul predicției statistice în sistem}{31}{section.6.1}\protected@file@percent }
-\newlabel{sec:rol_lstm}{{6.1}{31}{Rolul predicției statistice în sistem}{section.6.1}{}}
-\newlabel{sec:rol_lstm@cref}{{[section][1][6]6.1}{[1][31][]31}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Formularea problemei de predicție}{31}{section.6.2}\protected@file@percent }
-\newlabel{sec:formulare_lstm}{{6.2}{31}{Formularea problemei de predicție}{section.6.2}{}}
-\newlabel{sec:formulare_lstm@cref}{{[section][2][6]6.2}{[1][31][]31}{}{}{}}
-\newlabel{eq:formulare_lstm}{{6.1}{31}{Formularea problemei de predicție}{equation.6.1}{}}
-\newlabel{eq:formulare_lstm@cref}{{[equation][1][6]6.1}{[1][31][]31}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Arhitectura celulei LSTM}{31}{section.6.3}\protected@file@percent }
-\newlabel{sec:celula_lstm}{{6.3}{31}{Arhitectura celulei LSTM}{section.6.3}{}}
-\newlabel{sec:celula_lstm@cref}{{[section][3][6]6.3}{[1][31][]31}{}{}{}}
+\newlabel{ch:lstm}{{6}{32}{Predicție Epidemiologică folosind Rețele LSTM}{chapter.6}{}}
+\newlabel{ch:lstm@cref}{{[chapter][6][]6}{[1][32][]32}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Rolul predicției statistice în sistem}{32}{section.6.1}\protected@file@percent }
+\newlabel{sec:rol_lstm}{{6.1}{32}{Rolul predicției statistice în sistem}{section.6.1}{}}
+\newlabel{sec:rol_lstm@cref}{{[section][1][6]6.1}{[1][32][]32}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Formularea problemei de predicție}{32}{section.6.2}\protected@file@percent }
+\newlabel{sec:formulare_lstm}{{6.2}{32}{Formularea problemei de predicție}{section.6.2}{}}
+\newlabel{sec:formulare_lstm@cref}{{[section][2][6]6.2}{[1][32][]32}{}{}{}}
+\newlabel{eq:formulare_lstm}{{6.1}{32}{Formularea problemei de predicție}{equation.6.1}{}}
+\newlabel{eq:formulare_lstm@cref}{{[equation][1][6]6.1}{[1][32][]32}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Arhitectura celulei LSTM}{32}{section.6.3}\protected@file@percent }
+\newlabel{sec:celula_lstm}{{6.3}{32}{Arhitectura celulei LSTM}{section.6.3}{}}
+\newlabel{sec:celula_lstm@cref}{{[section][3][6]6.3}{[1][32][]32}{}{}{}}
 \citation{werbos1990bptt}
-\newlabel{eq:lstm_cell}{{6.7}{32}{Arhitectura celulei LSTM}{equation.6.7}{}}
-\newlabel{eq:lstm_cell@cref}{{[equation][7][6]6.7}{[1][32][]32}{}{}{}}
-\newlabel{eq:lstm_hidden}{{6.8}{32}{Arhitectura celulei LSTM}{equation.6.8}{}}
-\newlabel{eq:lstm_hidden@cref}{{[equation][8][6]6.8}{[1][32][]32}{}{}{}}
-\newlabel{eq:lstm_output}{{6.9}{32}{Arhitectura celulei LSTM}{equation.6.9}{}}
-\newlabel{eq:lstm_output@cref}{{[equation][9][6]6.9}{[1][32][]32}{}{}{}}
-\newlabel{lst:lstm_forward}{{6.1}{32}{Pasul înainte al celulei LSTM în \texttt {runner-lstm}}{lstlisting.6.1}{}}
-\newlabel{lst:lstm_forward@cref}{{[listing][1][6]6.1}{[1][32][]32}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}{\ignorespaces Pasul înainte al celulei LSTM în \texttt  {runner-lstm}.}}{32}{lstlisting.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}Normalizarea și construcția exemplelor}{32}{section.6.4}\protected@file@percent }
-\newlabel{sec:normalizare_lstm}{{6.4}{32}{Normalizarea și construcția exemplelor}{section.6.4}{}}
-\newlabel{sec:normalizare_lstm@cref}{{[section][4][6]6.4}{[1][32][]32}{}{}{}}
-\newlabel{eq:normalizare}{{6.10}{32}{Normalizarea și construcția exemplelor}{equation.6.10}{}}
-\newlabel{eq:normalizare@cref}{{[equation][10][6]6.10}{[1][32][]32}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.5}Antrenarea prin backpropagation through time}{32}{section.6.5}\protected@file@percent }
-\newlabel{sec:bptt_lstm}{{6.5}{32}{Antrenarea prin backpropagation through time}{section.6.5}{}}
-\newlabel{sec:bptt_lstm@cref}{{[section][5][6]6.5}{[1][32][]32}{}{}{}}
-\newlabel{eq:loss_lstm}{{6.11}{32}{Antrenarea prin backpropagation through time}{equation.6.11}{}}
-\newlabel{eq:loss_lstm@cref}{{[equation][11][6]6.11}{[1][32][]32}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt  {runner-lstm}.}}{33}{table.caption.32}\protected@file@percent }
-\newlabel{tab:lstm_componente}{{6.1}{33}{Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt {runner-lstm}}{table.caption.32}{}}
-\newlabel{tab:lstm_componente@cref}{{[table][1][6]6.1}{[1][32][]33}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.6}Împărțirea cronologică și evaluarea}{33}{section.6.6}\protected@file@percent }
-\newlabel{sec:evaluare_lstm}{{6.6}{33}{Împărțirea cronologică și evaluarea}{section.6.6}{}}
-\newlabel{sec:evaluare_lstm@cref}{{[section][6][6]6.6}{[1][33][]33}{}{}{}}
-\newlabel{lst:lstm_split}{{6.2}{33}{Împărțirea cronologică, normalizarea pe antrenare și evaluarea pe test}{lstlisting.6.2}{}}
-\newlabel{lst:lstm_split@cref}{{[listing][2][6]6.2}{[1][33][]33}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.2}{\ignorespaces Împărțirea cronologică, normalizarea pe antrenare și evaluarea pe test.}}{33}{lstlisting.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.7}Integrarea în arhitectura aplicației}{33}{section.6.7}\protected@file@percent }
-\newlabel{sec:arhitectura_lstm}{{6.7}{33}{Integrarea în arhitectura aplicației}{section.6.7}{}}
-\newlabel{sec:arhitectura_lstm@cref}{{[section][7][6]6.7}{[1][33][]33}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Iesirile runner-ului LSTM dedicat pe seria de cazuri active din Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele $80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte ($\hat  {y}_t = f_\theta (y_{t-14:t-1})$) urmaresc seria observata atat pe fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie exogena (intervalul de raportare, calendarul scolar) ar putea ameliora.}}{34}{figure.caption.33}\protected@file@percent }
-\newlabel{fig:lstm_trajectory}{{6.1}{34}{Iesirile runner-ului LSTM dedicat pe seria de cazuri active din Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele $80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte ($\hat {y}_t = f_\theta (y_{t-14:t-1})$) urmaresc seria observata atat pe fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie exogena (intervalul de raportare, calendarul scolar) ar putea ameliora}{figure.caption.33}{}}
-\newlabel{fig:lstm_trajectory@cref}{{[figure][1][6]6.1}{[1][33][]34}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.8}Linii de bază și limitări}{34}{section.6.8}\protected@file@percent }
-\newlabel{sec:limitari_lstm}{{6.8}{34}{Linii de bază și limitări}{section.6.8}{}}
-\newlabel{sec:limitari_lstm@cref}{{[section][8][6]6.8}{[1][34][]34}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Validarea LSTM fata de predictori naivi, eroare o-zi-inainte pe fereastra de test (ultimele $20\%$ din seria Romania, $288$ zile). Toate metodele folosesc doar valori observate trecute. \emph  {Skill} este reducerea relativa a MAE fata de persistenta (valori negative = mai slab decat persistenta). Pe aceasta serie, $85\%$ din zilele de test sunt identice cu ziua precedenta (raportare saptamanala), ceea ce face persistenta extrem de greu de batut.}}{34}{table.caption.34}\protected@file@percent }
-\newlabel{tab:lstm_baselines}{{6.2}{34}{Validarea LSTM fata de predictori naivi, eroare o-zi-inainte pe fereastra de test (ultimele $20\%$ din seria Romania, $288$ zile). Toate metodele folosesc doar valori observate trecute. \emph {Skill} este reducerea relativa a MAE fata de persistenta (valori negative = mai slab decat persistenta). Pe aceasta serie, $85\%$ din zilele de test sunt identice cu ziua precedenta (raportare saptamanala), ceea ce face persistenta extrem de greu de batut}{table.caption.34}{}}
-\newlabel{tab:lstm_baselines@cref}{{[table][2][6]6.2}{[1][34][]34}{}{}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {6.1}{\ignorespaces Antrenarea și evaluarea componentei LSTM}}{35}{algorithm.6.1}\protected@file@percent }
-\newlabel{alg:lstm}{{6.1}{35}{Antrenarea și evaluarea componentei LSTM}{algorithm.6.1}{}}
-\newlabel{alg:lstm@cref}{{[algorithm][1][6]6.1}{[1][33][]35}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.9}Direcții de extindere}{35}{section.6.9}\protected@file@percent }
-\newlabel{sec:extindere_lstm}{{6.9}{35}{Direcții de extindere}{section.6.9}{}}
-\newlabel{sec:extindere_lstm@cref}{{[section][9][6]6.9}{[1][35][]35}{}{}{}}
-\newlabel{eq:hibrid_lstm}{{6.22}{35}{Direcții de extindere}{equation.6.22}{}}
-\newlabel{eq:hibrid_lstm@cref}{{[equation][22][6]6.22}{[1][35][]35}{}{}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Comparația Modelelor, Analiză Numerică și Calibrare}{36}{chapter.7}\protected@file@percent }
+\newlabel{eq:lstm_cell}{{6.7}{33}{Arhitectura celulei LSTM}{equation.6.7}{}}
+\newlabel{eq:lstm_cell@cref}{{[equation][7][6]6.7}{[1][33][]33}{}{}{}}
+\newlabel{eq:lstm_hidden}{{6.8}{33}{Arhitectura celulei LSTM}{equation.6.8}{}}
+\newlabel{eq:lstm_hidden@cref}{{[equation][8][6]6.8}{[1][33][]33}{}{}{}}
+\newlabel{eq:lstm_output}{{6.9}{33}{Arhitectura celulei LSTM}{equation.6.9}{}}
+\newlabel{eq:lstm_output@cref}{{[equation][9][6]6.9}{[1][33][]33}{}{}{}}
+\newlabel{lst:lstm_forward}{{6.1}{33}{Pasul înainte al celulei LSTM în \texttt {runner-lstm}}{lstlisting.6.1}{}}
+\newlabel{lst:lstm_forward@cref}{{[listing][1][6]6.1}{[1][33][]33}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}{\ignorespaces Pasul înainte al celulei LSTM în \texttt  {runner-lstm}.}}{33}{lstlisting.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Normalizarea și construcția exemplelor}{33}{section.6.4}\protected@file@percent }
+\newlabel{sec:normalizare_lstm}{{6.4}{33}{Normalizarea și construcția exemplelor}{section.6.4}{}}
+\newlabel{sec:normalizare_lstm@cref}{{[section][4][6]6.4}{[1][33][]33}{}{}{}}
+\newlabel{eq:normalizare}{{6.10}{33}{Normalizarea și construcția exemplelor}{equation.6.10}{}}
+\newlabel{eq:normalizare@cref}{{[equation][10][6]6.10}{[1][33][]33}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}Antrenarea prin backpropagation through time}{33}{section.6.5}\protected@file@percent }
+\newlabel{sec:bptt_lstm}{{6.5}{33}{Antrenarea prin backpropagation through time}{section.6.5}{}}
+\newlabel{sec:bptt_lstm@cref}{{[section][5][6]6.5}{[1][33][]33}{}{}{}}
+\newlabel{eq:loss_lstm}{{6.11}{33}{Antrenarea prin backpropagation through time}{equation.6.11}{}}
+\newlabel{eq:loss_lstm@cref}{{[equation][11][6]6.11}{[1][33][]33}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt  {runner-lstm}.}}{34}{table.caption.32}\protected@file@percent }
+\newlabel{tab:lstm_componente}{{6.1}{34}{Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt {runner-lstm}}{table.caption.32}{}}
+\newlabel{tab:lstm_componente@cref}{{[table][1][6]6.1}{[1][33][]34}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.6}Împărțirea cronologică și evaluarea}{34}{section.6.6}\protected@file@percent }
+\newlabel{sec:evaluare_lstm}{{6.6}{34}{Împărțirea cronologică și evaluarea}{section.6.6}{}}
+\newlabel{sec:evaluare_lstm@cref}{{[section][6][6]6.6}{[1][34][]34}{}{}{}}
+\newlabel{lst:lstm_split}{{6.2}{34}{Împărțirea cronologică, normalizarea pe antrenare și evaluarea pe test}{lstlisting.6.2}{}}
+\newlabel{lst:lstm_split@cref}{{[listing][2][6]6.2}{[1][34][]34}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.2}{\ignorespaces Împărțirea cronologică, normalizarea pe antrenare și evaluarea pe test.}}{34}{lstlisting.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.7}Integrarea în arhitectura aplicației}{34}{section.6.7}\protected@file@percent }
+\newlabel{sec:arhitectura_lstm}{{6.7}{34}{Integrarea în arhitectura aplicației}{section.6.7}{}}
+\newlabel{sec:arhitectura_lstm@cref}{{[section][7][6]6.7}{[1][34][]34}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Iesirile runner-ului LSTM dedicat pe seria de cazuri active din Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele $80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte ($\hat  {y}_t = f_\theta (y_{t-14:t-1})$) urmaresc seria observata atat pe fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie exogena (intervalul de raportare, calendarul scolar) ar putea ameliora.}}{35}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:lstm_trajectory}{{6.1}{35}{Iesirile runner-ului LSTM dedicat pe seria de cazuri active din Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele $80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte ($\hat {y}_t = f_\theta (y_{t-14:t-1})$) urmaresc seria observata atat pe fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie exogena (intervalul de raportare, calendarul scolar) ar putea ameliora}{figure.caption.33}{}}
+\newlabel{fig:lstm_trajectory@cref}{{[figure][1][6]6.1}{[1][34][]35}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.8}Linii de bază și limitări}{35}{section.6.8}\protected@file@percent }
+\newlabel{sec:limitari_lstm}{{6.8}{35}{Linii de bază și limitări}{section.6.8}{}}
+\newlabel{sec:limitari_lstm@cref}{{[section][8][6]6.8}{[1][35][]35}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Validarea LSTM fata de predictori naivi, eroare o-zi-inainte pe fereastra de test (ultimele $20\%$ din seria Romania, $288$ zile). Toate metodele folosesc doar valori observate trecute. \emph  {Skill} este reducerea relativa a MAE fata de persistenta (valori negative = mai slab decat persistenta). Pe aceasta serie, $85\%$ din zilele de test sunt identice cu ziua precedenta (raportare saptamanala), ceea ce face persistenta extrem de greu de batut.}}{35}{table.caption.34}\protected@file@percent }
+\newlabel{tab:lstm_baselines}{{6.2}{35}{Validarea LSTM fata de predictori naivi, eroare o-zi-inainte pe fereastra de test (ultimele $20\%$ din seria Romania, $288$ zile). Toate metodele folosesc doar valori observate trecute. \emph {Skill} este reducerea relativa a MAE fata de persistenta (valori negative = mai slab decat persistenta). Pe aceasta serie, $85\%$ din zilele de test sunt identice cu ziua precedenta (raportare saptamanala), ceea ce face persistenta extrem de greu de batut}{table.caption.34}{}}
+\newlabel{tab:lstm_baselines@cref}{{[table][2][6]6.2}{[1][35][]35}{}{}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {6.1}{\ignorespaces Antrenarea și evaluarea componentei LSTM}}{36}{algorithm.6.1}\protected@file@percent }
+\newlabel{alg:lstm}{{6.1}{36}{Antrenarea și evaluarea componentei LSTM}{algorithm.6.1}{}}
+\newlabel{alg:lstm@cref}{{[algorithm][1][6]6.1}{[1][34][]36}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.9}Direcții de extindere}{36}{section.6.9}\protected@file@percent }
+\newlabel{sec:extindere_lstm}{{6.9}{36}{Direcții de extindere}{section.6.9}{}}
+\newlabel{sec:extindere_lstm@cref}{{[section][9][6]6.9}{[1][36][]36}{}{}{}}
+\newlabel{eq:hibrid_lstm}{{6.22}{36}{Direcții de extindere}{equation.6.22}{}}
+\newlabel{eq:hibrid_lstm@cref}{{[equation][22][6]6.22}{[1][36][]36}{}{}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Comparația Modelelor, Analiză Numerică și Calibrare}{37}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:comparatie_calibrare}{{7}{36}{Comparația Modelelor, Analiză Numerică și Calibrare}{chapter.7}{}}
-\newlabel{ch:comparatie_calibrare@cref}{{[chapter][7][]7}{[1][36][]36}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Rolul comparației între modele}{36}{section.7.1}\protected@file@percent }
-\newlabel{sec:rol_comparatie_modele}{{7.1}{36}{Rolul comparației între modele}{section.7.1}{}}
-\newlabel{sec:rol_comparatie_modele@cref}{{[section][1][7]7.1}{[1][36][]36}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Comparație structurală}{36}{section.7.2}\protected@file@percent }
-\newlabel{sec:comparatie_structurala}{{7.2}{36}{Comparație structurală}{section.7.2}{}}
-\newlabel{sec:comparatie_structurala@cref}{{[section][2][7]7.2}{[1][36][]36}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.3}Operatorul de observație}{36}{section.7.3}\protected@file@percent }
-\newlabel{sec:operator_observatie}{{7.3}{36}{Operatorul de observație}{section.7.3}{}}
-\newlabel{sec:operator_observatie@cref}{{[section][3][7]7.3}{[1][36][]36}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}Metrici de eroare numerică}{36}{section.7.4}\protected@file@percent }
-\newlabel{sec:metrici_eroare_numerica}{{7.4}{36}{Metrici de eroare numerică}{section.7.4}{}}
-\newlabel{sec:metrici_eroare_numerica@cref}{{[section][4][7]7.4}{[1][36][]36}{}{}{}}
+\newlabel{ch:comparatie_calibrare}{{7}{37}{Comparația Modelelor, Analiză Numerică și Calibrare}{chapter.7}{}}
+\newlabel{ch:comparatie_calibrare@cref}{{[chapter][7][]7}{[1][37][]37}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Rolul comparației între modele}{37}{section.7.1}\protected@file@percent }
+\newlabel{sec:rol_comparatie_modele}{{7.1}{37}{Rolul comparației între modele}{section.7.1}{}}
+\newlabel{sec:rol_comparatie_modele@cref}{{[section][1][7]7.1}{[1][37][]37}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Comparație structurală}{37}{section.7.2}\protected@file@percent }
+\newlabel{sec:comparatie_structurala}{{7.2}{37}{Comparație structurală}{section.7.2}{}}
+\newlabel{sec:comparatie_structurala@cref}{{[section][2][7]7.2}{[1][37][]37}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Operatorul de observație}{37}{section.7.3}\protected@file@percent }
+\newlabel{sec:operator_observatie}{{7.3}{37}{Operatorul de observație}{section.7.3}{}}
+\newlabel{sec:operator_observatie@cref}{{[section][3][7]7.3}{[1][37][]37}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Metrici de eroare numerică}{37}{section.7.4}\protected@file@percent }
+\newlabel{sec:metrici_eroare_numerica}{{7.4}{37}{Metrici de eroare numerică}{section.7.4}{}}
+\newlabel{sec:metrici_eroare_numerica@cref}{{[section][4][7]7.4}{[1][37][]37}{}{}{}}
 \citation{nelder1965simplex}
-\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Comparație structurală între modelele utilizate în lucrare.}}{37}{table.caption.35}\protected@file@percent }
-\newlabel{tab:comparatie_modele}{{7.1}{37}{Comparație structurală între modelele utilizate în lucrare}{table.caption.35}{}}
-\newlabel{tab:comparatie_modele@cref}{{[table][1][7]7.1}{[1][36][]37}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.5}Protocol de analiză comparativă}{37}{section.7.5}\protected@file@percent }
-\newlabel{sec:protocol_comparativ}{{7.5}{37}{Protocol de analiză comparativă}{section.7.5}{}}
-\newlabel{sec:protocol_comparativ@cref}{{[section][5][7]7.5}{[1][37][]37}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.6}Calibrarea parametrilor}{37}{section.7.6}\protected@file@percent }
-\newlabel{sec:calibrare_parametri}{{7.6}{37}{Calibrarea parametrilor}{section.7.6}{}}
-\newlabel{sec:calibrare_parametri@cref}{{[section][6][7]7.6}{[1][37][]37}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}}{38}{table.caption.36}\protected@file@percent }
-\newlabel{tab:teste_necesare_comparatie}{{7.2}{38}{Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor}{table.caption.36}{}}
-\newlabel{tab:teste_necesare_comparatie@cref}{{[table][2][7]7.2}{[1][37][]38}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.1}Aplicare pe Romania, valul 1 din 2020}{38}{subsection.7.6.1}\protected@file@percent }
-\newlabel{subsec:calibrare_romania}{{7.6.1}{38}{Aplicare pe Romania, valul 1 din 2020}{subsection.7.6.1}{}}
-\newlabel{subsec:calibrare_romania@cref}{{[subsection][1][7,6]7.6.1}{[1][38][]38}{}{}{}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {7.1}{\ignorespaces Calibrarea unui model compartimental pe date observate}}{38}{algorithm.7.1}\protected@file@percent }
-\newlabel{alg:calibrare_model}{{7.1}{38}{Calibrarea unui model compartimental pe date observate}{algorithm.7.1}{}}
-\newlabel{alg:calibrare_model@cref}{{[algorithm][1][7]7.1}{[1][38][]38}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces Calibrare SIR pe Romania, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Doua scenarii: \emph  {liber} (optimizeaza ambele rate, $(\beta ,\gamma )$), \emph  {constrans} (foloseste $\gamma =1/14$ din durata clinica medie a infectiei COVID-19, optimizeaza doar $\beta $). Comparatia ilustreaza tensiunea dintre minimizarea pierderii si interpretabilitatea epidemiologica a parametrilor.}}{39}{table.caption.37}\protected@file@percent }
-\newlabel{tab:calibration_results}{{7.3}{39}{Calibrare SIR pe Romania, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Doua scenarii: \emph {liber} (optimizeaza ambele rate, $(\beta ,\gamma )$), \emph {constrans} (foloseste $\gamma =1/14$ din durata clinica medie a infectiei COVID-19, optimizeaza doar $\beta $). Comparatia ilustreaza tensiunea dintre minimizarea pierderii si interpretabilitatea epidemiologica a parametrilor}{table.caption.37}{}}
-\newlabel{tab:calibration_results@cref}{{[table][3][7]7.3}{[1][38][]39}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria observata; cele doua scenarii produc fituri vizual aproape identice pe fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs $16\,727$ pentru cel constrans). Parametrii estimati difera substantial, ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate aproape la fel de bine de combinatii $(\beta , \gamma )$ foarte diferite.}}{39}{figure.caption.38}\protected@file@percent }
-\newlabel{fig:calibration_sir_fit}{{7.1}{39}{Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria observata; cele doua scenarii produc fituri vizual aproape identice pe fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs $16\,727$ pentru cel constrans). Parametrii estimati difera substantial, ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate aproape la fel de bine de combinatii $(\beta , \gamma )$ foarte diferite}{figure.caption.38}{}}
-\newlabel{fig:calibration_sir_fit@cref}{{[figure][1][7]7.1}{[1][38][]39}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.7}Identificabilitate și limitări ale calibrării}{39}{section.7.7}\protected@file@percent }
-\newlabel{sec:identificabilitate}{{7.7}{39}{Identificabilitate și limitări ale calibrării}{section.7.7}{}}
-\newlabel{sec:identificabilitate@cref}{{[section][7][7]7.7}{[1][38][]39}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.7.1}Vizualizarea identifiabilitatii practice pentru SIR}{39}{subsection.7.7.1}\protected@file@percent }
-\newlabel{subsec:identif_landscape}{{7.7.1}{39}{Vizualizarea identifiabilitatii practice pentru SIR}{subsection.7.7.1}{}}
-\newlabel{subsec:identif_landscape@cref}{{[subsection][1][7,7]7.7.1}{[1][39][]39}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Peisajul de pierdere $\log _{10}\mathrm  {MSE}(\beta , \gamma )$ pentru modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$; linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe combinatii $(\beta , \gamma )$ produc o potrivire similara cu datele observate din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru SIR cu o singura serie observata.}}{40}{figure.caption.39}\protected@file@percent }
-\newlabel{fig:identifiability_landscape}{{7.2}{40}{Peisajul de pierdere $\log _{10}\mathrm {MSE}(\beta , \gamma )$ pentru modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$; linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe combinatii $(\beta , \gamma )$ produc o potrivire similara cu datele observate din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru SIR cu o singura serie observata}{figure.caption.39}{}}
-\newlabel{fig:identifiability_landscape@cref}{{[figure][2][7]7.2}{[1][39][]40}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.7.2}Generalizare pe mai multe regiuni}{40}{subsection.7.7.2}\protected@file@percent }
-\newlabel{subsec:calibrare_multiregion}{{7.7.2}{40}{Generalizare pe mai multe regiuni}{subsection.7.7.2}{}}
-\newlabel{subsec:calibrare_multiregion@cref}{{[subsection][2][7,7]7.7.2}{[1][39][]40}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.8}Integrarea în sistemul software}{40}{section.7.8}\protected@file@percent }
-\newlabel{sec:integrare_calibrare_software}{{7.8}{40}{Integrarea în sistemul software}{section.7.8}{}}
-\newlabel{sec:integrare_calibrare_software@cref}{{[section][8][7]7.8}{[1][40][]40}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.8.1}Costul software al calibrării}{40}{subsection.7.8.1}\protected@file@percent }
-\newlabel{subsec:cost_calibrare}{{7.8.1}{40}{Costul software al calibrării}{subsection.7.8.1}{}}
-\newlabel{subsec:cost_calibrare@cref}{{[subsection][1][7,8]7.8.1}{[1][40][]40}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). In toate cele patru cazuri $\gamma $ este fixat la valoarea de literatura $1/14$ zile, iar $\beta $ este optimizat prin Nelder-Mead. Valorile $\hat  \beta $ si $\hat  {\mathcal  {R}}_0$ sunt comparabile direct intre tari, dar erorile absolute reflecta scarile diferite de populatie (column N) si de I$_0$.}}{41}{table.caption.40}\protected@file@percent }
-\newlabel{tab:calibration_multiregion}{{7.4}{41}{Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). In toate cele patru cazuri $\gamma $ este fixat la valoarea de literatura $1/14$ zile, iar $\beta $ este optimizat prin Nelder-Mead. Valorile $\hat \beta $ si $\hat {\mathcal {R}}_0$ sunt comparabile direct intre tari, dar erorile absolute reflecta scarile diferite de populatie (column N) si de I$_0$}{table.caption.40}{}}
-\newlabel{tab:calibration_multiregion@cref}{{[table][4][7]7.4}{[1][40][]41}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Costul software al calibrarii SIR (Romania, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber si constrans). Coloana \emph  {in-process} masoara direct costul procedurii din \texttt  {calibrate.py}; coloana \emph  {naiv (ca job-uri)} proiecteaza costul daca fiecare simulare candidata ar fi un job separat prin aplicatie, folosind latenta end-to-end masurata a unui job SIR real ($1047$~ms/job); coloana \emph  {recomandat} corespunde calibrarii intr-un singur job, cu o singura simulare finala scrisa in baza de date. Numarul de simulari candidate este numarul real de evaluari ale functiei obiectiv.}}{41}{table.caption.42}\protected@file@percent }
-\newlabel{tab:calibration_cost}{{7.5}{41}{Costul software al calibrarii SIR (Romania, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber si constrans). Coloana \emph {in-process} masoara direct costul procedurii din \texttt {calibrate.py}; coloana \emph {naiv (ca job-uri)} proiecteaza costul daca fiecare simulare candidata ar fi un job separat prin aplicatie, folosind latenta end-to-end masurata a unui job SIR real ($1047$~ms/job); coloana \emph {recomandat} corespunde calibrarii intr-un singur job, cu o singura simulare finala scrisa in baza de date. Numarul de simulari candidate este numarul real de evaluari ale functiei obiectiv}{table.caption.42}{}}
-\newlabel{tab:calibration_cost@cref}{{[table][5][7]7.5}{[1][40][]41}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19, in patru tari europene cu scari de populatie diferite (atenție la scarile $y$ distincte). Linia neagra este seria observata, linia rosie continua este fitul pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu coeficienti constanti.}}{41}{figure.caption.41}\protected@file@percent }
-\newlabel{fig:calibration_multiregion}{{7.3}{41}{Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19, in patru tari europene cu scari de populatie diferite (atenție la scarile $y$ distincte). Linia neagra este seria observata, linia rosie continua este fitul pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu coeficienti constanti}{figure.caption.41}{}}
-\newlabel{fig:calibration_multiregion@cref}{{[figure][3][7]7.3}{[1][40][]41}{}{}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {8}Evaluarea Software, Performanței și Scalabilității}{42}{chapter.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Comparație structurală între modelele utilizate în lucrare.}}{38}{table.caption.35}\protected@file@percent }
+\newlabel{tab:comparatie_modele}{{7.1}{38}{Comparație structurală între modelele utilizate în lucrare}{table.caption.35}{}}
+\newlabel{tab:comparatie_modele@cref}{{[table][1][7]7.1}{[1][37][]38}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.5}Protocol de analiză comparativă}{38}{section.7.5}\protected@file@percent }
+\newlabel{sec:protocol_comparativ}{{7.5}{38}{Protocol de analiză comparativă}{section.7.5}{}}
+\newlabel{sec:protocol_comparativ@cref}{{[section][5][7]7.5}{[1][38][]38}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.6}Calibrarea parametrilor}{38}{section.7.6}\protected@file@percent }
+\newlabel{sec:calibrare_parametri}{{7.6}{38}{Calibrarea parametrilor}{section.7.6}{}}
+\newlabel{sec:calibrare_parametri@cref}{{[section][6][7]7.6}{[1][38][]38}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}}{39}{table.caption.36}\protected@file@percent }
+\newlabel{tab:teste_necesare_comparatie}{{7.2}{39}{Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor}{table.caption.36}{}}
+\newlabel{tab:teste_necesare_comparatie@cref}{{[table][2][7]7.2}{[1][38][]39}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.1}Aplicare pe Romania, valul 1 din 2020}{39}{subsection.7.6.1}\protected@file@percent }
+\newlabel{subsec:calibrare_romania}{{7.6.1}{39}{Aplicare pe Romania, valul 1 din 2020}{subsection.7.6.1}{}}
+\newlabel{subsec:calibrare_romania@cref}{{[subsection][1][7,6]7.6.1}{[1][39][]39}{}{}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {7.1}{\ignorespaces Calibrarea unui model compartimental pe date observate}}{39}{algorithm.7.1}\protected@file@percent }
+\newlabel{alg:calibrare_model}{{7.1}{39}{Calibrarea unui model compartimental pe date observate}{algorithm.7.1}{}}
+\newlabel{alg:calibrare_model@cref}{{[algorithm][1][7]7.1}{[1][39][]39}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces Calibrare SIR pe Romania, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Doua scenarii: \emph  {liber} (optimizeaza ambele rate, $(\beta ,\gamma )$), \emph  {constrans} (foloseste $\gamma =1/14$ din durata clinica medie a infectiei COVID-19, optimizeaza doar $\beta $). Comparatia ilustreaza tensiunea dintre minimizarea pierderii si interpretabilitatea epidemiologica a parametrilor.}}{40}{table.caption.37}\protected@file@percent }
+\newlabel{tab:calibration_results}{{7.3}{40}{Calibrare SIR pe Romania, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Doua scenarii: \emph {liber} (optimizeaza ambele rate, $(\beta ,\gamma )$), \emph {constrans} (foloseste $\gamma =1/14$ din durata clinica medie a infectiei COVID-19, optimizeaza doar $\beta $). Comparatia ilustreaza tensiunea dintre minimizarea pierderii si interpretabilitatea epidemiologica a parametrilor}{table.caption.37}{}}
+\newlabel{tab:calibration_results@cref}{{[table][3][7]7.3}{[1][39][]40}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria observata; cele doua scenarii produc fituri vizual aproape identice pe fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs $16\,727$ pentru cel constrans). Parametrii estimati difera substantial, ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate aproape la fel de bine de combinatii $(\beta , \gamma )$ foarte diferite.}}{40}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:calibration_sir_fit}{{7.1}{40}{Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria observata; cele doua scenarii produc fituri vizual aproape identice pe fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs $16\,727$ pentru cel constrans). Parametrii estimati difera substantial, ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate aproape la fel de bine de combinatii $(\beta , \gamma )$ foarte diferite}{figure.caption.38}{}}
+\newlabel{fig:calibration_sir_fit@cref}{{[figure][1][7]7.1}{[1][39][]40}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.7}Identificabilitate și limitări ale calibrării}{40}{section.7.7}\protected@file@percent }
+\newlabel{sec:identificabilitate}{{7.7}{40}{Identificabilitate și limitări ale calibrării}{section.7.7}{}}
+\newlabel{sec:identificabilitate@cref}{{[section][7][7]7.7}{[1][39][]40}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7.1}Vizualizarea identifiabilitatii practice pentru SIR}{40}{subsection.7.7.1}\protected@file@percent }
+\newlabel{subsec:identif_landscape}{{7.7.1}{40}{Vizualizarea identifiabilitatii practice pentru SIR}{subsection.7.7.1}{}}
+\newlabel{subsec:identif_landscape@cref}{{[subsection][1][7,7]7.7.1}{[1][40][]40}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Peisajul de pierdere $\log _{10}\mathrm  {MSE}(\beta , \gamma )$ pentru modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$; linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe combinatii $(\beta , \gamma )$ produc o potrivire similara cu datele observate din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru SIR cu o singura serie observata.}}{41}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:identifiability_landscape}{{7.2}{41}{Peisajul de pierdere $\log _{10}\mathrm {MSE}(\beta , \gamma )$ pentru modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$; linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe combinatii $(\beta , \gamma )$ produc o potrivire similara cu datele observate din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru SIR cu o singura serie observata}{figure.caption.39}{}}
+\newlabel{fig:identifiability_landscape@cref}{{[figure][2][7]7.2}{[1][40][]41}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7.2}Generalizare pe mai multe regiuni}{41}{subsection.7.7.2}\protected@file@percent }
+\newlabel{subsec:calibrare_multiregion}{{7.7.2}{41}{Generalizare pe mai multe regiuni}{subsection.7.7.2}{}}
+\newlabel{subsec:calibrare_multiregion@cref}{{[subsection][2][7,7]7.7.2}{[1][40][]41}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.8}Integrarea în sistemul software}{41}{section.7.8}\protected@file@percent }
+\newlabel{sec:integrare_calibrare_software}{{7.8}{41}{Integrarea în sistemul software}{section.7.8}{}}
+\newlabel{sec:integrare_calibrare_software@cref}{{[section][8][7]7.8}{[1][41][]41}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.8.1}Costul software al calibrării}{41}{subsection.7.8.1}\protected@file@percent }
+\newlabel{subsec:cost_calibrare}{{7.8.1}{41}{Costul software al calibrării}{subsection.7.8.1}{}}
+\newlabel{subsec:cost_calibrare@cref}{{[subsection][1][7,8]7.8.1}{[1][41][]41}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). In toate cele patru cazuri $\gamma $ este fixat la valoarea de literatura $1/14$ zile, iar $\beta $ este optimizat prin Nelder-Mead. Valorile $\hat  \beta $ si $\hat  {\mathcal  {R}}_0$ sunt comparabile direct intre tari, dar erorile absolute reflecta scarile diferite de populatie (column N) si de I$_0$.}}{42}{table.caption.40}\protected@file@percent }
+\newlabel{tab:calibration_multiregion}{{7.4}{42}{Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). In toate cele patru cazuri $\gamma $ este fixat la valoarea de literatura $1/14$ zile, iar $\beta $ este optimizat prin Nelder-Mead. Valorile $\hat \beta $ si $\hat {\mathcal {R}}_0$ sunt comparabile direct intre tari, dar erorile absolute reflecta scarile diferite de populatie (column N) si de I$_0$}{table.caption.40}{}}
+\newlabel{tab:calibration_multiregion@cref}{{[table][4][7]7.4}{[1][41][]42}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Costul software al calibrarii SIR (Romania, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber si constrans). Coloana \emph  {in-process} masoara direct costul procedurii din \texttt  {calibrate.py}; coloana \emph  {naiv (ca job-uri)} proiecteaza costul daca fiecare simulare candidata ar fi un job separat prin aplicatie, folosind latenta end-to-end masurata a unui job SIR real ($1047$~ms/job); coloana \emph  {recomandat} corespunde calibrarii intr-un singur job, cu o singura simulare finala scrisa in baza de date. Numarul de simulari candidate este numarul real de evaluari ale functiei obiectiv.}}{42}{table.caption.42}\protected@file@percent }
+\newlabel{tab:calibration_cost}{{7.5}{42}{Costul software al calibrarii SIR (Romania, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber si constrans). Coloana \emph {in-process} masoara direct costul procedurii din \texttt {calibrate.py}; coloana \emph {naiv (ca job-uri)} proiecteaza costul daca fiecare simulare candidata ar fi un job separat prin aplicatie, folosind latenta end-to-end masurata a unui job SIR real ($1047$~ms/job); coloana \emph {recomandat} corespunde calibrarii intr-un singur job, cu o singura simulare finala scrisa in baza de date. Numarul de simulari candidate este numarul real de evaluari ale functiei obiectiv}{table.caption.42}{}}
+\newlabel{tab:calibration_cost@cref}{{[table][5][7]7.5}{[1][41][]42}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19, in patru tari europene cu scari de populatie diferite (atenție la scarile $y$ distincte). Linia neagra este seria observata, linia rosie continua este fitul pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu coeficienti constanti.}}{42}{figure.caption.41}\protected@file@percent }
+\newlabel{fig:calibration_multiregion}{{7.3}{42}{Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19, in patru tari europene cu scari de populatie diferite (atenție la scarile $y$ distincte). Linia neagra este seria observata, linia rosie continua este fitul pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu coeficienti constanti}{figure.caption.41}{}}
+\newlabel{fig:calibration_multiregion@cref}{{[figure][3][7]7.3}{[1][41][]42}{}{}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Evaluarea Software, Performanței și Scalabilității}{43}{chapter.8}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:evaluare}{{8}{42}{Evaluarea Software, Performanței și Scalabilității}{chapter.8}{}}
-\newlabel{ch:evaluare@cref}{{[chapter][8][]8}{[1][42][]42}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}Scopul evaluării}{42}{section.8.1}\protected@file@percent }
-\newlabel{sec:scop_evaluare_software}{{8.1}{42}{Scopul evaluării}{section.8.1}{}}
-\newlabel{sec:scop_evaluare_software@cref}{{[section][1][8]8.1}{[1][42][]42}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.2}Metrici colectate}{42}{section.8.2}\protected@file@percent }
-\newlabel{subsec:metrici}{{8.2}{42}{Metrici colectate}{section.8.2}{}}
-\newlabel{subsec:metrici@cref}{{[section][2][8]8.2}{[1][42][]42}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.3}Matricea experimentală}{42}{section.8.3}\protected@file@percent }
-\newlabel{sec:matrice_experimentala}{{8.3}{42}{Matricea experimentală}{section.8.3}{}}
-\newlabel{sec:matrice_experimentala@cref}{{[section][3][8]8.3}{[1][42][]42}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.1}{\ignorespaces Metricile colectate sau derivabile pentru evaluarea software.}}{43}{table.caption.43}\protected@file@percent }
-\newlabel{tab:metrici_benchmark}{{8.1}{43}{Metricile colectate sau derivabile pentru evaluarea software}{table.caption.43}{}}
-\newlabel{tab:metrici_benchmark@cref}{{[table][1][8]8.1}{[1][42][]43}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{43}{table.caption.44}\protected@file@percent }
-\newlabel{tab:matrice_benchmark}{{8.2}{43}{Matrice minimă pentru campania de benchmark}{table.caption.44}{}}
-\newlabel{tab:matrice_benchmark@cref}{{[table][2][8]8.2}{[1][42][]43}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{43}{table.caption.45}\protected@file@percent }
-\newlabel{tab:teste_necesare_software}{{8.3}{43}{Teste necesare pentru obținerea rezultatelor de evaluare software}{table.caption.45}{}}
-\newlabel{tab:teste_necesare_software@cref}{{[table][3][8]8.3}{[1][42][]43}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.4}Protocol de rulare}{44}{section.8.4}\protected@file@percent }
-\newlabel{subsec:protocoale}{{8.4}{44}{Protocol de rulare}{section.8.4}{}}
-\newlabel{subsec:protocoale@cref}{{[section][4][8]8.4}{[1][42][]44}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{44}{section.8.5}\protected@file@percent }
-\newlabel{sec:scalabilitate_date}{{8.5}{44}{Scalabilitate și complexitatea modelului}{section.8.5}{}}
-\newlabel{sec:scalabilitate_date@cref}{{[section][5][8]8.5}{[1][44][]44}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{44}{section.8.6}\protected@file@percent }
-\newlabel{sec:comparatie_timp}{{8.6}{44}{Compararea implementărilor R, Julia și Python}{section.8.6}{}}
-\newlabel{sec:comparatie_timp@cref}{{[section][6][8]8.6}{[1][44][]44}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.7}Indicatori agregați}{44}{section.8.7}\protected@file@percent }
-\newlabel{sec:indicatori_agregati}{{8.7}{44}{Indicatori agregați}{section.8.7}{}}
-\newlabel{sec:indicatori_agregati@cref}{{[section][7][8]8.7}{[1][44][]44}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{44}{subsection.8.7.1}\protected@file@percent }
-\newlabel{subsec:rezultate_masurate}{{8.7.1}{44}{Rezultate măsurate}{subsection.8.7.1}{}}
-\newlabel{subsec:rezultate_masurate@cref}{{[subsection][1][8,7]8.7.1}{[1][44][]44}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.4}{\ignorespaces Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max }$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt  {kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala.}}{45}{table.caption.46}\protected@file@percent }
-\newlabel{tab:bench_wall_time}{{8.4}{45}{Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max }$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt {kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala}{table.caption.46}{}}
-\newlabel{tab:bench_wall_time@cref}{{[table][4][8]8.4}{[1][44][]45}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.5}{\ignorespaces Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil.}}{45}{table.caption.47}\protected@file@percent }
-\newlabel{tab:bench_speedup_vs_python}{{8.5}{45}{Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil}{table.caption.47}{}}
-\newlabel{tab:bench_speedup_vs_python@cref}{{[table][5][8]8.5}{[1][44][]45}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.6}{\ignorespaces Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max }$.}}{46}{table.caption.48}\protected@file@percent }
-\newlabel{tab:bench_memory}{{8.6}{46}{Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max }$}{table.caption.48}{}}
-\newlabel{tab:bench_memory@cref}{{[table][6][8]8.6}{[1][44][]46}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.7}{\ignorespaces Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max }=90$.}}{46}{table.caption.50}\protected@file@percent }
-\newlabel{tab:bench_julia_coldstart}{{8.7}{46}{Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max }=90$}{table.caption.50}{}}
-\newlabel{tab:bench_julia_coldstart@cref}{{[table][7][8]8.7}{[1][46][]46}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Scalarea wall-time-ului median al solverului SIDARTHE in functie de orizontul $t_{\max }$, pentru cele trei limbaje. R prezinta o crestere aproape liniara cu $t_{\max }$ ($\sim $$130\times $ intre 90 si 10\,000 de pasi), dominata de inserarile rand-cu-rand in baza de date prin \texttt  {dbExecute()}; integrarea propriu-zisa cu \texttt  {deSolve::ode} este sub-secundara. Python ramane stabil ($4$--$8$~ms), iar Julia este mai rapid in regimul amortizat dupa compilarea JIT, atingand $6$~ms la $10\,000$ de pasi.}}{46}{figure.caption.49}\protected@file@percent }
-\newlabel{fig:scaling_wall_time}{{8.1}{46}{Scalarea wall-time-ului median al solverului SIDARTHE in functie de orizontul $t_{\max }$, pentru cele trei limbaje. R prezinta o crestere aproape liniara cu $t_{\max }$ ($\sim $$130\times $ intre 90 si 10\,000 de pasi), dominata de inserarile rand-cu-rand in baza de date prin \texttt {dbExecute()}; integrarea propriu-zisa cu \texttt {deSolve::ode} este sub-secundara. Python ramane stabil ($4$--$8$~ms), iar Julia este mai rapid in regimul amortizat dupa compilarea JIT, atingand $6$~ms la $10\,000$ de pasi}{figure.caption.49}{}}
-\newlabel{fig:scaling_wall_time@cref}{{[figure][1][8]8.1}{[1][46][]46}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{46}{subsection.8.7.2}\protected@file@percent }
-\newlabel{subsec:bench_lstm}{{8.7.2}{46}{Costul componentei LSTM}{subsection.8.7.2}{}}
-\newlabel{subsec:bench_lstm@cref}{{[subsection][2][8,7]8.7.2}{[1][46][]46}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.8}{\ignorespaces Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt  {lookback=14}, \texttt  {hidden\_size=12}, \texttt  {epochs=150}, \texttt  {learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max }$ are cost neglijabil fata de antrenare.}}{47}{table.caption.51}\protected@file@percent }
-\newlabel{tab:bench_lstm}{{8.8}{47}{Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt {lookback=14}, \texttt {hidden\_size=12}, \texttt {epochs=150}, \texttt {learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max }$ are cost neglijabil fata de antrenare}{table.caption.51}{}}
-\newlabel{tab:bench_lstm@cref}{{[table][8][8]8.8}{[1][46][]47}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.3}Variabilitatea cross-hardware}{47}{subsection.8.7.3}\protected@file@percent }
-\newlabel{subsec:hardware_variability}{{8.7.3}{47}{Variabilitatea cross-hardware}{subsection.8.7.3}{}}
-\newlabel{subsec:hardware_variability@cref}{{[subsection][3][8,7]8.7.3}{[1][47][]47}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{47}{section.8.8}\protected@file@percent }
-\newlabel{sec:acuratete}{{8.8}{47}{Acuratețe numerică și verificări de regresie}{section.8.8}{}}
-\newlabel{sec:acuratete@cref}{{[section][8][8]8.8}{[1][47][]47}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.9}{\ignorespaces Comparatia timpilor de executie pentru solverul Python (\texttt  {scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt  {kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt  {multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph  {speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid.}}{48}{table.caption.52}\protected@file@percent }
-\newlabel{tab:hardware_comparison}{{8.9}{48}{Comparatia timpilor de executie pentru solverul Python (\texttt {scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt {kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt {multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph {speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid}{table.caption.52}{}}
-\newlabel{tab:hardware_comparison@cref}{{[table][9][8]8.9}{[1][47][]48}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.10}{\ignorespaces Verificare numerica de regresie cross-limbaj: abaterea maxima absoluta intre traiectoriile compartimentale produse in R, Julia si Python pentru aceiasi parametri si aceleasi conditii initiale, pe setul sintetic \texttt  {multiwave} (populatia $N=50 \cdot 10^6$, $t_{\max }=365$ pasi zilnici). Modelele folosesc solvere diferite (R cu RK4 pas fix $h=1$, Python cu RK45 adaptiv, Julia cu Tsit5), deci abaterile reflecta tolerantele numerice cumulate, nu erori de implementare.}}{48}{table.caption.53}\protected@file@percent }
-\newlabel{tab:cross_language_regression}{{8.10}{48}{Verificare numerica de regresie cross-limbaj: abaterea maxima absoluta intre traiectoriile compartimentale produse in R, Julia si Python pentru aceiasi parametri si aceleasi conditii initiale, pe setul sintetic \texttt {multiwave} (populatia $N=50 \cdot 10^6$, $t_{\max }=365$ pasi zilnici). Modelele folosesc solvere diferite (R cu RK4 pas fix $h=1$, Python cu RK45 adaptiv, Julia cu Tsit5), deci abaterile reflecta tolerantele numerice cumulate, nu erori de implementare}{table.caption.53}{}}
-\newlabel{tab:cross_language_regression@cref}{{[table][10][8]8.10}{[1][47][]48}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{48}{section.8.9}\protected@file@percent }
-\newlabel{sec:evaluare_api_db}{{8.9}{48}{Evaluarea API-ului și a bazei de date}{section.8.9}{}}
-\newlabel{sec:evaluare_api_db@cref}{{[section][9][8]8.9}{[1][47][]48}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.11}{\ignorespaces Latenta API pe model, la orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se raporteaza mediana ($p_{50}$); pentru \emph  {results}, endpointul cel mai greu, se raporteaza si percentila 95 ($p_{95}$) si dimensiunea raspunsului JSON. \emph  {create} raspunde asincron (inainte de rularea solver-ului); \emph  {results} si \emph  {export} includ deserializarea din YugabyteDB. Masurat prin port-forward la clusterul \texttt  {kube-4kdhb}.}}{49}{table.caption.54}\protected@file@percent }
-\newlabel{tab:api_latency}{{8.11}{49}{Latenta API pe model, la orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se raporteaza mediana ($p_{50}$); pentru \emph {results}, endpointul cel mai greu, se raporteaza si percentila 95 ($p_{95}$) si dimensiunea raspunsului JSON. \emph {create} raspunde asincron (inainte de rularea solver-ului); \emph {results} si \emph {export} includ deserializarea din YugabyteDB. Masurat prin port-forward la clusterul \texttt {kube-4kdhb}}{table.caption.54}{}}
-\newlabel{tab:api_latency@cref}{{[table][11][8]8.11}{[1][48][]49}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8.12}{\ignorespaces Scalarea latentei de citire cu orizontul, pentru modelul \texttt  {sidarthe} ($8$ compartimente). Pe masura ce numarul de puncte creste, latenta \emph  {results} si dimensiunea JSON cresc aproximativ liniar, in timp ce \emph  {export} CSV ramane mai ieftin (text plat, fara structura JSON).}}{49}{table.caption.55}\protected@file@percent }
-\newlabel{tab:api_latency_scaling}{{8.12}{49}{Scalarea latentei de citire cu orizontul, pentru modelul \texttt {sidarthe} ($8$ compartimente). Pe masura ce numarul de puncte creste, latenta \emph {results} si dimensiunea JSON cresc aproximativ liniar, in timp ce \emph {export} CSV ramane mai ieftin (text plat, fara structura JSON)}{table.caption.55}{}}
-\newlabel{tab:api_latency_scaling@cref}{{[table][12][8]8.12}{[1][48][]49}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{49}{section.8.10}\protected@file@percent }
-\newlabel{sec:analiza_sintetica}{{8.10}{49}{Interpretarea rezultatelor}{section.8.10}{}}
-\newlabel{sec:analiza_sintetica@cref}{{[section][10][8]8.10}{[1][49][]49}{}{}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{50}{chapter.9}\protected@file@percent }
+\newlabel{ch:evaluare}{{8}{43}{Evaluarea Software, Performanței și Scalabilității}{chapter.8}{}}
+\newlabel{ch:evaluare@cref}{{[chapter][8][]8}{[1][43][]43}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Scopul evaluării}{43}{section.8.1}\protected@file@percent }
+\newlabel{sec:scop_evaluare_software}{{8.1}{43}{Scopul evaluării}{section.8.1}{}}
+\newlabel{sec:scop_evaluare_software@cref}{{[section][1][8]8.1}{[1][43][]43}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Metrici colectate}{43}{section.8.2}\protected@file@percent }
+\newlabel{subsec:metrici}{{8.2}{43}{Metrici colectate}{section.8.2}{}}
+\newlabel{subsec:metrici@cref}{{[section][2][8]8.2}{[1][43][]43}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}Matricea experimentală}{43}{section.8.3}\protected@file@percent }
+\newlabel{sec:matrice_experimentala}{{8.3}{43}{Matricea experimentală}{section.8.3}{}}
+\newlabel{sec:matrice_experimentala@cref}{{[section][3][8]8.3}{[1][43][]43}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.1}{\ignorespaces Metricile colectate sau derivabile pentru evaluarea software.}}{44}{table.caption.43}\protected@file@percent }
+\newlabel{tab:metrici_benchmark}{{8.1}{44}{Metricile colectate sau derivabile pentru evaluarea software}{table.caption.43}{}}
+\newlabel{tab:metrici_benchmark@cref}{{[table][1][8]8.1}{[1][43][]44}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{44}{table.caption.44}\protected@file@percent }
+\newlabel{tab:matrice_benchmark}{{8.2}{44}{Matrice minimă pentru campania de benchmark}{table.caption.44}{}}
+\newlabel{tab:matrice_benchmark@cref}{{[table][2][8]8.2}{[1][43][]44}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{44}{table.caption.45}\protected@file@percent }
+\newlabel{tab:teste_necesare_software}{{8.3}{44}{Teste necesare pentru obținerea rezultatelor de evaluare software}{table.caption.45}{}}
+\newlabel{tab:teste_necesare_software@cref}{{[table][3][8]8.3}{[1][43][]44}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.4}Protocol de rulare}{45}{section.8.4}\protected@file@percent }
+\newlabel{subsec:protocoale}{{8.4}{45}{Protocol de rulare}{section.8.4}{}}
+\newlabel{subsec:protocoale@cref}{{[section][4][8]8.4}{[1][43][]45}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{45}{section.8.5}\protected@file@percent }
+\newlabel{sec:scalabilitate_date}{{8.5}{45}{Scalabilitate și complexitatea modelului}{section.8.5}{}}
+\newlabel{sec:scalabilitate_date@cref}{{[section][5][8]8.5}{[1][45][]45}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{45}{section.8.6}\protected@file@percent }
+\newlabel{sec:comparatie_timp}{{8.6}{45}{Compararea implementărilor R, Julia și Python}{section.8.6}{}}
+\newlabel{sec:comparatie_timp@cref}{{[section][6][8]8.6}{[1][45][]45}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.7}Indicatori agregați}{45}{section.8.7}\protected@file@percent }
+\newlabel{sec:indicatori_agregati}{{8.7}{45}{Indicatori agregați}{section.8.7}{}}
+\newlabel{sec:indicatori_agregati@cref}{{[section][7][8]8.7}{[1][45][]45}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{45}{subsection.8.7.1}\protected@file@percent }
+\newlabel{subsec:rezultate_masurate}{{8.7.1}{45}{Rezultate măsurate}{subsection.8.7.1}{}}
+\newlabel{subsec:rezultate_masurate@cref}{{[subsection][1][8,7]8.7.1}{[1][45][]45}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.4}{\ignorespaces Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max }$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt  {kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala.}}{46}{table.caption.46}\protected@file@percent }
+\newlabel{tab:bench_wall_time}{{8.4}{46}{Wall-time median al solverului (ms), pe model si limbaj, pentru patru orizonturi $t_{\max }$. Rezultate din campania de benchmark prin aplicatie (cluster \texttt {kube-4kdhb}, 3 worker x 4 vCPU / 8 GiB), 3 repetari per combinatie, dataset Romania OWID, prima inregistrare ca conditie initiala}{table.caption.46}{}}
+\newlabel{tab:bench_wall_time@cref}{{[table][4][8]8.4}{[1][45][]46}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.5}{\ignorespaces Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil.}}{46}{table.caption.47}\protected@file@percent }
+\newlabel{tab:bench_speedup_vs_python}{{8.5}{46}{Raport de viteza al solverului fata de Python (mediana wall-time Python / mediana limbaj). Valori $>1$ inseamna mai rapid decat Python; valori $<1$ inseamna mai lent. Pragul `$>x$' apare cand mediana sub-milisecundara face raportul exact instabil}{table.caption.47}{}}
+\newlabel{tab:bench_speedup_vs_python@cref}{{[table][5][8]8.5}{[1][45][]46}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.6}{\ignorespaces Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max }$.}}{47}{table.caption.48}\protected@file@percent }
+\newlabel{tab:bench_memory}{{8.6}{47}{Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max }$}{table.caption.48}{}}
+\newlabel{tab:bench_memory@cref}{{[table][6][8]8.6}{[1][45][]47}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.7}{\ignorespaces Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max }=90$.}}{47}{table.caption.50}\protected@file@percent }
+\newlabel{tab:bench_julia_coldstart}{{8.7}{47}{Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max }=90$}{table.caption.50}{}}
+\newlabel{tab:bench_julia_coldstart@cref}{{[table][7][8]8.7}{[1][47][]47}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Scalarea wall-time-ului median al solverului SIDARTHE in functie de orizontul $t_{\max }$, pentru cele trei limbaje. R prezinta o crestere aproape liniara cu $t_{\max }$ ($\sim $$130\times $ intre 90 si 10\,000 de pasi), dominata de inserarile rand-cu-rand in baza de date prin \texttt  {dbExecute()}; integrarea propriu-zisa cu \texttt  {deSolve::ode} este sub-secundara. Python ramane stabil ($4$--$8$~ms), iar Julia este mai rapid in regimul amortizat dupa compilarea JIT, atingand $6$~ms la $10\,000$ de pasi.}}{47}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:scaling_wall_time}{{8.1}{47}{Scalarea wall-time-ului median al solverului SIDARTHE in functie de orizontul $t_{\max }$, pentru cele trei limbaje. R prezinta o crestere aproape liniara cu $t_{\max }$ ($\sim $$130\times $ intre 90 si 10\,000 de pasi), dominata de inserarile rand-cu-rand in baza de date prin \texttt {dbExecute()}; integrarea propriu-zisa cu \texttt {deSolve::ode} este sub-secundara. Python ramane stabil ($4$--$8$~ms), iar Julia este mai rapid in regimul amortizat dupa compilarea JIT, atingand $6$~ms la $10\,000$ de pasi}{figure.caption.49}{}}
+\newlabel{fig:scaling_wall_time@cref}{{[figure][1][8]8.1}{[1][47][]47}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{47}{subsection.8.7.2}\protected@file@percent }
+\newlabel{subsec:bench_lstm}{{8.7.2}{47}{Costul componentei LSTM}{subsection.8.7.2}{}}
+\newlabel{subsec:bench_lstm@cref}{{[subsection][2][8,7]8.7.2}{[1][47][]47}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.8}{\ignorespaces Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt  {lookback=14}, \texttt  {hidden\_size=12}, \texttt  {epochs=150}, \texttt  {learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max }$ are cost neglijabil fata de antrenare.}}{48}{table.caption.51}\protected@file@percent }
+\newlabel{tab:bench_lstm}{{8.8}{48}{Costul rularii pentru runner-ul LSTM dedicat (Python, hand-rolled NumPy), parametri impliciti (\texttt {lookback=14}, \texttt {hidden\_size=12}, \texttt {epochs=150}, \texttt {learning\_rate=0.01}), dataset Romania OWID (1\,440 zile, $80\%$ antrenare / $20\%$ test cronologic). Forecast-ul autoregresiv pe orizontul $t_{\max }$ are cost neglijabil fata de antrenare}{table.caption.51}{}}
+\newlabel{tab:bench_lstm@cref}{{[table][8][8]8.8}{[1][47][]48}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.3}Variabilitatea cross-hardware}{48}{subsection.8.7.3}\protected@file@percent }
+\newlabel{subsec:hardware_variability}{{8.7.3}{48}{Variabilitatea cross-hardware}{subsection.8.7.3}{}}
+\newlabel{subsec:hardware_variability@cref}{{[subsection][3][8,7]8.7.3}{[1][48][]48}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{48}{section.8.8}\protected@file@percent }
+\newlabel{sec:acuratete}{{8.8}{48}{Acuratețe numerică și verificări de regresie}{section.8.8}{}}
+\newlabel{sec:acuratete@cref}{{[section][8][8]8.8}{[1][48][]48}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.9}{\ignorespaces Comparatia timpilor de executie pentru solverul Python (\texttt  {scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt  {kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt  {multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph  {speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid.}}{49}{table.caption.52}\protected@file@percent }
+\newlabel{tab:hardware_comparison}{{8.9}{49}{Comparatia timpilor de executie pentru solverul Python (\texttt {scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt {kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt {multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph {speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid}{table.caption.52}{}}
+\newlabel{tab:hardware_comparison@cref}{{[table][9][8]8.9}{[1][48][]49}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.10}{\ignorespaces Verificare numerica de regresie cross-limbaj: abaterea maxima absoluta intre traiectoriile compartimentale produse in R, Julia si Python pentru aceiasi parametri si aceleasi conditii initiale, pe setul sintetic \texttt  {multiwave} (populatia $N=50 \cdot 10^6$, $t_{\max }=365$ pasi zilnici). Modelele folosesc solvere diferite (R cu RK4 pas fix $h=1$, Python cu RK45 adaptiv, Julia cu Tsit5), deci abaterile reflecta tolerantele numerice cumulate, nu erori de implementare.}}{49}{table.caption.53}\protected@file@percent }
+\newlabel{tab:cross_language_regression}{{8.10}{49}{Verificare numerica de regresie cross-limbaj: abaterea maxima absoluta intre traiectoriile compartimentale produse in R, Julia si Python pentru aceiasi parametri si aceleasi conditii initiale, pe setul sintetic \texttt {multiwave} (populatia $N=50 \cdot 10^6$, $t_{\max }=365$ pasi zilnici). Modelele folosesc solvere diferite (R cu RK4 pas fix $h=1$, Python cu RK45 adaptiv, Julia cu Tsit5), deci abaterile reflecta tolerantele numerice cumulate, nu erori de implementare}{table.caption.53}{}}
+\newlabel{tab:cross_language_regression@cref}{{[table][10][8]8.10}{[1][48][]49}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{49}{section.8.9}\protected@file@percent }
+\newlabel{sec:evaluare_api_db}{{8.9}{49}{Evaluarea API-ului și a bazei de date}{section.8.9}{}}
+\newlabel{sec:evaluare_api_db@cref}{{[section][9][8]8.9}{[1][48][]49}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.11}{\ignorespaces Latenta API pe model, la orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se raporteaza mediana ($p_{50}$); pentru \emph  {results}, endpointul cel mai greu, se raporteaza si percentila 95 ($p_{95}$) si dimensiunea raspunsului JSON. \emph  {create} raspunde asincron (inainte de rularea solver-ului); \emph  {results} si \emph  {export} includ deserializarea din YugabyteDB. Masurat prin port-forward la clusterul \texttt  {kube-4kdhb}.}}{50}{table.caption.54}\protected@file@percent }
+\newlabel{tab:api_latency}{{8.11}{50}{Latenta API pe model, la orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se raporteaza mediana ($p_{50}$); pentru \emph {results}, endpointul cel mai greu, se raporteaza si percentila 95 ($p_{95}$) si dimensiunea raspunsului JSON. \emph {create} raspunde asincron (inainte de rularea solver-ului); \emph {results} si \emph {export} includ deserializarea din YugabyteDB. Masurat prin port-forward la clusterul \texttt {kube-4kdhb}}{table.caption.54}{}}
+\newlabel{tab:api_latency@cref}{{[table][11][8]8.11}{[1][49][]50}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8.12}{\ignorespaces Scalarea latentei de citire cu orizontul, pentru modelul \texttt  {sidarthe} ($8$ compartimente). Pe masura ce numarul de puncte creste, latenta \emph  {results} si dimensiunea JSON cresc aproximativ liniar, in timp ce \emph  {export} CSV ramane mai ieftin (text plat, fara structura JSON).}}{50}{table.caption.55}\protected@file@percent }
+\newlabel{tab:api_latency_scaling}{{8.12}{50}{Scalarea latentei de citire cu orizontul, pentru modelul \texttt {sidarthe} ($8$ compartimente). Pe masura ce numarul de puncte creste, latenta \emph {results} si dimensiunea JSON cresc aproximativ liniar, in timp ce \emph {export} CSV ramane mai ieftin (text plat, fara structura JSON)}{table.caption.55}{}}
+\newlabel{tab:api_latency_scaling@cref}{{[table][12][8]8.12}{[1][49][]50}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{50}{section.8.10}\protected@file@percent }
+\newlabel{sec:analiza_sintetica}{{8.10}{50}{Interpretarea rezultatelor}{section.8.10}{}}
+\newlabel{sec:analiza_sintetica@cref}{{[section][10][8]8.10}{[1][50][]50}{}{}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{51}{chapter.9}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:aplicatie}{{9}{50}{Aplicația Web E-Medicine}{chapter.9}{}}
-\newlabel{ch:aplicatie@cref}{{[chapter][9][]9}{[1][50][]50}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.1}Rolul aplicației}{50}{section.9.1}\protected@file@percent }
-\newlabel{sec:functionalitati}{{9.1}{50}{Rolul aplicației}{section.9.1}{}}
-\newlabel{sec:functionalitati@cref}{{[section][1][9]9.1}{[1][50][]50}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.2}Backend Go}{50}{section.9.2}\protected@file@percent }
-\newlabel{sec:backend_go}{{9.2}{50}{Backend Go}{section.9.2}{}}
-\newlabel{sec:backend_go@cref}{{[section][2][9]9.2}{[1][50][]50}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{50}{section.9.3}\protected@file@percent }
-\newlabel{sec:dataseturi_web}{{9.3}{50}{Gestionarea dataseturilor}{section.9.3}{}}
-\newlabel{sec:dataseturi_web@cref}{{[section][3][9]9.3}{[1][50][]50}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.4}Execuția simulărilor}{50}{section.9.4}\protected@file@percent }
-\newlabel{sec:executie_simulari_web}{{9.4}{50}{Execuția simulărilor}{section.9.4}{}}
-\newlabel{sec:executie_simulari_web@cref}{{[section][4][9]9.4}{[1][50][]50}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.5}Frontend Vue.js}{51}{section.9.5}\protected@file@percent }
-\newlabel{sec:frontend_vue}{{9.5}{51}{Frontend Vue.js}{section.9.5}{}}
-\newlabel{sec:frontend_vue@cref}{{[section][5][9]9.5}{[1][51][]51}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.6}Consola super-admin}{51}{section.9.6}\protected@file@percent }
-\newlabel{sec:frontend_admin}{{9.6}{51}{Consola super-admin}{section.9.6}{}}
-\newlabel{sec:frontend_admin@cref}{{[section][6][9]9.6}{[1][51][]51}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.7}Considerații de securitate}{51}{section.9.7}\protected@file@percent }
-\newlabel{sec:securitate}{{9.7}{51}{Considerații de securitate}{section.9.7}{}}
-\newlabel{sec:securitate@cref}{{[section][7][9]9.7}{[1][51][]51}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{51}{subsection.9.7.1}\protected@file@percent }
-\newlabel{subsec:sec_mecanisme}{{9.7.1}{51}{Mecanisme implementate}{subsection.9.7.1}{}}
-\newlabel{subsec:sec_mecanisme@cref}{{[subsection][1][9,7]9.7.1}{[1][51][]51}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{52}{subsection.9.7.2}\protected@file@percent }
-\newlabel{subsec:sec_limitari}{{9.7.2}{52}{Limitări cunoscute și remedieri}{subsection.9.7.2}{}}
-\newlabel{subsec:sec_limitari@cref}{{[subsection][2][9,7]9.7.2}{[1][52][]52}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9.8}Validare funcțională}{52}{section.9.8}\protected@file@percent }
-\newlabel{sec:testare_functionala}{{9.8}{52}{Validare funcțională}{section.9.8}{}}
-\newlabel{sec:testare_functionala@cref}{{[section][8][9]9.8}{[1][52][]52}{}{}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{53}{chapter.10}\protected@file@percent }
+\newlabel{ch:aplicatie}{{9}{51}{Aplicația Web E-Medicine}{chapter.9}{}}
+\newlabel{ch:aplicatie@cref}{{[chapter][9][]9}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}Rolul aplicației}{51}{section.9.1}\protected@file@percent }
+\newlabel{sec:functionalitati}{{9.1}{51}{Rolul aplicației}{section.9.1}{}}
+\newlabel{sec:functionalitati@cref}{{[section][1][9]9.1}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.2}Backend Go}{51}{section.9.2}\protected@file@percent }
+\newlabel{sec:backend_go}{{9.2}{51}{Backend Go}{section.9.2}{}}
+\newlabel{sec:backend_go@cref}{{[section][2][9]9.2}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{51}{section.9.3}\protected@file@percent }
+\newlabel{sec:dataseturi_web}{{9.3}{51}{Gestionarea dataseturilor}{section.9.3}{}}
+\newlabel{sec:dataseturi_web@cref}{{[section][3][9]9.3}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.4}Execuția simulărilor}{51}{section.9.4}\protected@file@percent }
+\newlabel{sec:executie_simulari_web}{{9.4}{51}{Execuția simulărilor}{section.9.4}{}}
+\newlabel{sec:executie_simulari_web@cref}{{[section][4][9]9.4}{[1][51][]51}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.5}Frontend Vue.js}{52}{section.9.5}\protected@file@percent }
+\newlabel{sec:frontend_vue}{{9.5}{52}{Frontend Vue.js}{section.9.5}{}}
+\newlabel{sec:frontend_vue@cref}{{[section][5][9]9.5}{[1][52][]52}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.6}Consola super-admin}{52}{section.9.6}\protected@file@percent }
+\newlabel{sec:frontend_admin}{{9.6}{52}{Consola super-admin}{section.9.6}{}}
+\newlabel{sec:frontend_admin@cref}{{[section][6][9]9.6}{[1][52][]52}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.7}Considerații de securitate}{52}{section.9.7}\protected@file@percent }
+\newlabel{sec:securitate}{{9.7}{52}{Considerații de securitate}{section.9.7}{}}
+\newlabel{sec:securitate@cref}{{[section][7][9]9.7}{[1][52][]52}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{52}{subsection.9.7.1}\protected@file@percent }
+\newlabel{subsec:sec_mecanisme}{{9.7.1}{52}{Mecanisme implementate}{subsection.9.7.1}{}}
+\newlabel{subsec:sec_mecanisme@cref}{{[subsection][1][9,7]9.7.1}{[1][52][]52}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{53}{subsection.9.7.2}\protected@file@percent }
+\newlabel{subsec:sec_limitari}{{9.7.2}{53}{Limitări cunoscute și remedieri}{subsection.9.7.2}{}}
+\newlabel{subsec:sec_limitari@cref}{{[subsection][2][9,7]9.7.2}{[1][53][]53}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {9.8}Validare funcțională}{53}{section.9.8}\protected@file@percent }
+\newlabel{sec:testare_functionala}{{9.8}{53}{Validare funcțională}{section.9.8}{}}
+\newlabel{sec:testare_functionala@cref}{{[section][8][9]9.8}{[1][53][]53}{}{}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{54}{chapter.10}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{ch:concluzii}{{10}{53}{Concluzii și Direcții de Dezvoltare Viitoare}{chapter.10}{}}
-\newlabel{ch:concluzii@cref}{{[chapter][10][]10}{[1][53][]53}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.1}Sinteza lucrării}{53}{section.10.1}\protected@file@percent }
-\newlabel{sec:sinteza_contributii}{{10.1}{53}{Sinteza lucrării}{section.10.1}{}}
-\newlabel{sec:sinteza_contributii@cref}{{[section][1][10]10.1}{[1][53][]53}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.1}Răspuns la obiectivele propuse}{53}{subsection.10.1.1}\protected@file@percent }
-\newlabel{subsec:atingere_obiective}{{10.1.1}{53}{Răspuns la obiectivele propuse}{subsection.10.1.1}{}}
-\newlabel{subsec:atingere_obiective@cref}{{[subsection][1][10,1]10.1.1}{[1][53][]53}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{53}{section.10.2}\protected@file@percent }
-\newlabel{sec:concluzii_modele}{{10.2}{53}{Concluzii privind modelele}{section.10.2}{}}
-\newlabel{sec:concluzii_modele@cref}{{[section][2][10]10.2}{[1][53][]53}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{54}{section.10.3}\protected@file@percent }
-\newlabel{sec:concluzii_implementare}{{10.3}{54}{Concluzii privind implementarea}{section.10.3}{}}
-\newlabel{sec:concluzii_implementare@cref}{{[section][3][10]10.3}{[1][54][]54}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.4}Concluzii experimentale}{54}{section.10.4}\protected@file@percent }
-\newlabel{sec:concluzii_experimentale}{{10.4}{54}{Concluzii experimentale}{section.10.4}{}}
-\newlabel{sec:concluzii_experimentale@cref}{{[section][4][10]10.4}{[1][54][]54}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.5}Limitări}{55}{section.10.5}\protected@file@percent }
-\newlabel{sec:limitari}{{10.5}{55}{Limitări}{section.10.5}{}}
-\newlabel{sec:limitari@cref}{{[section][5][10]10.5}{[1][55][]55}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10.6}Direcții viitoare}{55}{section.10.6}\protected@file@percent }
-\newlabel{sec:directii_viitoare}{{10.6}{55}{Direcții viitoare}{section.10.6}{}}
-\newlabel{sec:directii_viitoare@cref}{{[section][6][10]10.6}{[1][55][]55}{}{}{}}
+\newlabel{ch:concluzii}{{10}{54}{Concluzii și Direcții de Dezvoltare Viitoare}{chapter.10}{}}
+\newlabel{ch:concluzii@cref}{{[chapter][10][]10}{[1][54][]54}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.1}Sinteza lucrării}{54}{section.10.1}\protected@file@percent }
+\newlabel{sec:sinteza_contributii}{{10.1}{54}{Sinteza lucrării}{section.10.1}{}}
+\newlabel{sec:sinteza_contributii@cref}{{[section][1][10]10.1}{[1][54][]54}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1.1}Răspuns la obiectivele propuse}{54}{subsection.10.1.1}\protected@file@percent }
+\newlabel{subsec:atingere_obiective}{{10.1.1}{54}{Răspuns la obiectivele propuse}{subsection.10.1.1}{}}
+\newlabel{subsec:atingere_obiective@cref}{{[subsection][1][10,1]10.1.1}{[1][54][]54}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{54}{section.10.2}\protected@file@percent }
+\newlabel{sec:concluzii_modele}{{10.2}{54}{Concluzii privind modelele}{section.10.2}{}}
+\newlabel{sec:concluzii_modele@cref}{{[section][2][10]10.2}{[1][54][]54}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{55}{section.10.3}\protected@file@percent }
+\newlabel{sec:concluzii_implementare}{{10.3}{55}{Concluzii privind implementarea}{section.10.3}{}}
+\newlabel{sec:concluzii_implementare@cref}{{[section][3][10]10.3}{[1][55][]55}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.4}Concluzii experimentale}{55}{section.10.4}\protected@file@percent }
+\newlabel{sec:concluzii_experimentale}{{10.4}{55}{Concluzii experimentale}{section.10.4}{}}
+\newlabel{sec:concluzii_experimentale@cref}{{[section][4][10]10.4}{[1][55][]55}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.5}Limitări}{56}{section.10.5}\protected@file@percent }
+\newlabel{sec:limitari}{{10.5}{56}{Limitări}{section.10.5}{}}
+\newlabel{sec:limitari@cref}{{[section][5][10]10.5}{[1][56][]56}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.6}Direcții viitoare}{56}{section.10.6}\protected@file@percent }
+\newlabel{sec:directii_viitoare}{{10.6}{56}{Direcții viitoare}{section.10.6}{}}
+\newlabel{sec:directii_viitoare@cref}{{[section][6][10]10.6}{[1][56][]56}{}{}{}}
 \bibstyle{unsrt}
 \bibdata{bibliography}
 \bibcite{andersonmay1991}{{1}{}{{}}{{}}}
@@ -749,7 +752,7 @@
 \bibcite{rcoreteam2024}{{18}{}{{}}{{}}}
 \bibcite{bezanson2017julia}{{19}{}{{}}{{}}}
 \bibcite{vanrossum2009python}{{20}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{Bibliografie}{57}{section.10.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Bibliografie}{58}{section.10.6}\protected@file@percent }
 \bibcite{yugabyte2024}{{21}{}{{}}{{}}}
 \bibcite{burns2016kubernetes}{{22}{}{{}}{{}}}
 \bibcite{kubernetes2024}{{23}{}{{}}{{}}}
@@ -763,73 +766,73 @@
 \bibcite{hochreiter1997lstm}{{31}{}{{}}{{}}}
 \bibcite{werbos1990bptt}{{32}{}{{}}{{}}}
 \bibcite{nelder1965simplex}{{33}{}{{}}{{}}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{59}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{60}{appendix.A}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:cod_r}{{A}{59}{Cod Sursă — Implementarea R}{appendix.A}{}}
-\newlabel{app:cod_r@cref}{{[chapter][1][]A}{[1][59][]59}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.1}{\ignorespaces Runner-ul R pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{59}{lstlisting.A.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{64}{appendix.B}\protected@file@percent }
+\newlabel{app:cod_r}{{A}{60}{Cod Sursă — Implementarea R}{appendix.A}{}}
+\newlabel{app:cod_r@cref}{{[chapter][1][]A}{[1][60][]60}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {A.1}{\ignorespaces Runner-ul R pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{60}{lstlisting.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{65}{appendix.B}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:cod_julia}{{B}{64}{Cod Sursă — Implementarea Julia}{appendix.B}{}}
-\newlabel{app:cod_julia@cref}{{[chapter][2][]B}{[1][64][]64}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}{\ignorespaces Runner-ul Julia pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{64}{lstlisting.B.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{69}{appendix.C}\protected@file@percent }
+\newlabel{app:cod_julia}{{B}{65}{Cod Sursă — Implementarea Julia}{appendix.B}{}}
+\newlabel{app:cod_julia@cref}{{[chapter][2][]B}{[1][65][]65}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {B.1}{\ignorespaces Runner-ul Julia pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{65}{lstlisting.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{70}{appendix.C}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:cod_python}{{C}{69}{Cod Sursă — Implementarea Python}{appendix.C}{}}
-\newlabel{app:cod_python@cref}{{[chapter][3][]C}{[1][69][]69}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {C.1}{\ignorespaces Runner-ul Python pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{69}{lstlisting.C.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{74}{appendix.D}\protected@file@percent }
+\newlabel{app:cod_python}{{C}{70}{Cod Sursă — Implementarea Python}{appendix.C}{}}
+\newlabel{app:cod_python@cref}{{[chapter][3][]C}{[1][70][]70}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {C.1}{\ignorespaces Runner-ul Python pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}}{70}{lstlisting.C.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{75}{appendix.D}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:cod_lstm}{{D}{74}{Cod Sursă --- Runner LSTM}{appendix.D}{}}
-\newlabel{app:cod_lstm@cref}{{[chapter][4][]D}{[1][74][]74}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {D.1}{\ignorespaces Runner-ul LSTM dedicat predicțiilor epidemiologice.}}{74}{lstlisting.D.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{82}{appendix.E}\protected@file@percent }
+\newlabel{app:cod_lstm}{{D}{75}{Cod Sursă --- Runner LSTM}{appendix.D}{}}
+\newlabel{app:cod_lstm@cref}{{[chapter][4][]D}{[1][75][]75}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {D.1}{\ignorespaces Runner-ul LSTM dedicat predicțiilor epidemiologice.}}{75}{lstlisting.D.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{83}{appendix.E}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:schema_bd}{{E}{82}{Schema Bazei de Date}{appendix.E}{}}
-\newlabel{app:schema_bd@cref}{{[chapter][5][]E}{[1][82][]82}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.1}{\ignorespaces Crearea tabelului \texttt  {users}.}}{82}{lstlisting.E.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.2}{\ignorespaces Crearea tabelului \texttt  {datasets}.}}{82}{lstlisting.E.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.3}{\ignorespaces Crearea tabelului \texttt  {epidemiological\_records}.}}{82}{lstlisting.E.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.4}{\ignorespaces Crearea tabelului \texttt  {simulation\_runs}.}}{83}{lstlisting.E.4}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.5}{\ignorespaces Crearea tabelului \texttt  {simulation\_results}.}}{83}{lstlisting.E.5}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.6}{\ignorespaces Crearea tabelului \texttt  {benchmarks}.}}{83}{lstlisting.E.6}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.7}{\ignorespaces Crearea tabelului \texttt  {studies}.}}{83}{lstlisting.E.7}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.8}{\ignorespaces Crearea tabelului \texttt  {study\_members}.}}{84}{lstlisting.E.8}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.9}{\ignorespaces Adăugarea flag-ului \texttt  {is\_super\_admin}.}}{84}{lstlisting.E.9}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.10}{\ignorespaces Adăugarea coloanei \texttt  {study\_id} pe dataseturi și simulări.}}{84}{lstlisting.E.10}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.11}{\ignorespaces Extinderea constrângerii \texttt  {model\_type} pentru toate modelele suportate.}}{84}{lstlisting.E.11}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.12}{\ignorespaces Adăugarea modelului \texttt  {lstm} în constrângerea \texttt  {model\_type}.}}{85}{lstlisting.E.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{86}{appendix.F}\protected@file@percent }
+\newlabel{app:schema_bd}{{E}{83}{Schema Bazei de Date}{appendix.E}{}}
+\newlabel{app:schema_bd@cref}{{[chapter][5][]E}{[1][83][]83}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.1}{\ignorespaces Crearea tabelului \texttt  {users}.}}{83}{lstlisting.E.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.2}{\ignorespaces Crearea tabelului \texttt  {datasets}.}}{83}{lstlisting.E.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.3}{\ignorespaces Crearea tabelului \texttt  {epidemiological\_records}.}}{83}{lstlisting.E.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.4}{\ignorespaces Crearea tabelului \texttt  {simulation\_runs}.}}{84}{lstlisting.E.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.5}{\ignorespaces Crearea tabelului \texttt  {simulation\_results}.}}{84}{lstlisting.E.5}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.6}{\ignorespaces Crearea tabelului \texttt  {benchmarks}.}}{84}{lstlisting.E.6}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.7}{\ignorespaces Crearea tabelului \texttt  {studies}.}}{84}{lstlisting.E.7}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.8}{\ignorespaces Crearea tabelului \texttt  {study\_members}.}}{85}{lstlisting.E.8}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.9}{\ignorespaces Adăugarea flag-ului \texttt  {is\_super\_admin}.}}{85}{lstlisting.E.9}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.10}{\ignorespaces Adăugarea coloanei \texttt  {study\_id} pe dataseturi și simulări.}}{85}{lstlisting.E.10}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.11}{\ignorespaces Extinderea constrângerii \texttt  {model\_type} pentru toate modelele suportate.}}{85}{lstlisting.E.11}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {E.12}{\ignorespaces Adăugarea modelului \texttt  {lstm} în constrângerea \texttt  {model\_type}.}}{86}{lstlisting.E.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{87}{appendix.F}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:kubernetes}{{F}{86}{Configurații Kubernetes}{appendix.F}{}}
-\newlabel{app:kubernetes@cref}{{[chapter][6][]F}{[1][86][]86}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {F.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{86}{table.caption.57}\protected@file@percent }
-\newlabel{tab:k8s_manifeste}{{F.1}{86}{Manifestele Kubernetes incluse în repository}{table.caption.57}{}}
-\newlabel{tab:k8s_manifeste@cref}{{[table][1][6]F.1}{[1][86][]86}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.1}{\ignorespaces \texttt  {00-namespace.yaml} --- Namespace-ul dedicat aplicației.}}{87}{lstlisting.F.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.2}{\ignorespaces \texttt  {10-yugabyte-values.yaml} --- Valorile Helm pentru YugabyteDB.}}{87}{lstlisting.F.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.3}{\ignorespaces \texttt  {12-yugabyte-tserver-service.yaml} --- \texttt  {ClusterIP} \texttt  {yb-tserver-service} (port 5433, YSQL).}}{89}{lstlisting.F.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.4}{\ignorespaces \texttt  {20-redis.yaml} --- Redis cu volum efemer.}}{89}{lstlisting.F.4}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.5}{\ignorespaces \texttt  {30-migrate-job.yaml} --- Job care aplică migrațiile prin \texttt  {psql}.}}{91}{lstlisting.F.5}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.6}{\ignorespaces \texttt  {40-api.yaml} --- Deployment și Service pentru API-ul Go.}}{92}{lstlisting.F.6}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.7}{\ignorespaces \texttt  {52-runner-julia.yaml} --- Deployment pentru runner-ul Julia.}}{94}{lstlisting.F.7}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.8}{\ignorespaces \texttt  {53-runner-lstm.yaml} --- Deployment pentru runner-ul LSTM.}}{95}{lstlisting.F.8}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.9}{\ignorespaces \texttt  {61-frontend-admin.yaml} --- Deployment și Service pentru consola super-admin.}}{96}{lstlisting.F.9}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.10}{\ignorespaces \texttt  {70-ingress.yaml} --- Ingress nginx pentru rutare HTTP.}}{97}{lstlisting.F.10}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.11}{\ignorespaces \texttt  {docker-compose.yml} --- Configurația echivalentă pentru mediul de dezvoltare local.}}{98}{lstlisting.F.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {G}Documentația API REST}{101}{appendix.G}\protected@file@percent }
+\newlabel{app:kubernetes}{{F}{87}{Configurații Kubernetes}{appendix.F}{}}
+\newlabel{app:kubernetes@cref}{{[chapter][6][]F}{[1][87][]87}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {F.1}{\ignorespaces Manifestele Kubernetes incluse în repository.}}{87}{table.caption.57}\protected@file@percent }
+\newlabel{tab:k8s_manifeste}{{F.1}{87}{Manifestele Kubernetes incluse în repository}{table.caption.57}{}}
+\newlabel{tab:k8s_manifeste@cref}{{[table][1][6]F.1}{[1][87][]87}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.1}{\ignorespaces \texttt  {00-namespace.yaml} --- Namespace-ul dedicat aplicației.}}{88}{lstlisting.F.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.2}{\ignorespaces \texttt  {10-yugabyte-values.yaml} --- Valorile Helm pentru YugabyteDB.}}{88}{lstlisting.F.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.3}{\ignorespaces \texttt  {12-yugabyte-tserver-service.yaml} --- \texttt  {ClusterIP} \texttt  {yb-tserver-service} (port 5433, YSQL).}}{90}{lstlisting.F.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.4}{\ignorespaces \texttt  {20-redis.yaml} --- Redis cu volum efemer.}}{90}{lstlisting.F.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.5}{\ignorespaces \texttt  {30-migrate-job.yaml} --- Job care aplică migrațiile prin \texttt  {psql}.}}{92}{lstlisting.F.5}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.6}{\ignorespaces \texttt  {40-api.yaml} --- Deployment și Service pentru API-ul Go.}}{93}{lstlisting.F.6}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.7}{\ignorespaces \texttt  {52-runner-julia.yaml} --- Deployment pentru runner-ul Julia.}}{95}{lstlisting.F.7}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.8}{\ignorespaces \texttt  {53-runner-lstm.yaml} --- Deployment pentru runner-ul LSTM.}}{96}{lstlisting.F.8}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.9}{\ignorespaces \texttt  {61-frontend-admin.yaml} --- Deployment și Service pentru consola super-admin.}}{97}{lstlisting.F.9}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.10}{\ignorespaces \texttt  {70-ingress.yaml} --- Ingress nginx pentru rutare HTTP.}}{98}{lstlisting.F.10}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {F.11}{\ignorespaces \texttt  {docker-compose.yml} --- Configurația echivalentă pentru mediul de dezvoltare local.}}{99}{lstlisting.F.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {G}Documentația API REST}{102}{appendix.G}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{app:api_rest}{{G}{101}{Documentația API REST}{appendix.G}{}}
-\newlabel{app:api_rest@cref}{{[chapter][7][]G}{[1][101][]101}{}{}{}}
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.1}{\ignorespaces Routerul REST al API-ului Go.}}{101}{lstlisting.G.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.2}{\ignorespaces Middleware-ul RBAC pentru studii și super-admin.}}{103}{lstlisting.G.2}\protected@file@percent }
+\newlabel{app:api_rest}{{G}{102}{Documentația API REST}{appendix.G}{}}
+\newlabel{app:api_rest@cref}{{[chapter][7][]G}{[1][102][]102}{}{}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.1}{\ignorespaces Routerul REST al API-ului Go.}}{102}{lstlisting.G.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.2}{\ignorespaces Middleware-ul RBAC pentru studii și super-admin.}}{104}{lstlisting.G.2}\protected@file@percent }
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.3}{\ignorespaces Formatul comun al răspunsurilor JSON.}}{106}{lstlisting.G.3}\protected@file@percent }
-\gdef \@abspage@last{117}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {G.3}{\ignorespaces Formatul comun al răspunsurilor JSON.}}{107}{lstlisting.G.3}\protected@file@percent }
+\gdef \@abspage@last{118}
