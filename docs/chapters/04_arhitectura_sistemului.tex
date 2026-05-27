@@ -1105,81 +1105,50 @@ deschisă: un cercetător poate dori să compare cu o regresie statistică, cu
 un model AR/ARIMA, cu o variantă bayesiană sau cu un model agent-based
 implementat în orice limbaj. Pentru a evita modificarea API-ului, a schemei
 de bază de date și a deployment-urilor Kubernetes la fiecare astfel de
-adăugare, sistemul include un mecanism de \emph{plug-in-uri}: un super-admin
-poate înregistra un runner nou într-un studiu, iar acesta este transformat
-automat într-un container separat în cluster, vizibil exclusiv în studiul în
-care a fost introdus.
+adăugare, sistemul oferă două căi distincte și complementare de
+extensibilitate, separate explicit ca responsabilități și permisiuni:
 
-Pentru a acoperi atât scenariul simplu (un script Python ad-hoc) cât și pe cel
-general (orice limbaj sau stack de biblioteci), sistemul oferă două moduri
-mutual exclusive de înregistrare, distinse la upload prin câmpurile cererii:
-modul \emph{script}, în care super-adminul încarcă un fișier \texttt{entry.py}
-rulat de un container generic, și modul \emph{image}, în care super-adminul dă
-o referință către o imagine container construită extern. Cele două moduri sunt
-impuse la nivel de schemă printr-un \texttt{CHECK} care permite exact una dintre
-coloanele \texttt{script\_content} și \texttt{image} să fie non-vidă.
+\begin{itemize}
+    \item \textbf{Runner-e bazate pe imagine container} (această secțiune):
+          un super-admin înregistrează în studiu o referință către o imagine
+          construită extern, iar API-ul provisionează automat un Deployment
+          Kubernetes dedicat. Algoritmul este \emph{persistent} (pod always-on,
+          coadă proprie) și poate fi rulat de orice membru al studiului.
+          Potrivit pentru algoritmi ``oficiali'', reutilizabili, în orice
+          limbaj.
+    \item \textbf{Editor de cod în browser pentru cercetători} (descris în
+          capitolul~\ref{ch:aplicatie},
+          secțiunea~\ref{sec:script_editor}): un cercetător scrie un script
+          Python într-un editor Monaco, îl salvează ca draft personal și
+          îl rulează ad-hoc peste un dataset. Algoritmul este \emph{efemer}
+          (execuție per cerere, fără pod dedicat) și este executat de un
+          executor partajat \texttt{runner-script}. Potrivit pentru explorare,
+          prototipare și analize one-off, fără ceremonia înregistrării unui
+          runner.
+\end{itemize}
 
-\subsection{Modul script: contractul scriptului utilizator}
+Această diviziune are o motivație practică: înregistrarea unui runner-container
+implică provisionarea unei resurse Kubernetes permanente și consumă o slot de
+pod în cluster, ceea ce justifică restricția la super-admin. Scrierea unui
+script de exploare nu trebuie să aibă același cost organizațional, deci este
+liberă oricărui cercetător cu drept de scriere în studiu. Cele două căi se
+folosesc de aceleași tabele \texttt{simulation\_runs}/\texttt{simulation\_results}
+și de același grafic în interfață --- diferă doar lifecycle-ul resursei.
+
+\subsection{Forma standard: \emph{runner protocol}}
 \label{subsec:plugin_contract}
 
-În modul script, forma standard pe care trebuie să o respecte un fișier
-încărcat este deliberat minimalistă: un singur \texttt{entry.py} care expune
-o funcție \texttt{main} cu o semnătură fixă.
-
-\begin{lstlisting}[language=Python, caption={Contractul oricărui runner plug-in.}]
-def main(records: list[dict],
-         parameters: dict,
-         context: dict) -> list[dict]:
-    """
-    records:    randurile dataset-ului
-                (date, region, infected, recovered, ...)
-    parameters: valorile parametrilor declarati in
-                manifest, validate de API
-    context:    metadate {population_n, t_max,
-                runner_id, ...}
-    return:     lista de pasi temporali
-                [{"t": int, "compartments":
-                  {nume: float, ...}}, ...]
-    """
-\end{lstlisting}
-
-Pe lângă funcția \texttt{main}, scriptul este însoțit la upload de un
-manifest minimal: un nume DNS-safe (folosit pentru numele cozii Redis și al
-Deployment-ului K8s), o descriere și un \texttt{parameter\_schema} JSON care
-declară parametrii așteptați (tip, valoare implicită, interval). Schema este
-folosită de API atât pentru validarea cererilor ulterioare de execuție, cât
-și de interfața web pentru a genera dinamic formularul de parametri.
-Tipul rezultatului (\texttt{list[\{t, compartments\}]}) este același ca pentru
-runner-ele built-in --- de aceea graficul existent care vizualizează
-traiectorii compartimentale poate afișa rezultatele oricărui plug-in fără
-modificări de cod.
-
-\subsection{Modul image: contract pentru imagini externe}
-\label{subsec:plugin_image_mode}
-
-Modul script funcționează doar pentru algoritmi exprimabili într-o singură
-funcție Python folosind stack-ul preinstalat (\texttt{numpy}, \texttt{scipy},
-\texttt{pandas}, \texttt{scikit-learn}). Pentru algoritmi care cer alt limbaj
-(R, Julia, Go), librării native sau dependențe netriviale, sistemul oferă
-modul \emph{image}: în loc de un script, super-adminul dă o referință către
-o imagine container deja construită și împinsă într-un registry accesibil
-clusterului (de exemplu \texttt{ghcr.io/cercetator/algoritm-x:1.0}).
-La înregistrare, API-ul creează un Deployment K8s care folosește direct acea
-imagine; nu există build în cluster și nu se interpretează cod la nivelul
-API-ului. Cercetătorul își construiește imaginea cu pipeline-ul propriu (CI
-extern, \texttt{docker build} local, etc.), iar singura cerință este să respecte
-\emph{runner protocol}-ul descris mai jos.
-
-Contractul este derivat din comportamentul wrapper-ului \texttt{runner-custom}
-și este intenționat compact, ca să poată fi implementat în orice limbaj:
+Forma pe care trebuie să o respecte o imagine container pentru a se comporta ca
+runner valid este deliberat compactă, ca să poată fi implementată în orice
+limbaj:
 \begin{enumerate}
-    \item Imaginea citește la pornire variabilele de mediu \texttt{RUNNER\_QUEUE}
-          (coada Redis de ascultat), \texttt{DATABASE\_URL} (conexiunea la
-          YugabyteDB) și \texttt{REDIS\_URL}.
+    \item La pornire, imaginea citește variabilele de mediu
+          \texttt{RUNNER\_QUEUE} (coada Redis de ascultat), \texttt{DATABASE\_URL}
+          (conexiunea la YugabyteDB) și \texttt{REDIS\_URL}.
     \item Pentru fiecare mesaj scos cu \texttt{BRPOP} din \texttt{RUNNER\_QUEUE},
-          se așteaptă un JSON cu cheile
-          \texttt{simulation\_id}, \texttt{dataset\_id}, \texttt{parameters},
-          \texttt{population\_n} și \texttt{t\_max}.
+          se așteaptă un JSON cu cheile \texttt{simulation\_id},
+          \texttt{dataset\_id}, \texttt{parameters}, \texttt{population\_n} și
+          \texttt{t\_max}.
     \item Imaginea citește înregistrările dataset-ului din tabela
           \texttt{epidemiological\_records} (\texttt{WHERE dataset\_id = \$1}),
           execută algoritmul și scrie rezultatele în
@@ -1189,89 +1158,84 @@ Contractul este derivat din comportamentul wrapper-ului \texttt{runner-custom}
           (sau \texttt{'failed'} cu \texttt{error\_message}).
 \end{enumerate}
 
-Imaginea \texttt{runner-custom} furnizată cu sistemul respectă exact acest
-protocol și poate servi atât ca implementare de referință, cât și ca bază
-pentru imagini derivate (\texttt{FROM ghcr.io/.../emedicine-runner-custom}).
-Validarea referinței la upload este o verificare de sanitate
-(\texttt{\textasciicircum[a-zA-Z0-9][a-zA-Z0-9.\_/:@-]\{1,254\}\$}); Kubernetes
-respinge la momentul \texttt{pull} referințele care nu pot fi rezolvate de
-nodurile cluster-ului.
+Tipul rezultatului așteptat per pas temporal este același ca pentru runner-ele
+built-in (\texttt{\{"t": int, "compartments": \{...\}\}}); aceasta înseamnă că
+graficul de traiectorii compartimentale poate afișa rezultatele oricărui
+plug-in fără modificări de cod. Imaginea \texttt{runner-custom} furnizată cu
+sistemul (folosită și ca executor pentru editor) respectă acest protocol și
+poate servi atât ca implementare de referință, cât și ca bază pentru imagini
+derivate (\texttt{FROM ghcr.io/.../emedicine-runner-custom}). Validarea
+referinței de imagine la upload este o verificare de sanitate
+(\texttt{\textasciicircum[a-zA-Z0-9][a-zA-Z0-9.\_/:@-]\{1,254\}\$});
+Kubernetes respinge la momentul \texttt{pull} referințele care nu pot fi
+rezolvate de nodurile cluster-ului.
 
 \subsection{Provisioning Kubernetes}
 \label{subsec:plugin_provisioning}
 
-Imaginea folosită este \emph{configurabilă per runner}: dacă rândul din
-\texttt{runners} are coloana \texttt{image} non-vidă (mod image), Deployment-ul
-folosește exact acea imagine; altfel folosește imaginea generică
-\texttt{runner-custom} (mod script). Imaginea generică este construită din
-\texttt{python:3.12-slim} cu \texttt{numpy}, \texttt{scipy}, \texttt{pandas}
-și \texttt{scikit-learn} preinstalate, și conține un \emph{wrapper}
-standard. Wrapper-ul nu cunoaște apriori scriptul utilizatorului: la pornire
-citește variabila de mediu \texttt{RUNNER\_ID}, deschide o conexiune la
-YugabyteDB, obține din tabela \texttt{runners} numele cozii și conținutul
-\texttt{entry.py}, îl compilează ca modul Python, marchează runner-ul ca
-\texttt{ready} și începe să asculte pe coada Redis \texttt{epimodel:jobs:custom-<nume>}.
-Pentru fiecare job primit, wrapper-ul citește înregistrările dataset-ului,
-apelează \texttt{main()} cu măsurători de timp wall, timp CPU și memorie de
-vârf, validează formatul rezultatului și inserează traiectoriile în
-\texttt{simulation\_results} alături de o intrare în \texttt{benchmarks} ---
-exact ca runner-ele built-in.
-
-Crearea infrastructurii este declanșată de API la momentul upload-ului prin
-clientul oficial \texttt{client-go}. Un \texttt{ServiceAccount} dedicat
+La înregistrarea unui runner, API-ul folosește clientul oficial
+\texttt{client-go} pentru a crea un Deployment cu o replică, imagine egală cu
+referința dată de super-admin, variabilele de mediu populate din
+Secret/ConfigMap (\texttt{DATABASE\_URL}, \texttt{REDIS\_URL}) și
+\texttt{RUNNER\_QUEUE} setat la o coadă unică derivată din numele runner-ului
+(\texttt{epimodel:jobs:custom-<nume>}). Un \texttt{ServiceAccount} dedicat
 (\texttt{api}) este legat de un \texttt{Role} care permite verbele
-\texttt{get}, \texttt{list}, \texttt{create} și \texttt{delete} pe resursa
-\texttt{deployments} din namespace-ul aplicației --- nimic mai mult, ceea ce
-respectă principiul privilegiului minim.
-Tabelul~\ref{tab:plugin_lifecycle} rezumă tranzițiile de stare ale unui runner
-plug-in.
+\texttt{get}, \texttt{list}, \texttt{create} și \texttt{delete} doar pe
+resursa \texttt{deployments} din namespace-ul aplicației --- nimic mai mult,
+ceea ce respectă principiul privilegiului minim. Tabelul~\ref{tab:plugin_lifecycle}
+rezumă tranzițiile de stare ale unui runner pe acest traseu.
 
 \input{tables/plugin_lifecycle}
 
-În varianta curentă, toate plug-in-urile partajează aceeași imagine de bază,
-deci stack-ul de biblioteci este fix. O extensie naturală (Faza~3 a
-implementării) ar fi un pipeline de build per script folosind un container
-\texttt{Kaniko} în cluster, care ar construi o imagine dedicată ce include
-dependențele declarate în \texttt{requirements.txt} al scriptului. Această
-extensie este menționată în capitolul de concluzii ca direcție viitoare.
+Imaginea fiind construită extern (în CI-ul propriu al cercetătorului sau
+local cu \texttt{docker build}), API-ul nu execută nicio operație de build
+in-cluster. O extensie naturală ar fi un pipeline opțional bazat pe
+\texttt{Kaniko} care ar putea construi imagini din scripturi cu
+\texttt{requirements.txt} declarat, dar pentru scopul tezei această
+responsabilitate este lăsată în sarcina cercetătorului, exact așa cum este
+lăsată construirea oricărei imagini reutilizabile.
 
 \subsection{Securitate și limitări}
 \label{subsec:plugin_securitate}
 
-Plug-in-urile rulează cod arbitrar furnizat de utilizator, deci modelul de
-securitate este conservator. \textbf{Acces restrâns la creare:} numai un
-super-admin poate încărca sau șterge un plug-in --- API-ul aplică această
+Runner-ele plug-in rulează cod arbitrar furnizat de utilizator, deci modelul
+de securitate este conservator. \textbf{Acces restrâns la creare:} numai un
+super-admin poate înregistra sau șterge un runner --- API-ul aplică această
 restricție prin lanțul de middleware \texttt{RequireStudyMembership} +
 \texttt{RequireSuperAdmin}, iar pentru un utilizator obișnuit cu rol în
 studiu cererea returnează \texttt{403 super admin required}.
 \textbf{Scope-uire la studiu:} fiecare runner are coloana \texttt{study\_id}
 NOT NULL cu cheie străină la \texttt{studies}, iar atât listarea cât și
 ștergerea sunt scope-uite (\texttt{Get(sid, id)}), exact ca pentru
-simulări și seturi de date. Un runner încărcat într-un studiu nu apare în
-alt studiu și nu poate fi referit cross-studiu.
+simulări și seturi de date. Un runner înregistrat într-un studiu nu apare
+în alt studiu și nu poate fi referit cross-studiu.
 \textbf{Nume DNS-safe:} numele runner-ului este validat prin expresia
 regulată \texttt{\textasciicircum[a-z][a-z0-9-]\{1,62\}[a-z0-9]\$}, deoarece
 ajunge atât în numele cozii Redis cât și în numele Deployment-ului K8s.
 \textbf{Limite de resurse:} fiecare Deployment generat are atribuite
 explicit \texttt{requests} (\texttt{100m} CPU, \texttt{128Mi} memorie) și
-\texttt{limits} (\texttt{500m} CPU, \texttt{512Mi} memorie), prevenind ca un
-script greșit scris să afecteze celelalte runner-e sau API-ul.
+\texttt{limits} (\texttt{500m} CPU, \texttt{512Mi} memorie), prevenind ca o
+imagine prost configurată să afecteze celelalte runner-e sau API-ul.
 
-Pentru modul image apare o suprafață suplimentară de încredere: imaginea
-provine dintr-un registry arbitrar și super-adminul își asumă conținutul ei,
-exact cum își asumă conținutul scripturilor încărcate. Nu există încă un
-mecanism de \emph{allowlist} de registre permise; o îmbunătățire naturală
-ar fi restricționarea la registre cunoscute (de exemplu doar
-\texttt{ghcr.io/organizatia/...}) și verificarea opțională a semnăturilor
-imaginilor prin \texttt{cosign}.
-
-Limitări cunoscute: nu există încă un mecanism formal de sandboxing
+Întrucât imaginea provine dintr-un registry arbitrar, super-adminul își asumă
+conținutul ei, exact cum își asumă orice altă imagine din infrastructură.
+Nu există încă un mecanism de \emph{allowlist} de registre permise; o
+îmbunătățire naturală ar fi restricționarea la registre cunoscute (de exemplu
+doar \texttt{ghcr.io/organizatia/...}) și verificarea opțională a semnăturilor
+prin \texttt{cosign}. De asemenea, nu există un mecanism formal de sandboxing
 suplimentar (de exemplu \texttt{gVisor} sau \texttt{Kata Containers}) pentru
 a izola și mai puternic runner-ele față de nodul Kubernetes; containerul are
 acces la rețeaua cluster-ului (inclusiv DB-ul, prin DSN-ul moștenit), ceea
 ce este intenționat pentru a putea citi dataset-ul, dar înseamnă că nu este
 o sandboxă universală. În scenariul vizat de această lucrare --- platformă
 internă pentru cercetători cunoscuți, super-admin curatând înregistrările
----
-modelul este adecvat; pentru deployment public ar fi necesare politici de
-rețea (\texttt{NetworkPolicy}) restrictive și posibil un sandbox runtime.
+--- modelul este adecvat; pentru deployment public ar fi necesare politici
+de rețea (\texttt{NetworkPolicy}) restrictive și posibil un sandbox runtime.
+
+Modelul de securitate al \emph{editor-ului din browser} este complementar și
+descris la momentul potrivit (secțiunea~\ref{sec:script_editor}): scripturile
+rulează într-un executor partajat \texttt{runner-script} cu aceleași limite
+de resurse, dar permisiunea de a rula scripturi este deschisă oricărui
+cercetător cu drept de scriere de simulări în studiu, fără gating
+super-admin --- compromisul fiind natura ad-hoc a execuției și absența unei
+resurse Kubernetes permanente create per script.

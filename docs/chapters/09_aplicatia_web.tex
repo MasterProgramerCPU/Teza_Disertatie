@@ -96,7 +96,109 @@ apare o eroare, statusul devine \texttt{failed}, iar mesajul este salvat în baz
 date. Interfața web nu trebuie să țină o conexiune deschisă pe durata calculului;
 pagina de rezultat interoghează periodic endpointul de status până la finalizare.
 
-\section{Frontend Vue.js}
+\section{Editor de cod pentru cercetători}
+\label{sec:script_editor}
+
+Pe lângă cele șase modele built-in și runner-ele plug-in înregistrate de
+super-admin (secțiunea~\ref{sec:plugin_runners}), aplicația include un
+\emph{editor de cod} accesibil oricărui membru al studiului cu drept de scriere
+de simulări. Această componentă răspunde unei cerințe distincte: cercetătorul
+vrea să încerce rapid un algoritm propriu (o regresie, un filtru, o euristică
+de prognoză) peste dataset-ul disponibil, fără a parcurge procesul de a
+construi o imagine container și a o înregistra ca runner persistent.
+
+\subsection{Flux de lucru}
+\label{subsec:editor_flux}
+
+Pagina \texttt{/script-editor} prezintă un layout în două coloane: în stânga,
+o listă verticală cu draft-urile salvate ale cercetătorului în studiul curent;
+în dreapta, un editor Monaco (același engine ca VS Code) preîncărcat cu un
+script demonstrativ de netezire exponențială și un set inițial de parametri.
+Sub editor se găsesc trei controale: dropdown-ul de dataset, un textarea cu
+parametrii în format JSON și butonul ``Rulează''. La apăsarea butonului,
+clientul trimite o cerere \texttt{POST /simulations} cu \texttt{model\_type =
+'script'} și conținutul curent al editorului; aceeași pagină pollează apoi
+endpointul de status și, la finalizare, afișează rezultatele cu același
+component grafic folosit pentru toate celelalte tipuri de rulări.
+
+Salvarea draft-urilor este o operație separată, decuplată de execuție.
+Cercetătorul introduce un nume în antetul workspace-ului și apasă
+``Salvează''; clientul face \texttt{POST /script-drafts} (sau
+\texttt{PATCH /script-drafts/\{id\}} dacă draftul are deja un id), iar în
+sidebar apare o intrare nouă marcată cu data ultimei actualizări. Click pe un
+draft din sidebar îl reîncarcă în editor împreună cu parametrii salvați, iar
+butonul ``×'' îl șterge după confirmare. Cu acest flux, codul scris în pagină
+nu se pierde la reîncărcarea browser-ului și este accesibil din orice device
+pe care cercetătorul se autentifică.
+
+\subsection{Contractul scriptului}
+\label{subsec:editor_contract}
+
+Scriptul are aceeași formă cu cea declarată pentru runner-ele plug-in:
+o singură funcție \texttt{main} cu o semnătură fixă.
+
+\begin{lstlisting}[language=Python, caption={Contractul scriptului din editor.}]
+def main(records, parameters, context):
+    """
+    records:    randurile dataset-ului
+                (date, region, infected, ...)
+    parameters: dict cu parametri (validati JSON
+                in UI)
+    context:    {simulation_id, population_n,
+                t_max}
+    return:     [{"t": int, "compartments":
+                  {nume: float, ...}}, ...]
+    """
+\end{lstlisting}
+
+Returnarea este aceeași listă de pași temporali cu obiecte
+\texttt{compartments} ca pentru runner-ele built-in, ceea ce permite graficului
+existent să afișeze rezultatele fără tratare specială. Stack-ul Python
+disponibil în executor este fix (\texttt{numpy}, \texttt{scipy}, \texttt{pandas},
+\texttt{scikit-learn}); cercetătorul care are nevoie de dependențe netriviale
+poate trece pe traseul de runner cu imagine externă.
+
+\subsection{Execuție și separare de runner-e persistente}
+\label{subsec:editor_executor}
+
+Scriptul este executat de un Deployment permanent numit \texttt{runner-script},
+care ascultă pe coada Redis \texttt{epimodel:jobs:script}. Pentru fiecare job,
+executorul scrie conținutul scriptului într-un fișier temporar, îl compilează
+ca modul Python, apelează \texttt{main(records, parameters, context)} cu
+măsurarea timpilor wall și CPU și a memoriei de vârf, validează structura
+rezultatului și scrie traiectoriile în \texttt{simulation\_results} alături de
+o intrare în \texttt{benchmarks} --- exact ca runner-ele built-in. Modulul
+este reîncărcat la fiecare job pentru a nu lăsa stare globală între execuții.
+
+Această arhitectură separă explicit două responsabilități. Editorul de cod
+este pentru \emph{explorare ad-hoc}: nu există resurse Kubernetes create per
+script, executorul partajat absoarbe toate cererile, iar permisiunea este
+deschisă oricărui cercetător cu drept de scriere de simulări. Runner-ele cu
+imagine container (capitolul~\ref{ch:arhitectura},
+secțiunea~\ref{sec:plugin_runners}) sunt pentru \emph{algoritmi
+operationali}: imagine construită extern, Deployment dedicat în cluster,
+acces de înregistrare restrâns la super-admin.
+
+\subsection{Izolare între utilizatori și securitate}
+\label{subsec:editor_securitate}
+
+Draft-urile sunt strict private cercetătorului care le-a creat. Tabela
+\texttt{script\_drafts} are coloana \texttt{user\_id} NOT NULL, iar toate
+interogările din \texttt{ScriptDraftRepository} filtrează cumulativ pe
+\texttt{(user\_id, study\_id, id)}: chiar dacă un utilizator încearcă să ceară
+direct id-ul unui draft creat de un alt cercetător (atac de tip IDOR), API-ul
+răspunde \texttt{404 not found}. Listarea expune doar metadatele
+(\texttt{script\_content} este omis); conținutul este servit doar la
+deschiderea explicită a unui draft, ceea ce păstrează compact răspunsul de
+listare și clarifică intenția fiecărei cereri.
+
+Dimensiunea scriptului trimis la execuție și a draft-ului salvat este
+plafonată la $1$~MB, suficient pentru orice script de explorare obișnuit și
+strict mai mic decât payload-urile pe care le-ar tolera baza de date.
+Validarea formatului parametrilor (JSON) și a structurii rezultatului
+(\texttt{list[\{t, compartments\}]}) se face server-side, astfel încât un
+script rău formatat este respins cu un mesaj clar înainte de a polua tabelele
+de rezultate.
 \label{sec:frontend_vue}
 
 Frontend-ul principal este o aplicație Vue 3 construită cu Vite și TypeScript.
