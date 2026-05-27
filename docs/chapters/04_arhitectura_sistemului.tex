@@ -138,6 +138,76 @@ compartimentale în \texttt{simulation\_results} și actualizează statusul la
 \texttt{completed}. Frontend-ul interoghează periodic API-ul și afișează
 graficele imediat ce simularea este finalizată.
 
+Figura~\ref{fig:ciclu_viata_simulare} prezintă aceeași secvență sub forma unei
+diagrame temporale, în care timpul curge de sus în jos, evidențiind decuplarea
+între răspunsul sincron al API-ului și execuția asincronă din runner.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    actor/.style={
+        draw=gray!70, thick, rounded corners=4pt,
+        minimum width=2.4cm, minimum height=0.85cm,
+        align=center, font=\small\bfseries
+    },
+    lifeline/.style={dashed, gray!50, thick},
+    msg/.style={-{Stealth[length=5pt, width=4pt]}, thick, black!85},
+    poll/.style={-{Stealth[length=5pt, width=4pt]}, thick, gray!65, densely dashed},
+    actbox/.style={fill=purple!15, draw=purple!40, minimum width=0.35cm},
+    mlbl/.style={font=\footnotesize, fill=white, inner sep=2pt, midway, above},
+    phase/.style={font=\scriptsize\itshape, gray!75}
+]
+
+%---- coloane actori (x: 0, 3.6, 7.2, 10.8, 14.4) ----
+\node[actor, fill=cyan!20]   (ui)     at (0,    9) {UI\\{\footnotesize Vue}};
+\node[actor, fill=green!20]  (api)    at (3.6,  9) {API\\{\footnotesize Go}};
+\node[actor, fill=red!18]    (redis)  at (7.2,  9) {Redis};
+\node[actor, fill=purple!18] (runner) at (10.8, 9) {Runner\\{\footnotesize \{R,Julia,Py\}}};
+\node[actor, fill=yellow!30] (db)     at (14.4, 9) {YugabyteDB};
+
+%---- lifelines ----
+\foreach \n in {ui, api, redis, runner, db} {
+    \draw[lifeline] (\n.south) -- ++(0,-11.5);
+}
+
+%---- faza 1: creare sincronă ----
+\node[phase, anchor=east] at (-0.3, 8.0) {creare};
+\draw[msg] (0, 8) -- (3.6, 8) node[mlbl] {\texttt{POST /simulations} + JWT};
+\draw[msg] (3.6, 7.2) -- (14.4, 7.2) node[mlbl] {INSERT \texttt{simulation\_runs} (\texttt{pending})};
+\draw[msg] (3.6, 6.4) -- (7.2, 6.4) node[mlbl] {LPUSH \texttt{epimodel:jobs:<lang>}};
+\draw[msg] (3.6, 5.6) -- (0, 5.6) node[mlbl] {\texttt{201 Created} (id)};
+
+%---- faza 2: execuție asincronă ----
+\node[phase, anchor=east] at (-0.3, 4.6) {execuție};
+\draw[msg] (10.8, 4.6) -- (7.2, 4.6) node[mlbl] {BRPOP};
+\draw[msg] (10.8, 3.8) -- (14.4, 3.8) node[mlbl] {UPDATE status=\texttt{running}};
+\node[actbox, minimum height=1.2cm] at (10.8, 2.8) {};
+\node[font=\footnotesize, anchor=west] at (11.0, 2.8) {solve ODE / antrenare LSTM};
+\draw[msg] (10.8, 1.6) -- (14.4, 1.6) node[mlbl] {INSERT \texttt{results}, UPDATE \texttt{completed}};
+
+%---- faza 3: polling + afișare rezultat ----
+\node[phase, anchor=east] at (-0.3, 0.6) {polling};
+\draw[poll] (0, 0.6) -- (3.6, 0.6) node[mlbl] {GET /\{id\}};
+\draw[poll] (3.6, 0.0) -- (0, 0.0) node[mlbl] {status=\texttt{completed}};
+\node[phase, anchor=east] at (-0.3, -1.0) {afișare};
+\draw[msg] (0, -1.0) -- (3.6, -1.0) node[mlbl] {GET /\{id\}/results};
+\draw[msg] (3.6, -1.8) -- (14.4, -1.8) node[mlbl] {SELECT \texttt{simulation\_results}};
+\draw[msg] (3.6, -2.6) -- (0, -2.6) node[mlbl] {traiectorie JSON};
+
+\end{tikzpicture}
+}%
+\caption{Ciclul de viață al unei simulări, de la cererea utilizatorului în UI
+până la afișarea rezultatului. Timpul curge de sus în jos. Săgețile pline
+indică mesaje sincrone HTTP/queue/SQL; săgețile întrerupte indică polling-ul
+repetat al statusului până la finalizare. API-ul răspunde \texttt{201 Created}
+\emph{înainte} ca solver-ul să ruleze --- întreaga execuție numerică se petrece
+asincron în runner, decuplată prin Redis. Aceasta este complementară
+Figurii~\ref{fig:arhitectura_globala}, care arată topologia: cine vorbește cu
+cine; aici se vede \emph{când}.}
+\label{fig:ciclu_viata_simulare}
+\end{figure*}
+
 % ------------------------------------------------------------
 \section{Cerințe funcționale și non-funcționale}
 \label{sec:cerinte}

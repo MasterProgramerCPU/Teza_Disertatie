@@ -194,15 +194,74 @@ dH = params["lambda"] * i + params["rho"] * d + params["kappa"] * a \
 dE = params["tau"] * threatened
 \end{lstlisting}
 
-Aceeași structură este implementată în R și Julia. În R, funcția este transmisă
-către \texttt{deSolve::ode()}, cu metoda \texttt{rk4}, păstrând pasul zilnic fix.
-În Julia, funcția respectă convenția \emph{in-place} din
-\texttt{DifferentialEquations.jl}, iar integrarea folosește \texttt{Tsit5()} cu
-\texttt{saveat = 0:1.0:t\_max}. Diferența dintre cele trei implementări nu este
-matematică, ci ține de ecosistemul numeric: R oferă o interfață stabilă și
-compactă pentru ODE-uri clasice, Julia urmărește performanța și controlul fin
-al solverului, iar Python oferă integrare directă cu infrastructura software și
-cu bibliotecile științifice uzuale.
+Aceeași dinamică este exprimată în R și în Julia, cu idiomurile specifice
+fiecărui ecosistem. În R, funcția returnează o listă de derivate, iar variabilele
+sunt aduse în scop prin \texttt{with(as.list(...))}, ceea ce face codul foarte
+apropiat de notația matematică:
+\begin{lstlisting}[language=R, caption={Funcția RHS SIDARTHE în runner-ul R (\texttt{deSolve}).}]
+sidarthe_rhs <- function(t, state, parms) {
+  with(as.list(c(state, parms)), {
+    force <- (alpha*S_I + beta*D + gamma*A + delta*R) / N
+    new_infections <- S * force
+    dS <- -new_infections
+    dI <- new_infections - (epsilon + zeta + lambda) * S_I
+    dD <- epsilon * S_I - (eta + rho) * D
+    dA <- zeta * S_I - (theta + mu + kappa) * A
+    dR <- eta * D + theta * A - (nu + xi) * R
+    dT <- mu * A + nu * R - (sigma + tau) * T
+    dH <- lambda*S_I + rho*D + kappa*A + xi*R + sigma*T
+    dE <- tau * T
+    list(c(dS, dI, dD, dA, dR, dT, dH, dE))
+  })
+}
+\end{lstlisting}
+
+În Julia, convenția \emph{in-place} din \texttt{DifferentialEquations.jl} cere ca
+funcția să scrie derivatele direct într-un vector \texttt{du} pre-alocat, ceea ce
+permite solverului să evite alocările repetate de memorie:
+\begin{lstlisting}[language=Julia, caption={Funcția RHS SIDARTHE în runner-ul Julia (\texttt{DifferentialEquations.jl}, convenție in-place).}]
+function sidarthe_rhs!(du, u, p, t)
+    S, I, D, A, R, T, H, E = u
+    N = p["N"]
+    force = (p["alpha"]*I + p["beta"]*D
+           + p["gamma"]*A + p["delta"]*R) / N
+    new_inf = S * force
+    du[1] = -new_inf
+    du[2] = new_inf - (p["epsilon"] + p["zeta"]
+                     + p["lambda"]) * I
+    du[3] = p["epsilon"]*I - (p["eta"] + p["rho"]) * D
+    du[4] = p["zeta"]*I - (p["theta"] + p["mu"]
+                         + p["kappa"]) * A
+    du[5] = p["eta"]*D + p["theta"]*A
+            - (p["nu"] + p["xi"]) * R
+    du[6] = p["mu"]*A + p["nu"]*R
+            - (p["sigma"] + p["tau"]) * T
+    du[7] = p["lambda"]*I + p["rho"]*D + p["kappa"]*A
+            + p["xi"]*R + p["sigma"]*T
+    du[8] = p["tau"] * T
+end
+\end{lstlisting}
+
+Cele trei snippet-uri reprezintă exact \emph{același} sistem ODE; diferențele
+țin de ecosistemul numeric: R oferă o sintaxă apropiată de notația matematică,
+Julia urmărește performanța prin alocare zero a vectorului de derivate, iar
+Python oferă integrare directă cu infrastructura software și cu bibliotecile
+științifice uzuale. Tabelul~\ref{tab:implementari_runners} sintetizează
+diferențele de implementare pentru cele trei runner-e ODE.
+
+\input{tables/implementari_runners}
+
+Trei observații merită notate. Prima: pentru R s-a ales \texttt{rk4} cu pas fix
+$h=1$ în loc de un solver adaptiv ca \texttt{lsoda}, pentru a păstra
+predictibilitatea timpului de execuție în benchmark-uri --- compromisul este o
+precizie mai mică decât în Julia sau Python, vizibilă în regresia cross-limbaj
+(Tabelul~\ref{tab:cross_language_regression}), dar funcțional acceptabilă.
+A doua: Julia și Python folosesc toleranțe identice ($\text{rtol}=10^{-8}$,
+$\text{atol}=10^{-10}$), ceea ce face traiectoriile lor numerice quasi-identice.
+A treia: lungimea similară a celor trei runner-e (sub $300$ de linii fiecare)
+arată că abstractizarea contractului comun --- mesaj din Redis, dispecerizare pe
+model, scriere în DB --- este suficient de simplă încât adăugarea unui al patrulea
+limbaj să fie un efort redus.
 
 \section{Variantele SIR, SIS, SEIR și SIRS}
 \label{sec:sir_secundar}

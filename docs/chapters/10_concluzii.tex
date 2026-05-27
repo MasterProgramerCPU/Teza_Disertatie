@@ -36,6 +36,49 @@ pe LSTM, tratată ca extensie statistică pentru prognoză pe termen scurt și
 pentru analiza reziduurilor rămase după simularea compartimentală, cu rezultate
 operaționale pe seria Romania OWID.
 
+\subsection{Răspuns la obiectivele propuse}
+\label{subsec:atingere_obiective}
+
+Cele patru obiective formulate în secțiunea~\ref{sec:obiective} au fost atinse
+concret, după cum urmează.
+
+\textbf{Obiectivul principal --- proiectarea unui sistem care leagă modelarea
+matematică de implementarea software, cu SIDARTHE ca model de lucru.} A fost
+construit întregul lanț, de la formalismul cu opt compartimente și șaisprezece
+rate (capitolul~\ref{ch:epidemiologie}) până la implementarea în trei limbaje
+(capitolul~\ref{ch:implementare}), expus printr-un API Go cu organizare pe
+studii și control RBAC (capitolul~\ref{ch:arhitectura}), rulat pe un cluster
+Kubernetes real (\texttt{kube-4kdhb}). SIDARTHE este tratat ca model clinic
+principal pe tot parcursul lucrării, iar familia SIR/SIS/SEIR/SIRS oferă
+reperele de bază.
+
+\textbf{Al doilea obiectiv --- același contract de simulare în R, Julia și
+Python.} Cele trei runner-e au fost implementate cu bibliotecile uzuale ale
+fiecărui ecosistem (\texttt{deSolve}, \texttt{DifferentialEquations.jl},
+\texttt{scipy.integrate}) și folosesc același contract de mesaj prin Redis și
+aceeași schemă de rezultate în YugabyteDB. Verificarea de regresie cross-limbaj
+(Tabelul~\ref{tab:cross_language_regression}) arată că abaterile între
+traiectoriile produse sunt sub $10^{-4} \cdot N$ pentru toate modelele, iar
+Tabelul~\ref{tab:bench_wall_time} compară direct costurile de execuție.
+
+\textbf{Al treilea obiectiv --- metodologie explicită de comparație și
+calibrare.} Comparația folosește operatori de observație definiți per model
+(secțiunea~\ref{sec:operator_observatie}), eroare MAE/RMSE pe ferestre
+separate de antrenare și test, iar calibrarea a fost rulată efectiv: pe Romania
+cu analiză de identifiabilitate (Figura~\ref{fig:identifiability_landscape}) și
+pe patru țări simultan (Tabelul~\ref{tab:calibration_multiregion}). Costul
+software al calibrării a fost măsurat și raportat alături de eroarea numerică
+(Tabelul~\ref{tab:calibration_cost}), conform principiului enunțat în obiectiv.
+
+\textbf{Obiectivul suplimentar --- extensie predictivă bazată pe LSTM.}
+Componenta este implementată ca runner Python dedicat
+(\texttt{runner-lstm}), antrenată hand-rolled în NumPy, cu rezultate
+operaționale pe seria Romania (Figura~\ref{fig:lstm_trajectory}). Validarea
+față de predictori naivi (Tabelul~\ref{tab:lstm_baselines}) este onestă:
+LSTM-ul univariat nu bate persistența la orizontul de o zi pe această serie,
+ceea ce delimitează clar regimul în care componenta are sens (corecție de
+reziduuri sau intrări multivariate), așa cum era anticipat în obiectiv.
+
 \section{Concluzii privind modelele}
 \label{sec:concluzii_modele}
 

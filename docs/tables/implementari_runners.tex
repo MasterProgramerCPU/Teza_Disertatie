@@ -1,0 +1,19 @@
+\begin{table}[!htbp]
+\centering
+\caption{Comparație side-by-side a celor trei runner-e compartimentale, ca
+instanțe ale aceluiași contract de simulare. Diferențele țin de ecosistemul
+numeric (biblioteca solver dominantă, convenția de control al pasului), nu de
+modelul matematic implementat. Numărul de linii include parsarea mesajului,
+dispecerizarea pe model, scrierea în baza de date și colectarea metricilor.}
+\label{tab:implementari_runners}
+\small
+\begin{tabularx}{\columnwidth}{l X l r}
+\toprule
+\textbf{Limbaj} & \textbf{Bibliotecă \& metodă} & \textbf{Pas} & \textbf{Linii} \\
+\midrule
+\texttt{r}      & \texttt{deSolve::ode}, RK4 clasic                                  & fix     & 274 \\
+\texttt{julia}  & \texttt{DiffEq.jl}, \texttt{Tsit5} (Tsitouras 5(4))                & adaptiv & 236 \\
+\texttt{python} & \texttt{scipy.solve\_ivp}, \texttt{RK45} (Dormand-Prince)          & adaptiv & 259 \\
+\bottomrule
+\end{tabularx}
+\end{table}
