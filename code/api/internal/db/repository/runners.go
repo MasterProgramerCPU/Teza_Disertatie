@@ -24,16 +24,13 @@ func NewRunnerRepository(pool *pgxpool.Pool) *RunnerRepository {
 }
 
 const runnerSelectCols = `id, study_id, uploaded_by, name, description,
-		COALESCE(script_content, ''), image,
-		parameter_schema, status, status_message,
-		image_tag, queue_name, deployment_name, created_at, ready_at`
+		image, parameter_schema, status, status_message,
+		queue_name, deployment_name, created_at, ready_at`
 
-// Create insereaza un runner nou. Exact unul dintre scriptContent si image
-// trebuie sa fie nevid (CHECK-ul DB il aplica si la nivel de schema).
-// Pentru mod script: scriptContent != "", image == "".
-// Pentru mod image:  scriptContent == "", image != "" (referinta imagine).
+// Create insereaza un runner nou (strict mod imagine; image trebuie sa fie
+// non-vid si CHECK-ul DB il valideaza si el).
 func (r *RunnerRepository) Create(ctx context.Context, studyID, userID uuid.UUID,
-	name, description, scriptContent, image string,
+	name, description, image string,
 	parameterSchema map[string]any, queueName string) (*models.Runner, error) {
 
 	schemaJSON, err := json.Marshal(parameterSchema)
@@ -41,25 +38,18 @@ func (r *RunnerRepository) Create(ctx context.Context, studyID, userID uuid.UUID
 		return nil, err
 	}
 
-	// In script-mode trecem NULL pe image (sau '' merge si el datorita CHECK);
-	// in image-mode trecem NULL pe script_content pentru claritate semantica.
-	var scriptArg any = scriptContent
-	if scriptContent == "" {
-		scriptArg = nil
-	}
-
 	var out models.Runner
 	var schemaRaw []byte
 	err = r.pool.QueryRow(ctx, `
 		INSERT INTO runners (study_id, uploaded_by, name, description,
-		                     script_content, image, parameter_schema, queue_name)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		                     image, parameter_schema, queue_name)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING `+runnerSelectCols,
-		studyID, userID, name, description, scriptArg, image, schemaJSON, queueName,
+		studyID, userID, name, description, image, schemaJSON, queueName,
 	).Scan(
 		&out.ID, &out.StudyID, &out.UploadedBy, &out.Name, &out.Description,
-		&out.ScriptContent, &out.Image, &schemaRaw, &out.Status, &out.StatusMessage,
-		&out.ImageTag, &out.QueueName, &out.DeploymentName, &out.CreatedAt, &out.ReadyAt,
+		&out.Image, &schemaRaw, &out.Status, &out.StatusMessage,
+		&out.QueueName, &out.DeploymentName, &out.CreatedAt, &out.ReadyAt,
 	)
 	if err != nil {
 		var pgErr *pgconn.PgError
@@ -105,19 +95,18 @@ func (r *RunnerRepository) Get(ctx context.Context, studyID, id uuid.UUID) (*mod
 }
 
 func (r *RunnerRepository) UpdateStatus(ctx context.Context, id uuid.UUID,
-	status models.RunnerStatus, message, imageTag, deploymentName string) error {
+	status models.RunnerStatus, message, deploymentName string) error {
 	// Cast explicit pe $2 ($2::text) — altfel YugabyteDB nu poate deduce un tip
 	// unic pentru $2 cand e folosit atat in SET (varchar) cat si in CASE WHEN
 	// $2 = 'ready' (text inferat din literal), si returneaza SQLSTATE 42P08.
 	_, err := r.pool.Exec(ctx, `
 		UPDATE runners
 		   SET status = $2::text, status_message = $3,
-		       image_tag = COALESCE(NULLIF($4::text, ''), image_tag),
-		       deployment_name = COALESCE(NULLIF($5::text, ''), deployment_name),
+		       deployment_name = COALESCE(NULLIF($4::text, ''), deployment_name),
 		       ready_at = CASE WHEN $2::text = 'ready' AND ready_at IS NULL
 		                       THEN NOW() ELSE ready_at END
 		 WHERE id = $1`,
-		id, status, message, imageTag, deploymentName,
+		id, status, message, deploymentName,
 	)
 	return err
 }
@@ -144,8 +133,8 @@ func scanRunner(s scanner) (*models.Runner, error) {
 	var schemaRaw []byte
 	err := s.Scan(
 		&rn.ID, &rn.StudyID, &rn.UploadedBy, &rn.Name, &rn.Description,
-		&rn.ScriptContent, &rn.Image, &schemaRaw, &rn.Status, &rn.StatusMessage,
-		&rn.ImageTag, &rn.QueueName, &rn.DeploymentName, &rn.CreatedAt, &rn.ReadyAt,
+		&rn.Image, &schemaRaw, &rn.Status, &rn.StatusMessage,
+		&rn.QueueName, &rn.DeploymentName, &rn.CreatedAt, &rn.ReadyAt,
 	)
 	if err != nil {
 		return nil, err

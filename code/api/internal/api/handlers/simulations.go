@@ -47,13 +47,18 @@ func NewSimulationsHandler(
 const maxTMax = 100000
 
 type createSimulationReq struct {
-	DatasetID   uuid.UUID          `json:"dataset_id"`
-	ModelType   string             `json:"model_type"`
-	Language    string             `json:"language"`
-	Parameters  map[string]float64 `json:"parameters"`
-	PopulationN *int64             `json:"population_n,omitempty"`
-	TMax        int                `json:"t_max"`
+	DatasetID     uuid.UUID          `json:"dataset_id"`
+	ModelType     string             `json:"model_type"`
+	Language      string             `json:"language"`
+	Parameters    map[string]float64 `json:"parameters"`
+	PopulationN   *int64             `json:"population_n,omitempty"`
+	TMax          int                `json:"t_max"`
+	ScriptContent string             `json:"script_content,omitempty"`
 }
+
+// maxSimScriptBytes plafoneaza dimensiunea scriptului trimis intr-o simulare
+// de tip 'script' (1 MB, suficient pentru orice notebook-cell-like).
+const maxSimScriptBytes = 1 << 20
 
 var defaultParameters = map[models.ModelType]map[string]float64{
 	models.ModelSIS: {
@@ -243,10 +248,16 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "model_type must be one of "+supportedModelTypesString())
 		return
 	}
-	if !models.ValidLanguage(req.Language) {
-		writeError(w, http.StatusBadRequest, "language must be one of r, julia, python")
+	modelType := models.ModelType(req.ModelType)
+
+	// Script-mode urmeaza o cale separata: dispecerizat la executorul partajat
+	// runner-script, fara validari de model/limbaj/t_max/initial-conditions.
+	// Scriptul decide singur orizontul (poate ignora t_max).
+	if modelType == models.ModelScript {
+		h.createScriptSimulation(w, r, sid, uid, &req)
 		return
 	}
+
 	if req.TMax <= 0 {
 		writeError(w, http.StatusBadRequest, "t_max must be > 0")
 		return
@@ -255,7 +266,11 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "t_max exceeds maximum of "+strconv.Itoa(maxTMax))
 		return
 	}
-	modelType := models.ModelType(req.ModelType)
+
+	if !models.ValidLanguage(req.Language) {
+		writeError(w, http.StatusBadRequest, "language must be one of r, julia, python")
+		return
+	}
 	if modelType == models.ModelLSTM && models.Language(req.Language) != models.LangPython {
 		writeError(w, http.StatusBadRequest, "lstm is executed by the dedicated LSTM runner and must use language=python")
 		return
@@ -336,6 +351,77 @@ func (h *SimulationsHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	writeJSON(w, http.StatusCreated, created)
+}
+
+// createScriptSimulation gestioneaza simularile de tip 'script': scriptul user
+// este pasat odata cu jobul si executat de runner-script. Spre deosebire de
+// caile compartimentale, aici nu calculam initial conditions si nu validam
+// parametri prin schema fixa --- scriptul interpreteaza singur ce primeste.
+func (h *SimulationsHandler) createScriptSimulation(w http.ResponseWriter, r *http.Request,
+	sid, uid uuid.UUID, req *createSimulationReq) {
+
+	if strings.TrimSpace(req.ScriptContent) == "" {
+		writeError(w, http.StatusBadRequest, "script_content required for model_type='script'")
+		return
+	}
+	if len(req.ScriptContent) > maxSimScriptBytes {
+		writeError(w, http.StatusBadRequest, "script_content exceeds maximum size of 1 MB")
+		return
+	}
+	if _, err := h.datasets.Get(r.Context(), sid, req.DatasetID); err != nil {
+		if errors.Is(err, repository.ErrNotFound) {
+			writeError(w, http.StatusNotFound, "dataset not found in study")
+			return
+		}
+		writeError(w, http.StatusInternalServerError, "dataset lookup failure")
+		return
+	}
+	first, err := h.datasets.FirstRecord(r.Context(), req.DatasetID)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "dataset has no records")
+		return
+	}
+	popN := first.Population
+	if req.PopulationN != nil && *req.PopulationN > 0 {
+		popN = *req.PopulationN
+	}
+
+	run := &models.SimulationRun{
+		UserID:        uid,
+		StudyID:       sid,
+		DatasetID:     req.DatasetID,
+		ModelType:     models.ModelScript,
+		Language:      models.LangPython,
+		Parameters:    req.Parameters,
+		PopulationN:   popN,
+		TMax:          req.TMax,
+		ScriptContent: req.ScriptContent,
+	}
+	created, err := h.sims.Create(r.Context(), run)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "could not create simulation: "+err.Error())
+		return
+	}
+
+	dsn := os.Getenv("RUNNER_DATABASE_URL")
+	if dsn == "" {
+		dsn = os.Getenv("DATABASE_URL")
+	}
+	msg := &runner.JobMessage{
+		SimulationID:  created.ID,
+		DatasetID:     req.DatasetID,
+		ModelType:     string(models.ModelScript),
+		Parameters:    req.Parameters,
+		PopulationN:   popN,
+		TMax:          req.TMax,
+		DBDSN:         dsn,
+		ScriptContent: req.ScriptContent,
+	}
+	if err := h.dispatcher.Publish(r.Context(), "script", msg); err != nil {
+		writeError(w, http.StatusInternalServerError, "could not dispatch script job: "+err.Error())
+		return
+	}
 	writeJSON(w, http.StatusCreated, created)
 }
 

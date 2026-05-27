@@ -104,6 +104,10 @@ const (
 	ModelSIRS     ModelType = "sirs"
 	ModelSIDARTHE ModelType = "sidarthe"
 	ModelLSTM     ModelType = "lstm"
+	// ModelScript marcheaza o simulare de tip "rulare ad-hoc de script Python".
+	// Pentru aceste simulari coloana script_content trebuie sa fie non-vida si
+	// executia o face runner-ul partajat runner-script (vezi Cap. 4 §plug-in-uri).
+	ModelScript ModelType = "script"
 )
 
 var SupportedModelTypes = []ModelType{
@@ -113,6 +117,7 @@ var SupportedModelTypes = []ModelType{
 	ModelSIRS,
 	ModelSIDARTHE,
 	ModelLSTM,
+	ModelScript,
 }
 
 func ValidModelType(s string) bool {
@@ -125,19 +130,20 @@ func ValidModelType(s string) bool {
 }
 
 type SimulationRun struct {
-	ID           uuid.UUID          `json:"id"`
-	UserID       uuid.UUID          `json:"user_id"`
-	StudyID      uuid.UUID          `json:"study_id"`
-	DatasetID    uuid.UUID          `json:"dataset_id"`
-	ModelType    ModelType          `json:"model_type"`
-	Language     Language           `json:"language"`
-	Parameters   map[string]float64 `json:"parameters"`
-	PopulationN  int64              `json:"population_n"`
-	TMax         int                `json:"t_max"`
-	Status       SimulationStatus   `json:"status"`
-	ErrorMessage *string            `json:"error_message,omitempty"`
-	CreatedAt    time.Time          `json:"created_at"`
-	CompletedAt  *time.Time         `json:"completed_at,omitempty"`
+	ID            uuid.UUID          `json:"id"`
+	UserID        uuid.UUID          `json:"user_id"`
+	StudyID       uuid.UUID          `json:"study_id"`
+	DatasetID     uuid.UUID          `json:"dataset_id"`
+	ModelType     ModelType          `json:"model_type"`
+	Language      Language           `json:"language"`
+	Parameters    map[string]float64 `json:"parameters"`
+	PopulationN   int64              `json:"population_n"`
+	TMax          int                `json:"t_max"`
+	ScriptContent string             `json:"script_content,omitempty"`
+	Status        SimulationStatus   `json:"status"`
+	ErrorMessage  *string            `json:"error_message,omitempty"`
+	CreatedAt     time.Time          `json:"created_at"`
+	CompletedAt   *time.Time         `json:"completed_at,omitempty"`
 }
 
 type SimulationResult struct {
@@ -162,33 +168,27 @@ const (
 	RunnerStatusStopped  RunnerStatus = "stopped"
 )
 
-// Runner descrie un runner de algoritm definit de utilizator (plug-in),
-// scope-uit la un singur studiu. Are doua moduri mutual exclusive:
-//   - script-mode: ScriptContent este nevid, iar containerul foloseste
-//     imaginea runner-custom care incarca scriptul la pornire.
-//   - image-mode: Image este nevid (referinta de imagine din registry), iar
-//     containerul foloseste exact acea imagine, considerata “runner protocol”
-//     compliant (consuma joburi din RUNNER_QUEUE, scrie rezultate in DB).
+// Runner descrie un runner de algoritm persistent definit prin imagine
+// container, scope-uit la un singur studiu. Imaginea este construita extern
+// (in CI sau docker build local) si referita aici; clusterul o trage din
+// registry si o ruleaza ca Deployment dedicat, ascultand pe coada Redis
+// dedicata. Pentru executia ad-hoc de scripturi Python vezi tabela
+// simulation_runs (model_type='script') si executor-ul partajat runner-script.
 type Runner struct {
 	ID              uuid.UUID      `json:"id"`
 	StudyID         uuid.UUID      `json:"study_id"`
 	UploadedBy      uuid.UUID      `json:"uploaded_by"`
 	Name            string         `json:"name"`
 	Description     string         `json:"description"`
-	ScriptContent   string         `json:"script_content,omitempty"`
-	Image           string         `json:"image,omitempty"`
+	Image           string         `json:"image"`
 	ParameterSchema map[string]any `json:"parameter_schema"`
 	Status          RunnerStatus   `json:"status"`
 	StatusMessage   string         `json:"status_message,omitempty"`
-	ImageTag        string         `json:"image_tag,omitempty"`
 	QueueName       string         `json:"queue_name"`
 	DeploymentName  string         `json:"deployment_name,omitempty"`
 	CreatedAt       time.Time      `json:"created_at"`
 	ReadyAt         *time.Time     `json:"ready_at,omitempty"`
 }
-
-// IsImageMode returneaza true daca runner-ul foloseste o imagine externa (Mod B).
-func (r *Runner) IsImageMode() bool { return r.Image != "" }
 
 type BenchmarkAggregate struct {
 	ModelType      ModelType `json:"model_type"`

@@ -26,18 +26,25 @@ func (r *SimulationRepository) Create(ctx context.Context, run *models.Simulatio
 		return nil, err
 	}
 
+	// script_content este NULL pentru modelele compartimentale si LSTM, si
+	// non-null doar pentru model_type='script' (CHECK la nivel de DB).
+	var scriptArg any
+	if run.ScriptContent != "" {
+		scriptArg = run.ScriptContent
+	}
+
 	const q = `
-		INSERT INTO simulation_runs (user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, status)
-		VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, 'pending')
-		RETURNING id, user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, status, created_at`
+		INSERT INTO simulation_runs (user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, script_content, status)
+		VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, 'pending')
+		RETURNING id, user_id, study_id, dataset_id, model_type, language, parameters, population_n, t_max, COALESCE(script_content,''), status, created_at`
 
 	var out models.SimulationRun
 	var params []byte
 	err = r.pool.QueryRow(ctx, q,
-		run.UserID, run.StudyID, run.DatasetID, run.ModelType, run.Language, paramsJSON, run.PopulationN, run.TMax,
+		run.UserID, run.StudyID, run.DatasetID, run.ModelType, run.Language, paramsJSON, run.PopulationN, run.TMax, scriptArg,
 	).Scan(
 		&out.ID, &out.UserID, &out.StudyID, &out.DatasetID, &out.ModelType, &out.Language, &params,
-		&out.PopulationN, &out.TMax, &out.Status, &out.CreatedAt,
+		&out.PopulationN, &out.TMax, &out.ScriptContent, &out.Status, &out.CreatedAt,
 	)
 	if err != nil {
 		return nil, err

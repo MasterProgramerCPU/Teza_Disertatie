@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runner-script
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/name: runner-script
+    app.kubernetes.io/part-of: epimodel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: runner-script
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: runner-script
+        app.kubernetes.io/part-of: epimodel
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: runner
+          image: ghcr.io/masterprogramercpu/emedicine-runner-custom:latest
+          imagePullPolicy: Always
+          env:
+            - name: RUNNER_QUEUE
+              value: "epimodel:jobs:script"
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: epimodel-config
+                  key: REDIS_URL
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: epimodel-secrets
+                  key: DATABASE_URL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 1Gi
