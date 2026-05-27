@@ -1,0 +1,44 @@
+# RBAC pentru API: permite crearea/stergerea de Deployment-uri pentru
+# runner-ele plug-in (vezi /api/studies/{id}/runners). Scope-uit la namespace,
+# nu cluster-wide.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: api
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/part-of: epimodel
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: api-runner-manager
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/part-of: epimodel
+rules:
+  # API-ul creeaza, listeaza, sterge Deployment-uri runner-custom.
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "create", "delete"]
+  # Pentru observabilitate (verificare status pod).
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: api-runner-manager
+  namespace: epimodel
+  labels:
+    app.kubernetes.io/part-of: epimodel
+subjects:
+  - kind: ServiceAccount
+    name: api
+    namespace: epimodel
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: api-runner-manager

@@ -1,16 +1,20 @@
 package handlers
 
 import (
+	"context"
 	"errors"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 
 	authmw "github.com/tudorgeana/emedicine-api/internal/api/middleware"
 	"github.com/tudorgeana/emedicine-api/internal/db/repository"
+	"github.com/tudorgeana/emedicine-api/internal/k8s"
 	"github.com/tudorgeana/emedicine-api/internal/models"
 )
 
@@ -25,10 +29,11 @@ var validRunnerName = regexp.MustCompile(`^[a-z][a-z0-9-]{1,62}[a-z0-9]$`)
 
 type RunnersHandler struct {
 	runners *repository.RunnerRepository
+	k8s     *k8s.Manager
 }
 
-func NewRunnersHandler(runners *repository.RunnerRepository) *RunnersHandler {
-	return &RunnersHandler{runners: runners}
+func NewRunnersHandler(runners *repository.RunnerRepository, mgr *k8s.Manager) *RunnersHandler {
+	return &RunnersHandler{runners: runners, k8s: mgr}
 }
 
 type createRunnerReq struct {
@@ -87,7 +92,45 @@ func (h *RunnersHandler) Create(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusInternalServerError, "could not create runner: "+err.Error())
 		return
 	}
+
+	// Provisioning K8s: cream Deployment-ul asincron, ca raspunsul HTTP sa fie
+	// rapid. Statusul incepe `building` si wrapper-ul din pod il muta la `ready`
+	// dupa ce isi incarca scriptul si se conecteaza la Redis.
+	if h.k8s.Enabled() {
+		out.Status = models.RunnerStatusBuilding
+		out.DeploymentName = k8s.DeploymentName(out.ID)
+		if err := h.runners.UpdateStatus(r.Context(), out.ID,
+			models.RunnerStatusBuilding, "", "", out.DeploymentName); err != nil {
+			log.Printf("runner %s: could not pre-set building status: %v", out.ID, err)
+		}
+		go h.provisionDeployment(out.ID, out.Name)
+	} else {
+		// In modul dev fara cluster, marcam direct ready: scriptul ramane
+		// inregistrat dar nu se executa decat daca un runner-custom e pornit manual.
+		_ = h.runners.UpdateStatus(r.Context(), out.ID,
+			models.RunnerStatusReady, "dev mode (no k8s provisioning)", "", "")
+		out.Status = models.RunnerStatusReady
+	}
 	writeJSON(w, http.StatusCreated, out)
+}
+
+// provisionDeployment creeaza Deployment-ul K8s in fundal. Daca esueaza,
+// muta runner-ul in starea `failed` cu mesajul de eroare.
+func (h *RunnersHandler) provisionDeployment(id uuid.UUID, name string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	depName, err := h.k8s.CreateRunnerDeployment(ctx, id, name)
+	if err != nil {
+		log.Printf("runner %s provisioning failed: %v", id, err)
+		_ = h.runners.UpdateStatus(ctx, id, models.RunnerStatusFailed, err.Error(), "", "")
+		return
+	}
+	// Lasam wrapper-ul din pod sa mute statusul la `ready` dupa ce reuseste
+	// sa se conecteze; aici doar inregistram numele Deployment-ului.
+	if err := h.runners.UpdateStatus(ctx, id, models.RunnerStatusBuilding,
+		"deployment created", "", depName); err != nil {
+		log.Printf("runner %s: could not record deployment name: %v", id, err)
+	}
 }
 
 // List intoarce runner-ele scope-uite la studiu, vizibile oricarui membru.
@@ -135,9 +178,10 @@ func (h *RunnersHandler) Get(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, rn)
 }
 
-// Delete sterge inregistrarea runner-ului din DB. In fazele ulterioare, aceasta
-// va declansa si scale-to-zero pe Deployment-ul K8s asociat (vezi router).
-// Doar super-adminul poate apela (impus prin middleware in router).
+// Delete sterge inregistrarea runner-ului din DB si Deployment-ul K8s asociat.
+// Doar super-adminul poate apela (impus prin middleware in router). Ordinea:
+// citim mai intai numele Deployment-ului, stergem K8s (idempotent), apoi DB.
+// Daca stergerea K8s esueaza, NU stergem din DB --- ramane vizibil ca `failed`.
 func (h *RunnersHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	sid, ok := authmw.StudyIDFrom(r.Context())
 	if !ok {
@@ -149,12 +193,25 @@ func (h *RunnersHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid id")
 		return
 	}
-	err = h.runners.Delete(r.Context(), sid, id)
+
+	rn, err := h.runners.Get(r.Context(), sid, id)
 	if errors.Is(err, repository.ErrNotFound) {
 		writeError(w, http.StatusNotFound, "runner not found")
 		return
 	}
 	if err != nil {
+		writeError(w, http.StatusInternalServerError, "lookup failure")
+		return
+	}
+
+	if err := h.k8s.DeleteRunnerDeployment(r.Context(), rn.DeploymentName); err != nil {
+		_ = h.runners.UpdateStatus(r.Context(), id, models.RunnerStatusFailed,
+			"k8s delete: "+err.Error(), "", "")
+		writeError(w, http.StatusInternalServerError, "k8s delete failed: "+err.Error())
+		return
+	}
+
+	if err := h.runners.Delete(r.Context(), sid, id); err != nil {
 		writeError(w, http.StatusInternalServerError, "delete failure")
 		return
 	}

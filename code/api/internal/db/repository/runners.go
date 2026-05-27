@@ -94,12 +94,16 @@ func (r *RunnerRepository) Get(ctx context.Context, studyID, id uuid.UUID) (*mod
 
 func (r *RunnerRepository) UpdateStatus(ctx context.Context, id uuid.UUID,
 	status models.RunnerStatus, message, imageTag, deploymentName string) error {
+	// Cast explicit pe $2 ($2::text) — altfel YugabyteDB nu poate deduce un tip
+	// unic pentru $2 cand e folosit atat in SET (varchar) cat si in CASE WHEN
+	// $2 = 'ready' (text inferat din literal), si returneaza SQLSTATE 42P08.
 	_, err := r.pool.Exec(ctx, `
 		UPDATE runners
-		   SET status = $2, status_message = $3,
-		       image_tag = COALESCE(NULLIF($4, ''), image_tag),
-		       deployment_name = COALESCE(NULLIF($5, ''), deployment_name),
-		       ready_at = CASE WHEN $2 = 'ready' AND ready_at IS NULL THEN NOW() ELSE ready_at END
+		   SET status = $2::text, status_message = $3,
+		       image_tag = COALESCE(NULLIF($4::text, ''), image_tag),
+		       deployment_name = COALESCE(NULLIF($5::text, ''), deployment_name),
+		       ready_at = CASE WHEN $2::text = 'ready' AND ready_at IS NULL
+		                       THEN NOW() ELSE ready_at END
 		 WHERE id = $1`,
 		id, status, message, imageTag, deploymentName,
 	)

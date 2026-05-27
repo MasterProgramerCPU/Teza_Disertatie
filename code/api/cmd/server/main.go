@@ -18,6 +18,7 @@ import (
 	"github.com/tudorgeana/emedicine-api/internal/api/router"
 	"github.com/tudorgeana/emedicine-api/internal/config"
 	"github.com/tudorgeana/emedicine-api/internal/db/repository"
+	"github.com/tudorgeana/emedicine-api/internal/k8s"
 	"github.com/tudorgeana/emedicine-api/internal/runner"
 )
 
@@ -67,6 +68,24 @@ func main() {
 	jwt := authmw.NewJWTMiddleware(cfg.JWTSecret)
 	rbac := authmw.NewRBAC(users, members)
 
+	k8sMgr, err := k8s.New(k8s.Config{
+		Enabled:    cfg.RunnerDeployEnabled,
+		Namespace:  cfg.RunnerNamespace,
+		Image:      cfg.RunnerCustomImage,
+		ConfigMap:  cfg.RunnerConfigMap,
+		SecretName: cfg.RunnerSecret,
+		PullSecret: cfg.RunnerImagePullSecret,
+	})
+	if err != nil {
+		log.Fatalf("k8s manager: %v", err)
+	}
+	if k8sMgr.Enabled() {
+		log.Printf("runner provisioning enabled (namespace=%s, image=%s)",
+			cfg.RunnerNamespace, cfg.RunnerCustomImage)
+	} else {
+		log.Printf("runner provisioning disabled (dev mode)")
+	}
+
 	deps := router.Deps{
 		Health:      handlers.NewHealthHandler(pool, rdb),
 		Auth:        handlers.NewAuthHandler(users, cfg.JWTSecret, cfg.JWTExpiry, cfg.BcryptCost),
@@ -76,7 +95,7 @@ func main() {
 		Simulations: handlers.NewSimulationsHandler(sims, datasets, results, benches, dispatcher),
 		Benchmarks:  handlers.NewBenchmarksHandler(benches),
 		Admin:       handlers.NewAdminHandler(users, studies, pool),
-		Runners:     handlers.NewRunnersHandler(runners),
+		Runners:     handlers.NewRunnersHandler(runners, k8sMgr),
 		JWT:         jwt,
 		RBAC:        rbac,
 	}

@@ -39,6 +39,7 @@ spec:
         app.kubernetes.io/name: api
         app.kubernetes.io/part-of: epimodel
     spec:
+      serviceAccountName: api
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: ghcr-pull
@@ -60,6 +61,10 @@ spec:
                 name: epimodel-config
             - secretRef:
                 name: epimodel-secrets
+          env:
+            # Activeaza provisioning-ul K8s pentru runner-ele plug-in.
+            - name: RUNNER_DEPLOY_ENABLED
+              value: "true"
           ports:
             - name: http
               containerPort: 8080
