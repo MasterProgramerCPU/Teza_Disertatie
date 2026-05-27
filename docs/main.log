@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  27 MAY 2026 09:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  27 MAY 2026 10:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1811,13 +1811,20 @@ i-na-rul Go sta-tic
 
 
 
-[24]) (./chapters/05_implementare_modele.tex
+[24]
 
 
 
-[25
+[25] (./tables/plugin_lifecycle.tex
+Underfull \hbox (badness 6078) in paragraph at lines 19--19
+[]|\T1/cmr/m/n/9 (+20) API a creat Deployment-ul K8s prin
+ []
 
-]
+)
+
+) (./chapters/05_implementare_modele.tex
+
+[26]
 \bbl@ensure@romanian {Capitolul} 5.
 
 Underfull \hbox (badness 10000) in paragraph at lines 8--8
@@ -1854,7 +1861,7 @@ Underfull \hbox (badness 1769) in paragraph at lines 74--84
 
 
 
-[26
+[27
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 133--151
@@ -1871,7 +1878,7 @@ imodel:jobs:python\T1/cmr/m/n/10 (+20) );
 
 
 
-[27]
+[28]
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/listings/ls
 tlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
@@ -1898,7 +1905,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--18
 
 )
 
-[28]
+[29]
 
 ) (./chapters/06_predictie_lstm.tex
 Underfull \hbox (badness 1077) in paragraph at lines 319--4
@@ -1913,7 +1920,7 @@ source.getrusage\T1/cmr/m/n/10 (+20) ; R
 
 
 
-[29]
+[30]
 \bbl@ensure@romanian {Capitolul} 6.
 
 Underfull \hbox (badness 10000) in paragraph at lines 33--33
@@ -1924,7 +1931,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 33--33
 
 
 
-[30
+[31
 
 ]
 Underfull \hbox (badness 1137) in paragraph at lines 141--141
@@ -1940,7 +1947,7 @@ Underfull \hbox (badness 5756) in paragraph at lines 169--171
 
 
 
-[31]
+[32]
 
 (./figures/lstm_trajectory.tex
 PGFPlots: reading {data/lstm_trajectory_romania.csv}
@@ -5222,7 +5229,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 319--319
 
 
 
-[32]
+[33]
 Underfull \hbox (badness 10000) in paragraph at lines 339--343
 []\T1/cmr/m/n/10 (+20) predic[]iile []i prog-noza sunt per-sis-tate în
  []
@@ -5247,11 +5254,11 @@ Underfull \hbox (badness 2111) in paragraph at lines 368--375
 
 (./tables/lstm_baselines.tex)
 
-[33]
+[34]
 
 ) (./chapters/07_comparatie_si_calibrare.tex
 
-[34]
+[35]
 \bbl@ensure@romanian {Capitolul} 7.
 
 Underfull \hbox (badness 10000) in paragraph at lines 47--47
@@ -5289,7 +5296,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--82
 
 
 
-[35
+[36
 
 ]
 
@@ -5300,7 +5307,7 @@ Underfull \hbox (badness 1990) in paragraph at lines 188--193
 
 
 
-[36] (./tables/calibration_results.tex) (./figures/calibration_sir_fit.tex
+[37] (./tables/calibration_results.tex) (./figures/calibration_sir_fit.tex
 PGFPlots: reading {data/calibration_sir_romania.csv}
 PGFPlots: reading {data/calibration_sir_romania.csv}
 
@@ -6051,13 +6058,13 @@ lso unbounded coords=jump).
 
 
 
-[37]
+[38]
 
 (./figures/identifiability_landscape.tex
 PGFPlots: reading {data/identifiability_grid_sir.csv}
 )
 
-[38] (./tables/calibration_multiregion.tex)
+[39] (./tables/calibration_multiregion.tex)
 (./figures/calibration_multiregion.tex
 PGFPlots: reading {data/calibration_multiregion.csv}
 PGFPlots: reading {data/calibration_multiregion.csv}
@@ -7556,7 +7563,7 @@ lso unbounded coords=jump).
 
 (./tables/calibration_cost.tex)) (./chapters/08_evaluare_performanta.tex
 
-[39] [40]
+[40] [41]
 \bbl@ensure@romanian {Capitolul} 8.
 
 Underfull \hbox (badness 2111) in paragraph at lines 54--62
@@ -7602,9 +7609,9 @@ Underfull \hbox (badness 1721) in paragraph at lines 102--115
 
 
 
-[41
+[42
 
-] [42]
+] [43]
 Underfull \hbox (badness 4024) in paragraph at lines 155--164
 []\T1/cmr/m/n/10 (+20) Campania de baz  a fost exe-cu-tat  pe clus-
  []
@@ -7708,7 +7715,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 13--13
 
 )
 
-[43] [44] (./figures/scaling_wall_time.tex
+[44] [45] (./figures/scaling_wall_time.tex
 Package pgfplots info on input line 19: Using 'lua backend=false' for axis: xmo
 de=log unsupported (yet).
 Package pgfplots info on input line 19: Using 'lua backend=false' for axis: ymo
@@ -7733,7 +7740,7 @@ Overfull \hbox (82.28607pt too wide) in alignment at lines 12--12
 
 )
 
-[45] (./tables/hardware_comparison.tex
+[46] (./tables/hardware_comparison.tex
 Underfull \hbox (badness 10000) in alignment at lines 16--16
 [][][][][][][] 
  []
@@ -7747,7 +7754,7 @@ Overfull \hbox (43.89594pt too wide) in alignment at lines 17--17
 
 )
 
-[46] (./tables/api_latency.tex
+[47] (./tables/api_latency.tex
 Underfull \hbox (badness 10000) in alignment at lines 17--17
 [][][][][][][] 
  []
@@ -7761,11 +7768,11 @@ Overfull \hbox (11.30632pt too wide) in alignment at lines 16--16
 
 )
 
-[47]
+[48]
 
 ) (./chapters/09_aplicatia_web.tex
 
-[48]
+[49]
 \bbl@ensure@romanian {Capitolul} 9.
 
 Underfull \hbox (badness 10000) in paragraph at lines 30--34
@@ -7793,7 +7800,7 @@ Underfull \hbox (badness 2035) in paragraph at lines 53--57
 
 
 
-[49
+[50
 
 ]
 Underfull \hbox (badness 4416) in paragraph at lines 110--124
@@ -7828,7 +7835,7 @@ a cele
 
 
 
-[50]
+[51]
 Underfull \hbox (badness 4752) in paragraph at lines 200--208
 []\T1/cmr/bx/n/10 (+20) Autorizare (RBAC con-tex-tual). \T1/cmr/m/n/10 (+20) Ac
 -ce-sul
@@ -7860,13 +7867,13 @@ Underfull \hbox (badness 3407) in paragraph at lines 209--215
 
 ) (./chapters/10_concluzii.tex
 
-[51]
+[52]
 \bbl@ensure@romanian {Capitolul} 10.
 
 
 
 
-[52
+[53
 
 ]
 
@@ -7883,7 +7890,7 @@ s-hardware
 
 
 
-[53]
+[54]
 Underfull \hbox (badness 3199) in paragraph at lines 200--218
 []\T1/cmr/bx/n/10 (+20) LSTM este o com-po-nenta ca-li-ta-tiv di-fe-
  []
@@ -7903,11 +7910,11 @@ ibrate.py
 
 
 
-[54])
+[55])
 
 
 
-[55
+[56
 
 ] (./main.bbl
 Underfull \hbox (badness 2564) in paragraph at lines 51--55
@@ -7928,7 +7935,7 @@ Underfull \hbox (badness 1226) in paragraph at lines 86--91
 
 
 
-[56
+[57
 
 
 ]
@@ -7940,60 +7947,58 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--149
 
 
 
-[57
+[58
 
 ] (./appendices/A_cod_r.tex
 \bbl@ensure@romanian {Anexa} A.
 (../code/runners/r/runner.R
 
-[58
+[59
 
 
 ]
-
-[59]
 
 [60]
 
-[61])) (./appendices/B_cod_julia.tex
+[61]
 
-[62]
+[62])) (./appendices/B_cod_julia.tex
+
+[63]
 \bbl@ensure@romanian {Anexa} B.
 (../code/runners/julia/runner.jl
 
-[63
+[64
 
 ]
-
-[64]
 
 [65]
 
-[66])) (./appendices/C_cod_python.tex
+[66]
 
-[67]
+[67])) (./appendices/C_cod_python.tex
+
+[68]
 \bbl@ensure@romanian {Anexa} C.
 (../code/runners/python/runner.py
 
-[68
+[69
 
 ]
-
-[69]
 
 [70]
 
-[71])) (./appendices/D_cod_lstm.tex
+[71]
 
-[72]
+[72])) (./appendices/D_cod_lstm.tex
+
+[73]
 \bbl@ensure@romanian {Anexa} D.
 (../code/runners/lstm/runner.py
 
-[73
+[74
 
 ]
-
-[74]
 
 [75]
 
@@ -8003,30 +8008,32 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--149
 
 [78]
 
-[79])) (./appendices/E_schema_bd.tex
+[79]
 
-[80]
+[80])) (./appendices/E_schema_bd.tex
+
+[81]
 \bbl@ensure@romanian {Anexa} E.
 (../code/db/migrations/000001_create_users.up.sql)
 (../code/db/migrations/000002_create_datasets.up.sql)
 (../code/db/migrations/000003_create_epidemiological_records.up.sql)
 
-[81
+[82
 
 ] (../code/db/migrations/000004_create_simulation_runs.up.sql)
 (../code/db/migrations/000005_create_simulation_results.up.sql)
 (../code/db/migrations/000006_create_benchmarks.up.sql)
 (../code/db/migrations/000007_create_studies.up.sql
 
-[82]) (../code/db/migrations/000008_create_study_members.up.sql)
+[83]) (../code/db/migrations/000008_create_study_members.up.sql)
 (../code/db/migrations/000009_add_super_admin.up.sql)
 (../code/db/migrations/000010_add_study_id_to_resources.up.sql)
 (../code/db/migrations/000011_expand_model_type_constraint.up.sql
 
-[83]) (../code/db/migrations/000012_add_lstm_model.up.sql))
+[84]) (../code/db/migrations/000012_add_lstm_model.up.sql))
 (./appendices/F_kubernetes.tex
 
-[84]
+[85]
 \bbl@ensure@romanian {Anexa} F.
 
 Underfull \hbox (badness 10000) in paragraph at lines 27--28
@@ -8068,67 +8075,67 @@ Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
 
 
-[85
+[86
 
 ] (../code/k8s/00-namespace.yaml) (../code/k8s/10-yugabyte-values.yaml
 
-[86]
+[87]
 
-[87]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
+[88]) (../code/k8s/12-yugabyte-tserver-service.yaml) (../code/k8s/20-redis.yaml
 
 
-[88]
+[89]
 
-[89]) (../code/k8s/30-migrate-job.yaml
+[90]) (../code/k8s/30-migrate-job.yaml
 
-[90]) (../code/k8s/40-api.yaml
+[91]) (../code/k8s/40-api.yaml
 
-[91]
+[92]
 
-[92]) (../code/k8s/52-runner-julia.yaml
+[93]) (../code/k8s/52-runner-julia.yaml
 
-[93]) (../code/k8s/53-runner-lstm.yaml)
+[94]) (../code/k8s/53-runner-lstm.yaml
 
-[94] (../code/k8s/61-frontend-admin.yaml
+[95]) (../code/k8s/61-frontend-admin.yaml
 
-[95]) (../code/k8s/70-ingress.yaml
+[96]) (../code/k8s/70-ingress.yaml
 
-[96]) (../code/docker-compose.yml
+[97]) (../code/docker-compose.yml
 
-[97]
+[98]
 
-[98])) (./appendices/G_api_rest.tex
+[99])
 
-[99]
+[100]) (./appendices/G_api_rest.tex
 \bbl@ensure@romanian {Anexa} G.
 (../code/api/internal/api/router/router.go
 
-[100
+[101
 
 ]
 
-[101]) (../code/api/internal/api/middleware/rbac.go
+[102]) (../code/api/internal/api/middleware/rbac.go
 
-[102]
+[103]
 
-[103]) (../code/api/internal/api/handlers/response.go
+[104])
 
-[104]))
+[105] (../code/api/internal/api/handlers/response.go))
 
-[105] (./main.aux)
+[106] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A10ED52E80376565D5F6125ACB9C6263;32417.
+(rerunfilecheck)             Checksum: A6C551D14C6CFCD11988E2ACDDB0D6CF;33270.
  ) 
 Here is how much of TeX's memory you used:
- 51403 strings out of 473190
- 1110839 string characters out of 5704334
- 3295264 words of memory out of 5000000
- 69955 multiletter control sequences out of 15000+600000
- 626186 words of font info for 431 fonts, out of 8000000 for 9000
+ 51484 strings out of 473190
+ 1112308 string characters out of 5704334
+ 3297200 words of memory out of 5000000
+ 69981 multiletter control sequences out of 15000+600000
+ 627290 words of font info for 437 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,97p,1001b,3063s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
@@ -8189,17 +8196,18 @@ ist/fonts/type1/public/cm-super/sfrm0900.pfb></opt/homebrew/Cellar/texlive/2025
 lic/cm-super/sfti0500.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
 dist/fonts/type1/public/cm-super/sfti0600.pfb></opt/homebrew/Cellar/texlive/202
 50308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti0700.pfb></opt/homebre
-w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti10
+w/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sfti09
 00.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pu
-blic/cm-super/sfti1200.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
--dist/fonts/type1/public/cm-super/sftt0800.pfb></opt/homebrew/Cellar/texlive/20
-250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></opt/homebr
-ew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt1
-000.pfb>
-Output written on main.pdf (116 pages, 1691426 bytes).
+blic/cm-super/sfti1000.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
+-dist/fonts/type1/public/cm-super/sfti1200.pfb></opt/homebrew/Cellar/texlive/20
+250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></opt/homebr
+ew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/cm-super/sftt0
+900.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/p
+ublic/cm-super/sftt1000.pfb>
+Output written on main.pdf (117 pages, 1721634 bytes).
 PDF statistics:
- 5468 PDF objects out of 6186 (max. 8388607)
- 5193 compressed objects within 52 object streams
- 3227 named destinations out of 3580 (max. 500000)
- 107227 words of extra memory for PDF output out of 128383 (max. 10000000)
+ 5549 PDF objects out of 6186 (max. 8388607)
+ 5270 compressed objects within 53 object streams
+ 3268 named destinations out of 3580 (max. 500000)
+ 109307 words of extra memory for PDF output out of 128383 (max. 10000000)
 

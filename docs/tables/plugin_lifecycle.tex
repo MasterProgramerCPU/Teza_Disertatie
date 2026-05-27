@@ -1,0 +1,20 @@
+\begin{table}[!htbp]
+\centering
+\caption{Ciclul de viață al unui runner plug-in, de la upload până la
+oprire. Stările sunt persistate in coloana \texttt{status} a tabelei
+\texttt{runners}; tranzițiile sunt declanșate de API (creare/ștergere) și
+de wrapper-ul din pod (marcarea \texttt{ready}).}
+\label{tab:plugin_lifecycle}
+\small
+\begin{tabularx}{\columnwidth}{l X}
+\toprule
+\textbf{Stare} & \textbf{Trigger / descriere} \\
+\midrule
+\texttt{pending}  & INSERT inițial în DB; răspunsul HTTP returnează imediat. \\
+\texttt{building} & API a creat Deployment-ul K8s prin \texttt{client-go}; pod-ul este \emph{Pending}. \\
+\texttt{ready}    & Wrapper-ul din pod a citit manifestul din DB, a compilat scriptul și ascultă pe coadă. \\
+\texttt{failed}   & Eroare la crearea Deployment-ului sau la compilarea scriptului; \texttt{status\_message} conține detalii. \\
+\texttt{stopped}  & Oprire explicită; Deployment-ul este șters, dar rândul rămâne pentru audit (opțional). \\
+\bottomrule
+\end{tabularx}
+\end{table}

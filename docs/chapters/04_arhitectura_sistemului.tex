@@ -1093,3 +1093,121 @@ configurează la nivel de Ingress prin \texttt{cert-manager} cu certificate
 Let's Encrypt; pentru disertație, traficul rămâne necriptat pe legătura
 locală \texttt{port-forward}, urmând ca activarea TLS să fie un pas
 operațional ulterior.
+
+% ============================================================
+\section{Sistem de plug-in-uri pentru algoritmi}
+\label{sec:plugin_runners}
+
+Runner-ele R, Julia și Python descrise până acum acoperă familia modelelor
+compartimentale (SIR/SIS/SEIR/SIRS/SIDARTHE) și componenta LSTM, dar lista
+algoritmilor relevanți pentru analiza unei serii epidemiologice este
+deschisă: un cercetător poate dori să compare cu o regresie statistică, cu
+un model AR/ARIMA, cu o variantă bayesiană sau cu un model agent-based
+implementat ca script. Pentru a evita modificarea API-ului, a schemei de
+bază de date și a deployment-urilor Kubernetes la fiecare astfel de
+adăugare, sistemul include un mecanism de \emph{plug-in-uri}: un super-admin
+poate încărca un script Python într-un studiu, iar acesta este transformat
+automat într-un runner separat în cluster, vizibil exclusiv în studiul în
+care a fost introdus.
+
+\subsection{Contractul scriptului utilizator}
+\label{subsec:plugin_contract}
+
+Forma standard pe care trebuie să o respecte un script încărcat este
+deliberat minimalistă: un singur fișier \texttt{entry.py} care expune o
+funcție \texttt{main} cu o semnătură fixă.
+
+\begin{lstlisting}[language=Python, caption={Contractul oricărui runner plug-in.}]
+def main(records: list[dict],
+         parameters: dict,
+         context: dict) -> list[dict]:
+    """
+    records:    randurile dataset-ului
+                (date, region, infected, recovered, ...)
+    parameters: valorile parametrilor declarati in
+                manifest, validate de API
+    context:    metadate {population_n, t_max,
+                runner_id, ...}
+    return:     lista de pasi temporali
+                [{"t": int, "compartments":
+                  {nume: float, ...}}, ...]
+    """
+\end{lstlisting}
+
+Pe lângă funcția \texttt{main}, scriptul este însoțit la upload de un
+manifest minimal: un nume DNS-safe (folosit pentru numele cozii Redis și al
+Deployment-ului K8s), o descriere și un \texttt{parameter\_schema} JSON care
+declară parametrii așteptați (tip, valoare implicită, interval). Schema este
+folosită de API atât pentru validarea cererilor ulterioare de execuție, cât
+și de interfața web pentru a genera dinamic formularul de parametri.
+Tipul rezultatului (\texttt{list[\{t, compartments\}]}) este același ca pentru
+runner-ele built-in --- de aceea graficul existent care vizualizează
+traiectorii compartimentale poate afișa rezultatele oricărui plug-in fără
+modificări de cod.
+
+\subsection{Provisioning Kubernetes}
+\label{subsec:plugin_provisioning}
+
+Implementarea folosește o singură imagine container, \texttt{runner-custom}
+(\texttt{python:3.12-slim} cu \texttt{numpy}, \texttt{scipy}, \texttt{pandas}
+și \texttt{scikit-learn} preinstalate), care conține un \emph{wrapper}
+standard. Wrapper-ul nu cunoaște apriori scriptul utilizatorului: la pornire
+citește variabila de mediu \texttt{RUNNER\_ID}, deschide o conexiune la
+YugabyteDB, obține din tabela \texttt{runners} numele cozii și conținutul
+\texttt{entry.py}, îl compilează ca modul Python, marchează runner-ul ca
+\texttt{ready} și începe să asculte pe coada Redis \texttt{epimodel:jobs:custom-<nume>}.
+Pentru fiecare job primit, wrapper-ul citește înregistrările dataset-ului,
+apelează \texttt{main()} cu măsurători de timp wall, timp CPU și memorie de
+vârf, validează formatul rezultatului și inserează traiectoriile în
+\texttt{simulation\_results} alături de o intrare în \texttt{benchmarks} ---
+exact ca runner-ele built-in.
+
+Crearea infrastructurii este declanșată de API la momentul upload-ului prin
+clientul oficial \texttt{client-go}. Un \texttt{ServiceAccount} dedicat
+(\texttt{api}) este legat de un \texttt{Role} care permite verbele
+\texttt{get}, \texttt{list}, \texttt{create} și \texttt{delete} pe resursa
+\texttt{deployments} din namespace-ul aplicației --- nimic mai mult, ceea ce
+respectă principiul privilegiului minim.
+Tabelul~\ref{tab:plugin_lifecycle} rezumă tranzițiile de stare ale unui runner
+plug-in.
+
+\input{tables/plugin_lifecycle}
+
+În varianta curentă, toate plug-in-urile partajează aceeași imagine de bază,
+deci stack-ul de biblioteci este fix. O extensie naturală (Faza~3 a
+implementării) ar fi un pipeline de build per script folosind un container
+\texttt{Kaniko} în cluster, care ar construi o imagine dedicată ce include
+dependențele declarate în \texttt{requirements.txt} al scriptului. Această
+extensie este menționată în capitolul de concluzii ca direcție viitoare.
+
+\subsection{Securitate și limitări}
+\label{subsec:plugin_securitate}
+
+Plug-in-urile rulează cod arbitrar furnizat de utilizator, deci modelul de
+securitate este conservator. \textbf{Acces restrâns la creare:} numai un
+super-admin poate încărca sau șterge un plug-in --- API-ul aplică această
+restricție prin lanțul de middleware \texttt{RequireStudyMembership} +
+\texttt{RequireSuperAdmin}, iar pentru un utilizator obișnuit cu rol în
+studiu cererea returnează \texttt{403 super admin required}.
+\textbf{Scope-uire la studiu:} fiecare runner are coloana \texttt{study\_id}
+NOT NULL cu cheie străină la \texttt{studies}, iar atât listarea cât și
+ștergerea sunt scope-uite (\texttt{Get(sid, id)}), exact ca pentru
+simulări și seturi de date. Un runner încărcat într-un studiu nu apare în
+alt studiu și nu poate fi referit cross-studiu.
+\textbf{Nume DNS-safe:} numele runner-ului este validat prin expresia
+regulată \texttt{\textasciicircum[a-z][a-z0-9-]\{1,62\}[a-z0-9]\$}, deoarece
+ajunge atât în numele cozii Redis cât și în numele Deployment-ului K8s.
+\textbf{Limite de resurse:} fiecare Deployment generat are atribuite
+explicit \texttt{requests} (\texttt{100m} CPU, \texttt{128Mi} memorie) și
+\texttt{limits} (\texttt{500m} CPU, \texttt{512Mi} memorie), prevenind ca un
+script greșit scris să afecteze celelalte runner-e sau API-ul.
+
+Limitări cunoscute: nu există încă un mecanism formal de sandboxing
+suplimentar (de exemplu \texttt{gVisor} sau \texttt{Kata Containers}) pentru
+a izola și mai puternic scripturile față de nodul Kubernetes; scriptul are
+acces la rețeaua cluster-ului (inclusiv DB-ul, prin DSN-ul moștenit), ceea
+ce este intenționat pentru a putea citi dataset-ul, dar înseamnă că nu este
+o sandboxă universală. În scenariul vizat de această lucrare --- platformă
+internă pentru cercetători cunoscuți, super-admin curatând încărcările ---
+modelul este adecvat; pentru deployment public ar fi necesare politici de
+rețea (\texttt{NetworkPolicy}) restrictive și posibil un sandbox runtime.

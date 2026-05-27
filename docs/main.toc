@@ -96,74 +96,78 @@
 \contentsline {subsection}{\numberline {4.6.3}Stratul aplicativ: imagini container și registru}{24}{subsection.4.6.3}%
 \contentsline {subsection}{\numberline {4.6.4}Coadă de mesaje și migrațiile bazei de date}{25}{subsection.4.6.4}%
 \contentsline {subsection}{\numberline {4.6.5}Expunere externă și ingress}{25}{subsection.4.6.5}%
-\contentsline {chapter}{\numberline {5}Implementarea modelelor compartimentale}{26}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{26}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{27}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTHE}{27}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Variantele SIR, SIS, SEIR și SIRS}{29}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{29}{section.5.5}%
-\contentsline {section}{\numberline {5.6}Metrici de performanță}{29}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Predicție Epidemiologică folosind Rețele LSTM}{30}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Rolul predicției statistice în sistem}{30}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Formularea problemei de predicție}{30}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Arhitectura celulei LSTM}{30}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Normalizarea și construcția exemplelor}{31}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Antrenarea prin backpropagation through time}{31}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Împărțirea cronologică și evaluarea}{32}{section.6.6}%
-\contentsline {section}{\numberline {6.7}Integrarea în arhitectura aplicației}{32}{section.6.7}%
-\contentsline {section}{\numberline {6.8}Linii de bază și limitări}{33}{section.6.8}%
-\contentsline {section}{\numberline {6.9}Direcții de extindere}{34}{section.6.9}%
-\contentsline {chapter}{\numberline {7}Comparația Modelelor, Analiză Numerică și Calibrare}{35}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Rolul comparației între modele}{35}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Comparație structurală}{35}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Operatorul de observație}{35}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Metrici de eroare numerică}{35}{section.7.4}%
-\contentsline {section}{\numberline {7.5}Protocol de analiză comparativă}{36}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Calibrarea parametrilor}{36}{section.7.6}%
-\contentsline {subsection}{\numberline {7.6.1}Aplicare pe Romania, valul 1 din 2020}{37}{subsection.7.6.1}%
-\contentsline {section}{\numberline {7.7}Identificabilitate și limitări ale calibrării}{38}{section.7.7}%
-\contentsline {subsection}{\numberline {7.7.1}Vizualizarea identifiabilitatii practice pentru SIR}{38}{subsection.7.7.1}%
-\contentsline {subsection}{\numberline {7.7.2}Generalizare pe mai multe regiuni}{39}{subsection.7.7.2}%
-\contentsline {section}{\numberline {7.8}Integrarea în sistemul software}{39}{section.7.8}%
-\contentsline {subsection}{\numberline {7.8.1}Costul software al calibrării}{39}{subsection.7.8.1}%
-\contentsline {chapter}{\numberline {8}Evaluarea Software, Performanței și Scalabilității}{41}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Scopul evaluării}{41}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Metrici colectate}{41}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Matricea experimentală}{41}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Protocol de rulare}{43}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{43}{section.8.5}%
-\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{43}{section.8.6}%
-\contentsline {section}{\numberline {8.7}Indicatori agregați}{43}{section.8.7}%
-\contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{43}{subsection.8.7.1}%
-\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{45}{subsection.8.7.2}%
-\contentsline {subsection}{\numberline {8.7.3}Variabilitatea cross-hardware}{46}{subsection.8.7.3}%
-\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{46}{section.8.8}%
-\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{47}{section.8.9}%
-\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{48}{section.8.10}%
-\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{49}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Rolul aplicației}{49}{section.9.1}%
-\contentsline {section}{\numberline {9.2}Backend Go}{49}{section.9.2}%
-\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{49}{section.9.3}%
-\contentsline {section}{\numberline {9.4}Execuția simulărilor}{49}{section.9.4}%
-\contentsline {section}{\numberline {9.5}Frontend Vue.js}{50}{section.9.5}%
-\contentsline {section}{\numberline {9.6}Consola super-admin}{50}{section.9.6}%
-\contentsline {section}{\numberline {9.7}Considerații de securitate}{50}{section.9.7}%
-\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{50}{subsection.9.7.1}%
-\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{51}{subsection.9.7.2}%
-\contentsline {section}{\numberline {9.8}Validare funcțională}{51}{section.9.8}%
-\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{52}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Sinteza lucrării}{52}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}Răspuns la obiectivele propuse}{52}{subsection.10.1.1}%
-\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{52}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{53}{section.10.3}%
-\contentsline {section}{\numberline {10.4}Concluzii experimentale}{53}{section.10.4}%
-\contentsline {section}{\numberline {10.5}Limitări}{54}{section.10.5}%
-\contentsline {section}{\numberline {10.6}Direcții viitoare}{54}{section.10.6}%
-\contentsline {chapter}{Bibliografie}{56}{section.10.6}%
-\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{58}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{63}{appendix.B}%
-\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{68}{appendix.C}%
-\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{73}{appendix.D}%
-\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{81}{appendix.E}%
-\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{85}{appendix.F}%
-\contentsline {chapter}{\numberline {G}Documentația API REST}{100}{appendix.G}%
+\contentsline {section}{\numberline {4.7}Sistem de plug-in-uri pentru algoritmi}{25}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Contractul scriptului utilizator}{25}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Provisioning Kubernetes}{26}{subsection.4.7.2}%
+\contentsline {subsection}{\numberline {4.7.3}Securitate și limitări}{26}{subsection.4.7.3}%
+\contentsline {chapter}{\numberline {5}Implementarea modelelor compartimentale}{27}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Datele de intrare și inițializarea compartimentelor}{27}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Contractul comun de simulare}{28}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Implementarea modelului SIDARTHE}{28}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Variantele SIR, SIS, SEIR și SIRS}{30}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Persistența rezultatelor și exportul}{30}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Metrici de performanță}{30}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Predicție Epidemiologică folosind Rețele LSTM}{31}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Rolul predicției statistice în sistem}{31}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Formularea problemei de predicție}{31}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Arhitectura celulei LSTM}{31}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Normalizarea și construcția exemplelor}{32}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Antrenarea prin backpropagation through time}{32}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Împărțirea cronologică și evaluarea}{33}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Integrarea în arhitectura aplicației}{33}{section.6.7}%
+\contentsline {section}{\numberline {6.8}Linii de bază și limitări}{34}{section.6.8}%
+\contentsline {section}{\numberline {6.9}Direcții de extindere}{35}{section.6.9}%
+\contentsline {chapter}{\numberline {7}Comparația Modelelor, Analiză Numerică și Calibrare}{36}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Rolul comparației între modele}{36}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Comparație structurală}{36}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Operatorul de observație}{36}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Metrici de eroare numerică}{36}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Protocol de analiză comparativă}{37}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Calibrarea parametrilor}{37}{section.7.6}%
+\contentsline {subsection}{\numberline {7.6.1}Aplicare pe Romania, valul 1 din 2020}{38}{subsection.7.6.1}%
+\contentsline {section}{\numberline {7.7}Identificabilitate și limitări ale calibrării}{39}{section.7.7}%
+\contentsline {subsection}{\numberline {7.7.1}Vizualizarea identifiabilitatii practice pentru SIR}{39}{subsection.7.7.1}%
+\contentsline {subsection}{\numberline {7.7.2}Generalizare pe mai multe regiuni}{40}{subsection.7.7.2}%
+\contentsline {section}{\numberline {7.8}Integrarea în sistemul software}{40}{section.7.8}%
+\contentsline {subsection}{\numberline {7.8.1}Costul software al calibrării}{40}{subsection.7.8.1}%
+\contentsline {chapter}{\numberline {8}Evaluarea Software, Performanței și Scalabilității}{42}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Scopul evaluării}{42}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Metrici colectate}{42}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Matricea experimentală}{42}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Protocol de rulare}{44}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Scalabilitate și complexitatea modelului}{44}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Compararea implementărilor R, Julia și Python}{44}{section.8.6}%
+\contentsline {section}{\numberline {8.7}Indicatori agregați}{44}{section.8.7}%
+\contentsline {subsection}{\numberline {8.7.1}Rezultate măsurate}{44}{subsection.8.7.1}%
+\contentsline {subsection}{\numberline {8.7.2}Costul componentei LSTM}{46}{subsection.8.7.2}%
+\contentsline {subsection}{\numberline {8.7.3}Variabilitatea cross-hardware}{47}{subsection.8.7.3}%
+\contentsline {section}{\numberline {8.8}Acuratețe numerică și verificări de regresie}{47}{section.8.8}%
+\contentsline {section}{\numberline {8.9}Evaluarea API-ului și a bazei de date}{48}{section.8.9}%
+\contentsline {section}{\numberline {8.10}Interpretarea rezultatelor}{49}{section.8.10}%
+\contentsline {chapter}{\numberline {9}Aplicația Web E-Medicine}{50}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Rolul aplicației}{50}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Backend Go}{50}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Gestionarea dataseturilor}{50}{section.9.3}%
+\contentsline {section}{\numberline {9.4}Execuția simulărilor}{50}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Frontend Vue.js}{51}{section.9.5}%
+\contentsline {section}{\numberline {9.6}Consola super-admin}{51}{section.9.6}%
+\contentsline {section}{\numberline {9.7}Considerații de securitate}{51}{section.9.7}%
+\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{51}{subsection.9.7.1}%
+\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{52}{subsection.9.7.2}%
+\contentsline {section}{\numberline {9.8}Validare funcțională}{52}{section.9.8}%
+\contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{53}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Sinteza lucrării}{53}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}Răspuns la obiectivele propuse}{53}{subsection.10.1.1}%
+\contentsline {section}{\numberline {10.2}Concluzii privind modelele}{53}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Concluzii privind implementarea}{54}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Concluzii experimentale}{54}{section.10.4}%
+\contentsline {section}{\numberline {10.5}Limitări}{55}{section.10.5}%
+\contentsline {section}{\numberline {10.6}Direcții viitoare}{55}{section.10.6}%
+\contentsline {chapter}{Bibliografie}{57}{section.10.6}%
+\contentsline {chapter}{\numberline {A}Cod Sursă — Implementarea R}{59}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Cod Sursă — Implementarea Julia}{64}{appendix.B}%
+\contentsline {chapter}{\numberline {C}Cod Sursă — Implementarea Python}{69}{appendix.C}%
+\contentsline {chapter}{\numberline {D}Cod Sursă --- Runner LSTM}{74}{appendix.D}%
+\contentsline {chapter}{\numberline {E}Schema Bazei de Date}{82}{appendix.E}%
+\contentsline {chapter}{\numberline {F}Configurații Kubernetes}{86}{appendix.F}%
+\contentsline {chapter}{\numberline {G}Documentația API REST}{101}{appendix.G}%
