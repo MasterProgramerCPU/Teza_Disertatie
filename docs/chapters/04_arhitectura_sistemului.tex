@@ -1236,6 +1236,88 @@ in-cluster. O extensie naturală ar fi un pipeline opțional bazat pe
 responsabilitate este lăsată în sarcina cercetătorului, exact așa cum este
 lăsată construirea oricărei imagini reutilizabile.
 
+\subsection{Exemplu concret de runner plug-in}
+\label{subsec:plugin_exemplu}
+
+Pentru a face palpabilă diviziunea descrisă, \cref{lst:plugin_runner_exemplu}
+prezintă un runner plug-in complet care implementează un model SIR cu rată
+explicită de mortalitate ($\beta, \gamma, \mu$ \textendash{} parametri
+liberi, compartiment suplimentar $D$ pentru decese). Codul folosește
+\texttt{redis-py} și \texttt{psycopg} ca runner-ele built-in, dar trăiește
+într-un repository extern, este publicat ca imagine container pe un registru
+accesibil de cluster și este înregistrat în studiu printr-un singur apel
+API. Restul mecanicii (provisionare Deployment, ascultare \texttt{BRPOP},
+afișare a traiectoriei în graficul UI) este moștenită \emph{gratis} de la
+contractul standard.
+
+\begin{lstlisting}[language=Python, label={lst:plugin_runner_exemplu}, caption={Runner plug-in minimal pentru SIR-D (compartiment de decese), care respectă \emph{runner protocol}-ul (\cref{subsec:plugin_contract}) și se integrează fără modificări în API.}]
+import json, os, time
+import redis, psycopg
+from psycopg.types.json import Json
+from scipy.integrate import solve_ivp
+
+QUEUE = os.environ["RUNNER_QUEUE"]   # epimodel:jobs:custom-sir-d
+DB = os.environ["DATABASE_URL"]
+RD = os.environ["REDIS_URL"]
+
+def sir_d(t, y, beta, gamma, mu, N):
+    S, I, R, D = y
+    dS = -beta * S * I / N
+    dI =  beta * S * I / N - gamma * I - mu * I
+    dR =  gamma * I
+    dD =  mu * I
+    return [dS, dI, dR, dD]
+
+def main():
+    r = redis.from_url(RD)
+    with psycopg.connect(DB) as cn:
+        while True:
+            _, raw = r.brpop(QUEUE)
+            job = json.loads(raw)
+            sid, did = job["simulation_id"], job["dataset_id"]
+            p = job["parameters"]
+            N = job["population_n"]
+            tmax = job["t_max"]
+            # citeste prima inregistrare ca conditie initiala
+            with cn.cursor() as cur:
+                cur.execute(
+                    "SELECT susceptible, infected, recovered, deaths "
+                    "FROM epidemiological_records "
+                    "WHERE dataset_id=%s ORDER BY recorded_date LIMIT 1",
+                    (did,))
+                S0, I0, R0, D0 = cur.fetchone()
+            sol = solve_ivp(sir_d, (0, tmax), [S0, I0, R0 or 0, D0 or 0],
+                            args=(p["beta"], p["gamma"], p["mu"], N),
+                            t_eval=range(tmax+1), method="RK45")
+            rows = [(sid, int(t), Json({"S": float(sol.y[0][t]),
+                                        "I": float(sol.y[1][t]),
+                                        "R": float(sol.y[2][t]),
+                                        "D": float(sol.y[3][t])}))
+                    for t in range(tmax+1)]
+            with cn.cursor() as cur:
+                cur.executemany(
+                    "INSERT INTO simulation_results "
+                    "(simulation_id, t, compartments) VALUES (%s,%s,%s)", rows)
+                cur.execute("UPDATE simulation_runs SET status='completed' "
+                            "WHERE id=%s", (sid,))
+            cn.commit()
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+După publicarea imaginii (de exemplu pe \texttt{ghcr.io}), super-adminul o
+înregistrează în studiu printr-un \texttt{POST /api/studies/\{sid\}/runners}
+cu corpul \texttt{\{"name": "sir-d", "image": "ghcr.io/.../sir-d:1.0"\}};
+API-ul creează Deployment-ul cu \texttt{RUNNER\_QUEUE=epimodel:jobs:custom-sir-d}
+și runner-ul devine selectabil în interfața de creare a simulărilor pentru
+orice membru al studiului. Niciun cod din API, frontend sau runner-ele
+built-in nu este modificat. Acest exemplu acoperă cele trei elemente cheie
+ale contractului: consumul cozii Redis, citirea dataset-ului prin
+\texttt{epidemiological\_records} (folosind, opțional, coloanele extinse
+precum \texttt{deaths}) și scrierea rezultatelor în formatul JSONB
+\texttt{compartments}, identic cu runner-ele built-in.
+
 \subsection{Securitate și limitări}
 \label{subsec:plugin_securitate}
 

@@ -34,7 +34,14 @@ gestionării rolurilor de acces, încărcării seturilor de date, lansării
 simulărilor, urmăririi statusului și vizualizării traiectoriilor
 compartimentale. Aplicația principală este destinată cercetătorilor și
 colaboratorilor dintr-un studiu, iar consola administrativă este rezervată
-utilizatorilor cu drepturi globale de super-admin. Întregul sistem este
+utilizatorilor cu drepturi globale de super-admin. Schema datelor
+epidemiologice acoperă, dincolo de cele patru câmpuri SIR-centrice, nouă
+metrici suplimentare (decese, spitalizări, terapie intensivă, vaccinări,
+teste, indicele Oxford de stringență, $R_t$ observat) propagate din sursa
+OWID; aceste valori nu sunt folosite de runner-ele compartimentale built-in,
+dar sunt expuse integral scripturilor scrise de cercetător într-un editor
+web dedicat, ceea ce permite formularea de modele ad-hoc fără modificări
+de cod în API. Întregul sistem este
 deployabil pe un cluster Kubernetes prin manifeste declarative, pe o platformă
 cloud privată cu factor de replicare~3 pentru baza de date. Sistemul este validat empiric printr-o campanie de benchmark executată prin
 aplicație (180 de rulări ODE cu cinci modele compartimentale, trei limbaje

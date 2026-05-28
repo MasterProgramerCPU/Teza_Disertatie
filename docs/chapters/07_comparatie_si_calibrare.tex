@@ -303,6 +303,31 @@ suplimentare în date — testare, spitalizare, terapie intensivă, decese — c
 permit fixarea sau constrangerea unor parametri prin operatori de observație
 multipli, nu doar serie singulară de cazuri active.
 
+\subsubsection*{O ieșire concretă: calibrare bivariată folosind decesele}
+
+Îmbogățirea schemei datelor cu metrici epidemiologice suplimentare
+(decese cumulate, $R_t$ observat, indici de stringență; \cref{sec:seturi_date})
+oferă levierul direct pentru a rupe valea identifiabilității slabe descrise mai
+sus. Pentru SIR cu rată de mortalitate $\mu$, o calibrare bivariată în care
+funcția de pierdere agregă MAE pe seria $I(t)$ și pe seria $D(t)$:
+\begin{equation}
+\label{eq:loss_bivariate}
+\mathcal{L}(\beta, \gamma, \mu) = w_I \cdot \mathrm{MAE}_I + w_D \cdot \mathrm{MAE}_D,
+\end{equation}
+selectează combinațiile $(\beta, \gamma)$ consistente cu \emph{ambele} serii
+simultan. Geometric, vorbim despre intersecția a două văi în spațiul de
+pierdere — una pentru fiecare serie observată — care, în general, se reduce
+la o vecinătate strâmtă, identifiabilă, dacă seriile sunt informative
+independent. Aceeași logică se aplică la SIDARTHE: cu seriile $D$
+(diagnosticate), $T$ (severe spitalizate) și $E$ (decese) disponibile prin
+coloanele \texttt{deaths} și (în lucrări viitoare) \texttt{icu} și
+\texttt{hospitalized}, mai mulți parametri se pot estima simultan,
+fără a se sprijini integral pe constrângeri din literatura clinică.
+Această direcție este menționată în limitările capitolului~\ref{ch:concluzii}
+și a devenit tehnic accesibilă odată cu îmbogățirea schemei de date din
+\cref{sec:seturi_date}; implementarea concretă rămâne o extensie naturală a
+scriptului \texttt{calibrate.py}.
+
 \subsection{Generalizare pe mai multe regiuni}
 \label{subsec:calibrare_multiregion}
 

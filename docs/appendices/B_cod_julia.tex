@@ -1,7 +1,19 @@
 \chapter{Cod Sursă — Implementarea Julia}
 \label{app:cod_julia}
 
-Această anexă include runner-ul Julia, bazat pe \texttt{DifferentialEquations.jl},
-\texttt{Redis.jl} și \texttt{LibPQ.jl}.
+Această anexă include runner-ul Julia, bazat pe
+\texttt{DifferentialEquations.jl}, \texttt{Redis.jl} și \texttt{LibPQ.jl}.
+Respectă același \emph{runner protocol} ca runner-ul R
+(\cref{subsec:plugin_contract}): ascultă coada \texttt{epimodel:jobs:julia},
+preia mesajul JSON cu parametrii și starea inițială, integrează modelul cerut
+prin \texttt{Tsit5} (Runge--Kutta adaptiv de ordin 5(4), tolerantă $10^{-8}$
+relativ) și scrie traiectoria în \texttt{simulation\_results}. Specificul Julia
+este pre-alocarea vectorului de derivate $\mathrm{d}u$ pentru zero alocări
+per pas și costul de pornire JIT amortizat doar după prima rulare a unui
+model dat în pod, vizibil empiric ca un overhead de $\sim$$900$--$1\,500$~ms
+pe primele job-uri (\cref{tab:bench_wall_time}). Dependențele sunt
+declarate prin \texttt{Project.toml} în \texttt{code/runners/julia/}, iar
+imaginea de bază este \texttt{julia:1.x-bookworm} pentru reproductibilitatea
+versiunilor compilate.
 
 \lstinputlisting[language=Julia, caption={Runner-ul Julia pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}]{../code/runners/julia/runner.jl}

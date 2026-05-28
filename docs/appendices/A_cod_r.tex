@@ -2,6 +2,21 @@
 \label{app:cod_r}
 
 Această anexă include runner-ul R folosit de sistem pentru consumul job-urilor
-Redis, rezolvarea modelelor compartimentale suportate și persistarea rezultatelor în YugabyteDB.
+Redis, rezolvarea modelelor compartimentale suportate și persistarea
+rezultatelor în YugabyteDB. Implementarea respectă \emph{runner protocol}-ul
+descris în \cref{subsec:plugin_contract}: ascultă \texttt{BRPOP} pe coada
+\texttt{epimodel:jobs:r}, parsează un mesaj JSON cu cheile
+\texttt{simulation\_id}, \texttt{dataset\_id}, \texttt{model\_type},
+\texttt{parameters}, \texttt{initial}, \texttt{population\_n} și
+\texttt{t\_max}, citește înregistrările dataset-ului prin
+\texttt{RPostgres}, integrează ecuațiile diferențiale corespunzătoare
+modelului prin \texttt{deSolve::ode} (metoda RK4 cu pas $h=1$~zi) și scrie
+seria temporală în \texttt{simulation\_results} (câte un rând per pas
+temporal, cu \texttt{compartments} ca JSONB) și metricile de execuție în
+\texttt{benchmarks}. La final, marchează \texttt{simulation\_runs.status =
+'completed'} sau \texttt{'failed'} cu \texttt{error\_message}. Dependențele
+necesare sunt declarate în \texttt{code/runners/r/Dockerfile}
+(\texttt{r-base:4.x}, \texttt{deSolve}, \texttt{redux}, \texttt{RPostgres},
+\texttt{jsonlite}).
 
 \lstinputlisting[language=R, caption={Runner-ul R pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}]{../code/runners/r/runner.R}

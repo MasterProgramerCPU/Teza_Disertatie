@@ -1,9 +1,22 @@
 \chapter{Cod Sursă --- Runner LSTM}
 \label{app:cod_lstm}
 
-Această anexă include runner-ul LSTM separat, responsabil pentru consumul cozii
-\texttt{epimodel:jobs:lstm}, antrenarea modelului recurent pe seria
-\texttt{infected} și persistarea seriilor \texttt{observed},
-\texttt{fitted} și \texttt{predicted}.
+Această anexă include runner-ul LSTM separat, responsabil pentru consumul
+cozii \texttt{epimodel:jobs:lstm}, antrenarea modelului recurent pe seria
+\texttt{infected} și persistarea seriilor \texttt{observed}, \texttt{fitted}
+și \texttt{predicted}. Spre deosebire de runner-ele compartimentale, această
+implementare nu rezolvă ecuații diferențiale, ci antrenează o rețea LSTM
+hand-rolled în NumPy (forward pass cu poartă de intrare, de uitare, de
+ieșire și celulă; backward pass prin BPTT, cu Adam ca optimizator)
+\textemdash{} detalii matematice în \cref{ch:lstm}. Split-ul cronologic
+$80\%/20\%$ separă fereastra de antrenare de cea de test, normalizarea este
+ajustată doar pe train pentru a evita scurgerea informației, iar metricile
+MAE, RMSE și nRMSE sunt calculate pe fereastra de test. Validarea împotriva
+predictorilor naivi (\cref{tab:lstm_baselines}) este executată separat prin
+\texttt{scripts/lstm\_baselines.py}, nu de runner. Dependențele sunt
+declarate în \texttt{code/runners/lstm/requirements.txt} (\texttt{numpy},
+\texttt{redis}, \texttt{psycopg}), iar imaginea separată permite scalarea
+independentă a calculului LSTM (costisitor, $\sim$$290$~s per rulare) față
+de solverele ODE (sub-secunde).
 
 \lstinputlisting[language=Python, caption={Runner-ul LSTM dedicat predicțiilor epidemiologice.}]{../code/runners/lstm/runner.py}

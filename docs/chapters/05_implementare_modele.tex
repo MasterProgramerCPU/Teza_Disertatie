@@ -76,6 +76,38 @@ analiză (calibrări care fitează simultan cazurile și decesele, factoring în
 $R_t$ observat, ajustări la intervențiile non-farmaceutice prin Stringency
 Index) fără modificări de schemă sau de cod în API.
 
+Pentru a concretiza această capabilitate, \cref{lst:script_owid_richer}
+prezintă un script user scurt care raportează simultan numărul de cazuri
+active, decesele cumulate și $R_t$ observat la fiecare pas de timp ---
+asemenea unei „simulări" identitate care nu mai necesită nici parametri,
+nici condiție inițială explicită, doar accesul la coloanele extinse.
+Listing-ul ilustrează că aceeași infrastructură care execută SIDARTHE prin
+runner-ele built-in poate găzdui și analize descriptive sau modele ad-hoc
+direct pe datele extinse, fără tabele suplimentare și fără cod nou în API.
+
+\begin{lstlisting}[language=Python, label={lst:script_owid_richer}, caption={Script user (executor partajat \texttt{runner-script}) care folosește coloanele epi extinse: raportează $I$, decese cumulate și $R_t$ observat ca pseudo-compartimente.}]
+def main(records, parameters, context):
+    """Returneaza I, decese cumulate si Rt observat
+    ca pseudo-compartimente pentru fiecare zi cu date.
+    Nu cere parametri; demonstreaza accesul direct
+    la coloanele epi extinse din records.
+    """
+    out = []
+    for t, r in enumerate(records):
+        if r.get("deaths") is None:
+            continue  # zile fara raportare de decese
+        out.append({
+            "t": t,
+            "compartments": {
+                "I":  float(r["infected"]),
+                "D":  float(r["deaths"]),
+                "Rt": float(r.get("reproduction_rate")
+                            or 0.0),
+            },
+        })
+    return out
+\end{lstlisting}
+
 \textbf{OWID COVID-19 extins.} Lista de țări procesate prin
 \texttt{preprocess\_owid.py} a fost extinsă de la nucleul european la 64 de țări
 de pe toate continentele (Europa, America, Asia, Africa, Oceania), pentru a

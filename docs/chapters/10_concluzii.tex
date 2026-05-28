@@ -116,6 +116,21 @@ Ea face sistemul mai flexibil și permite adăugarea unor modele noi fără migr
 ale tabelei de rezultate. Costul acestei flexibilități este o serializare mai
 generală și o nevoie mai mare de validare la nivel de aplicație.
 
+În aceeași direcție, schema datelor de intrare a fost îmbogățită dincolo de
+nucleul SIR-centric. Tabela \texttt{epidemiological\_records} găzduiește acum
+nouă metrici epidemiologice suplimentare (decese cumulate, cazuri și decese
+noi, spitalizări, terapie intensivă, vaccinări, teste, indicele Oxford de
+stringență, $R_t$ observat), populate din sursa OWID atunci când există;
+\cref{sec:seturi_date} detaliază propagarea, iar
+\cref{subsec:identif_landscape} explică levierul deschis: o calibrare
+bivariată care fitează simultan $I$ și $D$ rupe valea de identifiabilitate
+slabă vizibilă în peisajul de pierdere $\mathrm{MSE}(\beta, \gamma)$. Cuplată
+cu editorul de scripturi Python expus în interfață
+(\cref{sec:script_editor}), această îmbogățire face ca extinderea cu
+algoritmi noi de analiză să nu mai necesite migrații de bază de date sau
+modificări în API; cercetătorul accesează direct seriile prin
+\texttt{records[i]} și formulează modele ad-hoc.
+
 Pe latura operațională, sistemul a fost deployat efectiv pe un cluster Kubernetes
 v1.31 găzduit pe o platformă cloud privată, cu trei noduri control plane și trei
 workeri, YugabyteDB la factor de replicare~3 și Helm pentru ciclul de viață al
@@ -269,7 +284,17 @@ seria de cazuri active, în special date despre testare, spitalizare, terapie
 intensivă, vindecări și decese. Această extindere preia infrastructura
 demonstrată deja pentru SIR (calibrare cross-regiune cu $\gamma$ fixat din
 literatură) și o extinde la operatori de observație multipli, necesari pentru
-distingerea grupurilor de parametri ale SIDARTHE.
+distingerea grupurilor de parametri ale SIDARTHE. Pasul tehnic este acum
+direct: tabela \texttt{epidemiological\_records} expune toate seriile
+necesare (\texttt{deaths}, \texttt{hospitalized}, \texttt{icu},
+\texttt{tested}, \texttt{vaccinated}); rămâne de formulat funcția obiectiv
+bivariată sau trivariată (cu ponderi $w_I, w_D, w_T, \ldots$ stabilite din
+scările seriilor) și de extins scriptul \texttt{calibrate.py} pentru a fita
+simultan operatori de observație multipli. Calibrarea bivariată
+$\mathcal{L}(\beta,\gamma,\mu) = w_I \mathrm{MAE}_I + w_D \mathrm{MAE}_D$,
+discutată în \cref{subsec:identif_landscape}, este prima țintă naturală:
+oferă identifiabilitate practică pentru un model deja calibrat în lucrare
+(SIR) și servește ca reper metodologic pentru extensia la SIDARTHE.
 
 O direcție tehnică imediată este promovarea calibrării din script offline într-un
 tip de job asincron în mecanismul Redis al aplicației, alături de

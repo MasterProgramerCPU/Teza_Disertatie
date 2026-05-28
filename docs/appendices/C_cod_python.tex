@@ -1,7 +1,19 @@
 \chapter{Cod Sursă — Implementarea Python}
 \label{app:cod_python}
 
-Această anexă include runner-ul Python, care folosește \texttt{scipy.integrate.solve\_ivp}
-pentru integrarea numerică și \texttt{psycopg} pentru scrierea rezultatelor.
+Această anexă include runner-ul Python, care folosește
+\texttt{scipy.integrate.solve\_ivp} pentru integrarea numerică și
+\texttt{psycopg} pentru scrierea rezultatelor. Respectă același
+\emph{runner protocol} ca celelalte două (\cref{subsec:plugin_contract}):
+ascultă coada \texttt{epimodel:jobs:python}, preia mesajul JSON și
+integrează modelul cerut cu \texttt{RK45} (Dormand--Prince, adaptiv, aceeași
+toleranță cu \texttt{Tsit5} din Julia). Acest runner este alegerea
+\emph{default} a aplicației pentru flux-uri interactive: nu are cost de
+pornire JIT, are stack-ul cel mai stabil ca performanță
+($4$--$9$~ms per job în benchmark, \cref{tab:bench_wall_time}) și
+beneficiază de ecosistemul Python pentru extensii ulterioare (sensitivity
+sweeps, profiling, conexiuni la alte servicii). Dependențele sunt declarate
+în \texttt{code/runners/python/requirements.txt}, iar imaginea de bază este
+\texttt{python:3.11-slim}.
 
 \lstinputlisting[language=Python, caption={Runner-ul Python pentru modelele SIDARTHE/SIR/SIS/SEIR/SIRS.}]{../code/runners/python/runner.py}
