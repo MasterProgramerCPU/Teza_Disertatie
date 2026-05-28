@@ -2,10 +2,13 @@
 \label{app:schema_bd}
 
 Anexa include migrațiile SQL care definesc schema relațională folosită de API și
-runner-e. Primele migrații creează structura inițială, iar migrațiile finale
-adaugă studiile, membership-ul, flag-ul de super-admin, legătura
-\texttt{study\_id} pentru resursele epidemiologice și extinderea finală pentru
-modelul \texttt{lstm}.
+runner-e. Primele migrații creează structura inițială; cele intermediare adaugă
+studiile, membership-ul, flag-ul de super-admin, legătura \texttt{study\_id}
+pentru resursele epidemiologice și extinderile pentru modelele
+\texttt{lstm} și \texttt{script}; ultimele introduc tabelele auxiliare
+(runner-e plug-in, draft-uri de script) și îmbogățirea schemei de date
+epidemiologice cu metrici suplimentare (decese, spitalizări, ATI, vaccinări,
+teste, indici de răspuns sanitar).
 
 \lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{users}.}]{../code/db/migrations/000001_create_users.up.sql}
 
@@ -30,3 +33,15 @@ modelul \texttt{lstm}.
 \lstinputlisting[language=SQL, caption={Extinderea constrângerii \texttt{model\_type} pentru toate modelele suportate.}]{../code/db/migrations/000011_expand_model_type_constraint.up.sql}
 
 \lstinputlisting[language=SQL, caption={Adăugarea modelului \texttt{lstm} în constrângerea \texttt{model\_type}.}]{../code/db/migrations/000012_add_lstm_model.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{runners} pentru runner-ele plug-in.}]{../code/db/migrations/000013_create_runners.up.sql}
+
+\lstinputlisting[language=SQL, caption={Pivot către modul \texttt{image} pentru runner-e (DDL idempotent: condițional pe existența coloanei \texttt{script\_content}, dropped ulterior).}]{../code/db/migrations/000014_runner_image_mode.up.sql}
+
+\lstinputlisting[language=SQL, caption={Simulări de tip \texttt{script}: \texttt{script\_content} mutat în \texttt{simulation\_runs}, runner-ele devin strict \emph{image-based}.}]{../code/db/migrations/000015_script_simulations.up.sql}
+
+\lstinputlisting[language=SQL, caption={Relaxarea constrângerii \texttt{t\_max} pentru simulări de tip \texttt{script} (scriptul își alege singur orizontul).}]{../code/db/migrations/000016_relax_tmax_for_script.up.sql}
+
+\lstinputlisting[language=SQL, caption={Crearea tabelului \texttt{script\_drafts} pentru persistența draft-urilor din editor.}]{../code/db/migrations/000017_create_script_drafts.up.sql}
+
+\lstinputlisting[language=SQL, caption={Extinderea schemei \texttt{epidemiological\_records} cu metrici suplimentare (decese, spitalizări, ATI, vaccinări, teste, indicele Oxford de stringență, $R_t$ observat).}]{../code/db/migrations/000018_extend_epi_records_columns.up.sql}

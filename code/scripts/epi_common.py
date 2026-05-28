@@ -72,16 +72,28 @@ def fill_calendar(df: pd.DataFrame, start: pd.Timestamp, end: pd.Timestamp) -> p
     df["population"] = float(pop.iloc[0])
 
     df["region"] = df["region"].ffill().bfill()
+
+    # Pentru coloanele extinse: cumulativele se completeaza prin forward-fill,
+    # rate-urile zilnice raman ca atare (NaN cand lipseste raportarea).
+    cumulative_cols = ["total_deaths", "people_vaccinated", "total_tests"]
+    for col in cumulative_cols:
+        if col in df.columns:
+            df[col] = df[col].ffill()
     return df.reset_index()
 
 
 def derive_compartments(df: pd.DataFrame, infectious_window: int) -> pd.DataFrame:
-    """Deriva (infected, recovered, susceptible) din ``new_cases``/``total_cases``.
+    """Deriva (infected, recovered, susceptible) si pastreaza coloanele extinse.
 
     * ``infected(t)``    = suma ``new_cases`` pe ultimele ``infectious_window`` zile
       (aproximeaza numarul de infectii active la momentul ``t``);
     * ``recovered(t)``   = ``total_cases(t) - infected(t)`` (compartimentul "removed");
     * ``susceptible(t)`` = ``population - infected - recovered`` (prin conservare).
+
+    Pe langa coloanele SIR-centrice, propaga (cand sunt in df) metricile extinse
+    folosite de scripturile user: deaths, new_cases, new_deaths, hospitalized,
+    icu, vaccinated, tested, stringency_index, reproduction_rate. Coloanele
+    lipsa raman absente in CSV (parser-ul API le trateaza ca optionale).
 
     ``df`` este iesirea lui :func:`fill_calendar` (calendar zilnic continuu).
     """
@@ -92,7 +104,7 @@ def derive_compartments(df: pd.DataFrame, infectious_window: int) -> pd.DataFram
     removed = (df["total_cases"].astype(float) - infected).clip(lower=0)
     susceptible = (population - infected - removed).clip(lower=0)
 
-    return pd.DataFrame({
+    out = pd.DataFrame({
         "date": df["date"].dt.strftime("%Y-%m-%d"),
         "region": df["region"],
         "infected": infected.round().astype("int64"),
@@ -100,6 +112,31 @@ def derive_compartments(df: pd.DataFrame, infectious_window: int) -> pd.DataFram
         "recovered": removed.round().astype("int64"),
         "susceptible": susceptible.round().astype("int64"),
     })
+
+    # Coloane extinse — propagate doar daca exista in input.
+    # Tipurile: int64 cu NA suportat (Pandas Int64), respectiv float64.
+    int_mappings = [
+        ("deaths", "total_deaths"),
+        ("new_cases", "new_cases"),
+        ("new_deaths", "new_deaths"),
+        ("hospitalized", "hosp_patients"),
+        ("icu", "icu_patients"),
+        ("vaccinated", "people_vaccinated"),
+        ("tested", "total_tests"),
+    ]
+    for out_col, src_col in int_mappings:
+        if src_col in df.columns:
+            series = pd.to_numeric(df[src_col], errors="coerce")
+            out[out_col] = series.round().astype("Int64")
+
+    for out_col, src_col in [
+        ("stringency_index", "stringency_index"),
+        ("reproduction_rate", "reproduction_rate"),
+    ]:
+        if src_col in df.columns:
+            out[out_col] = pd.to_numeric(df[src_col], errors="coerce").astype("Float64")
+
+    return out
 
 
 def validate(df: pd.DataFrame, label: str) -> None:

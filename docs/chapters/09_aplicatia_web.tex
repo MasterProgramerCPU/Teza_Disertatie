@@ -140,8 +140,12 @@ o singură funcție \texttt{main} cu o semnătură fixă.
 \begin{lstlisting}[language=Python, caption={Contractul scriptului din editor.}]
 def main(records, parameters, context):
     """
-    records:    randurile dataset-ului
-                (date, region, infected, ...)
+    records:    randurile dataset-ului, fiecare cu
+                cheile: date, region, susceptible,
+                infected, recovered, population
+                + (opt) deaths, new_cases, new_deaths,
+                hospitalized, icu, vaccinated, tested,
+                stringency_index, reproduction_rate
     parameters: dict cu parametri (validati JSON
                 in UI)
     context:    {simulation_id, population_n,
@@ -153,8 +157,13 @@ def main(records, parameters, context):
 
 Returnarea este aceeași listă de pași temporali cu obiecte
 \texttt{compartments} ca pentru runner-ele built-in, ceea ce permite graficului
-existent să afișeze rezultatele fără tratare specială. Stack-ul Python
-disponibil în executor este fix (\texttt{numpy}, \texttt{scipy}, \texttt{pandas},
+existent să afișeze rezultatele fără tratare specială. Cheile epidemiologice
+extinse din \texttt{records} sunt populate atunci când sursa CSV de la upload
+le-a furnizat (\emph{e.g.}, dataseturile OWID COVID au de regulă
+\texttt{deaths}, \texttt{stringency\_index} și \texttt{reproduction\_rate} pentru
+mare parte din 2020--2023); altfel valoarea cheii este \texttt{None}, iar
+scriptul trebuie să trateze explicit absența. Stack-ul Python disponibil în
+executor este fix (\texttt{numpy}, \texttt{scipy}, \texttt{pandas},
 \texttt{scikit-learn}); cercetătorul care are nevoie de dependențe netriviale
 poate trece pe traseul de runner cu imagine externă.
 

@@ -74,22 +74,54 @@ def load_user_module(script_content: str):
 
 
 def fetch_records(conn, dataset_id: str) -> list[dict]:
+    """Aduce randurile dataset-ului cu toate coloanele epidemiologice.
+
+    Pe langa cele 4 metrici SIR-centrice de baza (susceptible/infected/
+    recovered/population), exportam si toate metricile extinse (decese,
+    spitalizari, ATI, vaccinari, teste, indici de raspuns sanitar) ca sa
+    permita oricarui script user sa acceseze datele complete fara cerere
+    suplimentara la baza de date.
+    """
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT recorded_date, region_code, susceptible, infected, recovered, population "
-            "FROM epidemiological_records WHERE dataset_id = %s ORDER BY recorded_date",
+            "SELECT recorded_date, region_code, "
+            "       susceptible, infected, recovered, population, "
+            "       deaths, new_cases, new_deaths, hospitalized, icu, "
+            "       vaccinated, tested, stringency_index, reproduction_rate "
+            "  FROM epidemiological_records WHERE dataset_id = %s "
+            " ORDER BY recorded_date",
             (dataset_id,),
         )
         rows = cur.fetchall()
+
+    def _i(v):
+        return int(v) if v is not None else None
+
+    def _f(v):
+        return float(v) if v is not None else None
+
     out = []
-    for date, region, susceptible, infected, recovered, population in rows:
+    for row in rows:
+        (date, region, susceptible, infected, recovered, population,
+         deaths, new_cases, new_deaths, hospitalized, icu,
+         vaccinated, tested, stringency_index, reproduction_rate) = row
         out.append({
             "date": date.isoformat() if date else None,
             "region": region,
-            "susceptible": int(susceptible) if susceptible is not None else None,
+            "susceptible": _i(susceptible),
             "infected": int(infected),
-            "recovered": int(recovered) if recovered is not None else None,
+            "recovered": _i(recovered),
             "population": int(population),
+            # Coloane epi extinse — toate optionale (None daca nu sunt in dataset)
+            "deaths": _i(deaths),
+            "new_cases": _i(new_cases),
+            "new_deaths": _i(new_deaths),
+            "hospitalized": _i(hospitalized),
+            "icu": _i(icu),
+            "vaccinated": _i(vaccinated),
+            "tested": _i(tested),
+            "stringency_index": _f(stringency_index),
+            "reproduction_rate": _f(reproduction_rate),
         })
     return out
 

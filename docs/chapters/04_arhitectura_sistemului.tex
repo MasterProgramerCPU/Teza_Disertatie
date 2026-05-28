@@ -395,7 +395,8 @@ autorizarea și interogările să fie făcute în contextul unui studiu.
     \bfseries\underline{id}\normalfont\ uuid\\%
     region\_code\ varchar\\%
     susceptible/infected/recovered\\%
-    population\ bigint%
+    population\ bigint\\%
+    {\itshape +9 metrici epi extinse (opt)}%
 };
 
 \node[ent] (runs) at (0, -4.2) {%
@@ -462,9 +463,15 @@ brute ale seriei temporale; câmpurile \texttt{susceptible},
 \texttt{infected} și \texttt{recovered} conțin valorile observate sau valorile
 inițiale folosite la calibrarea parametrilor, iar \texttt{region\_code} urmează
 standardul ISO~3166-1 alpha-3 în seturile de date preprocesate din OWID.
+Pe lângă acestea, schema include și 9 coloane epidemiologice opționale
+(\texttt{deaths}, \texttt{new\_cases}, \texttt{new\_deaths},
+\texttt{hospitalized}, \texttt{icu}, \texttt{vaccinated}, \texttt{tested},
+\texttt{stringency\_index}, \texttt{reproduction\_rate}), populate atunci
+când sursa de date le oferă; aceste metrici nu sunt folosite de runner-ele
+built-in, dar sunt expuse integral scripturilor user.
 Tabelul \texttt{simulation\_runs} reprezintă job-ul de simulare și include
 studiul, setul de date, tipul modelului (\texttt{sidarthe}, \texttt{sir},
-\texttt{sis}, \texttt{seir} sau \texttt{sirs}),
+\texttt{sis}, \texttt{seir}, \texttt{sirs}, \texttt{lstm} sau \texttt{script}),
 parametrii în format JSONB, populația, orizontul temporal, limbajul ales,
 statusul execuției (\texttt{pending}, \texttt{running}, \texttt{completed},
 \texttt{failed}), câmpul \texttt{error\_message} și timestampurile de creare și
@@ -495,6 +502,17 @@ minimă prezentată în \cref{tab:csv_schema}.
 \texttt{population}  & \texttt{BIGINT}  & Populația totală (obligatoriu) \\
 \texttt{recovered}   & \texttt{BIGINT}  & Cazuri recuperate (opțional) \\
 \texttt{susceptible} & \texttt{BIGINT}  & Populația susceptibilă estimată (opțional) \\
+\midrule
+\multicolumn{3}{l}{\emph{Metrici epidemiologice extinse (toate opționale, propagate scripturilor user)}} \\
+\texttt{deaths}             & \texttt{BIGINT}  & Decese cumulate \\
+\texttt{new\_cases}         & \texttt{BIGINT}  & Cazuri noi în intervalul de raportare \\
+\texttt{new\_deaths}        & \texttt{BIGINT}  & Decese noi în intervalul de raportare \\
+\texttt{hospitalized}       & \texttt{BIGINT}  & Pacienți spitalizați la moment \\
+\texttt{icu}                & \texttt{BIGINT}  & Pacienți în terapie intensivă la moment \\
+\texttt{vaccinated}         & \texttt{BIGINT}  & Persoane vaccinate (cel puțin o doză), cumulat \\
+\texttt{tested}             & \texttt{BIGINT}  & Teste cumulate \\
+\texttt{stringency\_index}  & \texttt{REAL}    & Oxford Stringency Index, $0\ldots 100$ \\
+\texttt{reproduction\_rate} & \texttt{REAL}    & $R_t$ observat, când e disponibil \\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -510,6 +528,19 @@ regiune este nevid. Validarea formală față de un registru ISO și analiza
 golurilor calendaristice nu sunt incluse în implementarea curentă a API-ului;
 ele sunt tratate în etapa de preprocesare pentru seturile de date OWID incluse în
 repository.
+
+Metricile epidemiologice extinse (decese, spitalizări, ATI, vaccinări, teste,
+indicele Oxford de stringență, $R_t$ observat) sunt opționale la nivel de schemă
+și de upload: dacă header-ul CSV include coloana corespunzătoare iar valoarea
+este nevidă, parser-ul Go o convertește la tipul potrivit ($\texttt{BIGINT}$
+sau $\texttt{REAL}$) și o trece prin \texttt{COPY FROM} în
+\texttt{epidemiological\_records}; altfel, câmpul rămâne $\texttt{NULL}$.
+Runner-ele built-in (SIR/SIDARTHE/LSTM) ignoră aceste coloane --- ele
+consumă doar prima înregistrare pentru condiția inițială ---, însă executorul
+de scripturi (\cref{ch:aplicatie}, \cref{sec:script_editor}) le expune
+integral funcției \texttt{main} prin lista \texttt{records}, ceea ce permite
+cercetătorului să scrie modele mai bogate (calibrări care folosesc decesele,
+ajustări la $R_t$ observat) fără modificări de schemă sau de cod în API.
 
 \subsection{Strategia de partiționare și replicare în YugabyteDB}
 \label{subsec:strategie_partitionare}
@@ -532,14 +563,24 @@ automat pe măsura creșterii datelor.
 
 \begin{lstlisting}[language=SQL, caption={DDL de producție al tabelului \texttt{epidemiological\_records} cu range sharding presplit pe cheie temporală.}]
 CREATE TABLE epidemiological_records (
-    id            UUID DEFAULT gen_random_uuid(),
-    dataset_id    UUID NOT NULL REFERENCES datasets(id),
-    recorded_date DATE NOT NULL,
-    region_code   VARCHAR(10) NOT NULL,
-    susceptible   BIGINT,
-    infected      BIGINT NOT NULL,
-    recovered     BIGINT,
-    population    BIGINT NOT NULL,
+    id                UUID DEFAULT gen_random_uuid(),
+    dataset_id        UUID NOT NULL REFERENCES datasets(id),
+    recorded_date     DATE NOT NULL,
+    region_code       VARCHAR(10) NOT NULL,
+    susceptible       BIGINT,
+    infected          BIGINT NOT NULL,
+    recovered         BIGINT,
+    population        BIGINT NOT NULL,
+    -- Metrici epi extinse (opt; populate cand sursa le ofera).
+    deaths            BIGINT,
+    new_cases         BIGINT,
+    new_deaths        BIGINT,
+    hospitalized      BIGINT,
+    icu               BIGINT,
+    vaccinated        BIGINT,
+    tested            BIGINT,
+    stringency_index  REAL,
+    reproduction_rate REAL,
     PRIMARY KEY (dataset_id, recorded_date, id)
 ) SPLIT AT VALUES (
     ('00000000-0000-0000-0000-000000000000', '2020-01-01'),

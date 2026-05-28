@@ -62,7 +62,19 @@ SIDARTHE & $S_0$, $I_0$, $D_0=A_0=R_0=T_0=0$, $H_0$, $E_0=0$ & model clinic cu d
 
 Pentru ca benchmark-urile să fie evaluate pe regimuri dinamice variate, sistemul
 suportă trei familii de seturi de date care produc toate aceeași schemă CSV
-(\texttt{date, region, infected, population, recovered, susceptible}).
+de bază (\texttt{date, region, infected, population, recovered, susceptible}).
+La aceasta se adaugă, opțional, nouă coloane epidemiologice extinse propagate
+de \texttt{preprocess\_owid.py} direct din sursa OWID atunci când există în
+fișierul brut: \texttt{deaths}, \texttt{new\_cases}, \texttt{new\_deaths},
+\texttt{hospitalized}, \texttt{icu}, \texttt{vaccinated}, \texttt{tested},
+\texttt{stringency\_index} (Oxford COVID-19 Government Response Tracker) și
+\texttt{reproduction\_rate} ($R_t$ observat). Aceste coloane sunt ignorate de
+runner-ele built-in (care nu au nevoie decât de prima înregistrare pentru
+condiția inițială), dar sunt expuse integral scripturilor scrise în editorul
+din UI prin lista \texttt{records}, ceea ce permite scenarii mai bogate de
+analiză (calibrări care fitează simultan cazurile și decesele, factoring în
+$R_t$ observat, ajustări la intervențiile non-farmaceutice prin Stringency
+Index) fără modificări de schemă sau de cod în API.
 
 \textbf{OWID COVID-19 extins.} Lista de țări procesate prin
 \texttt{preprocess\_owid.py} a fost extinsă de la nucleul european la 64 de țări

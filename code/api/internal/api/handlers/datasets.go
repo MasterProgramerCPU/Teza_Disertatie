@@ -210,6 +210,62 @@ func parseCSV(rd io.Reader) ([]models.EpidemiologicalRecord, error) {
 			rec.Susceptible = &v
 		}
 
+		// Coloane epi extinse (toate opt). Pentru fiecare, daca header-ul exista
+		// si valoarea e non-vida, o parsam. Tipurile int vs float sunt explicite.
+		optInt := func(col string) (*int64, error) {
+			i, ok := idx[col]
+			if !ok || i >= len(row) || row[i] == "" {
+				return nil, nil
+			}
+			v, err := parseInt64(row[i])
+			if err != nil {
+				return nil, fmt.Errorf("line %d: %s: %w", line, col, err)
+			}
+			return &v, nil
+		}
+		optFloat := func(col string) (*float64, error) {
+			i, ok := idx[col]
+			if !ok || i >= len(row) || row[i] == "" {
+				return nil, nil
+			}
+			v, err := strconv.ParseFloat(strings.TrimSpace(row[i]), 64)
+			if err != nil {
+				return nil, fmt.Errorf("line %d: %s: %w", line, col, err)
+			}
+			return &v, nil
+		}
+		for _, p := range []struct {
+			col string
+			dst **int64
+		}{
+			{"deaths", &rec.Deaths},
+			{"new_cases", &rec.NewCases},
+			{"new_deaths", &rec.NewDeaths},
+			{"hospitalized", &rec.Hospitalized},
+			{"icu", &rec.ICU},
+			{"vaccinated", &rec.Vaccinated},
+			{"tested", &rec.Tested},
+		} {
+			v, err := optInt(p.col)
+			if err != nil {
+				return nil, err
+			}
+			*p.dst = v
+		}
+		for _, p := range []struct {
+			col string
+			dst **float64
+		}{
+			{"stringency_index", &rec.StringencyIndex},
+			{"reproduction_rate", &rec.ReproductionRate},
+		} {
+			v, err := optFloat(p.col)
+			if err != nil {
+				return nil, err
+			}
+			*p.dst = v
+		}
+
 		var rec_ int64
 		if rec.Recovered != nil {
 			rec_ = *rec.Recovered

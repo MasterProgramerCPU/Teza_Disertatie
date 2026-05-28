@@ -41,11 +41,24 @@ func (r *DatasetRepository) Create(ctx context.Context, studyID, userID uuid.UUI
 	if len(records) > 0 {
 		rows := make([][]any, len(records))
 		for i, rec := range records {
-			rows[i] = []any{d.ID, rec.RecordedDate, rec.RegionCode, rec.Susceptible, rec.Infected, rec.Recovered, rec.Population}
+			rows[i] = []any{
+				d.ID, rec.RecordedDate, rec.RegionCode,
+				rec.Susceptible, rec.Infected, rec.Recovered, rec.Population,
+				// coloane epi extinse (toate optionale, NULL daca *int64/*float64 e nil)
+				rec.Deaths, rec.NewCases, rec.NewDeaths,
+				rec.Hospitalized, rec.ICU, rec.Vaccinated, rec.Tested,
+				rec.StringencyIndex, rec.ReproductionRate,
+			}
 		}
 		_, err = tx.CopyFrom(ctx,
 			pgx.Identifier{"epidemiological_records"},
-			[]string{"dataset_id", "recorded_date", "region_code", "susceptible", "infected", "recovered", "population"},
+			[]string{
+				"dataset_id", "recorded_date", "region_code",
+				"susceptible", "infected", "recovered", "population",
+				"deaths", "new_cases", "new_deaths",
+				"hospitalized", "icu", "vaccinated", "tested",
+				"stringency_index", "reproduction_rate",
+			},
 			pgx.CopyFromRows(rows),
 		)
 		if err != nil {

@@ -66,15 +66,30 @@ type MembershipForUser struct {
 	Role  StudyRole `json:"role"`
 }
 
+// EpidemiologicalRecord acopera atat metricile SIR-centrice de baza
+// (susceptible/infected/recovered/population), cat si metrici extinse folosite
+// frecvent in literatura (decese, spitalizari, ATI, vaccinari, teste, indici
+// de raspuns sanitar). Toate metricile extinse sunt opt si nu sunt
+// obligatorii la upload — runner-ii built-in le ignora, iar scripturile
+// definite de utilizator au acces la oricare prin records[i] in main().
 type EpidemiologicalRecord struct {
-	ID           uuid.UUID `json:"id"`
-	DatasetID    uuid.UUID `json:"dataset_id"`
-	RecordedDate time.Time `json:"recorded_date"`
-	RegionCode   string    `json:"region_code"`
-	Susceptible  *int64    `json:"susceptible,omitempty"`
-	Infected     int64     `json:"infected"`
-	Recovered    *int64    `json:"recovered,omitempty"`
-	Population   int64     `json:"population"`
+	ID               uuid.UUID `json:"id"`
+	DatasetID        uuid.UUID `json:"dataset_id"`
+	RecordedDate     time.Time `json:"recorded_date"`
+	RegionCode       string    `json:"region_code"`
+	Susceptible      *int64    `json:"susceptible,omitempty"`
+	Infected         int64     `json:"infected"`
+	Recovered        *int64    `json:"recovered,omitempty"`
+	Population       int64     `json:"population"`
+	Deaths           *int64    `json:"deaths,omitempty"`
+	NewCases         *int64    `json:"new_cases,omitempty"`
+	NewDeaths        *int64    `json:"new_deaths,omitempty"`
+	Hospitalized     *int64    `json:"hospitalized,omitempty"`
+	ICU              *int64    `json:"icu,omitempty"`
+	Vaccinated       *int64    `json:"vaccinated,omitempty"`
+	Tested           *int64    `json:"tested,omitempty"`
+	StringencyIndex  *float64  `json:"stringency_index,omitempty"`
+	ReproductionRate *float64  `json:"reproduction_rate,omitempty"`
 }
 
 type SimulationStatus string

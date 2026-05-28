@@ -124,11 +124,24 @@ COUNTRIES: tuple[Country, ...] = (
 
 
 def load_country(raw_path, iso3: str) -> pd.DataFrame:
-    """Incarca o tara din CSV-ul OWID si o aduce la schema comuna de intrare."""
-    cols = ["iso_code", "date", "new_cases", "total_cases", "population"]
+    """Incarca o tara din CSV-ul OWID si o aduce la schema comuna de intrare.
+
+    Pe langa coloanele SIR-centrice (new_cases, total_cases, population),
+    incarca si metricile extinse (decese, spitalizari, ATI, vaccinari, teste,
+    indici de raspuns) cand exista in CSV — propagate de derive_compartments
+    catre output.
+    """
+    cols = [
+        "iso_code", "date", "new_cases", "total_cases", "population",
+        # Coloane extinse
+        "total_deaths", "new_deaths",
+        "hosp_patients", "icu_patients",
+        "people_vaccinated", "total_tests",
+        "stringency_index", "reproduction_rate",
+    ]
     df = pd.read_csv(
         raw_path,
-        usecols=cols,
+        usecols=lambda c: c in cols,  # accepta lipsa unor coloane (CSV pot diferi)
         parse_dates=["date"],
         dtype={"iso_code": "string"},
     )
