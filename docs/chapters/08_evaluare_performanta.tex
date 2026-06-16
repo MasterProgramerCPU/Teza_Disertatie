@@ -289,7 +289,7 @@ compartimentale. Costul ODE depinde de orizontul de integrare $t_{\max}$
 
 Tabelul~\ref{tab:bench_lstm} arată rezultatele pe setul România OWID
 (1\,440 zile, $80\%$ antrenare $/$ $20\%$ test cronologic) cu parametrii
-impliciti din API. Mediana wall-time-ului este $\sim$$290$~s, aproape identică
+impliciți din API. Mediana wall-time-ului este $\sim$$290$~s, aproape identică
 între $t_{\max}=30$ și $t_{\max}=90$, ceea ce confirmă empiric că forecast-ul
 nu contribuie semnificativ. Utilizarea CPU este peste $98\%$ din wall-time
 (LSTM hand-rolled în NumPy fără paralelism), iar memoria peak este de doar
@@ -316,11 +316,11 @@ fără persistare în baza de date --- folosind exact aceleași tolerante numeri
 ($\texttt{RK45}$, $\mathrm{rtol}=10^{-8}$, $\mathrm{atol}=10^{-10}$), aceiași
 parametri și aceleași condiții inițiale ca rulările prin aplicație. Așa cum
 este indicat explicit în secțiunea~\ref{subsec:protocoale}, această
-masurare se face în afara aplicației pentru a evita amestecarea variațiilor
-de hardware cu deciziile de ortografie ale containerului și ale bazei de
+măsurare se face în afara aplicației pentru a evita amestecarea variațiilor
+de hardware cu deciziile de orchestrare ale containerului și ale bazei de
 date distribuite.
 
-Tabelul~\ref{tab:hardware_comparison} compară median wall-time pentru SIR și
+Tabelul~\ref{tab:hardware_comparison} compară mediana wall-time pentru SIR și
 SIDARTHE la trei orizonturi temporale, pe workload-ul sintetic non-trivial
 (setul \texttt{synthetic\_multiwave}, $I_0 = 100$ pentru a forța solverul să
 parcurgă efectiv pași de integrare). Datele de cluster sunt re-rulate în

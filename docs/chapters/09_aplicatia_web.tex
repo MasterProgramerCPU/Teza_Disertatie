@@ -185,7 +185,7 @@ script, executorul partajat absoarbe toate cererile, iar permisiunea este
 deschisă oricărui cercetător cu drept de scriere de simulări. Runner-ele cu
 imagine container (capitolul~\ref{ch:arhitectura},
 secțiunea~\ref{sec:plugin_runners}) sunt pentru \emph{algoritmi
-operationali}: imagine construită extern, Deployment dedicat în cluster,
+operaționali}: imagine construită extern, Deployment dedicat în cluster,
 acces de înregistrare restrâns la super-admin.
 
 \subsection{Izolare între utilizatori și securitate}
@@ -208,6 +208,8 @@ Validarea formatului parametrilor (JSON) și a structurii rezultatului
 (\texttt{list[\{t, compartments\}]}) se face server-side, astfel încât un
 script rău formatat este respins cu un mesaj clar înainte de a polua tabelele
 de rezultate.
+
+\section{Frontend principal Vue.js}
 \label{sec:frontend_vue}
 
 Frontend-ul principal este o aplicație Vue 3 construită cu Vite și TypeScript.

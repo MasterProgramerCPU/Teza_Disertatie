@@ -303,8 +303,8 @@ capitolul~\ref{ch:implementare}:
     și rutează jobul către coada Redis dedicată \texttt{epimodel:jobs:lstm};
     \item \texttt{runner-lstm} consumă jobul, citește seria \texttt{infected}
     din setul de date și marchează rularea ca \texttt{running};
-    \item rețeaua este antrenată prin BPTT cu Adam pe porțiunea de
-    antrenare, conform fluxului descris mai sus;
+    \item rețeaua este antrenată prin BPTT cu coborâre pe gradient stochastic
+    pe porțiunea de antrenare, conform fluxului descris mai sus;
     \item predicțiile și prognoza sunt persistate în \texttt{simulation\_results}
     ca obiecte JSONB, folosind cheile \texttt{observed}, \texttt{fitted} și
     \texttt{predicted}, iar metricile de calcul (timp, CPU, memorie) sunt scrise
@@ -346,7 +346,7 @@ toate cele trei repere triviale au erori sub cea a rețelei pe MAE.
 
 Explicația nu este un defect de antrenare, ci o proprietate a datelor:
 $85\%$ din zilele ferestrei de test sunt identice cu ziua precedentă, deoarece
-seria OWID are o cadență de raportare săptamânală (actualizări la interval mediu
+seria OWID are o cadență de raportare săptămânală (actualizări la interval mediu
 de $7{,}0$ zile, cu valori constante între ele). Pe o astfel de serie,
 persistența are eroare \emph{exact zero} în $85\%$ din zile, iar un model care
 prezice o traiectorie zilnică netedă este penalizat tocmai pe zilele plate. Acest

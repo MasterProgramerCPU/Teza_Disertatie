@@ -155,11 +155,12 @@
 \contentsline {subsection}{\numberline {9.5.2}Contractul scriptului}{83}{subsection.9.5.2}%
 \contentsline {subsection}{\numberline {9.5.3}Execuție și separare de runner-e persistente}{83}{subsection.9.5.3}%
 \contentsline {subsection}{\numberline {9.5.4}Izolare între utilizatori și securitate}{83}{subsection.9.5.4}%
-\contentsline {section}{\numberline {9.6}Consola super-admin}{84}{section.9.6}%
-\contentsline {section}{\numberline {9.7}Considerații de securitate}{85}{section.9.7}%
-\contentsline {subsection}{\numberline {9.7.1}Mecanisme implementate}{85}{subsection.9.7.1}%
-\contentsline {subsection}{\numberline {9.7.2}Limitări cunoscute și remedieri}{86}{subsection.9.7.2}%
-\contentsline {section}{\numberline {9.8}Validare funcțională}{86}{section.9.8}%
+\contentsline {section}{\numberline {9.6}Frontend principal Vue.js}{84}{section.9.6}%
+\contentsline {section}{\numberline {9.7}Consola super-admin}{84}{section.9.7}%
+\contentsline {section}{\numberline {9.8}Considerații de securitate}{85}{section.9.8}%
+\contentsline {subsection}{\numberline {9.8.1}Mecanisme implementate}{85}{subsection.9.8.1}%
+\contentsline {subsection}{\numberline {9.8.2}Limitări cunoscute și remedieri}{86}{subsection.9.8.2}%
+\contentsline {section}{\numberline {9.9}Validare funcțională}{86}{section.9.9}%
 \contentsline {chapter}{\numberline {10}Concluzii și Direcții de Dezvoltare Viitoare}{87}{chapter.10}%
 \contentsline {section}{\numberline {10.1}Sinteza lucrării}{87}{section.10.1}%
 \contentsline {subsection}{\numberline {10.1.1}Răspuns la obiectivele propuse}{87}{subsection.10.1.1}%

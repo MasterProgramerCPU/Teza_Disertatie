@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  16 JUN 2026 13:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  16 JUN 2026 14:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -7951,7 +7951,7 @@ Capitolul 9.
 [82]
 
 [83]
-Underfull \hbox (badness 10000) in paragraph at lines 270--280
+Underfull \hbox (badness 10000) in paragraph at lines 272--282
 []\T1/lmr/m/n/12 (+20) Pentru de-ta-liul unui stu-diu, \T1/lmtt/m/n/12 StudyDet
 ailPage \T1/lmr/m/n/12 (+20) re-u-ti-li-zeaz  en-d-po-in-tu-rile
  []
@@ -7959,7 +7959,7 @@ ailPage \T1/lmr/m/n/12 (+20) re-u-ti-li-zeaz  en-d-po-in-tu-rile
 
 
 [84]
-Underfull \hbox (badness 10000) in paragraph at lines 281--288
+Underfull \hbox (badness 10000) in paragraph at lines 283--290
 []\T1/lmr/m/n/12 (+20) Pagina \T1/lmtt/m/n/12 /activity \T1/lmr/m/n/12 (+20) co
 n-sum  \T1/lmtt/m/n/12 /api/admin/recent-simulations []\T1/lmr/m/n/12 (+20) i \
 T1/lmtt/m/n/12 /api/admin/
@@ -8319,13 +8319,13 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 018952FEF989033391C04043693AF4B4;38395.
+(rerunfilecheck)             Checksum: D074B9E225D372A5739ED420852D1100;38581.
  ) 
 Here is how much of TeX's memory you used:
- 51265 strings out of 473190
- 1113474 string characters out of 5704334
- 3133919 words of memory out of 5000000
- 69526 multiletter control sequences out of 15000+600000
+ 51267 strings out of 473190
+ 1113498 string characters out of 5704334
+ 3133889 words of memory out of 5000000
+ 69527 multiletter control sequences out of 15000+600000
  758358 words of font info for 405 fonts, out of 8000000 for 9000
  1152 hyphenation exceptions out of 8191
  84i,19n,97p,1001b,3083s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -8367,10 +8367,10 @@ ic/lm/lmtt8.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/te
 xlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
 b>
-Output written on main.pdf (153 pages, 1362476 bytes).
+Output written on main.pdf (153 pages, 1362567 bytes).
 PDF statistics:
- 5919 PDF objects out of 6186 (max. 8388607)
- 5632 compressed objects within 57 object streams
- 3505 named destinations out of 3580 (max. 500000)
- 105371 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 5924 PDF objects out of 6186 (max. 8388607)
+ 5637 compressed objects within 57 object streams
+ 3506 named destinations out of 3580 (max. 500000)
+ 105379 words of extra memory for PDF output out of 106986 (max. 10000000)
 
