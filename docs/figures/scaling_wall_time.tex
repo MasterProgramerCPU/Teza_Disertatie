@@ -31,12 +31,12 @@
 
 \end{loglogaxis}
 \end{tikzpicture}
-\caption{Scalarea wall-time-ului median al solverului SIDARTHE in functie de
-orizontul $t_{\max}$, pentru cele trei limbaje. R prezinta o crestere
-aproape liniara cu $t_{\max}$ ($\sim$$130\times$ intre 90 si 10\,000 de pasi),
-dominata de inserarile rand-cu-rand in baza de date prin
-\texttt{dbExecute()}; integrarea propriu-zisa cu \texttt{deSolve::ode} este
-sub-secundara. Python ramane stabil ($4$--$8$~ms), iar Julia este mai rapid
-in regimul amortizat dupa compilarea JIT, atingand $6$~ms la $10\,000$ de pasi.}
+\caption[Scalare wall-time vs $t_{\max}$]{Scalarea wall-time-ului median al solverului SIDARTHE în funcție de
+orizontul $t_{\max}$, pentru cele trei limbaje. R prezintă o creștere
+aproape liniara cu $t_{\max}$ ($\sim$$130\times$ între 90 și 10\,000 de pași),
+dominată de inserările rând-cu-rând în baza de date prin
+\texttt{dbExecute()}; integrarea propriu-zisă cu \texttt{deSolve::ode} este
+sub-secundara. Python rămâne stabil ($4$--$8$~ms), iar Julia este mai rapid
+în regimul amortizat după compilarea JIT, atingând $6$~ms la $10\,000$ de pași.}
 \label{fig:scaling_wall_time}
 \end{figure}

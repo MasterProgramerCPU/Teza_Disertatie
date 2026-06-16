@@ -1,6 +1,6 @@
 \begin{table*}[!htbp]
 \centering
-\caption{Comparatia timpilor de executie pentru solverul Python (\texttt{scipy.solve\_ivp} RK45) pe doua profile hardware distincte: cluster \texttt{kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner in container, wall-time include si scrierea rezultatelor in YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fara container, fara DB). Workload non-trivial: set sintetic \texttt{multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph{speedup M1} este raportul medianelor; valori $>1$ inseamna M1 mai rapid.}
+\caption[Comparare hardware M1 vs cluster]{Comparația timpilor de execuție pentru solverul Python (\texttt{scipy.solve\_ivp} RK45) pe două profile hardware distincte: cluster \texttt{kube-4kdhb} (worker amd64, OpenStack VM, 4 vCPU / 8 GiB, runner în container, wall-time include și scrierea rezultatelor în YugabyteDB) vs M1 Pro arm64 nativ (script standalone, fără container, fără DB). Workload non-trivial: set sintetic \texttt{multiwave} cu $I_0 = 100$, $N = 5 \cdot 10^7$. Coloana \emph{speedup M1} este raportul medianelor; valori $>1$ înseamnă M1 mai rapid.}
 \label{tab:hardware_comparison}
 \begin{tabularx}{\textwidth}{l r r r r r r}
 \toprule

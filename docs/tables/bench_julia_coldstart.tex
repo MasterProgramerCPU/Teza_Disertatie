@@ -1,8 +1,9 @@
 \begin{table}[!htbp]
 \centering
-\caption{Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetarile ulterioare ruleaza din cod cache-uit. Valori la $t_{\max}=90$.}
+\caption[Cost cold-start JIT Julia]{Costul de pornire JIT pentru runner-ul Julia: prima rulare include compilarea, repetările ulterioare rulează din cod cache-uit. Valori la $t_{\max}=90$.}
 \label{tab:bench_julia_coldstart}
-\begin{tabularx}{\columnwidth}{l r r r}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{l r r r}
 \toprule
 \textbf{Model} & \textbf{Rep 1 (ms)} & \textbf{Mediana rep 2-3 (ms)} & \textbf{Cost JIT (ms)} \\
 \midrule
@@ -12,5 +13,6 @@
 \texttt{sirs} & 948 & 0 & 948 \\
 \texttt{sidarthe} & 2 & 1 & 1 \\
 \bottomrule
-\end{tabularx}
+\end{tabular}%
+}
 \end{table}

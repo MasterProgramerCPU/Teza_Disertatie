@@ -1,15 +1,15 @@
 \begin{table*}[!htbp]
 \centering
-\caption{Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). In toate cele patru cazuri $\gamma$ este fixat la valoarea de literatura $1/14$ zile, iar $\beta$ este optimizat prin Nelder-Mead. Valorile $\hat\beta$ si $\hat{\mathcal{R}}_0$ sunt comparabile direct intre tari, dar erorile absolute reflecta scarile diferite de populatie (column N) si de I$_0$.}
+\caption[Calibrare SIR multi-regiune]{Calibrare SIR cross-regiune pe valul 1 al pandemiei COVID-19 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). În toate cele patru cazuri $\gamma$ este fixat la valoarea de literatură $1/14$ zile, iar $\beta$ este optimizat prin Nelder-Mead. Valorile $\hat\beta$ și $\hat{\mathcal{R}}_0$ sunt comparabile direct între țări, dar erorile absolute reflectă scările diferite de populație (coloana N) și de I$_0$.}
 \label{tab:calibration_multiregion}
 \begin{tabularx}{\textwidth}{l r r r r X r r}
 \toprule
 \textbf{Tara} & \textbf{N (mil.)} & \textbf{$I_0$} & \textbf{$\hat\beta$} & \textbf{$\hat{\mathcal{R}}_0$} & \textbf{Observatii} & \textbf{MAE train} & \textbf{MAE test} \\
 \midrule
-\textbf{Romania} & $19.7$ & $135$ & $0.1039$ & $1.45$ & infectie inca incipienta la inceputul ferestrei & $1612$ & $16727$ \\
-\textbf{Italia} & $59.0$ & $20029$ & $0.0673$ & $0.94$ & deja in plin val 1 ($I_0 \sim 20\,000$) & $16243$ & $5318$ \\
+\textbf{România} & $19.7$ & $135$ & $0.1039$ & $1.45$ & infectie inca incipienta la inceputul ferestrei & $1612$ & $16727$ \\
+\textbf{Italia} & $59.0$ & $20029$ & $0.0673$ & $0.94$ & deja în plin val 1 ($I_0 \sim 20\,000$) & $16243$ & $5318$ \\
 \textbf{Germania} & $83.4$ & $7346$ & $0.0750$ & $1.05$ & raspuns puternic la masuri & $14118$ & $3616$ \\
-\textbf{Spania} & $47.6$ & $13026$ & $0.0759$ & $1.06$ & val 2 incepe sa creasca la finalul ferestrei & $22214$ & $77036$ \\
+\textbf{Spania} & $47.6$ & $13026$ & $0.0759$ & $1.06$ & val 2 începe sa crească la finalul ferestrei & $22214$ & $77036$ \\
 \bottomrule
 \end{tabularx}
 \end{table*}

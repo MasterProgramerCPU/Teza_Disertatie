@@ -1,20 +1,20 @@
 \begin{table*}[!htbp]
 \centering
-\caption{Costul software al calibrarii SIR (Romania, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber si constrans). Coloana \emph{in-process} masoara direct costul procedurii din \texttt{calibrate.py}; coloana \emph{naiv (ca job-uri)} proiecteaza costul daca fiecare simulare candidata ar fi un job separat prin aplicatie, folosind latenta end-to-end masurata a unui job SIR real ($1047$~ms/job); coloana \emph{recomandat} corespunde calibrarii intr-un singur job, cu o singura simulare finala scrisa in baza de date. Numarul de simulari candidate este numarul real de evaluari ale functiei obiectiv.}
+\caption[Cost software calibrare SIR]{Costul software al calibrării SIR (România, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber și constrâns). Coloana \emph{în-process} măsoară direct costul procedurii din \texttt{calibrate.py}; coloana \emph{naiv (ca job-uri)} proiectează costul dacă fiecare simulare candidată ar fi un job separat prin aplicație, folosind latența end-to-end măsurată a unui job SIR real ($1047$~ms/job); coloana \emph{recomandat} corespunde calibrării într-un singur job, cu o singură simulare finală scrisă în baza de date. Numărul de simulări candidate este numărul real de evaluări ale funcției obiectiv.}
 \label{tab:calibration_cost}
 \small
 \begin{tabularx}{\textwidth}{X r r r}
 \toprule
-\textbf{Marime} & \textbf{In-process} & \textbf{Naiv (ca job-uri)} & \textbf{Recomandat} \\
+\textbf{Marime} & \textbf{În-process} & \textbf{Naiv (ca job-uri)} & \textbf{Recomandat} \\
 \midrule
-Simulari candidate & 1377 & 1377 & 1377 \\
-Job-uri prin aplicatie & 1 & 1377 & 1 \\
-Randuri scrise in DB & 0 & 213435 & 155 \\
+Simulări candidate & 1377 & 1377 & 1377 \\
+Job-uri prin aplicație & 1 & 1377 & 1 \\
+Randuri scrise în DB & 0 & 213435 & 155 \\
 \midrule
 Timp total wall (s) & 17.24 & 1441.8\textsuperscript{*} & 17.24 \\
 Timp CPU (s) & 17.23 & --- & 17.23 \\
 Memorie de varf (MB) & 0.7 & --- & 0.7 \\
 \bottomrule
 \end{tabularx}
-\\[2pt]\footnotesize\textsuperscript{*}~Proiectat: $1377 \times 1047$~ms${}=1442$~s; de $\sim$84$\times$ mai scump decat calibrarea in-process, fara castig de acuratete --- overhead-ul de coada si persistare ar fi platit pentru fiecare integrare candidata.
+\\[2pt]\footnotesize\textsuperscript{*}~Proiectat: $1377 \times 1047$~ms${}=1442$~s; de $\sim$84$\times$ mai scump decât calibrarea în-process, fără castig de acuratete --- overhead-ul de coada și persistare ar fi platit pentru fiecare integrare candidată.
 \end{table*}

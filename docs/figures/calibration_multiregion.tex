@@ -4,12 +4,12 @@
 \begin{groupplot}[
     group style={
         group size=2 by 2,
-        horizontal sep=1.6cm,
-        vertical sep=1.6cm,
+        horizontal sep=1.7cm,
+        vertical sep=2.4cm,
         ylabels at=edge left,
     },
-    width=0.46\textwidth,
-    height=4.8cm,
+    width=0.45\textwidth,
+    height=4.4cm,
     xlabel={Zi (de la $15$ martie 2020)},
     ylabel={Cazuri active},
     xmin=0, xmax=185,
@@ -17,13 +17,13 @@
     grid=both, grid style={line width=.1pt, draw=gray!20},
     tick label style={font=\scriptsize},
     label style={font=\scriptsize},
-    title style={font=\small\bfseries, yshift=-1.5ex},
+    title style={font=\small\bfseries, yshift=0.4ex},
     legend style={font=\tiny, fill=white, draw=gray!50, at={(0.02, 0.98)}, anchor=north west},
     legend cell align={left},
     every axis plot/.append style={line width=0.6pt},
 ]
-% --- Romania ---
-\nextgroupplot[title={Romania ($N=19{,}7$ mil., $\hat{\mathcal{R}}_0=1{,}45$)}, ymax=22000]
+% --- România ---
+\nextgroupplot[title={România ($N=19{,}7$ mil., $\hat{\mathcal{R}}_0=1{,}45$)}, ymax=22000]
 \draw[dashed, gray!70] (axis cs:154, 0) -- (axis cs:154, 22000);
 \addplot[black] table[col sep=comma, x=day, y=obs_romania]
     {data/calibration_multiregion.csv}; \addlegendentry{observat}
@@ -64,14 +64,14 @@
 
 \end{groupplot}
 \end{tikzpicture}
-\caption{Calibrare SIR cu $\gamma = 1/14$ pe valul 1 al pandemiei COVID-19,
-in patru tari europene cu scari de populatie diferite (atenție la scarile $y$
-distincte). Linia neagra este seria observata, linia rosie continua este fitul
-pe fereastra de antrenare ($15$ mar. -- $15$ aug. 2020), iar linia rosie
-intrerupta este prognoza pe luna urmatoare. Linia verticala marcheaza
-granita antrenare/test. Modelul reproduce calitativ valul 1 in toate cele
-patru cazuri; divergenta pe test este vizibila in Spania, unde valul 2 incepe
-sa creasca rapid in septembrie, evidentiind limitarea structurala a SIR cu
-coeficienti constanti.}
+\caption[Calibrare SIR pe 4 țări europene]{Calibrare SIR cu $\gamma = 1/14$
+pe valul 1 al pandemiei COVID-19, în patru țări europene cu scări de
+populație diferite (atenție la scările $y$ distincte). Linia neagră este
+seria observată, linia roșie continuă este fitul pe fereastra de antrenare
+($15$ mar. -- $15$ aug. 2020), iar linia roșie întreruptă este prognoza pe
+luna următoare. Linia verticală marchează granița antrenare/test. Modelul
+reproduce calitativ valul 1 în toate cele patru cazuri; divergența pe test
+este vizibilă în Spania, unde valul 2 începe sa crească rapid în septembrie,
+evidențiind limitarea structurală a SIR cu coeficienți constanți.}
 \label{fig:calibration_multiregion}
 \end{figure*}

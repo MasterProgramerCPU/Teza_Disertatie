@@ -17,16 +17,16 @@ nu le modelează explicit: întârzieri de raportare, efecte de weekend, ajustă
 administrative ale datelor și schimbări bruște de comportament. Aceste tipare
 apar ca zgomot structurat peste dinamica de transmitere.
 
-Din acest motiv, sistemul include o componentă bazată pe o rețea LSTM
+De aceea, sistemul include o componentă bazată pe o rețea LSTM
 (\emph{Long Short-Term Memory}), tratată ca instrument de predicție statistică
 pe serii temporale. Ea nu înlocuiește modelele SIR, SIS, SEIR, SIRS sau
-SIDARTHE, ci adaugă o linie de comparație complet empirică: în loc să presupună
+SIDARTHE; adaugă o linie de comparație complet empirică: în loc să presupună
 o structură de compartimente, învață direct dependența dintre valorile recente
 ale seriei și valoarea următoare. Capitolul descrie modelul implementat efectiv
 în runner-ul \texttt{runner-lstm}, nu o variantă idealizată. Implementarea
-curentă este \emph{univariată} --- folosește o singură serie, numărul de
-infectați activi --- și \emph{independentă} --- nu este cuplată cu un model
-compartimental. Extensiile naturale spre variante multivariate și hibride sunt
+curentă este \emph{univariată} (folosește o singură serie, numărul de
+infectați activi) și \emph{independentă} (nu este cuplată cu un model
+compartimental). Extensiile naturale spre variante multivariate și hibride sunt
 discutate separat, în secțiunea~\ref{sec:extindere_lstm}, și sunt marcate
 explicit ca neimplementate.
 
@@ -48,12 +48,12 @@ predicție pe un singur pas. Predicția pe orizont mai lung se obține
 procedeul se repetă pentru fiecare zi din orizontul cerut $h$ (parametrul
 \texttt{forecast\_horizon}, egal cu \texttt{t\_max}).
 
-Această formulare are două consecințe importante. În primul rând, ordinea
-temporală trebuie păstrată strict: o împărțire aleatoare a exemplelor ar permite
-ca informație din viitor să ajungă în antrenare, producând o evaluare optimistă
-nerealistă. În al doilea rând, normalizarea seriei trebuie estimată numai pe
-porțiunea de antrenare, pentru a nu introduce, prin medie și abatere standard,
-informație din fereastra de test. Ambele cerințe sunt tratate explicit în
+Această formulare cere două precauții. Ordinea temporală trebuie păstrată
+strict: o împărțire aleatoare a exemplelor ar permite ca informație din viitor
+să ajungă în antrenare, producând o evaluare optimistă nerealistă. Apoi,
+normalizarea seriei trebuie estimată numai pe porțiunea de antrenare, pentru a
+nu introduce, prin medie și abatere standard, informație din fereastra de
+test. Ambele cerințe sunt tratate explicit în
 secțiunile~\ref{sec:normalizare_lstm} și~\ref{sec:evaluare_lstm}.
 
 \section{Arhitectura celulei LSTM}
@@ -270,40 +270,9 @@ mae, rmse, nrmse = evaluate(series, fitted, train_end, population)
 
 În final, rețeaua produce o prognoză autoregresivă pe orizontul cerut, pornind
 de la ultima fereastră observată: fiecare predicție este reintrodusă în
-fereastră pentru pasul următor. Algoritmul~\ref{alg:lstm} sintetizează întregul
-flux, de la seria brută la metrici și prognoză.
+fereastră pentru pasul următor.
 
-\begin{algorithm}[t]
-\caption{Antrenarea și evaluarea componentei LSTM}
-\label{alg:lstm}
-\begin{lstlisting}[style=pseudocode]
-Input: seria infectatilor Y, lungime fereastra l,
-       dimensiune stare ascunsa H, rata invatare eta,
-       numar epoci E, orizont prognoza h, populatie N
-Output: predictii fitted, prognoza forecast,
-        metrici MAE, RMSE, nRMSE
-
-imparte Y cronologic: train = primele puncte,
-       test = ultima fractiune
-calculeaza media si abaterea standard pe train
-normalizeaza intreaga serie cu acesti parametri
-construieste exemple din ferestre de lungime l pe train
-initializeaza reteaua LSTM
-for fiecare epoca din 1..E do
-    for fiecare exemplu, in ordine permutata do
-        ruleaza pasul inainte si calculeaza pierderea
-        propaga gradientul prin timp (BPTT)
-        limiteaza gradientii si actualizeaza parametrii
-    end for
-end for
-fitted <- predictii o-zi-inainte pe toata seria
-MAE, RMSE, nRMSE <- eroare pe fereastra de test
-forecast <- prognoza autoregresiva pe h pasi
-return fitted, forecast, MAE, RMSE, nRMSE
-\end{lstlisting}
-\end{algorithm}
-
-Aplicarea concretă a procedurii pe seria Romania OWID (4 ani, 22 ianuarie 2020
+Aplicarea concretă a procedurii pe seria România OWID (4 ani, 22 ianuarie 2020
 -- 31 decembrie 2023) este ilustrată în Figura~\ref{fig:lstm_trajectory}.
 Predicțiile o-zi-înainte urmăresc rezonabil seria observată atât pe fereastra
 de antrenare cât și pe cea de test, dar prognoza autoregresivă dincolo de
@@ -334,8 +303,8 @@ capitolul~\ref{ch:implementare}:
     și rutează jobul către coada Redis dedicată \texttt{epimodel:jobs:lstm};
     \item \texttt{runner-lstm} consumă jobul, citește seria \texttt{infected}
     din setul de date și marchează rularea ca \texttt{running};
-    \item rețeaua este antrenată conform algoritmului~\ref{alg:lstm}, pe
-    porțiunea de antrenare;
+    \item rețeaua este antrenată prin BPTT cu Adam pe porțiunea de
+    antrenare, conform fluxului descris mai sus;
     \item predicțiile și prognoza sunt persistate în \texttt{simulation\_results}
     ca obiecte JSONB, folosind cheile \texttt{observed}, \texttt{fitted} și
     \texttt{predicted}, iar metricile de calcul (timp, CPU, memorie) sunt scrise
@@ -429,7 +398,7 @@ rețeaua să corecteze doar deviațiile statistice rămase după simularea
 compartimentală. Dacă reziduurile au un tipar stabil, modelul hibrid ar putea
 îmbunătăți predicția pe termen scurt fără a pierde interpretabilitatea.
 
-Capitolul prezintă rezultate operaționale pe Romania (Figura~\ref{fig:lstm_trajectory}),
+Capitolul prezintă rezultate operaționale pe România (Figura~\ref{fig:lstm_trajectory}),
 cost de execuție concret în Tabelul~\ref{tab:bench_lstm} din
 capitolul~\ref{ch:evaluare} și o validare predictivă față de linii de bază în
 Tabelul~\ref{tab:lstm_baselines}. Această validare, realizată pe seria României,

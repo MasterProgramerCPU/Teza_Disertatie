@@ -1,14 +1,16 @@
 \begin{table}[!htbp]
 \centering
-\caption{Memorie reziduala peak (MB), mediana pe toate combinatiile model x $t_{\max}$.}
+\caption[Memorie peak (mediană)]{Memorie reziduală peak (MB), mediana pe toate combinațiile model x $t_{\max}$.}
 \label{tab:bench_memory}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
 \begin{tabularx}{\columnwidth}{l X r}
 \toprule
-\textbf{Limbaj} & \textbf{Caracteristica runtime} & \textbf{Memorie median (MB)} \\
+\textbf{Limbaj} & \textbf{Runtime} & \textbf{Memorie (MB)} \\
 \midrule
-\texttt{r} & interpretat, pachete deSolve+RPostgres incarcate & 129 \\
-\texttt{julia} & JIT, runtime DifferentialEquations.jl & 940 \\
-\texttt{python} & interpretat, NumPy+SciPy & 95 \\
+\texttt{r} & deSolve + RPostgres & 129 \\
+\texttt{julia} & DifferentialEquations.jl (JIT) & 940 \\
+\texttt{python} & NumPy + SciPy & 95 \\
 \bottomrule
 \end{tabularx}
 \end{table}

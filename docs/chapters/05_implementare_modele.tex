@@ -145,7 +145,7 @@ validare și scriere CSV este extrasă în modulul \texttt{epi\_common.py}, part
 \label{sec:contract_simulare}
 
 Extinderea aplicației la SIDARTHE și la modelele SIR/SIS/SEIR/SIRS a impus
-generalizarea contractului intern dintre API și runnere. Versiunea inițială a
+generalizarea contractului intern dintre API și runner-e. Versiunea inițială a
 sistemului transmitea doar parametrii $\beta$ și $\gamma$ și presupunea implicit
 că rezultatul conține curbele $S$, $I$ și $R$. Versiunea curentă folosește
 câmpul \texttt{model\_type}, un obiect \texttt{parameters} și un obiect
@@ -203,7 +203,7 @@ elimină ambiguitatea dintre vindecări și decese și păstrează explicit bila
 populației în toate rezultatele.
 
 În Python, nucleul modelului este o funcție RHS compatibilă cu
-\texttt{scipy.integrate.solve\_ivp}. Ea primește vectorul de stare, dicționarul
+\texttt{scipy.\allowbreak integrate.\allowbreak solve\_ivp}. Ea primește vectorul de stare, dicționarul
 de parametri și populația totală:
 \begin{lstlisting}[language=Python, caption={Funcția RHS SIDARTHE în runner-ul Python.}]
 def sidarthe_rhs(t, y, params, n):

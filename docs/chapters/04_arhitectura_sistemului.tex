@@ -752,7 +752,7 @@ LSTM se folosește coada separată \texttt{epimodel:jobs:lstm}:
   "t_max":         365,
   "initial":       {"s": 998999.0, "i": 1001.0, "d": 0.0,
                     "a": 0.0, "r": 0.0, "t": 0.0, "h": 0.0, "e": 0.0},
-  "db_dsn":        "postgres://emedicine:***@yb-tserver-service.yugabyte.svc.cluster.local:5433/emedicine"
+  "db_dsn":        "postgres://emedicine:***@yb-tserver:5433/..."
 }
 \end{lstlisting}
 
@@ -1021,7 +1021,7 @@ set complet de manifeste --- două \texttt{StatefulSet}-uri, două Service-uri
 volumele persistente --- pe care îl putem suprascrie printr-un singur fișier
 de \texttt{values} custom adaptat resurselor disponibile:
 
-\begin{lstlisting}[language=bash, caption={Instalarea YugabyteDB cu Helm \v si fi\c{s}ierul de \texttt{values} custom.}]
+\begin{lstlisting}[language=bash, caption={Instalarea YugabyteDB cu Helm și fișierul de \texttt{values} custom.}]
 helm repo add yugabytedb https://charts.yugabyte.com
 helm install yugabyte yugabytedb/yugabyte \
   --namespace epimodel \
@@ -1049,14 +1049,14 @@ mici (\texttt{default\_memory\_limit\_to\_ram\_ratio: 0.6},
           necesar protocolului Raft;
     \item un \texttt{Service} \texttt{ClusterIP} numit
           \texttt{yb-tserver-service} pe portul 5433 (YSQL), folosit de
-          API-ul Go și de runnere pentru conexiunea la baza de date.
+          API-ul Go și de runner-e pentru conexiunea la baza de date.
 \end{itemize}
 
 \subsection{Stratul aplicativ: imagini container și registru}
 \label{subsec:deploy_aplicatii}
 
 Cele șapte componente proprii ale sistemului --- API Go, frontend-ul principal,
-frontend-ul admin, cele trei runnere compartimentale R / Python / Julia și
+frontend-ul admin, cele trei runner-e compartimentale R / Python / Julia și
 runner-ul LSTM --- sunt împachetate ca imagini
 Docker construite pentru arhitectura \texttt{linux/amd64} și publicate
 într-un registru de imagini compatibil OCI (GitHub Container Registry

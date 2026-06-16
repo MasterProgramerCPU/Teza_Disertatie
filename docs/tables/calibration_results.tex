@@ -1,14 +1,14 @@
 \begin{table*}[!htbp]
 \centering
-\caption{Calibrare SIR pe Romania, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Doua scenarii: \emph{liber} (optimizeaza ambele rate, $(\beta,\gamma)$), \emph{constrans} (foloseste $\gamma=1/14$ din durata clinica medie a infectiei COVID-19, optimizeaza doar $\beta$). Comparatia ilustreaza tensiunea dintre minimizarea pierderii si interpretabilitatea epidemiologica a parametrilor.}
+\caption[Calibrare SIR pe România]{Calibrare SIR pe România, valul 1 ($15$~martie -- $15$~august 2020 antrenare, $16$~august -- $15$~septembrie 2020 test). Două scenarii: \emph{liber} (optimizează ambele rate, $(\beta,\gamma)$), \emph{constrâns} (folosește $\gamma=1/14$ din durata clinică medie a infecției COVID-19, optimizează doar $\beta$). Comparația ilustrează tensiunea dintre minimizarea pierderii și interpretabilitatea epidemiologică a parametrilor.}
 \label{tab:calibration_results}
 \begin{tabularx}{\textwidth}{l r r X}
 \toprule
-\textbf{Marime} & \textbf{Liber} & \textbf{Constrans} & \textbf{Observatii} \\
+\textbf{Marime} & \textbf{Liber} & \textbf{Constrâns} & \textbf{Observatii} \\
 \midrule
 $\hat{\beta}$ (zi$^{-1}$) & 0.3677 & 0.1039 & rata de transmitere \\
-$\hat{\gamma}$ (zi$^{-1}$) & 0.3346 & 0.0714 (\textit{fix}) & $1/\hat{\gamma}$ liber $= 3.0$ zile (non-fizic), constrans $= 14$ zile \\
-$\hat{\mathcal{R}}_0$ & 1.10 & 1.45 & valori de literatura pentru tulpina originala $\sim 2$--$3$ \\
+$\hat{\gamma}$ (zi$^{-1}$) & 0.3346 & 0.0714 (\textit{fix}) & $1/\hat{\gamma}$ liber $= 3.0$ zile (non-fizic), constrâns $= 14$ zile \\
+$\hat{\mathcal{R}}_0$ & 1.10 & 1.45 & valori de literatură pentru tulpina originala $\sim 2$--$3$ \\
 \midrule
 MAE antrenare & 1630 & 1612 & cazuri \\
 RMSE antrenare & 2199 & 2203 & cazuri \\

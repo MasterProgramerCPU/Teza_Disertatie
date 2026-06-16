@@ -1,0 +1,271 @@
+% =============================================================================
+% Disertație — VARIANTĂ ANTI-PLAGIAT
+% Identică cu main.tex (text + bibliografie), dar FĂRĂ anexe (cod sursă).
+% Bibliografia este inclusă în această variantă.
+% =============================================================================
+\documentclass[12pt, a4paper, twoside, romanian]{teza-upb}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\usepackage{babel}
+
+% ============================================================
+% MATH
+% ============================================================
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{mathrsfs}
+
+% ============================================================
+% LAYOUT auxiliar (clasa UPB seteaza marginile si textwidth singura;
+% pastram doar microtype si raggedbottom)
+% ============================================================
+\usepackage{microtype}
+\usepackage{emptypage}
+\raggedbottom
+\singlespacing   % suprascrie \baselinestretch=1.6 din clasa UPB
+
+% Marja de flexibilitate moderata pentru break-ul liniilor pe o coloana lata.
+\tolerance=2000
+\emergencystretch=2em
+\hyphenpenalty=50
+\exhyphenpenalty=50
+\hbadness=2000
+
+% Silabisire suplimentara pentru cuvinte tehnice specifice tezei pe care
+% TeX nu le poate rupe altfel (numele de servicii Kubernetes, identifiers
+% de coloane DB, etc.). Cratima e marcata explicit \-.
+\hyphenation{
+  epi-mo-del si-mu-la-tion-runs si-mu-la-tion-re-sults
+  Yu-ga-byte-DB Ku-ber-ne-tes
+  fron-tend back-end run-ner-script run-ner-cus-tom
+  ana-li-za-rea mo-ni-to-ri-za-rea
+}
+
+% ============================================================
+% GRAPHICS & FIGURES
+% ============================================================
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, calc}
+
+% ============================================================
+% TABLES
+% ============================================================
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{enumerate}
+
+% ============================================================
+% CODE LISTINGS
+% ============================================================
+\usepackage{listings}
+\usepackage{xcolor}
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos,textsize=footnotesize]{todonotes}
+
+\definecolor{clrBackground}{RGB}{248,248,248}
+\definecolor{clrComment}{RGB}{0,128,0}
+\definecolor{clrKeyword}{RGB}{0,0,180}
+\definecolor{clrString}{RGB}{163,21,21}
+\definecolor{clrNumber}{RGB}{100,100,100}
+\definecolor{clrLineNum}{RGB}{150,150,150}
+
+\lstdefinestyle{codestyle}{
+    backgroundcolor=\color{clrBackground},
+    commentstyle=\color{clrComment}\itshape,
+    keywordstyle=\color{clrKeyword}\bfseries,
+    numberstyle=\tiny\color{clrLineNum},
+    stringstyle=\color{clrString},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=true,
+    breaklines=true,
+    breakautoindent=true,
+    breakindent=0pt,
+    columns=fullflexible,
+    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=8pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{gray!30},
+    xleftmargin=15pt,
+    xrightmargin=5pt,
+    literate=
+      {ă}{{\u{a}}}1 {Ă}{{\u{A}}}1
+      {â}{{\^{a}}}1 {Â}{{\^{A}}}1
+      {î}{{\^{i}}}1 {Î}{{\^{I}}}1
+      {ș}{{\c{s}}}1 {Ș}{{\c{S}}}1
+      {ț}{{\c{t}}}1 {Ț}{{\c{T}}}1
+      {β}{{$\beta$}}1 {γ}{{$\gamma$}}1
+      {≤}{{$\leq$}}1 {≥}{{$\geq$}}1
+      {—}{{---}}1 {–}{{--}}1
+}
+\lstset{style=codestyle}
+
+\lstdefinelanguage{Julia}{
+  morekeywords={function,end,if,else,elseif,for,while,return,
+                using,import,export,module,struct,mutable,
+                const,let,do,try,catch,finally,begin,quote,
+                nothing,true,false,Int,Float64,String,Bool,
+                AbstractFloat,Vector,Matrix,Tuple,Dict,Set},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[b]'
+}
+
+\lstdefinelanguage{Go}{
+  morekeywords={package,import,func,return,if,else,for,range,type,struct,
+                interface,var,const,go,defer,select,case,default,map,chan,
+                nil,true,false,string,int,int64,float64,error},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[s]{`}{`}
+}
+
+\usepackage{placeins}
+
+% ============================================================
+% BIBLIOGRAPHY
+% ============================================================
+\usepackage[numbers, sort&compress]{natbib}
+\usepackage{csquotes}
+
+% ============================================================
+% HYPERLINKS
+% ============================================================
+\usepackage[hidelinks,
+            bookmarks,
+            bookmarksopen=true,
+            pdftitle={Sistem E-Medicine cu modele compartimentale din familia SIR (variantă anti-plagiat)},
+            pdfauthor={Geana Tudor-Bogdan},
+            pdfsubject={Lucrare de disertatie - varianta anti-plagiat},
+            pdfkeywords={SIDARTHE, SIR, SIS, SEIR, SIRS, calibrare parametri, LSTM, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
+            ]{hyperref}
+\usepackage[capitalise]{cleveref}
+
+% ============================================================
+% THEOREM ENVIRONMENTS (română)
+% ============================================================
+\theoremstyle{plain}
+\newtheorem{teorema}{Teoremă}[chapter]
+\newtheorem{lema}[teorema]{Lemă}
+\newtheorem{propozitie}[teorema]{Propoziție}
+\newtheorem{corolar}[teorema]{Corolar}
+
+\theoremstyle{definition}
+\newtheorem{definitie}[teorema]{Definiție}
+\newtheorem{exemplu}[teorema]{Exemplu}
+
+\theoremstyle{remark}
+\newtheorem{observatie}[teorema]{Observație}
+\newtheorem{remarc}[teorema]{Remarcă}
+
+\renewcommand\proofname{Demonstrație}
+
+% ============================================================
+% MISC COMMANDS
+% ============================================================
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Rzero}{\mathcal{R}_0}
+\newcommand{\diff}[2]{\frac{d#1}{d#2}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\testtodo}[1]{%
+    \todo[inline,color=yellow!20]{\textbf{Necesită testare experimentală:} #1}%
+}
+
+% ============================================================
+% METADATE pentru clasa UPB (pagina de titlu si declaratia de onestitate)
+% ============================================================
+\author{Geană Tudor-Bogdan}
+\title{Sistem E-Medicine pentru Analizarea și Monitorizarea Datelor
+Epidemiologice cu Modele Compartimentale din Familia SIR}
+
+\facultatea{Facultatea de Electronică, Telecomunicații
+și Tehnologia Informației}
+\tiplucrare{dizertație}
+\domeniu{Inginerie Electronică, Telecomunicații și Tehnologii Informaționale}
+\catedra{Telecomunicații}
+\campus{Leu}
+\program{Ingineria Informației și Sisteme de Calcul}
+\titlulobtinut{Master}
+\director{Prof. Radu Rădescu}
+\submissionmonth{Iunie}
+\submissionyear{2026}
+
+% ============================================================
+% DOCUMENT
+% ============================================================
+\begin{document}
+
+% In varianta anti-plagiat eliminam declaratia de onestitate academica:
+% suprascriem \declaratiep (apelat de \beforepreface) cu un no-op.
+\renewcommand\declaratiep{}
+
+% Pagina de titlu, TOC etc. — single-column, gestionate de clasa UPB.
+% Lista figurilor/tabelelor activate prin \listoffigures/\listoftables
+% intre \beforepreface si \afterpreface.
+\beforepreface
+\listoffigures
+\listoftables
+\afterpreface
+
+% ============================================================
+% REZUMAT (single-column, ca pagina preliminara)
+% ============================================================
+\chapter*{Rezumat}
+\addcontentsline{toc}{chapter}{Rezumat}
+\input{chapters/00_rezumat}
+
+% ============================================================
+% CORPUL LUCRARII — o singura coloana
+% ============================================================
+\cleardoublepage
+
+\input{chapters/01_introducere}
+\input{chapters/02_epidemiologie_si_modelare}
+\input{chapters/03_tehnologii}
+\input{chapters/04_arhitectura_sistemului}
+\input{chapters/05_implementare_modele}
+\input{chapters/06_predictie_lstm}
+\input{chapters/07_comparatie_si_calibrare}
+\input{chapters/08_evaluare_performanta}
+\input{chapters/09_aplicatia_web}
+\input{chapters/10_concluzii}
+
+% ============================================================
+% BIBLIOGRAFIE (inclusă în varianta anti-plagiat)
+% ============================================================
+\cleardoublepage
+\renewcommand{\bibname}{Bibliografie}
+\addcontentsline{toc}{chapter}{Bibliografie}
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+
+% ANEXELE (cod sursă) sunt OMISE în varianta anti-plagiat.
+
+\end{document}

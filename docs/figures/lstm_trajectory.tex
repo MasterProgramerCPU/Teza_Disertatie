@@ -27,26 +27,26 @@
 
 \addplot[mark=none, color=black, line width=0.5pt]
     table[col sep=comma, x=t, y=observed] {data/lstm_trajectory_romania.csv};
-\addlegendentry{Observat (Romania)}
+\addlegendentry{Observat (România)}
 
 \addplot[mark=none, color=blue!80!black, line width=0.7pt]
     table[col sep=comma, x=t, y=fitted] {data/lstm_trajectory_romania.csv};
-\addlegendentry{Predictii o-zi-inainte (LSTM)}
+\addlegendentry{Predictii o-zi-înainte (LSTM)}
 
 \addplot[mark=none, color=red!80!black, line width=0.7pt, dashed]
     table[col sep=comma, x=t, y=predicted] {data/lstm_trajectory_romania.csv};
-\addlegendentry{Prognoza autoregresiva (LSTM)}
+\addlegendentry{Prognoza autoregresivă (LSTM)}
 
 \end{axis}
 \end{tikzpicture}
-\caption{Iesirile runner-ului LSTM dedicat pe seria de cazuri active din
-Romania (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele
-$80\%$ din puncte si evaluare pe ultimele $20\%$. Predictiile o-zi-inainte
-($\hat{y}_t = f_\theta(y_{t-14:t-1})$) urmaresc seria observata atat pe
-fereastra de antrenare cat si pe cea de test, dar prognoza autoregresiva
-care reintroduce iesirile in fereastra (dincolo de ziua $1440$) tinde rapid
-catre zero --- o limitare cunoscuta a LSTM-urilor compacte fara mecanisme
-explicite pentru sezonalitate, asupra careia un strat ulterior cu informatie
-exogena (intervalul de raportare, calendarul scolar) ar putea ameliora.}
+\caption[Predicții LSTM pe România OWID]{Ieșirile runner-ului LSTM dedicat pe seria de cazuri active din
+România (4 ani, 22 ian. 2020 -- 31 dec. 2023), cu antrenare pe primele
+$80\%$ din puncte și evaluare pe ultimele $20\%$. Predicțiile o-zi-înainte
+($\hat{y}_t = f_\theta(y_{t-14:t-1})$) urmăresc seria observată atât pe
+fereastra de antrenare cât și pe cea de test, dar prognoza autoregresivă
+care reintroduce ieșirile în fereastra (dincolo de ziua $1440$) tinde rapid
+către zero --- o limitare cunoscută a LSTM-urilor compacte fără mecanisme
+explicite pentru sezonalitate, asupra căreia un strat ulterior cu informație
+exogenă (intervalul de raportare, calendarul școlar) ar putea ameliora.}
 \label{fig:lstm_trajectory}
 \end{figure*}

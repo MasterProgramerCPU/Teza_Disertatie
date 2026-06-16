@@ -28,13 +28,13 @@ organizațională și observabilitatea rezultatelor.
 Lucrarea a fost extinsă cu un cadru de comparație numerică și calibrare.
 Această extensie nu este doar metodologică: a fost executată concret o
 campanie de benchmark prin aplicație (180 rulări ODE plus 4 rulări LSTM, fără
-eșecuri), iar calibrarea SIR cu $\gamma = 1/14$ a fost aplicată pe Romania
+eșecuri), iar calibrarea SIR cu $\gamma = 1/14$ a fost aplicată pe România
 și pe trei țări europene suplimentare (Italia, Germania, Spania), rezultatele
 fiind raportate ca tabele și figuri în capitolele~\ref{ch:comparatie_calibrare}
 și~\ref{ch:evaluare}. În plus, a fost introdusă o direcție predictivă bazată
 pe LSTM, tratată ca extensie statistică pentru prognoză pe termen scurt și
 pentru analiza reziduurilor rămase după simularea compartimentală, cu rezultate
-operaționale pe seria Romania OWID.
+operaționale pe seria România OWID.
 
 \subsection{Răspuns la obiectivele propuse}
 \label{subsec:atingere_obiective}
@@ -42,42 +42,45 @@ operaționale pe seria Romania OWID.
 Cele patru obiective formulate în secțiunea~\ref{sec:obiective} au fost atinse
 concret, după cum urmează.
 
-\textbf{Obiectivul principal --- proiectarea unui sistem care leagă modelarea
-matematică de implementarea software, cu SIDARTHE ca model de lucru.} A fost
-construit întregul lanț, de la formalismul cu opt compartimente și șaisprezece
-rate (capitolul~\ref{ch:epidemiologie}) până la implementarea în trei limbaje
-(capitolul~\ref{ch:implementare}), expus printr-un API Go cu organizare pe
-studii și control RBAC (capitolul~\ref{ch:arhitectura}), rulat pe un cluster
-Kubernetes real (\texttt{kube-4kdhb}). SIDARTHE este tratat ca model clinic
-principal pe tot parcursul lucrării, iar familia SIR/SIS/SEIR/SIRS oferă
-reperele de bază.
+Pentru obiectivul principal (proiectarea unui sistem care leagă modelarea
+matematică de implementarea software, cu SIDARTHE ca model de lucru) a
+fost construit întregul lanț, de la formalismul cu opt compartimente și
+șaisprezece rate (capitolul~\ref{ch:epidemiologie}) până la implementarea
+în trei limbaje (capitolul~\ref{ch:implementare}), expus printr-un API Go
+cu organizare pe studii și control RBAC (capitolul~\ref{ch:arhitectura}),
+rulat pe un cluster Kubernetes real (\texttt{kube-4kdhb}). SIDARTHE este
+tratat ca model clinic principal pe tot parcursul lucrării, iar familia
+SIR/SIS/SEIR/SIRS oferă reperele de bază.
 
-\textbf{Al doilea obiectiv --- același contract de simulare în R, Julia și
-Python.} Cele trei runner-e au fost implementate cu bibliotecile uzuale ale
-fiecărui ecosistem (\texttt{deSolve}, \texttt{DifferentialEquations.jl},
-\texttt{scipy.integrate}) și folosesc același contract de mesaj prin Redis și
-aceeași schemă de rezultate în YugabyteDB. Verificarea de regresie cross-limbaj
-(Tabelul~\ref{tab:cross_language_regression}) arată că abaterile între
-traiectoriile produse sunt sub $10^{-4} \cdot N$ pentru toate modelele, iar
-Tabelul~\ref{tab:bench_wall_time} compară direct costurile de execuție.
+Pentru al doilea obiectiv (același contract de simulare în R, Julia și
+Python), cele trei runner-e au fost implementate cu bibliotecile uzuale
+ale fiecărui ecosistem (\texttt{deSolve}, \texttt{DifferentialEquations.jl},
+\texttt{scipy.integrate}) și folosesc același contract de mesaj prin Redis
+și aceeași schemă de rezultate în YugabyteDB. Verificarea de regresie
+cross-limbaj (Tabelul~\ref{tab:cross_language_regression}) arată că
+abaterile între traiectoriile produse sunt sub $10^{-4} \cdot N$ pentru
+toate modelele, iar Tabelul~\ref{tab:bench_wall_time} compară direct
+costurile de execuție.
 
-\textbf{Al treilea obiectiv --- metodologie explicită de comparație și
-calibrare.} Comparația folosește operatori de observație definiți per model
+Al treilea obiectiv (metodologie explicită de comparație și calibrare) se
+sprijină pe operatori de observație definiți per model
 (secțiunea~\ref{sec:operator_observatie}), eroare MAE/RMSE pe ferestre
-separate de antrenare și test, iar calibrarea a fost rulată efectiv: pe Romania
-cu analiză de identifiabilitate (Figura~\ref{fig:identifiability_landscape}) și
-pe patru țări simultan (Tabelul~\ref{tab:calibration_multiregion}). Costul
-software al calibrării a fost măsurat și raportat alături de eroarea numerică
-(Tabelul~\ref{tab:calibration_cost}), conform principiului enunțat în obiectiv.
+separate de antrenare și test, iar calibrarea a fost rulată efectiv: pe
+România cu analiză de identifiabilitate
+(Figura~\ref{fig:identifiability_landscape}) și pe patru țări simultan
+(Tabelul~\ref{tab:calibration_multiregion}). Costul software al
+calibrării a fost măsurat și raportat alături de eroarea numerică
+(Tabelul~\ref{tab:calibration_cost}), conform principiului enunțat în
+obiectiv.
 
-\textbf{Obiectivul suplimentar --- extensie predictivă bazată pe LSTM.}
-Componenta este implementată ca runner Python dedicat
-(\texttt{runner-lstm}), antrenată hand-rolled în NumPy, cu rezultate
-operaționale pe seria Romania (Figura~\ref{fig:lstm_trajectory}). Validarea
-față de predictori naivi (Tabelul~\ref{tab:lstm_baselines}) este onestă:
-LSTM-ul univariat nu bate persistența la orizontul de o zi pe această serie,
-ceea ce delimitează clar regimul în care componenta are sens (corecție de
-reziduuri sau intrări multivariate), așa cum era anticipat în obiectiv.
+Obiectivul suplimentar (extensie predictivă bazată pe LSTM) este acoperit
+de un runner Python dedicat (\texttt{runner-lstm}), antrenat hand-rolled
+în NumPy, cu rezultate operaționale pe seria România
+(Figura~\ref{fig:lstm_trajectory}). Validarea față de predictori naivi
+(Tabelul~\ref{tab:lstm_baselines}) este onestă: LSTM-ul univariat nu bate
+persistența la orizontul de o zi pe această serie, ceea ce delimitează
+regimul în care componenta are sens (corecție de reziduuri sau intrări
+multivariate), așa cum era anticipat în obiectiv.
 
 \section{Concluzii privind modelele}
 \label{sec:concluzii_modele}
@@ -144,92 +147,90 @@ nici interfața REST.
 \section{Concluzii experimentale}
 \label{sec:concluzii_experimentale}
 
-Cele patru zone empirice ale lucrării --- calibrarea pe date reale, campania
+Cele patru zone empirice ale lucrării (calibrarea pe date reale, campania
 de benchmark prin aplicație, verificarea de regresie cross-limbaj și
-măsurătorile cross-hardware --- produc rezultate care nu trebuie citite în
-izolare, ci ca un set coerent de constrângeri pentru luarea deciziilor de
-modelare și de implementare. Această secțiune sintetizează firul empiric
-înainte de discuția limitărilor și a direcțiilor viitoare.
+măsurătorile cross-hardware) produc rezultate care nu trebuie citite în
+izolare, ci ca un set coerent de constrângeri pentru deciziile de modelare
+și de implementare.
 
-\textbf{Calibrarea sustine alegerea constrangerilor din literatura.}
-Comparația dintre SIR liber și SIR constrans (cu $\gamma = 1/14$) pe valul 1
-COVID-19 în Romania
-(subsecțiunea~\ref{subsec:calibrare_romania}) arată că erorile pe fereastra
-de antrenare sunt aproape identice ($\sim$$1\,600$ cazuri MAE pentru ambele
-scenarii), dar parametrii estimați diferă substanțial ($\hat\gamma$ liber
-$= 0{,}335$, adică $3$ zile de infecțiozitate, contra valorii clinice de
-$14$ zile). Peisajul de pierdere
+Calibrarea susține alegerea constrângerilor din literatură. Comparația
+dintre SIR liber și SIR constrâns (cu $\gamma = 1/14$) pe valul 1 COVID-19
+în România (subsecțiunea~\ref{subsec:calibrare_romania}) arată că erorile
+pe fereastra de antrenare sunt aproape identice ($\sim$$1\,600$ cazuri MAE
+pentru ambele scenarii), dar parametrii estimați diferă substanțial
+($\hat\gamma$ liber $= 0{,}335$, adică $3$ zile de infecțiozitate, contra
+valorii clinice de $14$ zile). Peisajul de pierdere
 (subsecțiunea~\ref{subsec:identif_landscape}) confirmă vizual cauza: valea
 de pierdere mică este alungită în $(\beta, \gamma)$, deci datele nu disting
 între aceste combinații. Extinderea la patru țări
 (subsecțiunea~\ref{subsec:calibrare_multiregion}) arată că procedura
-constransa este robustă cross-regiune --- $\hat{\mathcal{R}}_0$ rămâne între
-$0{,}94$ (Italia) și $1{,}45$ (Romania), valori sub intervalul de literatură
+constrânsa este robustă cross-regiune: $\hat{\mathcal{R}}_0$ rămâne între
+$0{,}94$ (Italia) și $1{,}45$ (România), valori sub intervalul de literatură
 $2$--$3$ pentru tulpina originală, ceea ce este consistent cu intervențiile
 non-farmaceutice deja active în fereastră. În toate cazurile, divergența pe
 fereastra de test este atribuibilă unei schimbări de regim epidemic (val 2),
 nu unei deficiențe a calibrării: este o limitare structurală a SIR cu
 coeficienți constanți.
 
-\textbf{Benchmark-ul reveleaza trei regimuri de cost calitativ diferite.}
-Pe clusterul \texttt{kube-4kdhb} (capitolul~\ref{ch:evaluare}), Julia este
-solver-ul cel mai rapid în regim amortizat ($5$--$6$~ms la
-$t_{\max}=10\,000$, indiferent de model), dar plătește un cost de pornire
-JIT de $\sim$$900$--$1\,500$~ms pe prima rulare. Python (SciPy) este cel mai
+Benchmark-ul relevă trei regimuri de cost calitativ diferite. Pe clusterul
+\texttt{kube-4kdhb} (capitolul~\ref{ch:evaluare}), Julia este solver-ul
+cel mai rapid în regim amortizat ($5$--$6$~ms la $t_{\max}=10\,000$,
+indiferent de model), dar plătește un cost de pornire JIT de
+$\sim$$900$--$1\,500$~ms pe prima rulare. Python (SciPy) este cel mai
 stabil ca performanță ($4$--$9$~ms peste tot, fără cold-start), iar R
 (\texttt{deSolve}) este de două până la trei ordine de mărime mai lent la
-orizonturi mari --- nu din cauza solver-ului în sine, ci a buclei de
-inserări rând-cu-rând în baza de date. Această distincție este importantă
-pentru două decizii practice: pentru calibrare, care face zeci sau sute de
-evaluări succesive ale solver-ului, Julia este alegerea naturală deoarece
-costul JIT se amortizează; pentru interfața interactivă a aplicației, unde
+orizonturi mari, nu din cauza solver-ului în sine, ci a buclei de inserări
+rând-cu-rând în baza de date. Distincția contează direct la nivel de
+decizii practice: pentru calibrare, care face zeci sau sute de evaluări
+succesive ale solver-ului, Julia este alegerea naturală deoarece costul
+JIT se amortizează; pentru interfața interactivă a aplicației, unde
 predictibilitatea contează mai mult decât viteza brută, Python rămâne
 default-ul rezonabil.
 
-\textbf{Implementarile sunt compatibile numeric, dar nu identice.}
-Verificarea cross-limbaj (secțiunea~\ref{sec:acuratete}) arată că Julia și
-Python produc traiectorii identice la nivelul preciziei flotante
+Implementările sunt compatibile numeric, dar nu identice. Verificarea
+cross-limbaj (secțiunea~\ref{sec:acuratete}) arată că Julia și Python
+produc traiectorii identice la nivelul preciziei flotante
 ($\sim$$10^{-8} \cdot N$), deoarece ambele folosesc solvere Runge--Kutta
 adaptive cu toleranțe similare ($\texttt{Tsit5}$ și respectiv
 $\texttt{RK45}$). Implementarea R, care folosește RK4 cu pas fix
 $h = 1$~zi, deviază de la celelalte două cu $\sim$$10^{-4} \cdot N$
-($0{,}013\%$ din populație) --- diferență deliberată din alegerea
-solver-ului, nu eroare de implementare. Acest rezultat dă o limită
-cantitativă a interschimbabilității runnerelor: pentru analize cu cerințe
-de precizie sub $10^{-3} \cdot N$, R este acceptabil; pentru reproducerea
-exactă a unei traiectorii Julia, Python este interschimbabilul direct.
+($0{,}013\%$ din populație), diferență deliberată din alegerea solver-ului,
+nu eroare de implementare. Rezultatul dă o limită cantitativă a
+interschimbabilității runnerelor: pentru analize cu cerințe de precizie
+sub $10^{-3} \cdot N$, R este acceptabil; pentru reproducerea exactă a
+unei traiectorii Julia, Python este interschimbabilul direct.
 
-\textbf{Hardware-ul conteaza, dar nu inlocuieste analiza per-stack.}
-Comparația cross-hardware (subsecțiunea~\ref{subsec:hardware_variability})
-arată că același cod Python rulează de $4$ până la $6$ ori mai rapid pe
+Hardware-ul contează, dar nu înlocuiește analiza per stack. Comparația
+cross-hardware (subsecțiunea~\ref{subsec:hardware_variability}) arată că
+același cod Python rulează de $4$ până la $6$ ori mai rapid pe
 Apple~M1~Pro arm64 nativ decât pe un worker amd64 din cluster, pe
-workload-uri solver-heavy. Pentru workload-uri solver-light (initial
-trivial), raportul crește la $10\times$ sau mai mult, dar acolo diferența
-nu mai reflectă hardware-ul brut, ci costul fix al persistării în baza de
-date distribuită. Concluzia operațională este că etapele de explorare
-rapidă (calibrări experimentale, sensitivity sweeps, prototipare LSTM cu
+workload-uri solver-heavy. Pentru workload-uri solver-light (cu condiție
+inițială trivială), raportul crește la $10\times$ sau mai mult, dar
+diferența nu mai reflectă hardware-ul brut, ci costul fix al persistării
+în baza de date distribuită. Operațional, etapele de explorare rapidă
+(calibrări experimentale, sensitivity sweeps, prototipare LSTM cu
 hiperparametri variați) sunt sensibil mai eficiente local, în timp ce
 clusterul aduce concurența, izolarea pe studii și persistența necesare
 pentru o utilizare colaborativă reală.
 
-\textbf{LSTM este o componenta calitativ diferita de solverele ODE.}
-Cele patru rulări LSTM (subsecțiunea~\ref{subsec:bench_lstm}) au costat
-$\sim$$290$~secunde fiecare pe seria Romania OWID ($1\,440$ zile,
-$80\% / 20\%$ split), de aproximativ \emph{cinci ordine de mărime} peste
-solverele ODE pe același cluster. Acest decalaj confirmă decizia
-arhitecturală de a izola \texttt{runner-lstm} într-o coadă Redis dedicată,
-separată de runnerele compartimentale; figura observat/fitted/predicted
-pentru Romania (Figura~\ref{fig:lstm_trajectory}) confirmă că predicțiile
-o-zi-înainte urmăresc rezonabil seria, dar prognoza autoregresivă se
-aplatizează rapid --- LSTM-ul actual este un instrument de prognoză pe
-termen scurt și de detectare a reziduurilor, nu un model autonom de
-extrapolare epidemiologică pe orizonturi mari. Validarea față de repere triviale
-(Tabelul~\ref{tab:lstm_baselines}) întărește această concluzie cu cifre: pe
-fereastra de test din seria României, persistența rămâne superioară LSTM-ului la
-orizontul de o zi, deoarece $85\%$ din zile sunt plate (raportare săptamânală).
-Acest rezultat onest delimitează clar rolul componentei: valoare adăugată
-plauzibilă doar în regimul hibrid de corecție a reziduurilor sau cu intrări
-multivariate, nu ca predictor univariat de sine stătător.
+LSTM este o componentă calitativ diferită de solverele ODE. Cele patru
+rulări LSTM (subsecțiunea~\ref{subsec:bench_lstm}) au costat $\sim$$290$
+secunde fiecare pe seria România OWID ($1\,440$ zile, $80\% / 20\%$ split),
+de aproximativ \emph{cinci ordine de mărime} peste solverele ODE pe același
+cluster. Decalajul confirmă decizia arhitecturală de a izola
+\texttt{runner-lstm} într-o coadă Redis dedicată, separată de runnerele
+compartimentale; figura observat/fitted/predicted pentru România
+(Figura~\ref{fig:lstm_trajectory}) confirmă că predicțiile o-zi-înainte
+urmăresc rezonabil seria, dar prognoza autoregresivă se aplatizează rapid:
+LSTM-ul actual este un instrument de prognoză pe termen scurt și de
+detectare a reziduurilor, nu un model autonom de extrapolare epidemiologică
+pe orizonturi mari. Validarea față de repere triviale
+(Tabelul~\ref{tab:lstm_baselines}) întărește concluzia cu cifre: pe
+fereastra de test din seria României, persistența rămâne superioară
+LSTM-ului la orizontul de o zi, deoarece $85\%$ din zile sunt plate
+(raportare săptămânală). Componenta are valoare adăugată plauzibilă doar
+în regimul hibrid de corecție a reziduurilor sau cu intrări multivariate,
+nu ca predictor univariat de sine stătător.
 
 \section{Limitări}
 \label{sec:limitari}
@@ -261,7 +262,7 @@ multe job-uri lansate simultan pe coadă) și măsurarea latențelor specifice
 ale API-ului sunt încă tratate metodologic, fără rezultate empirice.
 
 Componenta LSTM este implementată operațional și are rezultate cantitative
-(cost de antrenare măsurat și serie observed/fitted/predicted pe Romania).
+(cost de antrenare măsurat și serie observed/fitted/predicted pe România).
 Validarea predictivă completă --- comparația sistematică cu liniile de bază
 (persistență, medie mobilă) și cu modelul compartimental calibrat, pe mai
 multe regiuni --- este următorul pas natural; LSTM-ul actual este o

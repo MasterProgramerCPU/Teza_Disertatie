@@ -15,15 +15,15 @@
     label style={font=\small},
     legend cell align={left},
 ]
-% bara verticala separare antrenare / test
+% bara verticală separare antrenare / test
 \draw[dashed, gray!70, thick] (axis cs:154, 0) -- (axis cs:154, 22000)
     node[above, font=\scriptsize, gray!90] {antrenare $|$ test};
 
-% observat (linie continua)
+% observat (linie continuă)
 \addplot[mark=none, thick, black]
     table[col sep=comma, x=day, y=observed]
     {data/calibration_sir_romania.csv};
-\addlegendentry{Observat (Romania OWID)}
+\addlegendentry{Observat (România OWID)}
 
 % fit liber pe antrenare + forecast pe test
 \addplot[mark=none, thick, blue]
@@ -36,25 +36,25 @@
     {data/calibration_sir_romania.csv};
 \addlegendentry{Prognoza liber}
 
-% fit constrans
+% fit constrâns
 \addplot[mark=none, thick, red]
     table[col sep=comma, x=day, y=fit_fixed]
     {data/calibration_sir_romania.csv};
-\addlegendentry{Fit constrans, $\hat\beta=0{,}104$, $\gamma=1/14$}
+\addlegendentry{Fit constrâns, $\hat\beta=0{,}104$, $\gamma=1/14$}
 
 \addplot[mark=none, thick, dashed, red!80]
     table[col sep=comma, x=day, y=pred_fixed]
     {data/calibration_sir_romania.csv};
-\addlegendentry{Prognoza constrans}
+\addlegendentry{Prognoza constrâns}
 
 \end{axis}
 \end{tikzpicture}
-\caption{Calibrare SIR pe Romania, valul 1 din 2020. Linia neagra arata seria
-observata; cele doua scenarii produc fituri vizual aproape identice pe
+\caption[Calibrare SIR pe valul 1 (2020)]{Calibrare SIR pe România, valul 1 din 2020. Linia neagră arată seria
+observată; cele două scenarii produc fituri vizual aproape identice pe
 fereastra de antrenare (MAE $\approx 1\,600$ cazuri pentru ambele), dar
-prognoza pe luna urmatoare diverge (MAE $13\,031$ pentru fitul liber vs
-$16\,727$ pentru cel constrans). Parametrii estimati difera substantial,
-ilustrand identifiabilitatea practica slaba: aceleasi date sunt explicate
-aproape la fel de bine de combinatii $(\beta, \gamma)$ foarte diferite.}
+prognoza pe luna următoare diverge (MAE $13\,031$ pentru fitul liber vs
+$16\,727$ pentru cel constrâns). Parametrii estimați diferă substantial,
+ilustrând identifiabilitatea practică slaba: aceleași date sunt explicate
+aproape la fel de bine de combinații $(\beta, \gamma)$ foarte diferite.}
 \label{fig:calibration_sir_fit}
 \end{figure*}

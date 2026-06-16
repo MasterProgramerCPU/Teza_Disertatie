@@ -154,8 +154,7 @@ fiecare job.
 
 Campania de bază a fost executată pe clusterul \texttt{kube-4kdhb}
 (3 worker-i $\times$ 4~vCPU / 8~GiB pe OpenStack), folosind imaginile
-\texttt{ghcr.io/masterprogramercpu/emedicine-*:latest} construite din branch-ul
-principal. Rezultatele sunt prezentate în
+\texttt{emedicine-*:latest} de pe GHCR, construite din branch-ul principal. Rezultatele sunt prezentate în
 secțiunea~\ref{subsec:rezultate_masurate}; reproducerea pe alte configurații
 hardware (de exemplu o mașină locală sau un nod cu GPU) este planificată ca
 script separat, în afara aplicației, și permite plasarea acelorași combinații
@@ -226,7 +225,7 @@ A fost executată o campanie completă prin scriptul
 \texttt{run\_benchmark.py}, conform protocolului din
 secțiunea~\ref{subsec:protocoale}: cinci modele compartimentale, trei limbaje,
 patru orizonturi temporale ($t_{\max} \in \{90, 365, 2\,000, 10\,000\}$),
-3 repetări per combinație, pe setul de date Romania OWID. Toate cele 180 de
+3 repetări per combinație, pe setul de date România OWID. Toate cele 180 de
 rulări s-au finalizat fără erori. Datele sunt extrase direct din tabela
 \texttt{benchmarks} a aplicației deployate, valorile reflectând timpul măsurat
 de către runner între începutul integrării ODE și finalul scrierii rezultatelor.
@@ -242,10 +241,10 @@ calitativ diferite, identificabile dintr-o privire pe o scară log-log.
 
 \input{figures/scaling_wall_time}
 
-Trei observații dominante reies din date.
+Din date reies trei tipare dominante.
 
-\textbf{(i) Julia este cel mai rapid solver, dar are un cost de pornire JIT
-semnificativ.} La $t_{\max}=10\,000$, mediana wall-time-ului Julia este de
+Julia este cel mai rapid solver, dar are un cost de pornire JIT
+semnificativ. La $t_{\max}=10\,000$, mediana wall-time-ului Julia este de
 $5$--$6$~ms pentru orice model, inclusiv SIDARTHE cu opt compartimente.
 Python rămâne în intervalul $5$--$9$~ms, iar R urcă de la $665$ la $1\,327$~ms,
 de două până la trei ordine de mărime peste celelalte. Pentru orizonturi mici
@@ -257,21 +256,19 @@ pentru încărcarea și compilarea funcțiilor RHS și a solverului
 
 \input{tables/bench_julia_coldstart}
 
-\textbf{(ii) Python (SciPy \texttt{solve\_ivp}) este cel mai stabil ca
-performanță.} Wall-time-ul rămâne aproape constant în jurul a $4$--$9$~ms
-indiferent de model sau orizont, fără cold-start vizibil; aceasta îl face
+Python (SciPy \texttt{solve\_ivp}) este cel mai stabil ca performanță:
+wall-time-ul rămâne aproape constant în jurul a $4$--$9$~ms indiferent de
+model sau orizont, fără cold-start vizibil. Acest comportament îl face
 limbajul implicit recomandabil pentru utilizare interactivă, unde
 predictibilitatea contează la fel de mult ca viteza brută.
 
-\textbf{(iii) Costul mare al runner-ului R la orizonturi mari este dominat de
-inserările individuale în baza de date, nu de \texttt{deSolve}.} Cele
-$10\,001$ inserții rând-cu-rând prin \texttt{dbExecute()} reprezintă
-componenta principală a celor $\sim$$1$ secundă măsurată la
-$\texttt{sidarthe}/\texttt{r}/t_{\max}=10\,000$; integrarea numerică
-propriu-zisă cu \texttt{deSolve::ode} este sub-secundară. Această observație
-este un punct concret de îmbunătățire ulterioară (de exemplu prin
-\texttt{COPY FROM} sau prin tranzacții batch), nu o limitare intrinsecă a
-ecosistemului R.
+Costul mare al runner-ului R la orizonturi mari nu vine de la \texttt{deSolve},
+ci de la inserările individuale în baza de date. Cele $10\,001$ inserții
+rând-cu-rând prin \texttt{dbExecute()} domină cele $\sim$$1$ secundă măsurată
+la $\texttt{sidarthe}/\texttt{r}/t_{\max}=10\,000$; integrarea numerică
+propriu-zisă cu \texttt{deSolve::ode} este sub-secundară. Avem astfel un
+punct concret de îmbunătățire ulterioară (de exemplu prin \texttt{COPY FROM}
+sau prin tranzacții batch), nu o limitare intrinsecă a ecosistemului R.
 
 În ce privește memoria reziduală peak (Tabelul~\ref{tab:bench_memory}), Julia
 plătește un overhead constant de $\sim$$940$~MB pentru runtime-ul SciML, în
@@ -290,7 +287,7 @@ compartimentale. Costul ODE depinde de orizontul de integrare $t_{\max}$
 --- iar $t_{\max}$ controlează doar orizontul prognozei autoregresive
 (neglijabil în comparație).
 
-Tabelul~\ref{tab:bench_lstm} arată rezultatele pe setul Romania OWID
+Tabelul~\ref{tab:bench_lstm} arată rezultatele pe setul România OWID
 (1\,440 zile, $80\%$ antrenare $/$ $20\%$ test cronologic) cu parametrii
 impliciti din API. Mediana wall-time-ului este $\sim$$290$~s, aproape identică
 între $t_{\max}=30$ și $t_{\max}=90$, ceea ce confirmă empiric că forecast-ul
@@ -333,24 +330,23 @@ de campania anterioară), iar datele M1 provin din scriptul local
 
 \input{tables/hardware_comparison}
 
-Două observații se desprind. (i) Pentru același cod Python și aceeași
-încărcare numerică, M1 Pro nativ este de $\sim$$4\times$--$6\times$ mai
-rapid decât worker-ul amd64 al clusterului. Acest raport include diferența
-de microarhitectură (Apple Silicon vs. CPU x86 virtualizat în KVM),
-diferența de mediu (nativ vs. container) și costul redus al stratului de
-persistare (M1 nu scrie rezultatele într-o bază de date distribuită cu
-factor de replicare 3). Raportul este relativ stabil între modele și
-orizonturi, ceea ce sugerează că marea parte a diferenței vine din execuția
-solver-ului propriu-zis, nu din overhead-uri fixe.
+Pentru același cod Python și aceeași încărcare numerică, M1 Pro nativ
+este de $\sim$$4\times$--$6\times$ mai rapid decât worker-ul amd64 al
+clusterului. Acest raport include diferența de microarhitectură (Apple
+Silicon vs.\ CPU x86 virtualizat în KVM), diferența de mediu (nativ vs.\
+container) și costul redus al stratului de persistare (M1 nu scrie
+rezultatele într-o bază de date distribuită cu factor de replicare 3).
+Raportul este relativ stabil între modele și orizonturi, deci marea parte
+a diferenței vine din execuția solver-ului propriu-zis, nu din
+overhead-uri fixe.
 
-(ii) Pentru workload-ul trivial (setul Romania OWID cu $I_0 = 0$, ca în
+Pentru workload-ul trivial (setul România OWID cu $I_0 = 0$, ca în
 campania prin aplicație), M1 nativ rulează în $0{,}4$--$0{,}8$~ms per
-solver, iar cluster-ul în $3$--$9$~ms (din
-Tabelul~\ref{tab:bench_wall_time}); diferența este mai mare ($10\times$
-sau mai mult) tocmai pentru că, atunci când solver-ul nu are dinamică reală,
-\emph{toată} cheltuiala wall-time pe cluster vine din scrierea celor
-$t_{\max}+1$ rânduri în \texttt{simulation\_results}, cost care nu există
-în scriptul local.
+solver, iar cluster-ul în $3$--$9$~ms (Tabelul~\ref{tab:bench_wall_time});
+diferența crește la $10\times$ sau mai mult tocmai pentru că, atunci când
+solver-ul nu are dinamică reală, \emph{toată} cheltuiala wall-time pe
+cluster vine din scrierea celor $t_{\max}+1$ rânduri în
+\texttt{simulation\_results}, cost care nu există în scriptul local.
 
 Concluzia metodologică este că un raport \emph{absolut} între cele două
 hardware-uri depinde semnificativ de natura workload-ului (solver-light vs.
@@ -383,22 +379,22 @@ compatibile funcțional pentru scopul aplicației.
 
 Verificarea a fost rulată concret pe setul de date sintetic
 \texttt{multiwave} (populație $N = 50 \cdot 10^6$), pentru care condițiile
-inițiale produc dinamică ne-trivială (spre deosebire de Romania OWID, unde
+inițiale produc dinamică ne-trivială (spre deosebire de România OWID, unde
 prima zi din serie are $I=0$). Rezultatele sunt sintetizate în
 Tabelul~\ref{tab:cross_language_regression}.
 
 \input{tables/cross_language_regression}
 
-Două observații se desprind. (i) Implementările Julia și Python produc
-traiectorii practic identice ($\sim$$10^{-8} \cdot N$, la limita preciziei
-flotante), pentru că ambele folosesc solvere Runge--Kutta adaptive cu
-toleranțe similare ($\texttt{Tsit5}$ și respectiv $\texttt{RK45}$). (ii)
-Implementarea R, care folosește RK4 cu pas fix $h = 1$~zi, deviază de la
-celelalte două cu $\sim$$10^{-4} \cdot N$ ($\sim$$2\,200$ cazuri pentru SIR,
-$\sim$$6\,600$ pentru SIDARTHE). Pentru o populație de $50$ de milioane,
-această abatere reprezintă $0{,}013\%$ din populație și este
-sub-vizuală pe o reprezentare grafică tipică --- compatibilă funcțional cu
-scopul aplicației, dar deliberat mai puțin precisă decât metodele adaptive.
+Implementările Julia și Python produc traiectorii practic identice
+($\sim$$10^{-8} \cdot N$, la limita preciziei flotante), pentru că
+ambele folosesc solvere Runge--Kutta adaptive cu toleranțe similare
+($\texttt{Tsit5}$ și respectiv $\texttt{RK45}$). Implementarea R, care
+folosește RK4 cu pas fix $h = 1$~zi, deviază de la celelalte două cu
+$\sim$$10^{-4} \cdot N$ ($\sim$$2\,200$ cazuri pentru SIR, $\sim$$6\,600$
+pentru SIDARTHE). Pentru o populație de $50$ de milioane, abaterea
+reprezintă $0{,}013\%$ din populație, sub-vizuală pe o reprezentare
+grafică tipică, compatibilă funcțional cu scopul aplicației, dar
+deliberat mai puțin precisă decât metodele adaptive.
 
 \section{Evaluarea API-ului și a bazei de date}
 \label{sec:evaluare_api_db}
@@ -424,20 +420,21 @@ variabilitatea de rețea introdusă de tunel.
 \input{tables/api_latency}
 
 Tabelul~\ref{tab:api_latency} prezintă rezultatele la orizontul de un an
-($365$ puncte). Se desprind câteva observații. (i) Latențele mediane sunt
-omogene între modele și se situează în intervalul $24$--$71$~ms pentru toate
-endpointurile; modelul nu influențează semnificativ latența, deoarece costul
-este dominat de drumul dus-întors prin baza de date, nu de structura
-compartimentală. (ii) Endpointul \emph{create} răspunde asincron --- el doar
-validează inputul, citește primul rând epidemiologic, inserează în
-\texttt{simulation\_runs} și publică în coada Redis, înainte ca solverul să
-ruleze --- deci latența sa nu reflectă costul de integrare numerică, ci pe cel de
-inițiere a unui job. (iii) Dimensiunea răspunsului JSON depinde de model:
-SIDARTHE, cu opt compartimente, produce $\sim$$49$~KB față de $\sim$$36$~KB
-pentru SIS cu două compartimente, la același orizont. (iv) Percentila 95 este de
-$2{,}5$--$3$ ori mai mare decât mediana ($124$--$156$~ms), reflectând cozile de
-latență tipice unei măsurători prin tunel; pe un acces direct în cluster acestea
-ar fi mai mici, dar raportarea lor este corectă pentru profilul de testare.
+($365$ puncte). Latențele mediane sunt omogene între modele și se situează
+în intervalul $24$--$71$~ms pentru toate endpointurile; modelul nu
+influențează semnificativ latența, deoarece costul este dominat de drumul
+dus-întors prin baza de date, nu de structura compartimentală. Endpointul
+\emph{create} răspunde asincron: doar validează inputul, citește primul
+rând epidemiologic, inserează în \texttt{simulation\_runs} și publică în
+coada Redis, înainte ca solverul să ruleze, deci latența sa nu reflectă
+costul de integrare numerică, ci doar pe cel de inițiere a unui job.
+Dimensiunea răspunsului JSON depinde de model: SIDARTHE, cu opt
+compartimente, produce $\sim$$49$~KB față de $\sim$$36$~KB pentru SIS cu
+două compartimente, la același orizont. Percentila 95 este de
+$2{,}5$--$3$ ori mai mare decât mediana ($124$--$156$~ms), reflectând cozile
+de latență tipice unei măsurători prin tunel; pe un acces direct în cluster
+acestea ar fi mai mici, dar raportarea lor este corectă pentru profilul
+de testare folosit.
 
 \input{tables/api_latency_scaling}
 
@@ -470,20 +467,19 @@ parametri și cu timp de calibrare ridicat, poate fi mai puțin potrivit pentru
 analize rapide. În sens invers, un model simplu și rapid poate fi foarte util
 pentru explorare, dar insuficient pentru întrebări clinice.
 
-Combinând rezultatele măsurate, recomandarea practică derivată din această
-campanie este următoarea. Pentru rulări numeroase și scurte (de exemplu
-explorarea sensibilității parametrilor), \textbf{Python} este alegerea
-implicită cea mai bună --- timpii sunt sub $10$~ms și predictibili pentru toate
-modelele și orizonturile testate, fără cost de pornire. Pentru rulări puține
-și foarte lungi (de exemplu integrare pe orizonturi $t_{\max} \gg 10\,000$
-sau pentru calibrare cu mii de iterații în care Julia se compilează o singură
-dată), \textbf{Julia} oferă un solver cu un ordin de mărime mai rapid, cu
-condiția ca cele $\sim$$1$~secundă de pornire să fie amortizate. \textbf{R}
-rămâne potrivit pentru explorare interactivă în pipeline-uri statistice
-familiare cercetătorilor din epidemiologie, dar runner-ul curent are o limitare
-operațională (inserțiile rând-cu-rând în baza de date) care domină wall-time-ul
-la orizonturi mari și care poate fi corectată independent de schimbarea
-limbajului.
+Recomandarea practică derivată din această campanie urmează profilul cazului
+de utilizare. Pentru rulări numeroase și scurte (de exemplu explorarea
+sensibilității parametrilor), Python este alegerea implicită cea mai bună:
+timpii sunt sub $10$~ms și predictibili pentru toate modelele și orizonturile
+testate, fără cost de pornire. Pentru rulări puține și foarte lungi (de
+exemplu integrare pe orizonturi $t_{\max} \gg 10\,000$ sau calibrare cu mii
+de iterații în care Julia se compilează o singură dată), Julia oferă un
+solver cu un ordin de mărime mai rapid, cu condiția ca cele $\sim$$1$~secundă
+de pornire să fie amortizate. R rămâne potrivit pentru explorare interactivă
+în pipeline-uri statistice familiare cercetătorilor din epidemiologie, însă
+runner-ul curent are o limitare operațională (inserțiile rând-cu-rând în
+baza de date) care domină wall-time-ul la orizonturi mari și poate fi
+corectată independent de schimbarea limbajului.
 
 Pentru predicție cu LSTM, costul este dominat de antrenare și nu se compară
 direct cu solverele ODE. Este important ca interfața utilizatorului să trateze

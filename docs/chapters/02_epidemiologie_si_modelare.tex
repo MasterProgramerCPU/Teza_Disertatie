@@ -515,10 +515,11 @@ Considerăm o populație inițial complet susceptibilă ($S_0 \approx N$). Atunc
 \begin{proof}
 Din $dI/dt|_{t=0} = I_0(\beta S_0/N - \gamma) \approx I_0(\beta - \gamma)$
 (pentru $S_0 \approx N$), concluzia urmează din semnul expresiei $\beta - \gamma$:
-\begin{equation}
-    \diff{I}{t}\bigg|_{t=0} > 0 \iff \beta > \gamma \iff \frac{\beta}{\gamma} > 1 \iff \Rzero > 1.
-    \qedhere
-\end{equation}
+\begin{align*}
+    \diff{I}{t}\bigg|_{t=0} > 0
+        &\iff \beta > \gamma \\
+        &\iff \frac{\beta}{\gamma} > 1 \iff \Rzero > 1. \qedhere
+\end{align*}
 \end{proof}
 
 \subsection{Pragul de imunizare în turmă (herd immunity)}
@@ -581,10 +582,11 @@ pozitivă a ecuației transcendentale:
     \frac{dS}{dR} = \frac{-\beta SI/N}{\gamma I} = -\frac{\beta}{\gamma N} S = -\frac{\Rzero}{N} S.
 \end{equation}
 Această ecuație separabilă în $S$ și $R$ se integrează direct:
-\begin{equation}
-    \int_{S_0}^{S(t)} \frac{dS'}{S'} = -\frac{\Rzero}{N}\int_0^{R(t)} dR' \implies
-    \ln\frac{S(t)}{S_0} = -\frac{\Rzero}{N} R(t).
-\end{equation}
+\begin{align}
+    \int_{S_0}^{S(t)} \frac{dS'}{S'}
+        &= -\frac{\Rzero}{N}\int_0^{R(t)} dR', \\
+    \ln\frac{S(t)}{S_0} &= -\frac{\Rzero}{N}\, R(t).
+\end{align}
 Deci $S(t) = S_0 \exp\!\left(-\Rzero R(t)/N\right)$.
 
 La $t \to \infty$, $I(\infty) = 0$ (demonstrat mai jos), deci $R(\infty) = N - S(\infty)$
@@ -687,28 +689,10 @@ Eroarea locală de trunchiere (pe un singur pas) este $\mathcal{O}(h^2)$, deci
 metoda are ordinul local 2 și ordinul global 1.
 
 Aplicată sistemului SIR cu $\mathbf{y}_n = (S_n, I_n, R_n)^\intercal$,
-schema Euler este:
-
-\begin{algorithm}
-\caption{Metoda Euler pentru sistemul SIR}
-\label{alg:euler_sir}
-\begin{lstlisting}[style=pseudocode]
-Input:  beta, gamma, N, S0, I0, R0, t0, tf, h
-Output: Secventa (tn, Sn, In, Rn) pentru tn in [t0, tf]
-
-(S, I, R) <- (S0, I0, R0);  t <- t0
-while t < tf do
-    dS <- -beta * S * I / N
-    dI <-  beta * S * I / N - gamma * I
-    dR <-  gamma * I
-    S  <- S + h * dS
-    I  <- I + h * dI
-    R  <- R + h * dR
-    t  <- t + h
-    Inregistreaza (t, S, I, R)
-end while
-\end{lstlisting}
-\end{algorithm}
+schema Euler este o iterație simplă peste pașii temporali: la fiecare pas
+se evaluează rata de variație $(\dot S, \dot I, \dot R)$ folosind starea
+curentă și se actualizează compartimentele prin
+$\mathbf{y}_{n+1} = \mathbf{y}_n + h\,\mathbf{f}(t_n, \mathbf{y}_n)$.
 
 \textbf{Stabilitate.} Analiza stabilității metodei Euler pe ecuația test
 $y' = \lambda y$ ($\lambda \in \mathbb{C}$) conduce la factorul de amplificare
@@ -762,34 +746,13 @@ satisface:
 \end{equation}
 \end{teorema}
 
-\begin{proof}[Schiță de demonstrație]
+\paragraph{Schiță de demonstrație.}
 Eroarea locală de trunchiere $\tau_n$ se obține substituind soluția exactă
 $\mathbf{y}(t_n)$ în schema \eqref{eq:rk4} și expandând în serie Taylor.
-Se poate arăta că primele 4 condiții de ordin (condițiile de arbore Butcher
-pentru $p = 4$) sunt satisfăcute de coeficienții \eqref{eq:butcher_rk4},
-implicând $\tau_n = \mathcal{O}(h^5)$. Eroarea globală este
-$\mathcal{O}(h^4)$ prin acumularea $\sim 1/h$ de pași. Detalii complete
-în \cite{hairer1993}.
-\end{proof}
-
-\begin{algorithm}
-\caption{Metoda Runge-Kutta de ordinul 4 pentru sistemul SIR}
-\label{alg:rk4_sir}
-\begin{lstlisting}[style=pseudocode]
-Input:  f, y0, t0, tf, h
-Output: Secventa (tn, yn)
-
-y <- y0;  t <- t0
-while t < tf do
-    k1 <- h * f(t,       y           )
-    k2 <- h * f(t + h/2, y + k1/2    )
-    k3 <- h * f(t + h/2, y + k2/2    )
-    k4 <- h * f(t + h,   y + k3      )
-    y  <- y + (k1 + 2*k2 + 2*k3 + k4) / 6
-    t  <- t + h
-end while
-\end{lstlisting}
-\end{algorithm}
+Primele patru condiții de ordin (condițiile de arbore Butcher pentru
+$p = 4$) sunt satisfăcute de coeficienții \eqref{eq:butcher_rk4}, deci
+$\tau_n = \mathcal{O}(h^5)$. Acumularea pe $\sim 1/h$ pași conduce la o
+eroare globală $\mathcal{O}(h^4)$. Tratare completă în \cite{hairer1993}.
 
 \subsection{Metode Runge-Kutta adaptive (RK45 / Dormand-Prince)}
 \label{subsec:rk_adaptive}

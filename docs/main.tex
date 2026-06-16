@@ -1,11 +1,21 @@
-\documentclass[10pt, a4paper, oneside, twocolumn]{report}
+% =============================================================================
+% Disertație — Sistem E-Medicine cu modele compartimentale SIDARTHE/SIR/...
+% Document class: teza-upb.cls (UPB Bucuresti)
+% Layout: 1 coloana (cerinta autor)
+% =============================================================================
+\documentclass[12pt, a4paper, twoside, romanian]{teza-upb}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
-% ============================================================
-% ENCODING & LANGUAGE
-% ============================================================
-\usepackage[utf8]{inputenc}
+% Codificare fonturi T1 + Latin Modern: clasa incarca doar inputenc, lasand
+% encoding-ul OT1 implicit, in care diacriticele romanesti (a-breve, s/t-virgula
+% etc.) sunt compuse cu \accent — nu se silabiseaza, au spatiere mai slaba si
+% produc un strat de text PDF corupt. T1 + lmodern dau glyphuri reale, vectoriale,
+% silabisire corecta si copy/paste corect. Trebuie incarcate inaintea babel.
+\usepackage{lmodern}
 \usepackage[T1]{fontenc}
-\usepackage[provide=*,romanian]{babel}
+
+\usepackage{babel}
 
 % ============================================================
 % MATH
@@ -18,17 +28,30 @@
 \usepackage{mathrsfs}
 
 % ============================================================
-% LAYOUT
+% LAYOUT auxiliar (clasa UPB seteaza marginile si textwidth singura;
+% pastram doar microtype si raggedbottom)
 % ============================================================
-\usepackage[a4paper,
-            top=2.0cm, bottom=2.2cm,
-            left=1.6cm,  right=1.6cm]{geometry}
-\usepackage{setspace}
-\setstretch{1.05}
 \usepackage{microtype}
 \usepackage{emptypage}
-\setlength{\columnsep}{0.75cm}
 \raggedbottom
+\singlespacing   % suprascrie \baselinestretch=1.6 din clasa UPB
+
+% Marja de flexibilitate moderata pentru break-ul liniilor pe o coloana lata.
+\tolerance=2000
+\emergencystretch=2em
+\hyphenpenalty=50
+\exhyphenpenalty=50
+\hbadness=2000
+
+% Silabisire suplimentara pentru cuvinte tehnice specifice tezei pe care
+% TeX nu le poate rupe altfel (numele de servicii Kubernetes, identifiers
+% de coloane DB, etc.). Cratima e marcata explicit \-.
+\hyphenation{
+  epi-mo-del si-mu-la-tion-runs si-mu-la-tion-re-sults
+  Yu-ga-byte-DB Ku-ber-ne-tes
+  fron-tend back-end run-ner-script run-ner-cus-tom
+  ana-li-za-rea mo-ni-to-ri-za-rea
+}
 
 % ============================================================
 % GRAPHICS & FIGURES
@@ -51,6 +74,7 @@
 \usepackage{longtable}
 \usepackage{multirow}
 \usepackage{tabularx}
+\usepackage{makecell}
 \usepackage{enumerate}
 
 % ============================================================
@@ -74,9 +98,13 @@
     keywordstyle=\color{clrKeyword}\bfseries,
     numberstyle=\tiny\color{clrLineNum},
     stringstyle=\color{clrString},
-    basicstyle=\ttfamily\small,
-    breakatwhitespace=false,
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=true,
     breaklines=true,
+    breakautoindent=true,
+    breakindent=0pt,
+    columns=fullflexible,
+    postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
     captionpos=b,
     keepspaces=true,
     numbers=left,
@@ -124,33 +152,7 @@
   morestring=[s]{`}{`}
 }
 
-% ============================================================
-% ALGORITHMS
-% ============================================================
-\usepackage{float}
-\usepackage{caption}
-\floatstyle{ruled}
-\newfloat{algorithm}{htbp}{loa}[chapter]
-\floatname{algorithm}{Algoritm}
-\newcommand{\listofalgorithms}{\listof{algorithm}{Lista algoritmilor}}
 \usepackage{placeins}
-
-% Pseudocode style for listings
-\lstdefinestyle{pseudocode}{
-    backgroundcolor=\color{white},
-    basicstyle=\ttfamily\small,
-    keywordstyle=\bfseries,
-    commentstyle=\itshape\color{clrComment},
-    numbers=left,
-    numberstyle=\tiny\color{clrLineNum},
-    numbersep=8pt,
-    frame=none,
-    breaklines=true,
-    tabsize=4,
-    xleftmargin=15pt,
-    morekeywords={Input,Output,while,do,for,if,then,else,end,return,
-                  foreach,repeat,until,to,downto,and,or,not}
-}
 
 % ============================================================
 % BIBLIOGRAPHY
@@ -162,29 +164,14 @@
 % HYPERLINKS
 % ============================================================
 \usepackage[hidelinks,
+            bookmarks,
+            bookmarksopen=true,
             pdftitle={Sistem E-Medicine cu modele compartimentale din familia SIR},
-            pdfauthor={},
-            pdfsubject={Lucrare de disertație},
+            pdfauthor={Geana Tudor-Bogdan},
+            pdfsubject={Lucrare de disertatie},
             pdfkeywords={SIDARTHE, SIR, SIS, SEIR, SIRS, calibrare parametri, LSTM, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
             ]{hyperref}
 \usepackage[capitalise]{cleveref}
-
-% ============================================================
-% HEADER / FOOTER
-% ============================================================
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\setlength{\headheight}{14pt}
-\fancyhf{}
-\fancyhead[L]{\small\nouppercase{\leftmark}}
-\fancyhead[R]{\small\thepage}
-\fancyfoot{}
-\renewcommand{\headrulewidth}{0.4pt}
-
-% ============================================================
-% UNITS
-% ============================================================
-% siunitx requires texlive-science (not installed); omitted for now
 
 % ============================================================
 % THEOREM ENVIRONMENTS (română)
@@ -220,110 +207,52 @@
 }
 
 % ============================================================
+% METADATE pentru clasa UPB (pagina de titlu si declaratia de onestitate)
+% ============================================================
+\author{Geană Tudor-Bogdan}
+% Titlul lung nu incape in 2 randuri la \Large pe pagina de titlu (depasea
+% latimea cu ~30pt); il rupem explicit in 3 randuri care incap. Metadata PDF
+% foloseste pdftitle separat, deci \\ aici nu afecteaza bookmark-urile.
+\title{Sistem E-Medicine pentru Analizarea și Monitorizarea\\
+Datelor Epidemiologice cu Modele Compartimentale\\
+din Familia SIR}
+
+\facultatea{Facultatea de Electronică, Telecomunicații
+și Tehnologia Informației}
+\tiplucrare{dizertație}
+\domeniu{Inginerie Electronică, Telecomunicații și Tehnologii Informaționale}
+\catedra{Telecomunicații}
+\campus{Leu}
+\program{Ingineria Informației și Sisteme de Calcul}
+\titlulobtinut{Master}
+\director{Prof. Radu Rădescu}
+\submissionmonth{Iunie}
+\submissionyear{2026}
+
+% ============================================================
 % DOCUMENT
 % ============================================================
 \begin{document}
-\onecolumn
-\hypersetup{pageanchor=false}
 
-%------------------------------------------------------------
-% PAGINA DE TITLU
-%------------------------------------------------------------
-\begin{titlepage}
-    \centering
-    \vspace*{0.8cm}
+% Pagina de titlu, declaratia de onestitate, TOC etc. — toate single-column,
+% gestionate de clasa UPB. Lista figurilor/tabelelor activate prin
+% \listoffigures/\listoftables intre \beforepreface si \afterpreface.
+\beforepreface
+\listoffigures
+\listoftables
+\afterpreface
 
-    %------------------------------------------------------------
-    % Antet instituțional
-    %------------------------------------------------------------
-    {\large\bfseries UNIVERSITATEA DE ȘTIINȚE ȘI TEHNOLOGIE\\[0.15cm]
-        POLITEHNICA BUCUREȘTI}\\[0.55cm]
-    {\large Facultatea de Electronică, Telecomunicații\\[0.1cm]
-        și Tehnologia Informației}\\[0.4cm]
-    {\normalsize Programul de masterat:}\\[0.12cm]
-    {\large\itshape Ingineria Informației și Sisteme de Calcul}\\[0.45cm]
-    \rule{0.62\textwidth}{0.4pt}
-
-    %------------------------------------------------------------
-    % Logo universitate (opțional)
-    % Pentru a-l adăuga: pune fișierul în docs/figures/
-    % (ex. figures/logo_unstpb.png sau .pdf) și decomentează:
-    % \vspace{0.7cm}
-    % \includegraphics[height=2.8cm]{figures/logo_unstpb}
-    %------------------------------------------------------------
-
-    \vspace{2.2cm}
-
-    %------------------------------------------------------------
-    % Titlul lucrării
-    %------------------------------------------------------------
-    \rule{\textwidth}{1.5pt}\\[0.45cm]
-    {\LARGE\bfseries
-        Sistem E-Medicine pentru Analizarea\\[0.3cm]
-        și Monitorizarea Datelor Epidemiologice\\[0.3cm]
-        cu Modele Compartimentale din Familia SIR
-    }\\[0.45cm]
-    \rule{\textwidth}{1.5pt}
-
-    \vspace{0.9cm}
-    {\large\bfseries LUCRARE DE DISERTAȚIE}
-
-    \vspace{2.4cm}
-
-    %------------------------------------------------------------
-    % Coordonator / Absolvent
-    %------------------------------------------------------------
-    \begin{minipage}[t]{0.48\textwidth}
-        \begin{flushleft}
-            \textbf{Coordonator științific:}\\[0.2cm]
-            Prof. Radu Rădescu
-        \end{flushleft}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t]{0.48\textwidth}
-        \begin{flushright}
-            \textbf{Absolvent:}\\[0.2cm]
-            Geană Tudor-Bogdan
-        \end{flushright}
-    \end{minipage}
-
-    \vfill
-    {\large București, \the\year}
-\end{titlepage}
-\hypersetup{pageanchor=true}
-
-%------------------------------------------------------------
-% PAGINI PRELIMINARE
-%------------------------------------------------------------
-\pagenumbering{roman}
-\setcounter{page}{1}
-
+% ============================================================
+% REZUMAT (single-column, ca pagina preliminara)
+% ============================================================
 \chapter*{Rezumat}
 \addcontentsline{toc}{chapter}{Rezumat}
 \input{chapters/00_rezumat}
 
+% ============================================================
+% CORPUL LUCRARII — o singura coloana
+% ============================================================
 \cleardoublepage
-\tableofcontents
-
-\cleardoublepage
-\listoffigures
-\addcontentsline{toc}{chapter}{\listfigurename}
-
-\cleardoublepage
-\listoftables
-\addcontentsline{toc}{chapter}{\listtablename}
-
-\cleardoublepage
-\listofalgorithms
-\addcontentsline{toc}{chapter}{Lista algoritmilor}
-
-%------------------------------------------------------------
-% CORPUL LUCRĂRII
-%------------------------------------------------------------
-\cleardoublepage
-\pagenumbering{arabic}
-\setcounter{page}{1}
-\twocolumn
 
 \input{chapters/01_introducere}
 \input{chapters/02_epidemiologie_si_modelare}
@@ -336,20 +265,19 @@
 \input{chapters/09_aplicatia_web}
 \input{chapters/10_concluzii}
 
-%------------------------------------------------------------
+% ============================================================
 % BIBLIOGRAFIE
-%------------------------------------------------------------
+% ============================================================
 \cleardoublepage
 \renewcommand{\bibname}{Bibliografie}
 \addcontentsline{toc}{chapter}{Bibliografie}
 \bibliographystyle{unsrt}
 \bibliography{bibliography}
 
-%------------------------------------------------------------
-% ANEXE
-%------------------------------------------------------------
+% ============================================================
+% ANEXE — codul sursa
+% ============================================================
 \appendix
-\onecolumn
 \input{appendices/A_cod_r}
 \input{appendices/B_cod_julia}
 \input{appendices/C_cod_python}

@@ -1,18 +1,32 @@
 \begin{table*}[!htbp]
 \centering
-\caption{Latenta API pe model, la orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se raporteaza mediana ($p_{50}$); pentru \emph{results}, endpointul cel mai greu, se raporteaza si percentila 95 ($p_{95}$) si dimensiunea raspunsului JSON. \emph{create} raspunde asincron (inainte de rularea solver-ului); \emph{results} si \emph{export} includ deserializarea din YugabyteDB. Masurat prin port-forward la clusterul \texttt{kube-4kdhb}.}
+\caption[Latența API pe model ($t_{\max}=365$)]{Latența API pe model, la
+orizontul de $\,365\,$ puncte (1 an, pas zilnic). Pentru fiecare endpoint se
+raportează mediana ($p_{50}$); pentru \emph{results}, endpointul cel mai
+greu, se raportează și percentila 95 ($p_{95}$) și dimensiunea răspunsului
+JSON. \emph{create} răspunde asincron (înainte de rularea solver-ului);
+\emph{results} și \emph{export} includ deserializarea din YugabyteDB.
+Măsurat prin port-forward la clusterul \texttt{kube-4kdhb}.}
 \label{tab:api_latency}
-\small
-\begin{tabularx}{\textwidth}{l r r r r r r}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{l r r r r r r}
 \toprule
-\textbf{Model} & \textbf{Create} & \textbf{Status} & \textbf{Results $p_{50}$} & \textbf{Results $p_{95}$} & \textbf{JSON} & \textbf{Export} \\
- & (ms) & (ms) & (ms) & (ms) & (KB) & (ms) \\
+\textbf{Model} &
+  \textbf{Create} &
+  \textbf{Status} &
+  \makecell[r]{\textbf{Results}\\\scriptsize $p_{50}$ (ms)} &
+  \makecell[r]{\textbf{Results}\\\scriptsize $p_{95}$ (ms)} &
+  \makecell[r]{\textbf{JSON}\\\scriptsize (KB)} &
+  \textbf{Export} \\
+ & (ms) & (ms) & & & & (ms) \\
 \midrule
-\texttt{sir} & 46.4 & 23.9 & 48.5 & 139.8 & 38.1 & 48.3 \\
-\texttt{sis} & 70.6 & 31.5 & 45.5 & 123.9 & 36.0 & 39.6 \\
-\texttt{seir} & 49.9 & 27.0 & 53.8 & 155.6 & 40.3 & 36.6 \\
-\texttt{sirs} & 50.0 & 28.3 & 46.9 & 124.0 & 38.1 & 37.3 \\
+\texttt{sir}      & 46.4 & 23.9 & 48.5 & 139.8 & 38.1 & 48.3 \\
+\texttt{sis}      & 70.6 & 31.5 & 45.5 & 123.9 & 36.0 & 39.6 \\
+\texttt{seir}     & 49.9 & 27.0 & 53.8 & 155.6 & 40.3 & 36.6 \\
+\texttt{sirs}     & 50.0 & 28.3 & 46.9 & 124.0 & 38.1 & 37.3 \\
 \texttt{sidarthe} & 44.2 & 29.7 & 47.1 & 126.3 & 48.9 & 39.3 \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{table*}

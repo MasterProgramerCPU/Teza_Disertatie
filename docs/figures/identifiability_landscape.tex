@@ -35,11 +35,11 @@
 \node[font=\scriptsize, anchor=south, color=red, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
     at (axis cs:0.3677, 0.3346) {liber};
 
-% optimul constrans (gamma=1/14)
+% optimul constrâns (gamma=1/14)
 \addplot[mark=*, mark size=4pt, color=red!70!black, mark options={fill=white, line width=1pt}]
     coordinates {(0.1039, 0.0714)};
 \node[font=\scriptsize, anchor=south, color=red!70!black, fill=white, fill opacity=0.85, text opacity=1, inner sep=1pt]
-    at (axis cs:0.1039, 0.0714) {constrans};
+    at (axis cs:0.1039, 0.0714) {constrâns};
 
 % linia gamma=1/14
 \draw[dashed, red!50, thick] (axis cs:0.05, 0.0714) -- (axis cs:0.6, 0.0714);
@@ -49,13 +49,13 @@
 
 \end{axis}
 \end{tikzpicture}
-\caption{Peisajul de pierdere $\log_{10}\mathrm{MSE}(\beta, \gamma)$ pentru
-modelul SIR pe fereastra de antrenare. Punctele rosii marcheaza solutia
-libera $(0{,}368, 0{,}335)$ si solutia constransa $(0{,}104, 0{,}0714)$;
-linia rosie punctata indica restrictia clinica $\gamma = 1/14$. Valea de
-pierdere mica este alungita si aproape liniara, ceea ce inseamna ca multe
-combinatii $(\beta, \gamma)$ produc o potrivire similara cu datele observate
-din valul 1 --- semnatura tipica a identifiabilitatii practice slabe pentru
-SIR cu o singura serie observata.}
+\caption[Peisaj de pierdere SIR]{Peisajul de pierdere $\log_{10}\mathrm{MSE}(\beta, \gamma)$ pentru
+modelul SIR pe fereastra de antrenare. Punctele roșii marchează soluția
+liberă $(0{,}368, 0{,}335)$ și soluția constrânsă $(0{,}104, 0{,}0714)$;
+linia roșie punctata indica restricția clinică $\gamma = 1/14$. Valea de
+pierdere mica este alungită și aproape liniara, ceea ce înseamnă ca multe
+combinații $(\beta, \gamma)$ produc o potrivire similara cu datele observate
+din valul 1 --- semnătura tipică a identifiabilității practice slabe pentru
+SIR cu o singură serie observată.}
 \label{fig:identifiability_landscape}
 \end{figure}
