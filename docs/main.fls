@@ -577,7 +577,6 @@ OUTPUT main.toc
 INPUT ./main.lof
 INPUT ./main.lof
 INPUT main.lof
-INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/lm/ec-lmtt12.tfm
 OUTPUT main.lof
 INPUT ./main.lot
 INPUT ./main.lot
@@ -599,6 +598,7 @@ INPUT ./chapters/01_introducere.tex
 INPUT ./chapters/01_introducere.tex
 INPUT chapters/01_introducere.tex
 INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/lm/ec-lmbx7.tfm
+INPUT /opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/tfm/public/lm/ec-lmtt12.tfm
 INPUT ./chapters/02_epidemiologie_si_modelare.tex
 INPUT ./chapters/02_epidemiologie_si_modelare.tex
 INPUT ./chapters/02_epidemiologie_si_modelare.tex

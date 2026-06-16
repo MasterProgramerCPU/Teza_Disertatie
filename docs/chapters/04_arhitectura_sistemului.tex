@@ -112,7 +112,7 @@ aceeași separare a responsabilităților permite descrierea resurselor în Kube
 
 \end{tikzpicture}
 }
-\caption{Arhitectura globală a sistemului e-medicine.
+\caption[Arhitectura globală a sistemului]{Arhitectura globală a sistemului e-medicine.
 Săgețile indică direcția de flux a datelor: browserul accesează
 aplicația prin Ingress, care rutează cererile către cele două SPA-uri sau API;
 API-ul publică job-uri în Redis și le consumă runner-ele dedicate;
@@ -197,7 +197,7 @@ diagrame temporale, în care timpul curge de sus în jos, evidențiind decuplare
 
 \end{tikzpicture}
 }%
-\caption{Ciclul de viață al unei simulări, de la cererea utilizatorului în UI
+\caption[Ciclul de viață al unei simulări]{Ciclul de viață al unei simulări, de la cererea utilizatorului în UI
 până la afișarea rezultatului. Timpul curge de sus în jos. Săgețile pline
 indică mesaje sincrone HTTP/queue/SQL; săgețile întrerupte indică polling-ul
 repetat al statusului până la finalizare. API-ul răspunde \texttt{201 Created}
@@ -441,7 +441,7 @@ autorizarea și interogările să fie făcute în contextul unui studiu.
 
 \end{tikzpicture}
 }
-\caption{Diagrama entitate-relație a bazei de date curente. PK-urile sunt
+\caption[Schema bazei de date (ERD)]{Diagrama entitate-relație a bazei de date curente. PK-urile sunt
 marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit{FK}.
 Tabelele \texttt{datasets} și \texttt{simulation\_runs} sunt scope-uite pe
 \texttt{study\_id}, iar tabela \texttt{study\_members} definește rolul fiecărui
@@ -490,7 +490,7 @@ minimă prezentată în \cref{tab:csv_schema}.
 
 \begin{table*}[t]
 \centering
-\caption{Structura minimă a fișierului CSV de date epidemiologice.}
+\caption[Structura fișierului CSV]{Structura minimă a fișierului CSV de date epidemiologice.}
 \label{tab:csv_schema}
 \begin{tabularx}{0.92\textwidth}{llX}
 \toprule
@@ -679,7 +679,7 @@ tratați ca administratori în orice studiu, ceea ce permite operații de suport
 
 \begin{table*}[t]
 \centering
-\caption{Endpointurile REST principale ale API-ului backend.}
+\caption[Endpointurile REST ale API-ului]{Endpointurile REST principale ale API-ului backend.}
 \label{tab:endpoints}
 \scriptsize
 \renewcommand{\arraystretch}{1.08}
@@ -997,7 +997,7 @@ metrici CPU/memorie (Horizontal Pod Autoscaler).
 
 \end{tikzpicture}
 }
-\caption{Topologia cluster-ului Kubernetes cu 3 noduri control plane
+\caption[Topologia clusterului Kubernetes]{Topologia cluster-ului Kubernetes cu 3 noduri control plane
 HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform
 prin \texttt{podAntiAffinity}, garantând că pierderea unui worker
 afectează cel mult o replică \texttt{yb-master} și o replică

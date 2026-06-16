@@ -1,6 +1,6 @@
 \begin{table*}[!htbp]
 \centering
-\caption[Cost software calibrare SIR]{Costul software al calibrării SIR (România, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber și constrâns). Coloana \emph{în-process} măsoară direct costul procedurii din \texttt{calibrate.py}; coloana \emph{naiv (ca job-uri)} proiectează costul dacă fiecare simulare candidată ar fi un job separat prin aplicație, folosind latența end-to-end măsurată a unui job SIR real ($1047$~ms/job); coloana \emph{recomandat} corespunde calibrării într-un singur job, cu o singură simulare finală scrisă în baza de date. Numărul de simulări candidate este numărul real de evaluări ale funcției obiectiv.}
+\caption[Cost software calibrare SIR]{Costul software al calibrării SIR (România, valul 1; fereastra de $154$ zile, restart-uri multiple Nelder--Mead pentru scenariile liber și constrâns). Coloana \emph{in-process} măsoară direct costul procedurii din \texttt{calibrate.py}; coloana \emph{naiv (ca job-uri)} proiectează costul dacă fiecare simulare candidată ar fi un job separat prin aplicație, folosind latența end-to-end măsurată a unui job SIR real ($1047$~ms/job); coloana \emph{recomandat} corespunde calibrării într-un singur job, cu o singură simulare finală scrisă în baza de date. Numărul de simulări candidate este numărul real de evaluări ale funcției obiectiv.}
 \label{tab:calibration_cost}
 \small
 \begin{tabularx}{\textwidth}{X r r r}
@@ -16,5 +16,5 @@ Timp CPU (s) & 17.23 & --- & 17.23 \\
 Memorie de varf (MB) & 0.7 & --- & 0.7 \\
 \bottomrule
 \end{tabularx}
-\\[2pt]\footnotesize\textsuperscript{*}~Proiectat: $1377 \times 1047$~ms${}=1442$~s; de $\sim$84$\times$ mai scump decât calibrarea în-process, fără castig de acuratete --- overhead-ul de coada și persistare ar fi platit pentru fiecare integrare candidată.
+\\[2pt]\footnotesize\textsuperscript{*}~Proiectat: $1377 \times 1047$~ms${}=1442$~s; de $\sim$84$\times$ mai scump decât calibrarea in-process, fără castig de acuratete --- overhead-ul de coada și persistare ar fi platit pentru fiecare integrare candidată.
 \end{table*}

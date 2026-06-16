@@ -94,9 +94,9 @@
 \newlabel{subsec:sir_derivare@cref}{{[subsection][1][1,4]1.4.1}{[1][10][]10}{}{}{}}
 \newlabel{eq:sir}{{1.17}{10}{Ipoteze și derivarea ecuațiilor din principii prime}{equation.1.17}{}}
 \newlabel{eq:sir@cref}{{[equation][17][1]1.17}{[1][10][]10}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Diagrama de flux a compartimentelor modelului SIR. Fluxul $\beta SI/N$ reprezintă rata de noi infecții, iar $\gamma I$ reprezintă rata de recuperare.}}{11}{figure.caption.17}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.1}{\ignorespaces Diagrama modelului SIR}}{11}{figure.caption.17}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:sir_diagram}{{1.1}{11}{Diagrama de flux a compartimentelor modelului SIR. Fluxul $\beta SI/N$ reprezintă rata de noi infecții, iar $\gamma I$ reprezintă rata de recuperare}{figure.caption.17}{}}
+\newlabel{fig:sir_diagram}{{1.1}{11}{Diagrama modelului SIR}{figure.caption.17}{}}
 \newlabel{fig:sir_diagram@cref}{{[figure][1][1]1.1}{[1][11][]11}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.4.2}Proprietăți matematice fundamentale}{11}{subsection.1.4.2}\protected@file@percent }
 \newlabel{subsec:sir_proprietati}{{1.4.2}{11}{Proprietăți matematice fundamentale}{subsection.1.4.2}{}}
@@ -230,8 +230,8 @@
 \newlabel{subsec:python@cref}{{[subsection][3][2,1]2.1.3}{[1][22][]22}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3.1}Istoric și filosofie}{22}{subsubsection.2.1.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3.2}Caracteristici tehnice și ecosistem științific}{22}{subsubsection.2.1.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Comparație a limbajelor de programare utilizate}}{23}{table.caption.19}\protected@file@percent }
-\newlabel{tab:comparatie_limbaje}{{2.1}{23}{Comparație a limbajelor de programare utilizate}{table.caption.19}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Comparația limbajelor (R/Julia/Python)}}{23}{table.caption.19}\protected@file@percent }
+\newlabel{tab:comparatie_limbaje}{{2.1}{23}{Comparația limbajelor (R/Julia/Python)}{table.caption.19}{}}
 \newlabel{tab:comparatie_limbaje@cref}{{[table][1][2]2.1}{[1][23][]23}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3.3}Funcțiile de rezolvare a EDO în SciPy}{23}{subsubsection.2.1.3.3}\protected@file@percent }
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {2.1}{\ignorespaces Interfața solve\_ivp din SciPy pentru un sistem compartimental SIR}}{23}{lstlisting.2.1}\protected@file@percent }
@@ -298,11 +298,11 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Cerințe funcționale}{27}{subsection.3.2.1}\protected@file@percent }
 \newlabel{subsec:cerinte_functionale}{{3.2.1}{27}{Cerințe funcționale}{subsection.3.2.1}{}}
 \newlabel{subsec:cerinte_functionale@cref}{{[subsection][1][3,2]3.2.1}{[1][27][]27}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către cele două SPA-uri sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB.}}{28}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:arhitectura_globala}{{3.1}{28}{Arhitectura globală a sistemului e-medicine. Săgețile indică direcția de flux a datelor: browserul accesează aplicația prin Ingress, care rutează cererile către cele două SPA-uri sau API; API-ul publică job-uri în Redis și le consumă runner-ele dedicate; atât API-ul, cât și runner-ele accesează același cluster YugabyteDB}{figure.caption.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Arhitectura globală a sistemului}}{28}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:arhitectura_globala}{{3.1}{28}{Arhitectura globală a sistemului}{figure.caption.20}{}}
 \newlabel{fig:arhitectura_globala@cref}{{[figure][1][3]3.1}{[1][27][]28}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Ciclul de viață al unei simulări, de la cererea utilizatorului în UI până la afișarea rezultatului. Timpul curge de sus în jos. Săgețile pline indică mesaje sincrone HTTP/queue/SQL; săgețile întrerupte indică polling-ul repetat al statusului până la finalizare. API-ul răspunde \texttt  {201 Created} \emph  {înainte} ca solver-ul să ruleze --- întreaga execuție numerică se petrece asincron în runner, decuplată prin Redis. Aceasta este complementară Figurii~\ref {fig:arhitectura_globala}, care arată topologia: cine vorbește cu cine; aici se vede \emph  {când}.}}{29}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:ciclu_viata_simulare}{{3.2}{29}{Ciclul de viață al unei simulări, de la cererea utilizatorului în UI până la afișarea rezultatului. Timpul curge de sus în jos. Săgețile pline indică mesaje sincrone HTTP/queue/SQL; săgețile întrerupte indică polling-ul repetat al statusului până la finalizare. API-ul răspunde \texttt {201 Created} \emph {înainte} ca solver-ul să ruleze --- întreaga execuție numerică se petrece asincron în runner, decuplată prin Redis. Aceasta este complementară Figurii~\ref {fig:arhitectura_globala}, care arată topologia: cine vorbește cu cine; aici se vede \emph {când}}{figure.caption.21}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Ciclul de viață al unei simulări}}{29}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:ciclu_viata_simulare}{{3.2}{29}{Ciclul de viață al unei simulări}{figure.caption.21}{}}
 \newlabel{fig:ciclu_viata_simulare@cref}{{[figure][2][3]3.2}{[1][27][]29}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Cerințe non-funcționale}{30}{subsection.3.2.2}\protected@file@percent }
 \newlabel{subsec:cerinte_nonfunctionale}{{3.2.2}{30}{Cerințe non-funcționale}{subsection.3.2.2}{}}
@@ -313,15 +313,15 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Schema relațională}{30}{subsection.3.3.1}\protected@file@percent }
 \newlabel{subsec:schema_bd}{{3.3.1}{30}{Schema relațională}{subsection.3.3.1}{}}
 \newlabel{subsec:schema_bd@cref}{{[subsection][1][3,3]3.3.1}{[1][30][]30}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagrama entitate-relație a bazei de date curente. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit  {FK}. Tabelele \texttt  {datasets} și \texttt  {simulation\_runs} sunt scope-uite pe \texttt  {study\_id}, iar tabela \texttt  {study\_members} definește rolul fiecărui utilizator într-un studiu.}}{31}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:erd}{{3.3}{31}{Diagrama entitate-relație a bazei de date curente. PK-urile sunt marcate cu aldine și subliniere; FK-urile sunt marcate cu \textit {FK}. Tabelele \texttt {datasets} și \texttt {simulation\_runs} sunt scope-uite pe \texttt {study\_id}, iar tabela \texttt {study\_members} definește rolul fiecărui utilizator într-un studiu}{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Schema bazei de date (ERD)}}{31}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:erd}{{3.3}{31}{Schema bazei de date (ERD)}{figure.caption.22}{}}
 \newlabel{fig:erd@cref}{{[figure][3][3]3.3}{[1][30][]31}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Modelul datelor epidemiologice}{31}{subsection.3.3.2}\protected@file@percent }
 \newlabel{subsec:model_date}{{3.3.2}{31}{Modelul datelor epidemiologice}{subsection.3.3.2}{}}
 \newlabel{subsec:model_date@cref}{{[subsection][2][3,3]3.3.2}{[1][31][]31}{}{}{}}
 \citation{ongaro2014raft}
-\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Structura minimă a fișierului CSV de date epidemiologice.}}{32}{table.caption.23}\protected@file@percent }
-\newlabel{tab:csv_schema}{{3.1}{32}{Structura minimă a fișierului CSV de date epidemiologice}{table.caption.23}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Structura fișierului CSV}}{32}{table.caption.23}\protected@file@percent }
+\newlabel{tab:csv_schema}{{3.1}{32}{Structura fișierului CSV}{table.caption.23}{}}
 \newlabel{tab:csv_schema@cref}{{[table][1][3]3.1}{[1][31][]32}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Strategia de partiționare și replicare în YugabyteDB}{32}{subsection.3.3.3}\protected@file@percent }
 \newlabel{subsec:strategie_partitionare}{{3.3.3}{32}{Strategia de partiționare și replicare în YugabyteDB}{subsection.3.3.3}{}}
@@ -349,8 +349,8 @@
 \newlabel{subsec:integrare_runnere}{{3.4.5}{34}{Integrarea cu runner-ele de algoritmi}{subsection.3.4.5}{}}
 \newlabel{subsec:integrare_runnere@cref}{{[subsection][5][3,4]3.4.5}{[1][34][]34}{}{}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {3.3}{\ignorespaces Exemplu mesaj JSON publicat în coada Redis la inițierea unei simulări.}}{34}{lstlisting.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Endpointurile REST principale ale API-ului backend.}}{35}{table.caption.24}\protected@file@percent }
-\newlabel{tab:endpoints}{{3.2}{35}{Endpointurile REST principale ale API-ului backend}{table.caption.24}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces Endpointurile REST ale API-ului}}{35}{table.caption.24}\protected@file@percent }
+\newlabel{tab:endpoints}{{3.2}{35}{Endpointurile REST ale API-ului}{table.caption.24}{}}
 \newlabel{tab:endpoints@cref}{{[table][2][3]3.2}{[1][34][]35}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.5}Arhitectura frontend Vue.js}{35}{section.3.5}\protected@file@percent }
 \newlabel{sec:arhitectura_frontend}{{3.5}{35}{Arhitectura frontend Vue.js}{section.3.5}{}}
@@ -373,8 +373,8 @@
 \newlabel{subsec:deploy_yugabyte}{{3.6.2}{37}{Deployment YugabyteDB pe Kubernetes}{subsection.3.6.2}{}}
 \newlabel{subsec:deploy_yugabyte@cref}{{[subsection][2][3,6]3.6.2}{[1][37][]37}{}{}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {3.5}{\ignorespaces Instalarea YugabyteDB cu Helm și fișierul de \texttt  {values} custom.}}{37}{lstlisting.3.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Topologia cluster-ului Kubernetes cu 3 noduri control plane HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform prin \texttt  {podAntiAffinity}, garantând că pierderea unui worker afectează cel mult o replică \texttt  {yb-master} și o replică \texttt  {yb-tserver} --- în limita toleranței quorum-ului Raft.}}{38}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:k8s_topology}{{3.4}{38}{Topologia cluster-ului Kubernetes cu 3 noduri control plane HA și 3 noduri worker. Pod-urile YugabyteDB sunt distribuite uniform prin \texttt {podAntiAffinity}, garantând că pierderea unui worker afectează cel mult o replică \texttt {yb-master} și o replică \texttt {yb-tserver} --- în limita toleranței quorum-ului Raft}{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Topologia clusterului Kubernetes}}{38}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:k8s_topology}{{3.4}{38}{Topologia clusterului Kubernetes}{figure.caption.25}{}}
 \newlabel{fig:k8s_topology@cref}{{[figure][4][3]3.4}{[1][37][]38}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.6.3}Stratul aplicativ: imagini container și registru}{38}{subsection.3.6.3}\protected@file@percent }
 \newlabel{subsec:deploy_aplicatii}{{3.6.3}{38}{Stratul aplicativ: imagini container și registru}{subsection.3.6.3}{}}
@@ -394,8 +394,8 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.7.2}Provisioning Kubernetes}{41}{subsection.3.7.2}\protected@file@percent }
 \newlabel{subsec:plugin_provisioning}{{3.7.2}{41}{Provisioning Kubernetes}{subsection.3.7.2}{}}
 \newlabel{subsec:plugin_provisioning@cref}{{[subsection][2][3,7]3.7.2}{[1][41][]41}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces Ciclul de viață runner plug-în}}{41}{table.caption.26}\protected@file@percent }
-\newlabel{tab:plugin_lifecycle}{{3.3}{41}{Ciclul de viață runner plug-în}{table.caption.26}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces Ciclul de viață runner plug-in}}{41}{table.caption.26}\protected@file@percent }
+\newlabel{tab:plugin_lifecycle}{{3.3}{41}{Ciclul de viață runner plug-in}{table.caption.26}{}}
 \newlabel{tab:plugin_lifecycle@cref}{{[table][3][3]3.3}{[1][41][]41}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.7.3}Exemplu concret de runner plug-in}{41}{subsection.3.7.3}\protected@file@percent }
 \newlabel{subsec:plugin_exemplu}{{3.7.3}{41}{Exemplu concret de runner plug-in}{subsection.3.7.3}{}}
@@ -414,8 +414,8 @@
 \newlabel{sec:seturi_date}{{4.1}{45}{Datele de intrare și inițializarea compartimentelor}{section.4.1}{}}
 \newlabel{sec:seturi_date@cref}{{[section][1][4]4.1}{[1][45][]45}{}{}{}}
 \citation{owid_covid}
-\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{46}{table.caption.27}\protected@file@percent }
-\newlabel{tab:initializare_modele}{{4.1}{46}{Maparea datelor observabile în condiții inițiale pentru modelele suportate}{table.caption.27}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Inițializarea compartimentelor}}{46}{table.caption.27}\protected@file@percent }
+\newlabel{tab:initializare_modele}{{4.1}{46}{Inițializarea compartimentelor}{table.caption.27}{}}
 \newlabel{tab:initializare_modele@cref}{{[table][1][4]4.1}{[1][45][]46}{}{}{}}
 \newlabel{lst:script_owid_richer}{{4.1}{46}{Script user (executor partajat \texttt {runner-script}) care folosește coloanele epi extinse: raportează $I$, decese cumulate și $R_t$ observat ca pseudo-compartimente}{lstlisting.4.1}{}}
 \newlabel{lst:script_owid_richer@cref}{{[listing][1][4]4.1}{[1][46][]46}{}{}{}}
@@ -459,8 +459,8 @@
 \@writefile{toc}{\contentsline {section}{\numberline {5.3}Arhitectura celulei LSTM}{51}{section.5.3}\protected@file@percent }
 \newlabel{sec:celula_lstm}{{5.3}{51}{Arhitectura celulei LSTM}{section.5.3}{}}
 \newlabel{sec:celula_lstm@cref}{{[section][3][5]5.3}{[1][51][]51}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt  {runner-lstm}.}}{52}{table.caption.29}\protected@file@percent }
-\newlabel{tab:lstm_componente}{{5.1}{52}{Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt {runner-lstm}}{table.caption.29}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Componentele celulei LSTM}}{52}{table.caption.29}\protected@file@percent }
+\newlabel{tab:lstm_componente}{{5.1}{52}{Componentele celulei LSTM}{table.caption.29}{}}
 \newlabel{tab:lstm_componente@cref}{{[table][1][5]5.1}{[1][52][]52}{}{}{}}
 \newlabel{eq:lstm_cell}{{5.7}{52}{Arhitectura celulei LSTM}{equation.5.7}{}}
 \newlabel{eq:lstm_cell@cref}{{[equation][7][5]5.7}{[1][52][]52}{}{}{}}
@@ -517,8 +517,8 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6.3}Operatorul de observație}{59}{section.6.3}\protected@file@percent }
 \newlabel{sec:operator_observatie}{{6.3}{59}{Operatorul de observație}{section.6.3}{}}
 \newlabel{sec:operator_observatie@cref}{{[section][3][6]6.3}{[1][59][]59}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Comparație structurală între modelele utilizate în lucrare.}}{60}{table.caption.32}\protected@file@percent }
-\newlabel{tab:comparatie_modele}{{6.1}{60}{Comparație structurală între modelele utilizate în lucrare}{table.caption.32}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Comparația structurală a modelelor}}{60}{table.caption.32}\protected@file@percent }
+\newlabel{tab:comparatie_modele}{{6.1}{60}{Comparația structurală a modelelor}{table.caption.32}{}}
 \newlabel{tab:comparatie_modele@cref}{{[table][1][6]6.1}{[1][59][]60}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {6.4}Metrici de eroare numerică}{60}{section.6.4}\protected@file@percent }
 \newlabel{sec:metrici_eroare_numerica}{{6.4}{60}{Metrici de eroare numerică}{section.6.4}{}}
@@ -530,8 +530,8 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6.6}Calibrarea parametrilor}{61}{section.6.6}\protected@file@percent }
 \newlabel{sec:calibrare_parametri}{{6.6}{61}{Calibrarea parametrilor}{section.6.6}{}}
 \newlabel{sec:calibrare_parametri@cref}{{[section][6][6]6.6}{[1][61][]61}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}}{62}{table.caption.33}\protected@file@percent }
-\newlabel{tab:teste_necesare_comparatie}{{6.2}{62}{Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor}{table.caption.33}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces Teste necesare: comparație numerică}}{62}{table.caption.33}\protected@file@percent }
+\newlabel{tab:teste_necesare_comparatie}{{6.2}{62}{Teste necesare: comparație numerică}{table.caption.33}{}}
 \newlabel{tab:teste_necesare_comparatie@cref}{{[table][2][6]6.2}{[1][61][]62}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.6.1}Aplicare pe România, valul 1 din 2020}{62}{subsection.6.6.1}\protected@file@percent }
 \newlabel{subsec:calibrare_romania}{{6.6.1}{62}{Aplicare pe România, valul 1 din 2020}{subsection.6.6.1}{}}
@@ -580,17 +580,17 @@
 \@writefile{toc}{\contentsline {section}{\numberline {7.2}Metrici colectate}{69}{section.7.2}\protected@file@percent }
 \newlabel{subsec:metrici}{{7.2}{69}{Metrici colectate}{section.7.2}{}}
 \newlabel{subsec:metrici@cref}{{[section][2][7]7.2}{[1][69][]69}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Metricile colectate sau derivabile pentru evaluarea software.}}{69}{table.caption.41}\protected@file@percent }
-\newlabel{tab:metrici_benchmark}{{7.1}{69}{Metricile colectate sau derivabile pentru evaluarea software}{table.caption.41}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Metrici de evaluare software}}{69}{table.caption.41}\protected@file@percent }
+\newlabel{tab:metrici_benchmark}{{7.1}{69}{Metrici de evaluare software}{table.caption.41}{}}
 \newlabel{tab:metrici_benchmark@cref}{{[table][1][7]7.1}{[1][69][]69}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {7.3}Matricea experimentală}{70}{section.7.3}\protected@file@percent }
 \newlabel{sec:matrice_experimentala}{{7.3}{70}{Matricea experimentală}{section.7.3}{}}
 \newlabel{sec:matrice_experimentala@cref}{{[section][3][7]7.3}{[1][70][]70}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{70}{table.caption.42}\protected@file@percent }
-\newlabel{tab:matrice_benchmark}{{7.2}{70}{Matrice minimă pentru campania de benchmark}{table.caption.42}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Matricea experimentală de benchmark}}{70}{table.caption.42}\protected@file@percent }
+\newlabel{tab:matrice_benchmark}{{7.2}{70}{Matricea experimentală de benchmark}{table.caption.42}{}}
 \newlabel{tab:matrice_benchmark@cref}{{[table][2][7]7.2}{[1][70][]70}{}{}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{71}{table.caption.43}\protected@file@percent }
-\newlabel{tab:teste_necesare_software}{{7.3}{71}{Teste necesare pentru obținerea rezultatelor de evaluare software}{table.caption.43}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces Teste necesare: evaluare software}}{71}{table.caption.43}\protected@file@percent }
+\newlabel{tab:teste_necesare_software}{{7.3}{71}{Teste necesare: evaluare software}{table.caption.43}{}}
 \newlabel{tab:teste_necesare_software@cref}{{[table][3][7]7.3}{[1][71][]71}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {7.4}Protocol de rulare}{71}{section.7.4}\protected@file@percent }
 \newlabel{subsec:protocoale}{{7.4}{71}{Protocol de rulare}{section.7.4}{}}

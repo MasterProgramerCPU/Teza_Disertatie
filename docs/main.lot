@@ -1,20 +1,20 @@
 \babel@toc {romanian}{}\relax 
-\contentsline {table}{\numberline {2.1}{\ignorespaces Comparație a limbajelor de programare utilizate}}{23}{table.caption.19}%
-\contentsline {table}{\numberline {3.1}{\ignorespaces Structura minimă a fișierului CSV de date epidemiologice.}}{32}{table.caption.23}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Endpointurile REST principale ale API-ului backend.}}{35}{table.caption.24}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Ciclul de viață runner plug-în}}{41}{table.caption.26}%
-\contentsline {table}{\numberline {4.1}{\ignorespaces Maparea datelor observabile în condiții inițiale pentru modelele suportate.}}{46}{table.caption.27}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Comparația limbajelor (R/Julia/Python)}}{23}{table.caption.19}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Structura fișierului CSV}}{32}{table.caption.23}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Endpointurile REST ale API-ului}}{35}{table.caption.24}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Ciclul de viață runner plug-in}}{41}{table.caption.26}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Inițializarea compartimentelor}}{46}{table.caption.27}%
 \contentsline {table}{\numberline {4.2}{\ignorespaces Comparație runner-e compartimentale}}{49}{table.caption.28}%
-\contentsline {table}{\numberline {5.1}{\ignorespaces Corespondența dintre formularea matematică a celulei LSTM și implementarea din \texttt {runner-lstm}.}}{52}{table.caption.29}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Componentele celulei LSTM}}{52}{table.caption.29}%
 \contentsline {table}{\numberline {5.2}{\ignorespaces LSTM vs predictori naivi}}{56}{table.caption.31}%
-\contentsline {table}{\numberline {6.1}{\ignorespaces Comparație structurală între modelele utilizate în lucrare.}}{60}{table.caption.32}%
-\contentsline {table}{\numberline {6.2}{\ignorespaces Locurile din analiza comparativă care necesită testare pentru obținerea rezultatelor.}}{62}{table.caption.33}%
+\contentsline {table}{\numberline {6.1}{\ignorespaces Comparația structurală a modelelor}}{60}{table.caption.32}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Teste necesare: comparație numerică}}{62}{table.caption.33}%
 \contentsline {table}{\numberline {6.3}{\ignorespaces Calibrare SIR pe România}}{63}{table.caption.34}%
 \contentsline {table}{\numberline {6.4}{\ignorespaces Calibrare SIR multi-regiune}}{65}{table.caption.38}%
 \contentsline {table}{\numberline {6.5}{\ignorespaces Cost software calibrare SIR}}{67}{table.caption.40}%
-\contentsline {table}{\numberline {7.1}{\ignorespaces Metricile colectate sau derivabile pentru evaluarea software.}}{69}{table.caption.41}%
-\contentsline {table}{\numberline {7.2}{\ignorespaces Matrice minimă pentru campania de benchmark.}}{70}{table.caption.42}%
-\contentsline {table}{\numberline {7.3}{\ignorespaces Teste necesare pentru obținerea rezultatelor de evaluare software.}}{71}{table.caption.43}%
+\contentsline {table}{\numberline {7.1}{\ignorespaces Metrici de evaluare software}}{69}{table.caption.41}%
+\contentsline {table}{\numberline {7.2}{\ignorespaces Matricea experimentală de benchmark}}{70}{table.caption.42}%
+\contentsline {table}{\numberline {7.3}{\ignorespaces Teste necesare: evaluare software}}{71}{table.caption.43}%
 \contentsline {table}{\numberline {7.4}{\ignorespaces Wall-time median solver}}{73}{table.caption.44}%
 \contentsline {table}{\numberline {7.5}{\ignorespaces Speedup solver vs Python}}{74}{table.caption.45}%
 \contentsline {table}{\numberline {7.6}{\ignorespaces Memorie peak (mediană)}}{74}{table.caption.46}%
