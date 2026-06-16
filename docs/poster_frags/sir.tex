@@ -1,0 +1,13 @@
+\begin{tikzpicture}[
+    box/.style = {rectangle, draw, thick, minimum width=2cm, minimum height=1.2cm,
+                  fill=blue!10, font=\large\bfseries},
+    arr/.style = {-{Stealth[length=3mm]}, thick},
+    lbl/.style = {font=\normalsize, midway, above}
+]
+    \node[box] (S) {$S$};
+    \node[box, right=3cm of S] (I) {$I$};
+    \node[box, right=3cm of I] (R) {$R$};
+
+    \draw[arr] (S) -- (I) node[lbl] {$\beta SI/N$};
+    \draw[arr] (I) -- (R) node[lbl] {$\gamma I$};
+\end{tikzpicture}

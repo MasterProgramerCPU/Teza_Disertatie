@@ -400,7 +400,7 @@
         \null\nobreak\vskip 10bp
         {\def\baselinestretch{1}\@normalsize
 %          \centering\Large\bfseries\uppercase\expandafter{\@title}\par\nobreak
-          \centering\Large\bfseries\expandafter{\@title}\par\nobreak % DN
+          \centering\Large\bfseries\itshape\expandafter{\@title}\par\nobreak % DN
          }
 
         \vskip 20mm
@@ -410,15 +410,18 @@
           \ifdraft%
             {VERSIUNEA DRAFT CREATĂ LA \uppercase\expandafter{\today}\\}
           \else %
-            program de master:\\
-            {\it\@program}
+            \vskip 2ex
+            {\mdseries\large
+              prezentată ca cerință parțială pentru obținerea titlului de\\[2.4ex]
+              {\itshape\@titlulobtinut} în domeniul {\itshape\@domeniu}\\[2.4ex]
+              programul de studii de master {\itshape\@program}\par}
 
         \vfil
 
              \begin{tabular}
                {>{\raggedright}p{0.6\textwidth}r}
-               \Large{Conducător științific} & \Large{Absolvent}\\
-               {\@director} & {\@author}\\
+               {\Large\mdseries Conducător(i) științific(i)} & {\Large\mdseries Absolvent}\\[1ex]
+               {\itshape\@director} & {\itshape\@author}\\
              \end{tabular}
  \vfil
        
@@ -440,7 +443,7 @@ Catedra \@catedra} \par\nobreak % DN
         \null\nobreak\vskip 10bp
         {\def\baselinestretch{1}\@normalsize
 %          \centering\Large\bfseries\uppercase\expandafter{\@title}\par\nobreak
-          \centering\Large\bfseries\expandafter{\@title}\par\nobreak % DN
+          \centering\Large\bfseries\itshape\expandafter{\@title}\par\nobreak % DN
          }
 
         \vskip 20mm
@@ -450,15 +453,18 @@ Catedra \@catedra} \par\nobreak % DN
           \ifdraft%
             {VERSIUNEA DRAFT CREATĂ LA \uppercase\expandafter{\today}\\}
           \else %
-            program de master:\\
-            {\it\@program}
+            \vskip 2ex
+            {\mdseries\large
+              prezentată ca cerință parțială pentru obținerea titlului de\\[2.4ex]
+              {\itshape\@titlulobtinut} în domeniul {\itshape\@domeniu}\\[2.4ex]
+              programul de studii de master {\itshape\@program}\par}
 
         \vfil
 
              \begin{tabular}
                {>{\raggedright}p{0.6\textwidth}r}
-               \Large{Conducător științific} & \Large{Absolvent}\\
-               {\@director} & {\@author}\\
+               {\Large\mdseries Conducător(i) științific(i)} & {\Large\mdseries Absolvent}\\[1ex]
+               {\itshape\@director} & {\itshape\@author}\\
              \end{tabular}
  \vfil
        
@@ -529,6 +535,9 @@ Absolvent: {\@author}
         \pagestyle{empty}
         \titlep
         % \inscrierep
+        % Formular de inscriere a temei (Anexa 1/2), intre titlu si declaratie,
+        % daca exista fisierul in proiect:
+        \InputIfFileExists{frontmatter_formular}{}{}
         \declaratiep
         \tableofcontents
         %\ifcopyright\copyrightp\fi  

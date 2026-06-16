@@ -2,10 +2,13 @@
 % CAPITOLUL 1 — INTRODUCERE
 % ============================================================
 
-\chapter{Introducere}
+\chapter*{Introducere}
+\addcontentsline{toc}{chapter}{Introducere}
 \label{ch:introducere}
 
-\section{Context și motivație}
+\phantomsection
+\addcontentsline{toc}{section}{Context și motivație}
+\section*{Context și motivație}
 \label{sec:context}
 
 Bolile infecțioase rămân una dintre formele prin care vulnerabilitatea unui sistem
@@ -41,7 +44,9 @@ vizualizare în interfață web. Modelele SIR, SIS, SEIR și SIRS rămân utile 
 repere mai simple, prin care se poate observa ce se pierde sau ce se câștigă
 atunci când modelul introduce compartimente suplimentare.
 
-\section{Lucrări și instrumente conexe}
+\phantomsection
+\addcontentsline{toc}{section}{Lucrări și instrumente conexe}
+\section*{Lucrări și instrumente conexe}
 \label{sec:lucrari_inrudite}
 
 Modelarea computațională a epidemiilor se sprijină pe un ecosistem matur de
@@ -89,7 +94,9 @@ combinație o deosebește atât de bibliotecile mono-limbaj de rezolvare a ODE-u
 cât și de platformele epidemiologice specializate care nu oferă această integrare
 de sistem.
 
-\section{Obiectivele lucrării}
+\phantomsection
+\addcontentsline{toc}{section}{Obiectivele lucrării}
+\section*{Obiectivele lucrării}
 \label{sec:obiective}
 
 Obiectivul principal este proiectarea unui sistem care leagă explicit modelarea
@@ -121,7 +128,9 @@ experimente într-un cadru accesibil prin web. API-ul Go, baza de date
 YugabyteDB, coada Redis și cele două interfețe Vue.js sunt tratate ca părți ale
 aceluiași instrument de cercetare, nu ca module izolate.
 
-\section{Contribuții originale}
+\phantomsection
+\addcontentsline{toc}{section}{Contribuții originale}
+\section*{Contribuții originale}
 \label{sec:contributii}
 
 Contribuția lucrării constă în combinarea unei analize matematice clasice cu un
@@ -157,10 +166,13 @@ aplicația de la cinci modele compartimentale plus LSTM la \emph{orice} algoritm
 care respectă un contract minimal de I/O, fără modificări la API sau la schema
 bazei de date.
 
-\section{Structura lucrării}
+\phantomsection
+\addcontentsline{toc}{section}{Structura lucrării}
+\section*{Structura lucrării}
 \label{sec:structura}
 
-Lucrarea este organizată în zece capitole.
+Lucrarea este organizată în opt capitole numerotate, încadrate de introducerea
+de față și de un capitol final de concluzii (ambele nenumerotate).
 
 \textbf{Capitolul~\ref{ch:epidemiologie}} (\emph{Epidemiologie Computațională și
 Modelarea Matematică}) prezintă fundamentele epidemiologiei matematice. Sunt
@@ -207,9 +219,9 @@ detaliază implementarea aplicației web, documentând backend-ul Go, aplicația
 principală Vue.js și consola Vue.js pentru super-admini, cu descrierea
 funcționalităților și a fluxurilor de utilizare.
 
-\textbf{Capitolul~\ref{ch:concluzii}} (\emph{Concluzii și Direcții Viitoare})
-sintetizează contribuțiile lucrării, discută limitele sistemului și identifică
-direcții de dezvoltare ulterioară.
+\textbf{Concluziile și direcțiile de dezvoltare viitoare} (capitolul final,
+nenumerotat) sintetizează contribuțiile lucrării, discută limitele sistemului și
+identifică direcții de dezvoltare ulterioară.
 
 Lucrarea se încheie cu \textbf{Bibliografie} și \textbf{Anexe} care conțin
 codul sursă complet al implementărilor, schema bazei de date, configurațiile

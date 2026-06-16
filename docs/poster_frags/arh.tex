@@ -1,0 +1,38 @@
+% Diagrama de arhitectura redesenata pentru poster (curata, fara incrucisari)
+\begin{tikzpicture}[
+  box/.style 2 args={rectangle, rounded corners=6pt, draw=petrol, line width=1.2pt,
+        minimum width=5.4cm, minimum height=2.0cm, align=center, fill=#1,
+        font=\large\bfseries, text=black, label={[font=\normalsize\itshape,
+        text=gray!55!black]right:#2}},
+  plain/.style={rectangle, rounded corners=6pt, draw=petrol, line width=1.2pt,
+        minimum width=5.4cm, minimum height=2.0cm, align=center, fill=#1,
+        font=\large\bfseries},
+  lbl/.style={font=\normalsize\itshape, text=gray!55!black, midway,
+        fill=white, inner sep=2pt},
+  ar/.style={-{Stealth[length=5mm,width=4mm]}, line width=1.1pt, gray!65!black},
+  node distance=2.4cm and 1.4cm
+]
+  \node[box={blue!12}{Utilizator}] (browser) {Browser};
+  \node[box={orange!25}{Gateway}, below=of browser] (ingress) {Ingress Nginx};
+
+  \node[plain={blue!16}, below left=2.8cm and 0.1cm of ingress] (fu)
+        {Frontend\\utilizator};
+  \node[box={green!20}{Aplica\c tie}, below=2.9cm of ingress] (api)
+        {API Go\\{\normalsize REST · JWT · RBAC}};
+  \node[plain={blue!16}, below right=2.8cm and 0.1cm of ingress] (fa)
+        {Frontend\\admin};
+
+  \node[box={red!22}{Coad\u a}, below=of api] (redis) {Redis};
+  \node[box={red!10}{Calcul}, below=of redis] (run)
+        {Runnere\\{\normalsize R · Julia · Python}};
+  \node[box={yellow!35}{Stocare}, below=of run] (db)
+        {YugabyteDB\\{\normalsize 3 noduri · RF = 3}};
+
+  \draw[ar] (browser) -- (ingress) node[lbl]{HTTPS};
+  \draw[ar] (ingress) -- (fu);
+  \draw[ar] (ingress) -- (api);
+  \draw[ar] (ingress) -- (fa);
+  \draw[ar] (api) -- (redis) node[lbl]{LPUSH};
+  \draw[ar] (redis) -- (run) node[lbl]{BRPOP};
+  \draw[ar] (run) -- (db) node[lbl]{INSERT};
+\end{tikzpicture}

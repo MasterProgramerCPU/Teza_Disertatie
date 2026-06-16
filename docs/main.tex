@@ -166,7 +166,7 @@
 \usepackage[hidelinks,
             bookmarks,
             bookmarksopen=true,
-            pdftitle={Sistem E-Medicine cu modele compartimentale din familia SIR},
+            pdftitle={Sisteme e-medicine de gestionare și monitorizare a datelor epidemiologice},
             pdfauthor={Geana Tudor-Bogdan},
             pdfsubject={Lucrare de disertatie},
             pdfkeywords={SIDARTHE, SIR, SIS, SEIR, SIRS, calibrare parametri, LSTM, epidemiologie, e-medicine, YugabyteDB, Kubernetes}
@@ -210,17 +210,14 @@
 % METADATE pentru clasa UPB (pagina de titlu si declaratia de onestitate)
 % ============================================================
 \author{Geană Tudor-Bogdan}
-% Titlul lung nu incape in 2 randuri la \Large pe pagina de titlu (depasea
-% latimea cu ~30pt); il rupem explicit in 3 randuri care incap. Metadata PDF
-% foloseste pdftitle separat, deci \\ aici nu afecteaza bookmark-urile.
-\title{Sistem E-Medicine pentru Analizarea și Monitorizarea\\
-Datelor Epidemiologice cu Modele Compartimentale\\
-din Familia SIR}
+% Titlul oficial inregistrat (Anexa 2). Fara \\ explicit: pe pagina de titlu se
+% infasoara natural prin \centering, iar pe declaratie apare corect inline.
+\title{Sisteme e-medicine de gestionare și monitorizare a datelor epidemiologice}
 
 \facultatea{Facultatea de Electronică, Telecomunicații
 și Tehnologia Informației}
-\tiplucrare{dizertație}
-\domeniu{Inginerie Electronică, Telecomunicații și Tehnologii Informaționale}
+\tiplucrare{disertație}
+\domeniu{Calculatoare și tehnologia informației}
 \catedra{Telecomunicații}
 \campus{Leu}
 \program{Ingineria Informației și Sisteme de Calcul}
@@ -240,6 +237,12 @@ din Familia SIR}
 \beforepreface
 \listoffigures
 \listoftables
+
+% Lista acronimelor — langa celelalte liste, in front-matter (inainte de Rezumat)
+\chapter*{Lista acronimelor}
+\addcontentsline{toc}{chapter}{Lista acronimelor}
+\input{chapters/00b_lista_acronime}
+
 \afterpreface
 
 % ============================================================

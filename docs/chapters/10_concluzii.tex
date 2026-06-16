@@ -2,10 +2,13 @@
 % CAPITOLUL 10 — CONCLUZII ȘI DIRECȚII VIITOARE
 % ============================================================
 
-\chapter{Concluzii și Direcții de Dezvoltare Viitoare}
+\chapter*{Concluzii și Direcții de Dezvoltare Viitoare}
+\addcontentsline{toc}{chapter}{Concluzii și Direcții de Dezvoltare Viitoare}
 \label{ch:concluzii}
 
-\section{Sinteza lucrării}
+\phantomsection
+\addcontentsline{toc}{section}{Sinteza lucrării}
+\section*{Sinteza lucrării}
 \label{sec:sinteza_contributii}
 
 Lucrarea a fost reorientată în jurul modelului SIDARTHE, deoarece
@@ -36,10 +39,12 @@ pe LSTM, tratată ca extensie statistică pentru prognoză pe termen scurt și
 pentru analiza reziduurilor rămase după simularea compartimentală, cu rezultate
 operaționale pe seria România OWID.
 
-\subsection{Răspuns la obiectivele propuse}
+\phantomsection
+\addcontentsline{toc}{subsection}{Răspuns la obiectivele propuse}
+\subsection*{Răspuns la obiectivele propuse}
 \label{subsec:atingere_obiective}
 
-Cele patru obiective formulate în secțiunea~\ref{sec:obiective} au fost atinse
+Cele patru obiective formulate în secțiunea \emph{Obiectivele lucrării} au fost atinse
 concret, după cum urmează.
 
 Pentru obiectivul principal (proiectarea unui sistem care leagă modelarea
@@ -82,7 +87,9 @@ persistența la orizontul de o zi pe această serie, ceea ce delimitează
 regimul în care componenta are sens (corecție de reziduuri sau intrări
 multivariate), așa cum era anticipat în obiectiv.
 
-\section{Concluzii privind modelele}
+\phantomsection
+\addcontentsline{toc}{section}{Concluzii privind modelele}
+\section*{Concluzii privind modelele}
 \label{sec:concluzii_modele}
 
 SIDARTHE introduce o structură mai apropiată de realitatea raportării
@@ -104,7 +111,9 @@ necesită mai mulți parametri neobservabili sau dacă supraînvață fereastra 
 calibrare. Pentru SIDARTHE, valoarea reală este dată de capacitatea de a formula
 întrebări clinice mai bogate, nu doar de reducerea unei erori agregate.
 
-\section{Concluzii privind implementarea}
+\phantomsection
+\addcontentsline{toc}{section}{Concluzii privind implementarea}
+\section*{Concluzii privind implementarea}
 \label{sec:concluzii_implementare}
 
 Implementarea arată că același contract de simulare poate fi rulat în ecosisteme
@@ -144,7 +153,9 @@ extensiei \texttt{pgcrypto} la momentul instalării, datorită bazei PostgreSQL~
 a YugabyteDB. Aceste ajustări sunt locale și nu afectează nici codul aplicativ,
 nici interfața REST.
 
-\section{Concluzii experimentale}
+\phantomsection
+\addcontentsline{toc}{section}{Concluzii experimentale}
+\section*{Concluzii experimentale}
 \label{sec:concluzii_experimentale}
 
 Cele patru zone empirice ale lucrării (calibrarea pe date reale, campania
@@ -232,7 +243,9 @@ LSTM-ului la orizontul de o zi, deoarece $85\%$ din zile sunt plate
 în regimul hibrid de corecție a reziduurilor sau cu intrări multivariate,
 nu ca predictor univariat de sine stătător.
 
-\section{Limitări}
+\phantomsection
+\addcontentsline{toc}{section}{Limitări}
+\section*{Limitări}
 \label{sec:limitari}
 
 Prima limitare este calibrarea parametrilor SIDARTHE. Datele OWID folosite în
@@ -277,7 +290,9 @@ mai sofisticate pentru job-uri, politici de rate limiting și audit al
 operațiilor utilizatorilor. Aceste elemente ar fi necesare înainte de
 folosirea sistemului într-un context operațional.
 
-\section{Direcții viitoare}
+\phantomsection
+\addcontentsline{toc}{section}{Direcții viitoare}
+\section*{Direcții viitoare}
 \label{sec:directii_viitoare}
 
 Direcția imediată este calibrarea modelului SIDARTHE pe date mai bogate decât

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  16 JUN 2026 14:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  17 JUN 2026 00:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1682,38 +1682,38 @@ File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 ) (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 235.
-LaTeX Font Info:    ... okay on input line 235.
-LaTeX Info: Redefining \microtypecontext on input line 235.
-Package microtype Info: Applying patch `item' on input line 235.
-Package microtype Info: Applying patch `toc' on input line 235.
-Package microtype Info: Applying patch `eqnum' on input line 235.
-Package microtype Info: Applying patch `footnote' on input line 235.
-Package microtype Info: Applying patch `verbatim' on input line 235.
-LaTeX Info: Redefining \microtypesetup on input line 235.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 232.
+LaTeX Font Info:    ... okay on input line 232.
+LaTeX Info: Redefining \microtypecontext on input line 232.
+Package microtype Info: Applying patch `item' on input line 232.
+Package microtype Info: Applying patch `toc' on input line 232.
+Package microtype Info: Applying patch `eqnum' on input line 232.
+Package microtype Info: Applying patch `footnote' on input line 232.
+Package microtype Info: Applying patch `verbatim' on input line 232.
+LaTeX Info: Redefining \microtypesetup on input line 232.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 235.
+LaTeX Info: Redefining \showhyphens on input line 232.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -1773,46 +1773,46 @@ Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
 \c@lstlisting=\count376
-Package hyperref Info: Link coloring OFF on input line 235.
+Package hyperref Info: Link coloring OFF on input line 232.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 2
-40.
+37.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/ot1lmr.f
 d
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 2
-40.
+37.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/omllmm.f
 d
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-240.
+237.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/omslmsy.
 fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-240.
+237.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/omxlmex.
 fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14.4> on input line 240.
+(Font)              <14.4> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 240.
+(Font)              <10> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 240.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 240
+(Font)              <7> on input line 237.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 237
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1823,7 +1823,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 t-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 240
+LaTeX Font Info:    Trying to load font information for U+msb on input line 237
 .
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/amsfonts/um
@@ -1834,8 +1834,8 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 t-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 24
-0.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 23
+7.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/jknapltx/ur
 sfs.fd
@@ -1843,50 +1843,70 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 Title
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <17.28> on input line 240.
+(Font)              <17.28> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 240.
+(Font)              <12> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <24.88> on input line 240.
+(Font)              <24.88> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <20.74> on input line 240.
+(Font)              <20.74> on input line 237.
 
 
 [1
 
 {/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updm
 ap/pdftex.map}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
-nc/dvips/lm/lm-ec.enc}]
+nc/dvips/lm/lm-ec.enc}] (./frontmatter_formular.tex
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 240.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 240.
+(Font)              <5> on input line 13.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 6
+9.
 
-Underfull \hbox (badness 10000) in paragraph at lines 240--240
+(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/t1lmtt.f
+d
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+
+[2])
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <8> on input line 237.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <6> on input line 237.
+
+Underfull \hbox (badness 10000) in paragraph at lines 237--237
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 240--240
+Underfull \hbox (badness 10000) in paragraph at lines 237--237
 
  []
 
 
-
-[2] (./main.toc
 
 [3
 
-{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/lm/lm
--mathit.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc
-/dvips/lm/lm-mathsy.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-di
-st/fonts/enc/dvips/lm/lm-rm.enc}]
+]
 
-[4]
+[4
 
-[5]
+] (./main.toc
 
-[6])
+[5{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/lm/
+lm-mathit.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
+nc/dvips/lm/lm-mathsy.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
+dist/fonts/enc/dvips/lm/lm-rm.enc}]
+
+[6]
+
+[7]
+
+[8])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
@@ -1897,20 +1917,8 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.ii}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.241 \listoffigures
-                     [2] (./main.lof
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 4
-.
-
-(/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/t1lmtt.f
-d
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-)
+l.238 \listoffigures
+                     [2] (./main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
@@ -1921,7 +1929,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.iii}) ha
 s been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.242 \listoftables
+l.239 \listoftables
                     [3
 
 ]
@@ -1931,7 +1939,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.iv}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.242 \listoftables
+l.239 \listoftables
                     [4
 
 ] (./main.lot)
@@ -1945,8 +1953,38 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.v}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.243 \afterpreface
-                    [5] (./chapters/00_rezumat.tex)
+l.242 \chapter
+              *{Lista acronimelor} [5]
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.vi}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.242 \chapter
+              *{Lista acronimelor} [6
+
+] (./chapters/00b_lista_acronime.tex
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
+[]|\T1/lmr/m/n/12 (+20) Susceptible-Infected-Recovered --- Susceptibili-Infecta
+[]i-
+ []
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.vii}) ha
+s been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.57 \end{longtable}
+                     [7])
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.viii}) h
+as been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.246 \afterpreface
+                    [8] (./chapters/00_rezumat.tex)
 
 [1
 
@@ -1955,8 +1993,6 @@ l.243 \afterpreface
 [2
 
 ] (./chapters/01_introducere.tex
-Capitolul 1.
-
 
 [3
 
@@ -1967,7 +2003,7 @@ Capitolul 1.
 [5]) (./chapters/02_epidemiologie_si_modelare.tex
 
 [6]
-Capitolul 2.
+Capitolul 1.
 
 
 [7
@@ -2015,7 +2051,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 [20
 
 ]
-Capitolul 3.
+Capitolul 2.
 
 
 [21]
@@ -2052,7 +2088,7 @@ T1/lmr/m/n/12 (+20) , \T1/lmtt/m/n/12 Deployment\T1/lmr/m/n/12 (+20) , \T1/lmtt
 [25]
 
 [26]
-Capitolul 4.
+Capitolul 3.
 
 
 [27
@@ -2151,7 +2187,7 @@ Underfull \hbox (badness 7415) in paragraph at lines 1309--1320
 [44
 
 ]
-Capitolul 5.
+Capitolul 4.
 
 
 [45]
@@ -2177,7 +2213,7 @@ File: lstlang3.sty 2024/09/23 1.10c listings language file
 [49]) (./chapters/06_predictie_lstm.tex
 
 [50]
-Capitolul 6.
+Capitolul 5.
 
 
 [51
@@ -5478,7 +5514,7 @@ also unbounded coords=jump).
 [58
 
 ]
-Capitolul 7.
+Capitolul 6.
 
 Underfull \hbox (badness 10000) in paragraph at lines 48--48
 []|\T1/lmr/bx/n/12 (+20) Observabil
@@ -7821,7 +7857,7 @@ lso unbounded coords=jump).
 [68
 
 ]
-Capitolul 8.
+Capitolul 7.
 
 
 [69]
@@ -7943,7 +7979,7 @@ Underfull \hbox (badness 10000) in alignment at lines 16--16
 [80
 
 ]
-Capitolul 9.
+Capitolul 8.
 
 
 [81]
@@ -7970,8 +8006,6 @@ T1/lmtt/m/n/12 /api/admin/
 [85]) (./chapters/10_concluzii.tex
 
 [86]
-Capitolul 10.
-
 
 [87
 
@@ -7980,7 +8014,7 @@ Capitolul 10.
 [88]
 
 [89]
-Underfull \hbox (badness 10000) in paragraph at lines 247--253
+Underfull \hbox (badness 10000) in paragraph at lines 260--266
 []\T1/lmr/m/n/12 (+20) Calibrarea este re-a-li-zat  în lu-crare ca script offli
 ne, în afara aplica[]iei
  []
@@ -8319,58 +8353,60 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D074B9E225D372A5739ED420852D1100;38581.
+(rerunfilecheck)             Checksum: FC5BD0666985BF3172691568D50B57DF;38711.
  ) 
 Here is how much of TeX's memory you used:
- 51267 strings out of 473190
- 1113498 string characters out of 5704334
- 3133889 words of memory out of 5000000
- 69527 multiletter control sequences out of 15000+600000
- 758358 words of font info for 405 fonts, out of 8000000 for 9000
+ 51347 strings out of 473190
+ 1114848 string characters out of 5704334
+ 3134401 words of memory out of 5000000
+ 69552 multiletter control sequences out of 15000+600000
+ 771461 words of font info for 424 fonts, out of 8000000 for 9000
  1152 hyphenation exceptions out of 8191
  84i,19n,97p,1001b,3083s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
 lm/lmbx10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/t
 ype1/public/lm/lmbx12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
-dist/fonts/type1/public/lm/lmbx6.pfb></opt/homebrew/Cellar/texlive/20250308_1/s
-hare/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></opt/homebrew/Cellar/texlive/2
-0250308_1/share/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></opt/homebrew/Cella
-r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></opt/h
-omebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmex10
-.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/publ
-ic/lm/lmmi10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/font
-s/type1/public/lm/lmmi12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
-mf-dist/fonts/type1/public/lm/lmmi6.pfb></opt/homebrew/Cellar/texlive/20250308_
-1/share/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></opt/homebrew/Cellar/texliv
-e/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmmib10.pfb></opt/homebrew/
-Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmr10.pfb></op
+dist/fonts/type1/public/lm/lmbx5.pfb></opt/homebrew/Cellar/texlive/20250308_1/s
+hare/texmf-dist/fonts/type1/public/lm/lmbx6.pfb></opt/homebrew/Cellar/texlive/2
+0250308_1/share/texmf-dist/fonts/type1/public/lm/lmbx7.pfb></opt/homebrew/Cella
+r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmbx8.pfb></opt/hom
+ebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmbxi10.
+pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/publi
+c/lm/lmex10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts
+/type1/public/lm/lmmi10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texm
+f-dist/fonts/type1/public/lm/lmmi12.pfb></opt/homebrew/Cellar/texlive/20250308_
+1/share/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></opt/homebrew/Cellar/texliv
+e/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></opt/homebrew/Ce
+llar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmmib10.pfb></op
 t/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmr
-12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pu
-blic/lm/lmr5.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/font
-s/type1/public/lm/lmr6.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
--dist/fonts/type1/public/lm/lmr7.pfb></opt/homebrew/Cellar/texlive/20250308_1/s
-hare/texmf-dist/fonts/type1/public/lm/lmr8.pfb></opt/homebrew/Cellar/texlive/20
-250308_1/share/texmf-dist/fonts/type1/public/lm/lmri10.pfb></opt/homebrew/Cella
-r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmri12.pfb></opt/ho
-mebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmri7.p
+10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/pu
+blic/lm/lmr12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fon
+ts/type1/public/lm/lmr17.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
+mf-dist/fonts/type1/public/lm/lmr5.pfb></opt/homebrew/Cellar/texlive/20250308_1
+/share/texmf-dist/fonts/type1/public/lm/lmr6.pfb></opt/homebrew/Cellar/texlive/
+20250308_1/share/texmf-dist/fonts/type1/public/lm/lmr7.pfb></opt/homebrew/Cella
+r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmr8.pfb></opt/home
+brew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmri10.pf
+b></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/
+lm/lmri12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/t
+ype1/public/lm/lmri7.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-d
+ist/fonts/type1/public/lm/lmri8.pfb></opt/homebrew/Cellar/texlive/20250308_1/sh
+are/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></opt/homebrew/Cellar/texlive/2
+0250308_1/share/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></opt/homebrew/Cella
+r/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></opt/hom
+ebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmtk10.p
 fb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public
-/lm/lmri8.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/t
-ype1/public/lm/lmsy10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
-dist/fonts/type1/public/lm/lmsy7.pfb></opt/homebrew/Cellar/texlive/20250308_1/s
-hare/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></opt/homebrew/Cellar/texlive/2
-0250308_1/share/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></opt/homebrew/Cell
-ar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></opt/h
-omebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/lm/lmtt12
-.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/publ
-ic/lm/lmtt8.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts
-/type1/public/lm/lmtti10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/tex
-mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></opt/homebrew/Cellar/te
-xlive/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
-b>
-Output written on main.pdf (153 pages, 1362567 bytes).
+/lm/lmtt10.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/
+type1/public/lm/lmtt12.pfb></opt/homebrew/Cellar/texlive/20250308_1/share/texmf
+-dist/fonts/type1/public/lm/lmtt8.pfb></opt/homebrew/Cellar/texlive/20250308_1/
+share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></opt/homebrew/Cellar/texliv
+e/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></
+opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsf
+onts/symbols/msbm10.pfb>
+Output written on main.pdf (158 pages, 1408678 bytes).
 PDF statistics:
- 5924 PDF objects out of 6186 (max. 8388607)
- 5637 compressed objects within 57 object streams
- 3506 named destinations out of 3580 (max. 500000)
- 105379 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 5969 PDF objects out of 6186 (max. 8388607)
+ 5673 compressed objects within 57 object streams
+ 3522 named destinations out of 3580 (max. 500000)
+ 111531 words of extra memory for PDF output out of 128383 (max. 10000000)
 

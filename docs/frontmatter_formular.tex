@@ -1,0 +1,92 @@
+% =============================================================================
+% Anexa 2 — Formular de inscriere a temei lucrarii (TEMA LUCRARII DE DISERTATIE)
+% Document oficial reprodus ca atare; se insereaza intre pagina de titlu si
+% declaratia de onestitate. Pentru forma finala oficiala se inlocuieste cu
+% scanul semnat in original.
+% =============================================================================
+\thispagestyle{empty}
+{\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}\footnotesize
+
+% --- antet ---
+\noindent
+\begin{minipage}[t]{0.7\textwidth}
+Universitatea Națională de Știință și Tehnologie POLITEHNICA București\\
+Facultatea de Electronică, Telecomunicații și Tehnologia Informației\\
+Programul de masterat \textbf{IISC}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.25\textwidth}
+\raggedleft\textbf{Anexa 2}
+\end{minipage}
+
+\vspace{1em}
+
+\begin{center}
+\textbf{TEMA LUCRĂRII DE DISERTAȚIE}\\[0.3em]
+a masterandului \textbf{GEANĂ B.D. Tudor-Bogdan, 421-IISC}
+\end{center}
+
+\vspace{0.3em}
+
+\textbf{1. Titlul temei:} Sisteme e-medicine de gestionare și monitorizare a
+datelor epidemiologice
+
+\textbf{2. Descrierea temei:}\\
+Lucrarea prezintă proiectarea și realizarea unui sistem e-medicine pentru
+analizarea și monitorizarea datelor epidemiologice, având la bază modelul
+matematic SIR, implementat și testat comparativ în limbajele de programare R,
+Julia, SAS și Python. Implementările sunt evaluate pe mai multe configurații
+hardware, urmărindu-se comportamentul algoritmilor din punct de vedere al
+performanței și al scalabilității. Datele epidemiologice utilizate sunt stocate
+într-o bază de date distribuită YugabyteDB, rulată într-un cluster Kubernetes,
+care asigură disponibilitate ridicată și distribuție eficientă a datelor. Pentru
+testarea, compararea și analiza rezultatelor este dezvoltată o aplicație web
+dedicată, compusă dintr-un API backend implementat în limbajul Go și o interfață
+web realizată în Vue.js, prin intermediul căreia pot fi consultate rezultatele
+rulării algoritmilor, seturile de date utilizate și graficele asociate acestora,
+oferind o perspectivă unificată asupra performanței și comportamentului modelelor
+epidemiologice analizate.
+
+\textbf{3. Contribuția originală:}\\
+Contribuția studentului constă în studiul și formalizarea modelului epidemiologic
+SIR, urmate de implementarea acestuia în limbajele de programare R, Julia, SAS și
+Python, într-o formă unitară care permite compararea directă a rezultatelor.
+Studentul a proiectat și realizat scenarii de testare pe mai multe configurații
+hardware, colectând și analizând metrici de performanță relevante. De asemenea,
+studentul a proiectat arhitectura de stocare a datelor epidemiologice utilizând
+YugabyteDB, implementată într-un cluster Kubernetes, asigurând distribuția și
+disponibilitatea datelor. O contribuție majoră este dezvoltarea aplicației web
+pentru testarea și compararea algoritmilor, incluzând implementarea unui API
+backend în limbajul Go și a unei interfețe web în Vue.js, care permite
+consultarea rezultatelor rulării algoritmilor, a seturilor de date utilizate și a
+reprezentărilor grafice asociate, precum și integrarea tuturor componentelor
+într-un sistem funcțional coerent.
+
+\textbf{4. Resurse și bibliografie:}\\
+Bibliografie selectivă\\
+1. W. O. Kermack, A. G. McKendrick, A Contribution to the Mathematical Theory of Epidemics, Proc. R. Soc. A.\\
+2. H. W. Hethcote, The Mathematics of Infectious Diseases, SIAM Review.\\
+3. M. J. Keeling, P. Rohani, Modeling Infectious Diseases in Humans and Animals, Princeton University Press.\\
+4. PostgreSQL Documentation: \texttt{https://www.postgresql.org/docs/}\\
+5. YugabyteDB Documentation: \texttt{https://docs.yugabyte.com/}\\
+6. Kubernetes Documentation: \texttt{https://kubernetes.io/docs/}\\
+7. Go Documentation: \texttt{https://go.dev/doc/}\\
+8. Vue.js Documentation: \texttt{https://vuejs.org/guide/}
+
+\textbf{5. Data înregistrării temei:} 2026-01-22 12:26:55
+
+\vspace{1.6em}
+
+\noindent
+\begin{tabular}{@{}p{0.52\textwidth}>{\raggedleft\arraybackslash}p{0.44\textwidth}@{}}
+\textbf{Conducător(i) lucrare,}        & \textbf{Student,}            \\
+Prof. dr. ing. Radu RĂDESCU            & GEANĂ B.D. Tudor-Bogdan      \\[2em]
+\textbf{Responsabil program master,}   & \textbf{Decan,}              \\
+Prof. dr. ing. Radu DOGARU             & Prof. dr. ing. Mihnea UDREA  \\
+\end{tabular}
+
+\vspace{1.6em}
+
+\noindent Cod Validare: \textbf{e205b4fce0}
+
+}
+\clearpage
