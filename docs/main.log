@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  17 JUN 2026 16:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025/Homebrew) (preloaded format=pdflatex 2025.10.11)  17 JUN 2026 16:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1857,10 +1857,14 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 {/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/map/pdftex/updm
 ap/pdftex.map}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
 nc/dvips/lm/lm-ec.enc}] (./frontmatter_formular.tex
+
+[2
+
+]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 13.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 6
-9.
+(Font)              <5> on input line 14.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7
+0.
 
 (/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/tex/latex/lm/t1lmtt.f
 d
@@ -1872,7 +1876,11 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             See the microtype manual for details.
 
 
-[2])
+[3]
+
+[4
+
+])
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <8> on input line 237.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -1889,24 +1897,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 237--237
 
 
 
-[3
+[5]
 
-]
-
-[4
+[6
 
 ] (./main.toc
 
-[5{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/lm/
+[7{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/enc/dvips/lm/
 lm-mathit.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/e
 nc/dvips/lm/lm-mathsy.enc}{/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-
 dist/fonts/enc/dvips/lm/lm-rm.enc}]
 
-[6]
+[8]
 
-[7]
+[9]
 
-[8])
+[10])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
@@ -8356,9 +8362,9 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: FC5BD0666985BF3172691568D50B57DF;38711.
  ) 
 Here is how much of TeX's memory you used:
- 51347 strings out of 473190
- 1114848 string characters out of 5704334
- 3127329 words of memory out of 5000000
+ 51349 strings out of 473190
+ 1114861 string characters out of 5704334
+ 3127330 words of memory out of 5000000
  69552 multiletter control sequences out of 15000+600000
  771461 words of font info for 424 fonts, out of 8000000 for 9000
  1152 hyphenation exceptions out of 8191
@@ -8403,10 +8409,10 @@ share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></opt/homebrew/Cellar/texliv
 e/20250308_1/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></
 opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/fonts/type1/public/amsf
 onts/symbols/msbm10.pfb>
-Output written on main.pdf (158 pages, 1405237 bytes).
+Output written on main.pdf (160 pages, 1405412 bytes).
 PDF statistics:
- 5951 PDF objects out of 6186 (max. 8388607)
- 5655 compressed objects within 57 object streams
- 3522 named destinations out of 3580 (max. 500000)
+ 5960 PDF objects out of 6186 (max. 8388607)
+ 5662 compressed objects within 57 object streams
+ 3524 named destinations out of 3580 (max. 500000)
  111531 words of extra memory for PDF output out of 128383 (max. 10000000)
 
