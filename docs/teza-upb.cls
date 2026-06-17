@@ -391,7 +391,7 @@
 
 \newcommand\titlep{\vbox to \textheight{%
     \vskip 12mm
-    \centering\large{Universitatea de Științe și Tehnologie POLITEHNICA București\\
+    \centering\large{Universitatea Națională de Știință și Tehnologie POLITEHNICA București\\
 \@facultatea} \par\nobreak % DN
     \vskip 40mm
         \parskip0pt
@@ -432,7 +432,7 @@
 
 \newcommand\inscrierep{\vbox to \textheight{%
     \vskip 12mm
-\large{Universitatea de Științe și Tehnologie POLITEHNICA București\\
+\large{Universitatea Națională de Știință și Tehnologie POLITEHNICA București\\
 \@facultatea\\
 Catedra \@catedra} \par\nobreak % DN
     \vskip 20mm
@@ -491,7 +491,7 @@ Catedra \@catedra} \par\nobreak % DN
 
     Prin prezenta declar că lucrarea cu titlul {\it {\@title}},
     prezentată în cadrul Facultăţii de Electronică, Telecomunicaţii şi
-    Tehnologia Informaţiei a Universităţii de Științe și Tehnologie
+    Tehnologia Informaţiei a Universităţii Naţionale de Știință și Tehnologie
     POLITEHNICA Bucureşti, în program de master {\it{\@program}},
     este scrisă de mine şi nu a mai fost prezentată niciodată la o
     facultate sau instituţie de învăţământ superior din ţară sau

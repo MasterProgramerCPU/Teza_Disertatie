@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1781704752.81722 "main.aux" "main.bbl" "main" 1781704762.60439 0
+["bibtex main"] 1781704752.81722 "main.aux" "main.bbl" "main" 1781707750.41389 0
   "./bibliography.bib" 1779440050.18795 15395 2256d3db050e01395b7ccfd03db8ca8f ""
   "/opt/homebrew/Cellar/texlive/20250308_1/share/texmf-dist/bibtex/bst/base/unsrt.bst" 1741388039 18030 1376b4b231b50c66211e47e42eda2875 ""
-  "main.aux" 1781704761.80001 83275 b5e3f69677679bf66223c3c19a7aee06 "pdflatex"
+  "main.aux" 1781707749.59989 83275 b5e3f69677679bf66223c3c19a7aee06 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1781704752.89357 "main.tex" "main.pdf" "main" 1781704762.60467 0
+["pdflatex"] 1781707740.63684 "main.tex" "main.pdf" "main" 1781707750.41419 0
   "../code/api/internal/api/handlers/response.go" 1778480941.50347 833 ce1f32e45640bfb80038a375e87e341f ""
   "../code/api/internal/api/middleware/rbac.go" 1778588509.96336 3896 32086d6647fc58dcc09232ebbe75b9f7 ""
   "../code/api/internal/api/router/router.go" 1780480135.71182 5814 3af0c188709e2c95f20a7c0555f2972c ""
@@ -414,13 +414,13 @@
   "figures/lstm_trajectory.tex" 1781604689.57396 2290 7f2550298479b01c4c5a7bebfb3c6a53 ""
   "figures/scaling_wall_time.tex" 1781604960.19361 1783 df05a0aeb87f2385c753d9dd450f4f51 ""
   "frontmatter_formular.tex" 1781704039.75485 4693 337bc0d2f8b7d62af645e1682df00c32 ""
-  "main.aux" 1781704761.80001 83275 b5e3f69677679bf66223c3c19a7aee06 "pdflatex"
+  "main.aux" 1781707749.59989 83275 b5e3f69677679bf66223c3c19a7aee06 "pdflatex"
   "main.bbl" 1781704752.88893 7358 9130b846db082c483944fad46de893fa "bibtex main"
-  "main.lof" 1781704761.80869 1150 f8081f91fcd3682ffcfae0e3dd1f78d7 "pdflatex"
-  "main.lot" 1781704761.80873 2901 21ef8b4c4f5aa802593d9c643d8da5d4 "pdflatex"
-  "main.out" 1781704761.80786 38711 fc5bd0666985bf3172691568d50b57df "pdflatex"
+  "main.lof" 1781707749.60865 1150 f8081f91fcd3682ffcfae0e3dd1f78d7 "pdflatex"
+  "main.lot" 1781707749.60868 2901 21ef8b4c4f5aa802593d9c643d8da5d4 "pdflatex"
+  "main.out" 1781707749.60784 38711 fc5bd0666985bf3172691568d50b57df "pdflatex"
   "main.tex" 1781703230.66278 10062 2feae3d91bc51f371c12b1a9675f512e ""
-  "main.toc" 1781704761.80866 17027 e932dd853f91f0a2088844745c111d8f "pdflatex"
+  "main.toc" 1781707749.60835 17027 e932dd853f91f0a2088844745c111d8f "pdflatex"
   "tables/api_latency.tex" 1781604598.27038 1336 ef8504a9f1b8665a1a2f308c51b0542c ""
   "tables/api_latency_scaling.tex" 1781604598.27219 814 dff2a5046601247e387f8982b3e72ee4 ""
   "tables/bench_julia_coldstart.tex" 1781604598.27316 634 059c50937e6e203ff5697c787d23459d ""
@@ -436,7 +436,7 @@
   "tables/implementari_runners.tex" 1780387606.80693 996 db85a2b1c977b96c87f262d169a16669 ""
   "tables/lstm_baselines.tex" 1781604960.19427 915 3f6603a77d35cbba51aa4245872d545a ""
   "tables/plugin_lifecycle.tex" 1781646110.52094 1066 6da47c5c499ad3572a4c4cd02116177f ""
-  "teza-upb.cls" 1781703070.8205 26153 5071d704245692d82c94c7da7e297a38 ""
+  "teza-upb.cls" 1781707713.05123 26191 d5e701e7c7ee802abff7468bbb38c936 ""
   (generated)
   "main.aux"
   "main.lof"
