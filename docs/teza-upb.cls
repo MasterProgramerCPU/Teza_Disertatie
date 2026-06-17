@@ -420,7 +420,7 @@
 
              \begin{tabular}
                {>{\raggedright}p{0.6\textwidth}r}
-               {\Large\mdseries Conducător(i) științific(i)} & {\Large\mdseries Absolvent}\\[1ex]
+               {\Large\mdseries Coordonator științific} & {\Large\mdseries Absolvent}\\[1ex]
                {\itshape\@director} & {\itshape\@author}\\
              \end{tabular}
  \vfil
@@ -463,7 +463,7 @@ Catedra \@catedra} \par\nobreak % DN
 
              \begin{tabular}
                {>{\raggedright}p{0.6\textwidth}r}
-               {\Large\mdseries Conducător(i) științific(i)} & {\Large\mdseries Absolvent}\\[1ex]
+               {\Large\mdseries Coordonator științific} & {\Large\mdseries Absolvent}\\[1ex]
                {\itshape\@director} & {\itshape\@author}\\
              \end{tabular}
  \vfil
