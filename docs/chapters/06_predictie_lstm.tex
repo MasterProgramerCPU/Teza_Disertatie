@@ -339,8 +339,10 @@ test din seria României (ultimele $20\%$ din puncte), prin scriptul
 \texttt{scripts/lstm\_baselines.py}. Toate metodele folosesc strict valori
 observate trecute. Rezultatele, în Tabelul~\ref{tab:lstm_baselines}, sunt
 clarificatoare: LSTM-ul compact \emph{nu} bate persistența --- dimpotrivă, are o
-eroare MAE de aproximativ trei ori mai mare ($755$ față de $251$ de cazuri), iar
-toate cele trei repere triviale au erori sub cea a rețelei pe MAE.
+eroare MAE de aproximativ trei ori mai mare ($755$ față de $251$ de cazuri).
+Dintre cele trei repere triviale, persistența ($251$) și drift-ul ($501$) au
+erori sub cea a rețelei pe MAE, în timp ce media mobilă pe $7$ zile ($1\,002$)
+rămâne mai slabă decât LSTM.
 
 \input{tables/lstm_baselines}
 
