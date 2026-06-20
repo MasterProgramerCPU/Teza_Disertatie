@@ -9,10 +9,10 @@ api/bin/
 *.out
 vendor/
 
-# Data (raw download is large, processed is reproducible)
-data/raw/*.csv
-data/raw/*.csv.part
-data/processed/*.csv
+# Data (raw download is large, processed is reproducible) — recursiv,
+# acopera si subdirectoarele jhu/, subnational/ etc.
+data/raw/
+data/processed/
 
 # Python
 __pycache__/
