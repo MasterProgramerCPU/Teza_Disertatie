@@ -54,3 +54,46 @@ func (r *BenchmarkRepository) AggregateByModelAndLanguage(ctx context.Context, s
 	}
 	return out, rows.Err()
 }
+
+// ListRunsForModelLanguage intoarce toate rularile finalizate pentru o
+// combinatie (model x limbaj) intr-un studiu, cu metadata necesara paginii
+// de detaliu (dataset, t_max, timestamps, metrici per rulare).
+func (r *BenchmarkRepository) ListRunsForModelLanguage(
+	ctx context.Context, studyID uuid.UUID, modelType, language string,
+) ([]models.BenchmarkRun, error) {
+	const q = `
+		SELECT
+			s.id, s.dataset_id, d.name,
+			s.t_max,
+			b.wall_time_ms, b.cpu_time_ms, b.peak_memory_mb,
+			s.created_at, s.completed_at
+		FROM benchmarks b
+		JOIN simulation_runs s ON s.id = b.simulation_id
+		JOIN datasets d        ON d.id = s.dataset_id
+		WHERE s.status = 'completed'
+		  AND s.study_id = $1
+		  AND s.model_type = $2
+		  AND s.language = $3
+		ORDER BY s.created_at DESC`
+
+	rows, err := r.pool.Query(ctx, q, studyID, modelType, language)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var out []models.BenchmarkRun
+	for rows.Next() {
+		var b models.BenchmarkRun
+		if err := rows.Scan(
+			&b.SimulationID, &b.DatasetID, &b.DatasetName,
+			&b.TMax,
+			&b.WallTimeMs, &b.CPUTimeMs, &b.PeakMemoryMB,
+			&b.CreatedAt, &b.CompletedAt,
+		); err != nil {
+			return nil, err
+		}
+		out = append(out, b)
+	}
+	return out, rows.Err()
+}

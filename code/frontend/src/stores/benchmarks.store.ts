@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { api } from "@/api/client";
-import type { BenchmarkAggregate } from "@/types";
+import type { BenchmarkAggregate, BenchmarkRun, Language, ModelType } from "@/types";
 import { useStudiesStore } from "@/stores/studies.store";
 
-function path(): string {
+function base(): string {
   const studies = useStudiesStore();
   if (!studies.currentStudyId) {
     throw new Error("no study selected");
@@ -14,6 +14,7 @@ function path(): string {
 
 export const useBenchmarksStore = defineStore("benchmarks", () => {
   const items = ref<BenchmarkAggregate[]>([]);
+  const runs = ref<BenchmarkRun[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
 
@@ -21,7 +22,7 @@ export const useBenchmarksStore = defineStore("benchmarks", () => {
     loading.value = true;
     error.value = null;
     try {
-      items.value = (await api.get<BenchmarkAggregate[] | null>(path())) ?? [];
+      items.value = (await api.get<BenchmarkAggregate[] | null>(base())) ?? [];
     } catch (e) {
       error.value = (e as Error).message;
     } finally {
@@ -29,5 +30,20 @@ export const useBenchmarksStore = defineStore("benchmarks", () => {
     }
   }
 
-  return { items, loading, error, fetchAll };
+  async function fetchRuns(model: ModelType, language: Language) {
+    loading.value = true;
+    error.value = null;
+    runs.value = [];
+    try {
+      runs.value = (await api.get<BenchmarkRun[] | null>(
+        `${base()}/${model}/${language}`,
+      )) ?? [];
+    } catch (e) {
+      error.value = (e as Error).message;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  return { items, runs, loading, error, fetchAll, fetchRuns };
 });
