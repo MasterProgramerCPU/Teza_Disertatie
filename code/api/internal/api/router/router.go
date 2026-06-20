@@ -24,6 +24,7 @@ type Deps struct {
 	Admin        *handlers.AdminHandler
 	Runners      *handlers.RunnersHandler
 	ScriptDrafts *handlers.ScriptDraftsHandler
+	Map          *handlers.MapHandler
 	JWT          *authmw.JWTMiddleware
 	RBAC         *authmw.RBAC
 }
@@ -58,6 +59,15 @@ func New(deps Deps) http.Handler {
 
 			// Profilul userului curent
 			r.Get("/me", deps.Users.Me)
+			r.Get("/me/profile", deps.Users.MyProfile)
+			r.Patch("/me/profile", deps.Users.UpdateMyProfile)
+			r.Put("/me/avatar", deps.Users.SetMyAvatar)
+			r.Delete("/me/avatar", deps.Users.DeleteMyAvatar)
+			r.Get("/me/collaborators", deps.Users.MyCollaborators)
+
+			// Profilul altor utilizatori (vizibil colaboratorilor)
+			r.Get("/users/{userId}/profile", deps.Users.GetUserProfile)
+			r.Get("/users/{userId}/avatar", deps.Users.GetUserAvatar)
 
 			// Studii — list / create sunt scope pe userul curent
 			r.Route("/studies", func(r chi.Router) {
@@ -85,6 +95,10 @@ func New(deps Deps) http.Handler {
 
 						// Benchmarks — citire pentru toti membrii
 						r.Get("/benchmarks", deps.Benchmarks.Aggregate)
+						r.Get("/benchmarks/{model}/{language}", deps.Benchmarks.RunsForCombination)
+
+						// Harta studiului: observat + simulat per tara
+						r.Get("/map", deps.Map.Get)
 
 						// Runners (plug-in-uri) — citire pentru toti membrii
 						r.Get("/runners", deps.Runners.List)

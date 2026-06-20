@@ -130,17 +130,37 @@ func (r *DatasetRepository) Delete(ctx context.Context, studyID, id uuid.UUID, o
 	return nil
 }
 
+// FirstRecord intoarce prima zi cu cazuri active (infected > 0). Asta
+// permite ca seturile preprocesate prin fill_calendar (OWID COVID/mpox), care
+// debuteaza cronologic cu zile plate I=0, sa porneasca simularea dintr-un
+// punct de stare ne-trivial — altfel ODE-ul SIR/SEIR/SIDARTHE cu I(0)=0 este
+// matematic un punct fix si traiectoria ramane plata la nesfarsit. Pentru
+// seturile sintetice si OWID care raporteaza I>0 din prima zi, comportamentul
+// e identic cu varianta veche.
+//
+// Fallback: daca dataset-ul are doar zile cu infected = 0 (caz de degenerare),
+// intoarce totusi prima zi pentru a evita esecul cererii.
 func (r *DatasetRepository) FirstRecord(ctx context.Context, datasetID uuid.UUID) (*models.EpidemiologicalRecord, error) {
 	var rec models.EpidemiologicalRecord
 	err := r.pool.QueryRow(ctx, `
 		SELECT id, dataset_id, recorded_date, region_code, susceptible, infected, recovered, population
-		FROM epidemiological_records WHERE dataset_id = $1
+		FROM epidemiological_records WHERE dataset_id = $1 AND infected > 0
 		ORDER BY recorded_date ASC LIMIT 1`, datasetID).Scan(
 		&rec.ID, &rec.DatasetID, &rec.RecordedDate, &rec.RegionCode,
 		&rec.Susceptible, &rec.Infected, &rec.Recovered, &rec.Population,
 	)
 	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, ErrNotFound
+		// Fallback: nu exista zile cu I>0 → folosim prima zi cronologic.
+		err = r.pool.QueryRow(ctx, `
+			SELECT id, dataset_id, recorded_date, region_code, susceptible, infected, recovered, population
+			FROM epidemiological_records WHERE dataset_id = $1
+			ORDER BY recorded_date ASC LIMIT 1`, datasetID).Scan(
+			&rec.ID, &rec.DatasetID, &rec.RecordedDate, &rec.RegionCode,
+			&rec.Susceptible, &rec.Infected, &rec.Recovered, &rec.Population,
+		)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, ErrNotFound
+		}
 	}
 	if err != nil {
 		return nil, err

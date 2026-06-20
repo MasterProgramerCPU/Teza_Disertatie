@@ -65,6 +65,7 @@ export const api = {
   get: <T>(url: string, params?: Record<string, unknown>) =>
     unwrap<T>(http.get(url, { params })),
   post: <T>(url: string, body?: unknown) => unwrap<T>(http.post(url, body)),
+  put: <T>(url: string, body?: unknown) => unwrap<T>(http.put(url, body)),
   patch: <T>(url: string, body?: unknown) => unwrap<T>(http.patch(url, body)),
   delete: <T>(url: string) => unwrap<T>(http.delete(url)),
   postForm: <T>(url: string, form: FormData) =>

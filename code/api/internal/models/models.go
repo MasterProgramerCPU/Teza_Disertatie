@@ -14,6 +14,47 @@ type User struct {
 	CreatedAt    time.Time `json:"created_at"`
 }
 
+// UserProfile e proiectia publica a unui utilizator (sau a propriului cont).
+// HasAvatar e calculat din lungimea binarului; binarul nu se trimite in JSON,
+// se serveste separat prin GET /api/users/{id}/avatar.
+type UserProfile struct {
+	ID           uuid.UUID `json:"id"`
+	Email        string    `json:"email"`
+	FullName     string    `json:"full_name"`
+	Affiliation  string    `json:"affiliation"`
+	Bio          string    `json:"bio"`
+	HasAvatar    bool      `json:"has_avatar"`
+	IsSuperAdmin bool      `json:"is_super_admin"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
+// UserProfileUpdate e payload-ul acceptat de PATCH /api/me/profile.
+// Pointer-i pentru a distinge intre "neschimbat" si "sters" (sir gol).
+type UserProfileUpdate struct {
+	FullName    *string `json:"full_name,omitempty"`
+	Affiliation *string `json:"affiliation,omitempty"`
+	Bio         *string `json:"bio,omitempty"`
+}
+
+// CollaboratorEntry descrie un coleg de studiu, agregat per studiu.
+type CollaboratorEntry struct {
+	UserID      uuid.UUID `json:"user_id"`
+	Email       string    `json:"email"`
+	FullName    string    `json:"full_name"`
+	Affiliation string    `json:"affiliation"`
+	HasAvatar   bool      `json:"has_avatar"`
+	Role        StudyRole `json:"role"`
+}
+
+// CollaboratorsByStudy e raspunsul de la GET /api/me/collaborators:
+// pentru fiecare studiu in care utilizatorul curent e membru, lista celorlalti
+// membri (excluzandu-l pe el).
+type CollaboratorsByStudy struct {
+	Study   Study               `json:"study"`
+	MyRole  StudyRole           `json:"my_role"`
+	Members []CollaboratorEntry `json:"members"`
+}
+
 type Dataset struct {
 	ID          uuid.UUID `json:"id"`
 	UserID      uuid.UUID `json:"user_id"`
@@ -229,4 +270,19 @@ type BenchmarkAggregate struct {
 	P95WallMs      float64   `json:"p95_wall_ms"`
 	MedianCPUMs    float64   `json:"median_cpu_ms"`
 	MedianMemoryMB float64   `json:"median_memory_mb"`
+}
+
+// BenchmarkRun reprezinta o singura rulare finalizata, expusa in pagina de
+// detaliu a unui agregat (model x limbaj). Include cantitatile per rulare,
+// metadata dataset-ului si timestamps-urile simularii.
+type BenchmarkRun struct {
+	SimulationID uuid.UUID  `json:"simulation_id"`
+	DatasetID    uuid.UUID  `json:"dataset_id"`
+	DatasetName  string     `json:"dataset_name"`
+	TMax         int        `json:"t_max"`
+	WallTimeMs   int64      `json:"wall_time_ms"`
+	CPUTimeMs    int64      `json:"cpu_time_ms"`
+	PeakMemoryMB float64    `json:"peak_memory_mb"`
+	CreatedAt    time.Time  `json:"created_at"`
+	CompletedAt  *time.Time `json:"completed_at,omitempty"`
 }

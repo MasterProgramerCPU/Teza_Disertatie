@@ -137,7 +137,8 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
 <style scoped>
 .chart-shell {
   padding: 8px;
+  /* Pastram fond alb in ambele teme — canvas-ul Chart.js deseneaza axe in negru */
   background: #ffffff;
-  border: 1px inset #808080;
+  border: 1px inset var(--c-border);
 }
 </style>

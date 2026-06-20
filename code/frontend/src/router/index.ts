@@ -70,10 +70,42 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true, requiresStudy: true },
   },
   {
+    path: "/map",
+    name: "map",
+    component: () => import("@/pages/MapPage.vue"),
+    meta: { requiresAuth: true, requiresStudy: true },
+  },
+  {
+    path: "/benchmarks/:model/:language",
+    name: "benchmark-detail",
+    component: () => import("@/pages/BenchmarkDetailPage.vue"),
+    meta: { requiresAuth: true, requiresStudy: true },
+    props: true,
+  },
+  {
     path: "/script-editor",
     name: "script-editor",
     component: () => import("@/pages/ScriptEditorPage.vue"),
     meta: { requiresAuth: true, requiresStudy: true },
+  },
+  {
+    path: "/owner-dashboard",
+    name: "owner-dashboard",
+    component: () => import("@/pages/StudyOwnerDashboardPage.vue"),
+    meta: { requiresAuth: true, requiresStudy: true, requiresAdmin: true },
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("@/pages/ProfilePage.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/users/:userId",
+    name: "user-profile",
+    component: () => import("@/pages/UserProfilePage.vue"),
+    meta: { requiresAuth: true },
+    props: true,
   },
   { path: "/:pathMatch(.*)*", redirect: "/dashboard" },
 ];

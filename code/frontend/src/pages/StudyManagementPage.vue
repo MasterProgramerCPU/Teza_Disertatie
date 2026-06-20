@@ -171,7 +171,7 @@ async function removeMember(member: StudyMember) {
 <style scoped>
 .page { max-width: 820px; margin: 0 auto; padding: 8px; }
 .header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-.back { color: #000080; text-decoration: underline; }
+.back { color: var(--c-link); text-decoration: underline; }
 .card {
   background: var(--c-surface); border: 1px solid var(--c-border-dark);
   border-radius: 0; padding: 20px; margin-bottom: 16px;

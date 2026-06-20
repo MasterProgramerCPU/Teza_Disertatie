@@ -1,32 +1,232 @@
-:root {
-  --c-bg: #3a8bf0;
+/* ===========================================================
+   Theme variables — light (default) & dark
+   Both păstrează estetica Win98 (3D bevel, gradient title bars,
+   ramă inset+outset). Dark mode = palette Plus!/HiContrast.
+   =========================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Background-uri */
+  --c-bg-1: #1f68db;
+  --c-bg-2: #61b7ff;
+  --c-bg-3: #71b950;
+  --c-bg-4: #2f7d27;
+  --c-bg-hill-1: rgba(95, 172, 62, 0.95);
+  --c-bg-hill-2: rgba(60, 142, 45, 0.9);
+  --c-taskbar-1: #2b72f2;
+  --c-taskbar-2: #0b45bc;
+  --c-taskbar-3: #07307f;
+  --c-taskbar-top: #66a5ff;
+  --c-taskbar-highlight: #8bc2ff;
+
+  /* Suprafete (card, dialog, panel) */
   --c-surface: #ece9d8;
   --c-surface-soft: #f8f6ed;
   --c-surface-dark: #d6d1bd;
+  --c-container: rgba(236, 233, 216, 0.96);
+  --c-container-border: #0a246a;
+
+  /* Borduri 3D */
   --c-border: #8b8b83;
   --c-border-dark: #404040;
   --c-border-light: #ffffff;
+  --c-border-deep: #001b5d;
+
+  /* Text */
   --c-text: #111111;
   --c-text-muted: #4b4b4b;
+  --c-text-strong: #000000;
+
+  /* Linkuri */
+  --c-link: #000080;
+  --c-link-hover: #ff0000;
+
+  /* Accent */
   --c-primary: #0a46c4;
   --c-primary-hover: #1c66e8;
+  --c-primary-deep: #001b5d;
   --c-title-start: #0058ee;
   --c-title-end: #003399;
+  --c-title-end-glow: #6fb6ff;
+
+  /* Stari */
   --c-success: #15821f;
   --c-warning: #9c6500;
   --c-danger: #b00000;
   --c-info: #0a46c4;
 
+  /* Compartimente */
   --c-s: #0058ee;
   --c-i: #c00000;
   --c-r: #15821f;
 
+  /* Butoane standard */
+  --btn-bg-1: #ffffff;
+  --btn-bg-2: #ece9d8;
+  --btn-bg-3: #d7d0bd;
+  --btn-hover-1: #fffef7;
+  --btn-hover-2: #f3edcc;
+  --btn-hover-3: #ddd3a5;
+  --btn-border: #003c74;
+  --btn-inset-light: #ffffff;
+  --btn-inset-dark: #858585;
+  --btn-text: #000000;
+
+  /* Buton primary (gradient blue) */
+  --btn-primary-1: #4f9dff;
+  --btn-primary-2: #1c66e8;
+  --btn-primary-3: #0b3ca6;
+  --btn-primary-hover-1: #75b8ff;
+  --btn-primary-hover-2: #2b72f2;
+  --btn-primary-hover-3: #1249bd;
+
+  /* Buton danger (gradient red) */
+  --btn-danger-1: #ff7777;
+  --btn-danger-2: #d42323;
+  --btn-danger-3: #8d0000;
+
+  /* Input */
+  --input-bg: #ffffff;
+  --input-border: #7f9db9;
+  --input-text: #000000;
+  --input-focus-border: #0a46c4;
+
+  /* Tabel */
+  --table-bg: #ffffff;
+  --table-row-hover: #dbeafe;
+  --table-border: #d6d1bd;
+
+  /* Cod */
+  --code-bg: #ffffff;
+  --code-text: #000080;
+  --code-border: #d6d1bd;
+
+  /* Scrollbar */
+  --scroll-track: #ece9d8;
+  --scroll-thumb-1: #ffffff;
+  --scroll-thumb-2: #d6d1bd;
+
+  /* Badge / pill */
+  --pill-bg-1: #ffffff;
+  --pill-bg-2: #ece9d8;
+
+  /* Layout */
   --radius: 2px;
   --shadow-sm: 2px 2px 0 rgba(64, 64, 64, 0.45);
   --shadow-md: 4px 4px 0 rgba(0, 0, 0, 0.28);
+  --shadow-hover: 3px 3px 0 rgba(0, 0, 0, 0.35);
   --font-sans: Tahoma, "MS Sans Serif", Verdana, sans-serif;
   --font-mono: "Lucida Console", "Courier New", monospace;
+
+  /* Animatii */
+  --t-fast: 80ms;
+  --t-med: 160ms;
+  --t-slow: 280ms;
+  --easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
+[data-theme="dark"] {
+  /* Background — Plus! "Inside your computer" inspirat, gradient nocturn */
+  --c-bg-1: #0a1a3a;
+  --c-bg-2: #1a2f5c;
+  --c-bg-3: #0d2438;
+  --c-bg-4: #050a18;
+  --c-bg-hill-1: rgba(20, 60, 110, 0.85);
+  --c-bg-hill-2: rgba(10, 40, 80, 0.9);
+  --c-taskbar-1: #1a3a7a;
+  --c-taskbar-2: #0a1c4a;
+  --c-taskbar-3: #04102e;
+  --c-taskbar-top: #4a7ad4;
+  --c-taskbar-highlight: #5a8be0;
+
+  /* Suprafete: gri-otelar Win98 in palette nocturna */
+  --c-surface: #2a2a2a;
+  --c-surface-soft: #353535;
+  --c-surface-dark: #1f1f1f;
+  --c-container: rgba(42, 42, 42, 0.96);
+  --c-container-border: #4a5a8a;
+
+  /* Borduri 3D — pastram contrastul light/dark */
+  --c-border: #4a4a4a;
+  --c-border-dark: #1a1a1a;
+  --c-border-light: #5a5a5a;
+  --c-border-deep: #050a18;
+
+  --c-text: #e8e8e8;
+  --c-text-muted: #a8a8a8;
+  --c-text-strong: #ffffff;
+
+  --c-link: #6fbcff;
+  --c-link-hover: #ffae42;
+
+  --c-primary: #4a7ad4;
+  --c-primary-hover: #6a9aff;
+  --c-primary-deep: #04102e;
+  --c-title-start: #2a4a9a;
+  --c-title-end: #0a1c4a;
+  --c-title-end-glow: #5a8be0;
+
+  --c-success: #4ade80;
+  --c-warning: #fbbf24;
+  --c-danger: #f87171;
+  --c-info: #6fbcff;
+
+  --c-s: #6fbcff;
+  --c-i: #f87171;
+  --c-r: #4ade80;
+
+  /* Butoane otelii */
+  --btn-bg-1: #4a4a4a;
+  --btn-bg-2: #3a3a3a;
+  --btn-bg-3: #2a2a2a;
+  --btn-hover-1: #5a5a5a;
+  --btn-hover-2: #4a4a4a;
+  --btn-hover-3: #3a3a3a;
+  --btn-border: #1a1a1a;
+  --btn-inset-light: #6a6a6a;
+  --btn-inset-dark: #1a1a1a;
+  --btn-text: #e8e8e8;
+
+  --btn-primary-1: #4a7ad4;
+  --btn-primary-2: #2a4a9a;
+  --btn-primary-3: #0a1c4a;
+  --btn-primary-hover-1: #6a9aff;
+  --btn-primary-hover-2: #4a7ad4;
+  --btn-primary-hover-3: #1a3a7a;
+
+  --btn-danger-1: #c84a4a;
+  --btn-danger-2: #8a2a2a;
+  --btn-danger-3: #4a0a0a;
+
+  /* Input cu fundal intunecat */
+  --input-bg: #1a1a1a;
+  --input-border: #4a5a7a;
+  --input-text: #e8e8e8;
+  --input-focus-border: #6fbcff;
+
+  --table-bg: #2a2a2a;
+  --table-row-hover: #1a3060;
+  --table-border: #3a3a3a;
+
+  --code-bg: #1a1a1a;
+  --code-text: #6fbcff;
+  --code-border: #3a3a3a;
+
+  --scroll-track: #1a1a1a;
+  --scroll-thumb-1: #4a4a4a;
+  --scroll-thumb-2: #2a2a2a;
+
+  --pill-bg-1: #3a3a3a;
+  --pill-bg-2: #2a2a2a;
+
+  --shadow-sm: 2px 2px 0 rgba(0, 0, 0, 0.55);
+  --shadow-md: 4px 4px 0 rgba(0, 0, 0, 0.55);
+  --shadow-hover: 3px 3px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* ===========================================================
+   Reset & layout
+   =========================================================== */
 
 * {
   box-sizing: border-box;
@@ -44,10 +244,11 @@ body {
   font-size: 13px;
   color: var(--c-text);
   background:
-    radial-gradient(ellipse at 18% 78%, rgba(95, 172, 62, 0.95) 0 18%, transparent 19%),
-    radial-gradient(ellipse at 78% 82%, rgba(60, 142, 45, 0.9) 0 22%, transparent 23%),
-    linear-gradient(180deg, #1f68db 0%, #61b7ff 48%, #71b950 49%, #2f7d27 100%);
+    radial-gradient(ellipse at 18% 78%, var(--c-bg-hill-1) 0 18%, transparent 19%),
+    radial-gradient(ellipse at 78% 82%, var(--c-bg-hill-2) 0 22%, transparent 23%),
+    linear-gradient(180deg, var(--c-bg-1) 0%, var(--c-bg-2) 48%, var(--c-bg-3) 49%, var(--c-bg-4) 100%);
   background-attachment: fixed;
+  transition: color var(--t-med) var(--easing);
 }
 
 body::after {
@@ -59,9 +260,9 @@ body::after {
   bottom: 0;
   height: 30px;
   pointer-events: none;
-  background: linear-gradient(180deg, #2b72f2 0%, #0b45bc 52%, #07307f 100%);
-  border-top: 1px solid #66a5ff;
-  box-shadow: inset 0 1px 0 #8bc2ff;
+  background: linear-gradient(180deg, var(--c-taskbar-1) 0%, var(--c-taskbar-2) 52%, var(--c-taskbar-3) 100%);
+  border-top: 1px solid var(--c-taskbar-top);
+  box-shadow: inset 0 1px 0 var(--c-taskbar-highlight);
 }
 
 #app {
@@ -74,12 +275,13 @@ body::after {
 }
 
 a {
-  color: #000080;
+  color: var(--c-link);
   text-decoration: underline;
+  transition: color var(--t-fast) var(--easing);
 }
 
 a:hover {
-  color: #ff0000;
+  color: var(--c-link-hover);
 }
 
 h1,
@@ -88,6 +290,7 @@ h3,
 h4 {
   margin: 0 0 12px 0;
   font-weight: 700;
+  color: var(--c-text-strong);
 }
 
 h1 {
@@ -95,13 +298,12 @@ h1 {
   letter-spacing: -0.02em;
 }
 
-h2 {
-  font-size: 17px;
-}
+h2 { font-size: 17px; }
+h3 { font-size: 14px; }
 
-h3 {
-  font-size: 14px;
-}
+/* ===========================================================
+   Butoane — animatie de apasare + transitie hover
+   =========================================================== */
 
 button,
 .btn {
@@ -110,22 +312,33 @@ button,
   line-height: 1.2;
   min-height: 26px;
   padding: 4px 14px;
-  border: 1px solid #003c74;
+  border: 1px solid var(--btn-border);
   border-radius: var(--radius);
-  color: #000000;
-  background: linear-gradient(180deg, #ffffff 0%, #ece9d8 48%, #d7d0bd 100%);
+  color: var(--btn-text);
+  background: linear-gradient(180deg, var(--btn-bg-1) 0%, var(--btn-bg-2) 48%, var(--btn-bg-3) 100%);
   box-shadow:
-    inset 1px 1px 0 #ffffff,
-    inset -1px -1px 0 #858585;
+    inset 1px 1px 0 var(--btn-inset-light),
+    inset -1px -1px 0 var(--btn-inset-dark);
   cursor: pointer;
   text-decoration: none;
+  transition:
+    background-position var(--t-fast) var(--easing),
+    box-shadow var(--t-fast) var(--easing),
+    transform var(--t-fast) var(--easing),
+    color var(--t-fast) var(--easing);
 }
 
 button:hover:not(:disabled),
 .btn:hover {
-  color: #000000;
+  color: var(--btn-text);
   text-decoration: none;
-  background: linear-gradient(180deg, #fffef7 0%, #f3edcc 48%, #ddd3a5 100%);
+  background: linear-gradient(180deg, var(--btn-hover-1) 0%, var(--btn-hover-2) 48%, var(--btn-hover-3) 100%);
+}
+
+button:focus-visible,
+.btn:focus-visible {
+  outline: 1px dotted currentColor;
+  outline-offset: -4px;
 }
 
 button:active:not(:disabled),
@@ -133,41 +346,45 @@ button:active:not(:disabled),
   padding-top: 5px;
   padding-left: 15px;
   box-shadow:
-    inset 1px 1px 0 #7a7a7a,
-    inset -1px -1px 0 #ffffff;
+    inset 1px 1px 0 var(--btn-inset-dark),
+    inset -1px -1px 0 var(--btn-inset-light);
 }
 
 button:disabled {
-  color: #808080;
+  color: var(--c-text-muted);
   cursor: not-allowed;
   opacity: 0.72;
 }
 
 button.primary,
 .btn.primary {
-  border-color: #003c74;
+  border-color: var(--btn-border);
   color: #ffffff;
-  background: linear-gradient(180deg, #4f9dff 0%, #1c66e8 44%, #0b3ca6 100%);
+  background: linear-gradient(180deg, var(--btn-primary-1) 0%, var(--btn-primary-2) 44%, var(--btn-primary-3) 100%);
   box-shadow:
-    inset 1px 1px 0 #8bc2ff,
-    inset -1px -1px 0 #001b5d;
+    inset 1px 1px 0 var(--c-taskbar-highlight),
+    inset -1px -1px 0 var(--c-primary-deep);
 }
 
 button.primary:hover:not(:disabled),
 .btn.primary:hover {
   color: #ffffff;
-  background: linear-gradient(180deg, #75b8ff 0%, #2b72f2 44%, #1249bd 100%);
+  background: linear-gradient(180deg, var(--btn-primary-hover-1) 0%, var(--btn-primary-hover-2) 44%, var(--btn-primary-hover-3) 100%);
 }
 
 button.danger,
 .btn.danger {
-  border-color: #7a0000;
+  border-color: var(--btn-danger-3);
   color: #ffffff;
-  background: linear-gradient(180deg, #ff7777 0%, #d42323 45%, #8d0000 100%);
+  background: linear-gradient(180deg, var(--btn-danger-1) 0%, var(--btn-danger-2) 45%, var(--btn-danger-3) 100%);
   box-shadow:
     inset 1px 1px 0 #ffc5c5,
     inset -1px -1px 0 #540000;
 }
+
+/* ===========================================================
+   Inputs
+   =========================================================== */
 
 input,
 select,
@@ -176,26 +393,33 @@ textarea {
   font-family: inherit;
   font-size: 13px;
   padding: 5px 7px;
-  border: 1px solid #7f9db9;
+  border: 1px solid var(--input-border);
   border-radius: 0;
-  color: #000000;
-  background: #ffffff;
+  color: var(--input-text);
+  background: var(--input-bg);
   box-shadow:
     inset 1px 1px 0 #808080,
-    inset -1px -1px 0 #ffffff;
+    inset -1px -1px 0 var(--btn-inset-light);
+  transition:
+    border-color var(--t-fast) var(--easing),
+    box-shadow var(--t-fast) var(--easing);
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  outline: 1px dotted #000000;
+  outline: 1px dotted currentColor;
   outline-offset: -3px;
-  border-color: #0a46c4;
+  border-color: var(--input-focus-border);
+  box-shadow:
+    inset 1px 1px 0 #808080,
+    inset -1px -1px 0 var(--btn-inset-light),
+    0 0 0 2px rgba(74, 122, 212, 0.22);
 }
 
 input[type="checkbox"] {
   width: auto;
-  accent-color: #0a46c4;
+  accent-color: var(--c-primary);
   box-shadow: none;
 }
 
@@ -210,18 +434,23 @@ code {
   font-family: var(--font-mono);
   font-size: 12px;
   padding: 1px 3px;
-  color: #000080;
-  background: #ffffff;
-  border: 1px inset #d6d1bd;
+  color: var(--code-text);
+  background: var(--code-bg);
+  border: 1px inset var(--code-border);
 }
+
+/* ===========================================================
+   Container + cards (cu animatie hover subtila)
+   =========================================================== */
 
 .container {
   width: min(1220px, calc(100% - 28px));
   margin: 16px auto 0;
   padding: 14px;
-  background: rgba(236, 233, 216, 0.96);
-  border: 1px solid #0a246a;
+  background: var(--c-container);
+  border: 1px solid var(--c-container-border);
   box-shadow: var(--shadow-md);
+  animation: fade-in var(--t-slow) var(--easing);
 }
 
 .card {
@@ -229,12 +458,25 @@ code {
   margin-bottom: 16px;
   padding: 14px;
   background: var(--c-surface);
+  color: var(--c-text);
   border: 1px solid var(--c-border-dark);
   border-radius: 0;
   box-shadow:
     inset 1px 1px 0 var(--c-border-light),
     inset -1px -1px 0 var(--c-border),
     var(--shadow-sm);
+  transition:
+    box-shadow var(--t-med) var(--easing),
+    transform var(--t-med) var(--easing);
+  animation: fade-in var(--t-slow) var(--easing);
+}
+
+.card:hover {
+  box-shadow:
+    inset 1px 1px 0 var(--c-border-light),
+    inset -1px -1px 0 var(--c-border),
+    var(--shadow-hover);
+  transform: translateY(-1px);
 }
 
 .card > h1:first-child,
@@ -245,9 +487,9 @@ code {
   color: #ffffff;
   font-size: 13px;
   line-height: 1.2;
-  background: linear-gradient(90deg, var(--c-title-end) 0%, var(--c-title-start) 72%, #6fb6ff 100%);
-  border: 1px solid #2b72f2;
-  text-shadow: 1px 1px 0 #00185f;
+  background: linear-gradient(90deg, var(--c-title-end) 0%, var(--c-title-start) 72%, var(--c-title-end-glow) 100%);
+  border: 1px solid var(--c-title-start);
+  text-shadow: 1px 1px 0 var(--c-primary-deep);
 }
 
 .card > h1:first-child::after,
@@ -273,67 +515,73 @@ code {
   gap: 12px;
 }
 
-.flex-1 {
-  flex: 1;
-}
+.flex-1 { flex: 1; }
 
 .muted {
   color: var(--c-text-muted);
   font-size: 12px;
 }
 
-.error {
-  color: var(--c-danger);
-}
+.error { color: var(--c-danger); }
+.success { color: var(--c-success); }
 
-.success {
-  color: var(--c-success);
-}
+/* ===========================================================
+   Tabele
+   =========================================================== */
 
 table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  background: #ffffff;
-  border: 1px solid #808080;
+  background: var(--table-bg);
+  color: var(--c-text);
+  border: 1px solid var(--c-border-dark);
   box-shadow:
-    inset 1px 1px 0 #404040,
-    inset -1px -1px 0 #ffffff;
+    inset 1px 1px 0 var(--c-border-dark),
+    inset -1px -1px 0 var(--c-border-light);
 }
 
 table th,
 table td {
   text-align: left;
   padding: 7px 9px;
-  border-right: 1px solid #d6d1bd;
-  border-bottom: 1px solid #d6d1bd;
+  border-right: 1px solid var(--table-border);
+  border-bottom: 1px solid var(--table-border);
 }
 
 table th {
-  color: #000000;
+  color: var(--c-text-strong);
   font-weight: 700;
-  background: linear-gradient(180deg, #ffffff 0%, #ece9d8 100%);
+  background: linear-gradient(180deg, var(--btn-bg-1) 0%, var(--btn-bg-2) 100%);
   box-shadow:
-    inset 1px 1px 0 #ffffff,
-    inset -1px -1px 0 #9d9d92;
+    inset 1px 1px 0 var(--btn-inset-light),
+    inset -1px -1px 0 var(--btn-inset-dark);
+}
+
+table tr {
+  transition: background var(--t-fast) var(--easing);
 }
 
 table tr:hover td {
-  background: #dbeafe;
+  background: var(--table-row-hover);
 }
+
+/* ===========================================================
+   Badges
+   =========================================================== */
 
 .badge {
   display: inline-block;
   padding: 2px 7px;
-  border: 1px solid #808080;
+  border: 1px solid var(--c-border);
   border-radius: 0;
   font-size: 11px;
   font-weight: 700;
-  color: #000000;
-  background: linear-gradient(180deg, #ffffff 0%, #ece9d8 100%);
+  color: var(--c-text-strong);
+  background: linear-gradient(180deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
   box-shadow:
-    inset 1px 1px 0 #ffffff,
-    inset -1px -1px 0 #9d9d92;
+    inset 1px 1px 0 var(--btn-inset-light),
+    inset -1px -1px 0 var(--btn-inset-dark);
 }
 
 .badge.pending {
@@ -360,14 +608,40 @@ table tr:hover td {
   color: #800000;
 }
 
+[data-theme="dark"] .badge.pending {
+  background: #5a4500;
+  border-color: #fbbf24;
+  color: #fde68a;
+}
+[data-theme="dark"] .badge.running {
+  background: #0a3060;
+  border-color: #6fbcff;
+  color: #cfe6ff;
+}
+[data-theme="dark"] .badge.completed {
+  background: #0f3a18;
+  border-color: #4ade80;
+  color: #c8f0d4;
+}
+[data-theme="dark"] .badge.failed {
+  background: #4a0a0a;
+  border-color: #f87171;
+  color: #fecaca;
+}
+
+/* ===========================================================
+   Alerts
+   =========================================================== */
+
 .alert {
   padding: 10px 12px;
   margin: 0 0 16px;
-  border: 1px solid #808080;
+  border: 1px solid var(--c-border);
   border-radius: 0;
   box-shadow:
-    inset 1px 1px 0 #ffffff,
-    inset -1px -1px 0 #9d9d92;
+    inset 1px 1px 0 var(--btn-inset-light),
+    inset -1px -1px 0 var(--btn-inset-dark);
+  animation: slide-down var(--t-med) var(--easing);
 }
 
 .alert.error {
@@ -382,42 +656,118 @@ table tr:hover td {
   border-color: #0a46c4;
 }
 
+[data-theme="dark"] .alert.error {
+  color: #fecaca;
+  background: #4a0a0a;
+  border-color: #f87171;
+}
+[data-theme="dark"] .alert.info {
+  color: #cfe6ff;
+  background: #0a3060;
+  border-color: #6fbcff;
+}
+
+/* ===========================================================
+   Scrollbar
+   =========================================================== */
+
 ::-webkit-scrollbar {
   width: 16px;
   height: 16px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #ece9d8;
-  border: 1px solid #808080;
+  background: var(--scroll-track);
+  border: 1px solid var(--c-border);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, #ffffff 0%, #d6d1bd 100%);
-  border: 1px solid #808080;
-  box-shadow: inset 1px 1px 0 #ffffff;
+  background: linear-gradient(90deg, var(--scroll-thumb-1) 0%, var(--scroll-thumb-2) 100%);
+  border: 1px solid var(--c-border);
+  box-shadow: inset 1px 1px 0 var(--btn-inset-light);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, var(--btn-hover-1) 0%, var(--btn-hover-3) 100%);
+}
+
+/* ===========================================================
+   Page transitions + animatii globale
+   =========================================================== */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* Spinner-ul nostru: Win98 hourglass minimalist */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--c-border);
+  border-top-color: var(--c-primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  vertical-align: middle;
+}
+
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--c-surface-dark) 0%,
+    var(--c-surface-soft) 50%,
+    var(--c-surface-dark) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Tranzitia router intre pagini */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity var(--t-med) var(--easing), transform var(--t-med) var(--easing);
+}
+.page-fade-enter-from { opacity: 0; transform: translateY(4px); }
+.page-fade-leave-to { opacity: 0; transform: translateY(-2px); }
+
+/* Reduce motion pentru cei care prefera */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .card:hover { transform: none; }
 }
 
 @media (max-width: 760px) {
-  body::after {
-    display: none;
-  }
-
-  #app {
-    padding-bottom: 0;
-  }
-
+  body::after { display: none; }
+  #app { padding-bottom: 0; }
   .container {
     width: calc(100% - 12px);
     margin-top: 6px;
     padding: 8px;
   }
-
-  .row {
-    align-items: stretch;
-  }
-
-  .row > * {
-    min-width: 100%;
-  }
+  .row { align-items: stretch; }
+  .row > * { min-width: 100%; }
 }

@@ -47,9 +47,45 @@ export interface Membership {
 export interface MeResponse {
   id: string;
   email: string;
+  full_name?: string;
+  affiliation?: string;
+  bio?: string;
+  has_avatar?: boolean;
   is_super_admin: boolean;
   created_at: string;
   studies: Membership[] | null;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  full_name: string;
+  affiliation: string;
+  bio: string;
+  has_avatar: boolean;
+  is_super_admin: boolean;
+  created_at: string;
+}
+
+export interface UserProfileUpdate {
+  full_name?: string;
+  affiliation?: string;
+  bio?: string;
+}
+
+export interface CollaboratorEntry {
+  user_id: string;
+  email: string;
+  full_name: string;
+  affiliation: string;
+  has_avatar: boolean;
+  role: StudyRole;
+}
+
+export interface CollaboratorsByStudy {
+  study: Study;
+  my_role: StudyRole;
+  members: CollaboratorEntry[];
 }
 
 export interface Dataset {
@@ -94,6 +130,18 @@ export interface BenchmarkAggregate {
   median_memory_mb: number;
 }
 
+export interface BenchmarkRun {
+  simulation_id: string;
+  dataset_id: string;
+  dataset_name: string;
+  t_max: number;
+  wall_time_ms: number;
+  cpu_time_ms: number;
+  peak_memory_mb: number;
+  created_at: string;
+  completed_at?: string;
+}
+
 export interface CreateSimulationPayload {
   dataset_id: string;
   model_type: ModelType;
@@ -121,4 +169,36 @@ export interface ScriptDraftPayload {
   description?: string;
   script_content: string;
   parameters_json?: Record<string, unknown>;
+}
+
+export interface MapSeries {
+  start_date: string;
+  values: number[];
+}
+
+export interface SimMeta {
+  id: string;
+  created_at: string;
+  t_max: number;
+  total_runs: number;
+}
+
+export interface MapCountry {
+  dataset_id: string;
+  name: string;
+  iso3: string;
+  population: number;
+  observed: MapSeries;
+  simulated?: MapSeries;
+  simulation_id?: string;
+  simulation?: SimMeta;
+}
+
+export interface MapResponse {
+  study_id: string;
+  model_type: string;
+  language: string;
+  countries: MapCountry[];
+  global_min_day?: string;
+  global_max_day?: string;
 }

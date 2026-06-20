@@ -98,6 +98,7 @@ func main() {
 		Admin:        handlers.NewAdminHandler(users, studies, pool),
 		Runners:      handlers.NewRunnersHandler(runners, k8sMgr),
 		ScriptDrafts: handlers.NewScriptDraftsHandler(scriptDrafts),
+		Map:          handlers.NewMapHandler(pool),
 		JWT:          jwt,
 		RBAC:         rbac,
 	}

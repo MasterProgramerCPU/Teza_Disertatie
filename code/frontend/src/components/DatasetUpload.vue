@@ -97,12 +97,12 @@ async function submit() {
 }
 .dropzone.over {
   border-color: var(--c-primary);
-  background: #dbeafe;
+  background: var(--table-row-hover);
 }
 .dropzone.has {
   border-color: var(--c-success);
   border-style: solid;
-  background: #e1f5d6;
+  background: rgba(74, 222, 128, 0.15);
 }
 .dropzone input[type="file"] {
   position: absolute;
