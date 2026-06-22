@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Office: fișiere temporare/lock & backup-uri
+~$*
+*.bak
+
+# Video demo — binare mari, NU în git (păstrate local / pe Desktop)
+*.mp4
+code/demo_recording/
+
+# Artefacte de build LaTeX pentru varianta antiplagiat
+# (sursa docs/main_antiplagiat.tex rămâne urmărită în git)
+docs/main_antiplagiat.aux
+docs/main_antiplagiat.bbl
+docs/main_antiplagiat.blg
+docs/main_antiplagiat.fdb_latexmk
+docs/main_antiplagiat.fls
+docs/main_antiplagiat.lof
+docs/main_antiplagiat.log
+docs/main_antiplagiat.lot
+docs/main_antiplagiat.out
+docs/main_antiplagiat.pdf
+docs/main_antiplagiat.toc
